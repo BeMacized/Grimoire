@@ -36,10 +36,14 @@ bot.on('message', message => {
                 else {
                     //Check for multiple results
                     var matchesAny = false;
+                    var match = "";
                     var uniqueCards = [];
 
                     for (var card of cards) {
-                        if (cname.toLowerCase() == card.name.toLowerCase()) matchesAny = true;
+                        if (cname.toLowerCase() == card.name.toLowerCase()) {
+                            matchesAny = true;
+                            match = card.name;
+                        }
                         if (uniqueCards.indexOf(card.name) <= -1) uniqueCards.push(card.name);
                     }
 
@@ -50,10 +54,19 @@ bot.on('message', message => {
                         }
                         retmsg += "\n";
                     }
-
-                    //Queue the image for upload
                     else {
-                        images.push(cards[cards.length - 1].imageUrl);
+                        //Find the matching card if a direct match was found
+                        var card;
+                        if (matchesAny) {
+                            for (var i = 1; i < cards.length; i++) {
+                                card = cards[cards.length - i];
+                                if (card.name.toLowerCase() == match.toLowerCase()) break;
+                            }
+                        }
+                        if (!card) card = cards[cards.length - 1];
+
+                        //Queue the image for upload
+                        images.push(card.imageUrl);
                     }
                 }
 
