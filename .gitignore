@@ -45,3 +45,6 @@ jspm_packages
 
 #Config file
 config.js
+
+#IntelliJ
+.idea/
