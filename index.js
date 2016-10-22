@@ -6,74 +6,79 @@ const mtg = require('mtgsdk');
 //Global initializations
 const bot = new Discord.Client();
 
+//Notify when ready for use
 bot.on('ready', () => {
     console.log('Ready.');
 });
 
+//Handle message receive event
 bot.on('message', message => {
+
+    //Don't respond to bot users
     if (message.author.bot) return;
 
     //Extract names from message
     var names = message.content.match(/<<[^<>]+>>/g);
     if (names == null || names.length == 0) return;
-    var retmsg = "";
+
+    //Initialize response variables
+    var response = "";
     var images = [];
+
+    //Remove excess names above threshold
     names = names.slice(0, config.maxCardsPerMessage);
 
-    //Evaluate every cardname
+    //Evaluate every card name
     var callsRemaining = names.length;
     for (var name of names) {
-        //Remove <<*>>
+        //Remove << & >>
         name = name.substr(2, name.length - 4);
 
-        //Start making requests
+        //Start making API requests
         const cname = name;
         mtg.card.where({name: cname})
             .then(cards => {
+                //We received no results
                 if (cards.length == 0) {
-                    retmsg += "No results found for '" + cname + "'\n\n";
+                    response += "No results found for '" + cname + "'\n\n";
                 }
+
+                //We did receive results
                 else {
-                    //Check for multiple results
-                    var matchesAny = false;
-                    var match = "";
+
+                    //Single out the one card we need
+                    var card;
+                    {
+                        //If we have a 1:1 match, remove all non matching results.
+                        var tmpCards = cards.filter(function (e) {
+                            return e.name.toLowerCase() == cname.toLowerCase()
+                        });
+                        if (tmpCards.length > 0) cards = tmpCards;
+
+                        //If we don't, we preselect the last (most recent) result.
+                        else card = tmpCards[tmpCards.length - 1];
+                    }
+
+                    //If we still have multiple unique cards, present user with a list of names.
                     var uniqueCards = [];
-
-                    for (var card of cards) {
-                        if (cname.toLowerCase() == card.name.toLowerCase()) {
-                            matchesAny = true;
-                            match = card.name;
-                        }
-                        if (uniqueCards.indexOf(card.name) <= -1) uniqueCards.push(card.name);
+                    for (var c of cards)
+                        if (uniqueCards.indexOf(c.name) <= -1)
+                            uniqueCards.push(c.name);
+                    if (uniqueCards.length > 1) {
+                        response += "There are multiple results for '" + cname + "'. Did you mean one of the following?\n";
+                        for (var c of uniqueCards)
+                            response += " - " + c + "\n";
+                        response += "\n";
                     }
 
-                    if (!matchesAny && uniqueCards.length > 1) {
-                        retmsg += "There are multiple results for '" + cname + "'. Did you mean one of the following?\n";
-                        for (var card of uniqueCards) {
-                            retmsg += " - " + card + "\n";
-                        }
-                        retmsg += "\n";
-                    }
-                    else {
-                        //Find the matching card if a direct match was found
-                        var card;
-                        if (matchesAny) {
-                            for (var i = 1; i < cards.length; i++) {
-                                card = cards[cards.length - i];
-                                if (card.name.toLowerCase() == match.toLowerCase()) break;
-                            }
-                        }
-                        if (!card) card = cards[cards.length - 1];
-
-                        //Queue the image for upload
-                        images.push(card.imageUrl);
-                    }
+                    //Queue the image for upload if we have a definitive result
+                    else images.push(card.imageUrl);
                 }
 
                 //Upload the images and send the message
                 callsRemaining--;
                 if (callsRemaining == 0) {
-                    if (retmsg.length > 0) message.channel.sendMessage(retmsg);
+                    if (response.length > 0) message.channel.sendMessage(response);
                     for (var img of images) {
                         message.channel.sendFile(img, "card.png");
                     }
