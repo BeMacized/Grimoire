@@ -5,6 +5,7 @@ const mtg = require('mtgsdk');
 
 //Global initializations
 const bot = new Discord.Client();
+var lastCard = {};
 
 //Notify when ready for use
 bot.on('ready', () => {
@@ -24,7 +25,40 @@ bot.on('message', message => {
         var args = split.splice(1, split.length);
 
         switch (cmd) {
-
+            case "rulings":
+                if (!lastCard.hasOwnProperty(message.channel.id)) {
+                    message.reply("I don't remember the last card mentioned!");
+                    return;
+                }
+                const cardShell = lastCard[message.channel.id];
+                mtg.card.where({name: cardShell.name})
+                    .then(cards => {
+                        if (cards.length == 0) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+                        var card = null;
+                        for (var c of cards) {
+                            if (c.id == cardShell.id) {
+                                card = c;
+                                break;
+                            }
+                        }
+                        if (card == null) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+                        if (!card.hasOwnProperty("rulings")) {
+                            message.reply("'" + cardShell.name + "' does not seem to have any specified rulings!");
+                            return;
+                        }
+                        var response = "**Rulings for '" + card.name + "':**\n\n";
+                        for (ruling of card.rulings) {
+                            response += "**" + ruling.date + "**\n" + ruling.text + "\n\n";
+                        }
+                        message.reply(response);
+                    });
+                break;
         }
     }
 
@@ -114,6 +148,7 @@ bot.on('message', message => {
                                     response += "There is no card art available for '" + card.name + "' from set '" + card.setName + "' (" + card.set + ")!\n\n";
                                 } else {
                                     images.push(card.imageUrl);
+                                    lastCard[message.channel.id] = {id: card.id, name: card.name};
                                 }
                             }
                         }
