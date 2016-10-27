@@ -11,6 +11,7 @@ localstore.load();
 
 //Global initializations
 const bot = new Discord.Client();
+const factTriggers = ["thopter", "servo", "kaladesh", "fabricate"];
 var lastCard = {};
 
 //Notify when ready for use
@@ -128,11 +129,8 @@ bot.on('message', message => {
                     if (cards.length == 0) {
                         response += "No results found for '" + cname + "'\n\n";
                     }
-
                     //We did receive results
                     else {
-
-
                         //If we have a 1:1 match, remove all non matching results.
                         var tmpCards = cards.filter(function (e) {
                             return e.name.toLowerCase() == cname.toLowerCase()
@@ -195,42 +193,41 @@ bot.on('message', message => {
                     callsRemaining--;
                     if (callsRemaining == 0) {
                         if (response.length > 0) message.channel.sendMessage(response);
-                        for (var img of images) {
+                        for (var img of images)
                             message.channel.sendFile(img, "card.png");
-                            stathat.trackEZCount(config.statHatEZKey, "Card Lookup", 1, function (status, json) {
-                            });
-                        }
+                        stathat.trackEZCount(config.statHatEZKey, "Card Lookup", images.length, function (status, json) {
+                        });
                     }
                 });
         }
     }
-    else if (message.content.toLowerCase().includes("thopter")) {
-        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
-            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
-            localstore.save();
-            message.channel.sendMessage("Thopter Fact: " + facts.thopterFacts[Math.floor(Math.random() * facts.thopterFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
-            });
-        }
-    }
-    if (message.content.toLowerCase().includes("servo") || message.content.toLowerCase().includes("fabricate")) {
-        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
-            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
-            localstore.save();
-            message.channel.sendMessage("Servo Fact: " + facts.servoFacts[Math.floor(Math.random() * facts.servoFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
-            });
-        }
-    }
-    else if (message.content.toLowerCase().includes("kaladesh") || message.content.toLowerCase().includes("ghirapur")) {
-        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
-            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
-            localstore.save();
-            var servo = Math.floor(Math.random * 2) == 0;
-            message.channel.sendMessage(((servo) ? "Servo Fact: " : "Thopter Fact: ") + ((servo) ? facts.servoFacts : facts.thopterFacts)[Math.floor(Math.random() * facts.servoFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
-            });
-        }
+
+    else if (factTriggers.some(function (v) {
+            return message.content.toLowerCase().indexOf(v) >= 0;
+        }) && localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
+
+        //Determine fact store
+        var f = message.content.toLowerCase().includes("thopter") ? {
+            facts: facts.thopterFacts,
+            name: "Thopter"
+        } : (message.content.toLowerCase().includes("servo") ? {
+            facts: facts.servoFacts,
+            name: "Servo"
+        } : (Math.floor(Math.random * 2) == 0 ? {facts: facts.servoFacts, name: "Servo"} : {
+            facts: facts.thopterFacts,
+            name: "Thopter"
+        }));
+
+        //Set timeout for next fact
+        localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
+        localstore.save();
+
+        //Send the fact
+        message.channel.sendMessage(f.name + " Fact: " + f.facts[Math.floor(Math.random() * f.facts.length)]);
+
+        //Log statistic
+        stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
+        });
     }
 });
 
