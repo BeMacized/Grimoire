@@ -35,14 +35,23 @@ bot.on('message', message => {
 
         switch (cmd) {
             case "rulings":
+
+                //First, let's check if a card was specified.
+                var manual = false;
+                var cardShell;
+                if (args.length > 0) {
+                    cardShell = {name: args.join(" "), id: null};
+                    manual = true;
+                }
                 //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
-                if (!lastCard.hasOwnProperty(message.channel.id)) {
+                else if (!lastCard.hasOwnProperty(message.channel.id)) {
                     message.reply("I don't remember the last card mentioned!");
                     return;
+                } else {
+                    cardShell = lastCard[message.channel.id];
                 }
 
                 //Find the card
-                const cardShell = lastCard[message.channel.id];
                 mtg.card.where({name: cardShell.name})
                     .then(cards => {
                         //No cards found!
@@ -53,10 +62,20 @@ bot.on('message', message => {
 
                         //Get the card that has an ID match
                         var card = null;
-                        for (var c of cards) {
-                            if (c.id == cardShell.id) {
-                                card = c;
-                                break;
+
+                        if (!manual) {
+                            for (var c of cards) {
+                                if (c.id == cardShell.id) {
+                                    card = c;
+                                    break;
+                                }
+                            }
+                        } else {
+                            for (var c of cards) {
+                                if (c.name.toLowerCase() == cardShell.name.toLowerCase()) {
+                                    card = c;
+                                    break;
+                                }
                             }
                         }
 
@@ -178,29 +197,29 @@ bot.on('message', message => {
                         if (response.length > 0) message.channel.sendMessage(response);
                         for (var img of images) {
                             message.channel.sendFile(img, "card.png");
-                            stathat.trackEZCount(config.statHatEZKey, "Card Lookup", 1, function(status, json) {});
+                            stathat.trackEZCount(config.statHatEZKey, "Card Lookup", 1, function (status, json) {
+                            });
                         }
                     }
                 });
         }
     }
-    // else if (message.content.includes("servo")){
-    //
-    // }
     else if (message.content.toLowerCase().includes("thopter")) {
         if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
             localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
             localstore.save();
-            message.reply("**Thopter Fact:** " + facts.thopterFacts[Math.floor(Math.random() * facts.thopterFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
+            message.channel.sendMessage("Thopter Fact: " + facts.thopterFacts[Math.floor(Math.random() * facts.thopterFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
+            });
         }
     }
     if (message.content.toLowerCase().includes("servo") || message.content.toLowerCase().includes("fabricate")) {
         if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
             localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
             localstore.save();
-            message.reply("**Servo Fact:** " + facts.servoFacts[Math.floor(Math.random() * facts.servoFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
+            message.channel.sendMessage("Servo Fact: " + facts.servoFacts[Math.floor(Math.random() * facts.servoFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
+            });
         }
     }
     else if (message.content.toLowerCase().includes("kaladesh") || message.content.toLowerCase().includes("ghirapur")) {
@@ -208,8 +227,9 @@ bot.on('message', message => {
             localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
             localstore.save();
             var servo = Math.floor(Math.random * 2) == 0;
-            message.reply(((servo) ? "**Servo Fact:** " : "**Thopter Fact:** ") + ((servo) ? facts.servoFacts : facts.thopterFacts)[Math.floor(Math.random() * facts.servoFacts.length)]);
-            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
+            message.channel.sendMessage(((servo) ? "Servo Fact: " : "Thopter Fact: ") + ((servo) ? facts.servoFacts : facts.thopterFacts)[Math.floor(Math.random() * facts.servoFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
+            });
         }
     }
 });
