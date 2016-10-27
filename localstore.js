@@ -16,6 +16,12 @@ mod.save = function () {
 };
 
 mod.load = function () {
+
+    if (!fs.exists("./localstore.json")) {
+        mod.save();
+        return;
+    }
+
     var data = fs.readFileSync('./localstore.json');
 
     try {

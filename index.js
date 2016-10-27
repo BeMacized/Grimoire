@@ -4,6 +4,7 @@ const config = require('./config.js');
 const mtg = require('mtgsdk');
 const facts = require("./facts.js");
 const localstore = require("./localstore.js");
+const stathat = require('stathat');
 
 //Load localstore
 localstore.load();
@@ -177,6 +178,7 @@ bot.on('message', message => {
                         if (response.length > 0) message.channel.sendMessage(response);
                         for (var img of images) {
                             message.channel.sendFile(img, "card.png");
+                            stathat.trackEZCount(config.statHatEZKey, "Card Lookup", 1, function(status, json) {});
                         }
                     }
                 });
@@ -190,6 +192,7 @@ bot.on('message', message => {
             localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
             localstore.save();
             message.reply("**Thopter Fact:** " + facts.thopterFacts[Math.floor(Math.random() * facts.thopterFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
         }
     }
     if (message.content.toLowerCase().includes("servo") || message.content.toLowerCase().includes("fabricate")) {
@@ -197,6 +200,7 @@ bot.on('message', message => {
             localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
             localstore.save();
             message.reply("**Servo Fact:** " + facts.servoFacts[Math.floor(Math.random() * facts.servoFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
         }
     }
     else if (message.content.toLowerCase().includes("kaladesh") || message.content.toLowerCase().includes("ghirapur")) {
@@ -205,6 +209,7 @@ bot.on('message', message => {
             localstore.save();
             var servo = Math.floor(Math.random * 2) == 0;
             message.reply(((servo) ? "**Servo Fact:** " : "**Thopter Fact:** ") + ((servo) ? facts.servoFacts : facts.thopterFacts)[Math.floor(Math.random() * facts.servoFacts.length)]);
+            stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function(status, json) {});
         }
     }
 });

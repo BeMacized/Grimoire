@@ -10,6 +10,7 @@
   "license": "Apache License 2.0",
   "dependencies": {
     "discord.js": "^9.3.0",
-    "mtgsdk": "^0.1.1"
+    "mtgsdk": "^0.1.1",
+    "stathat": "0.0.8"
   }
 }
