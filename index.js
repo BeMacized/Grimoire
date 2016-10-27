@@ -2,6 +2,11 @@
 const Discord = require('discord.js');
 const config = require('./config.js');
 const mtg = require('mtgsdk');
+const facts = require("./facts.js");
+const localstore = require("./localstore.js");
+
+//Load localstore
+localstore.load();
 
 //Global initializations
 const bot = new Discord.Client();
@@ -18,6 +23,9 @@ bot.on('message', message => {
     //Don't respond to bot users
     if (message.author.bot) return;
 
+    //Extract names from message
+    var names = message.content.match(/<<[^<>]+>>/g);
+
     //Handle commands
     if (message.content.startsWith("!")) {
         var split = message.content.trim().split(/\s+/);
@@ -26,17 +34,23 @@ bot.on('message', message => {
 
         switch (cmd) {
             case "rulings":
+                //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
                 if (!lastCard.hasOwnProperty(message.channel.id)) {
                     message.reply("I don't remember the last card mentioned!");
                     return;
                 }
+
+                //Find the card
                 const cardShell = lastCard[message.channel.id];
                 mtg.card.where({name: cardShell.name})
                     .then(cards => {
+                        //No cards found!
                         if (cards.length == 0) {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+
+                        //Get the card that has an ID match
                         var card = null;
                         for (var c of cards) {
                             if (c.id == cardShell.id) {
@@ -44,14 +58,20 @@ bot.on('message', message => {
                                 break;
                             }
                         }
+
+                        //We couldn't find a matching card.
                         if (card == null) {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+
+                        //check if the card has rulings, if not let the user know
                         if (!card.hasOwnProperty("rulings")) {
                             message.reply("'" + cardShell.name + "' does not seem to have any specified rulings!");
                             return;
                         }
+
+                        //Show the user all the rulings.
                         var response = "**Rulings for '" + card.name + "':**\n\n";
                         for (ruling of card.rulings) {
                             response += "**" + ruling.date + "**\n" + ruling.text + "\n\n";
@@ -63,10 +83,7 @@ bot.on('message', message => {
     }
 
     //Otherwise attempt finding card names
-    else {
-        //Extract names from message
-        var names = message.content.match(/<<[^<>]+>>/g);
-        if (names == null || names.length == 0) return;
+    else if (names != null && names.length > 0) {
 
         //Initialize response variables
         var response = "";
@@ -163,6 +180,31 @@ bot.on('message', message => {
                         }
                     }
                 });
+        }
+    }
+    // else if (message.content.includes("servo")){
+    //
+    // }
+    else if (message.content.toLowerCase().includes("thopter")) {
+        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
+            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
+            localstore.save();
+            message.reply("**Thopter Fact:** " + facts.thopterFacts[Math.floor(Math.random() * facts.thopterFacts.length)]);
+        }
+    }
+    if (message.content.toLowerCase().includes("servo") || message.content.toLowerCase().includes("fabricate")) {
+        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
+            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
+            localstore.save();
+            message.reply("**Servo Fact:** " + facts.servoFacts[Math.floor(Math.random() * facts.servoFacts.length)]);
+        }
+    }
+    else if (message.content.toLowerCase().includes("kaladesh") || message.content.toLowerCase().includes("ghirapur")) {
+        if (localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
+            localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
+            localstore.save();
+            var servo = Math.floor(Math.random * 2) == 0;
+            message.reply(((servo) ? "**Servo Fact:** " : "**Thopter Fact:** ") + ((servo) ? facts.servoFacts : facts.thopterFacts)[Math.floor(Math.random() * facts.servoFacts.length)]);
         }
     }
 });

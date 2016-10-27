@@ -45,6 +45,7 @@ jspm_packages
 
 #Config file
 config.js
+localstore.json
 
 #IntelliJ
 .idea/
