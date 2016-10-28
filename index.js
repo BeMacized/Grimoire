@@ -19,6 +19,7 @@ bot.on('ready', () => {
     console.log('Ready.');
 });
 
+
 //Handle message receive event
 bot.on('message', message => {
 
@@ -162,6 +163,28 @@ bot.on('message', message => {
                         message.reply(response);
                     });
                 break;
+            case "help":
+                try {
+                    message.reply(
+                        "**You requested help! Here are some instructions:**\n\n" +
+                        "My general usage is pulling up card art. You can do this by surrounding card names with << >>.\n" +
+                        "For example: _<<Shivan Dragon>> has been reprinted many times!_\n" +
+                        "You can too specify a specific set if you want to. You can do this by either supplying the set name, or a 3 letter set code.\n" +
+                        "For example: _<<Shivan Dragon|Limited Edition Alpha>> is a very old card!_\n" +
+                        "Or alternatively: _<<Shivan Dragon|LEA>> is a very old card!_\n\n" +
+                        "I too have some commands you can use:\n" +
+                        "**!help** - That is this command you dummy!\n" +
+                        "**!rulings** _[cardname]_ - Pull up the rulings for a card. If no cardname is supplied, it will take the last card mentioned in the channel.\n" +
+                        "**!prints** _[cardname]_ - Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.\n\n" +
+                        "If you have any issues or questions about me, please shoot my developer " + message.guild.members.get(config.devId) + " a PM!"
+                    );
+                } catch (err) {
+                }
+                break;
+            case "stats":
+                message.reply("**Bot Statistics**\n\n**Card Lookups:** https://www.stathat.com/s/WKI6qS4tPTjI");
+                break;
+
         }
     }
 
