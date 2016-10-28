@@ -175,6 +175,7 @@ bot.on('message', message => {
                         "I too have some commands you can use:\n" +
                         "**!help** - That is this command you dummy!\n" +
                         "**!rulings** _[cardname]_ - Pull up the rulings for a card. If no cardname is supplied, it will take the last card mentioned in the channel.\n" +
+                        "**!stats** - Pull up some bot related statistics!\n" +
                         "**!prints** _[cardname]_ - Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.\n\n" +
                         "If you have any issues or questions about me, please shoot my developer " + message.guild.members.get(config.devId) + " a PM!"
                     );
