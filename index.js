@@ -36,6 +36,9 @@ bot.on('message', message => {
 
         switch (cmd) {
             case "rulings":
+                //Log statistic
+                stathat.trackEZCount(config.statHatEZKey, "Command: !rulings", 1, function (status, json) {
+                });
 
                 //First, let's check if a card was specified.
                 var manual = false;
@@ -100,6 +103,65 @@ bot.on('message', message => {
                         message.reply(response);
                     });
                 break;
+            case "prints":
+                //Log statistic
+                stathat.trackEZCount(config.statHatEZKey, "Command: !prints", 1, function (status, json) {
+                });
+
+                //First, let's check if a card was specified.
+                var manual = false;
+                var cardShell;
+                if (args.length > 0) {
+                    cardShell = {name: args.join(" "), id: null};
+                    manual = true;
+                }
+
+                //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
+                else if (!lastCard.hasOwnProperty(message.channel.id)) {
+                    message.reply("I don't remember the last card mentioned!");
+                    return;
+                } else {
+                    cardShell = lastCard[message.channel.id];
+                }
+
+                //Find the card
+                mtg.card.where({name: cardShell.name})
+                    .then(cards => {
+                        //No cards found!
+                        if (cards.length == 0) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+
+                        //Get the card that has an ID match
+                        var filtered_cards = [];
+
+                        if (!manual) {
+                            for (var c of cards) {
+                                if (c.name.toLowerCase() == cardShell.name.toLowerCase())
+                                    filtered_cards.push(c);
+                            }
+                        } else {
+                            for (var c of cards) {
+                                if (c.name.toLowerCase() == cardShell.name.toLowerCase())
+                                    filtered_cards.push(c);
+                            }
+                        }
+
+                        //We couldn't find a matching card.
+                        if (filtered_cards.length == 0) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+
+                        //Show the user all the sets.
+                        var response = "**Card '" + filtered_cards[0].name + "' was printed in the following sets:**\n\n";
+                        for (var card of filtered_cards) {
+                            response += " - " + card.setName + " (" + card.set + ")\n";
+                        }
+                        message.reply(response);
+                    });
+                break;
         }
     }
 
@@ -154,7 +216,7 @@ bot.on('message', message => {
                             var sets = [];
 
                             //If we specified the set, remove all cards with a nonmatching set
-                            if (set != null) {
+                            if (set != null && set !== "") {
                                 var tmpCards = [];
                                 for (c of cards) {
                                     if (c.set.toLowerCase() == set.toLowerCase() || c.setName.toLowerCase() == set.toLowerCase()) {
@@ -178,8 +240,17 @@ bot.on('message', message => {
 
                             //Queue the image for upload if we have a definitive result
                             else {
-                                var card = cards[cards.length - 1];
-                                if (!card.hasOwnProperty("imageUrl")) {
+                                //Get last card in array with art
+                                var card = null;
+
+                                for (var i = cards.length - 1; i >= 0; i--) {
+                                    if (cards[i].hasOwnProperty("imageUrl")) {
+                                        card = cards[i];
+                                        break;
+                                    }
+                                }
+
+                                if (card == null) {
                                     response += "There is no card art available for '" + card.name + "' from set '" + card.setName + "' (" + card.set + ")!\n\n";
                                 } else {
                                     images.push(card.imageUrl);
@@ -204,7 +275,7 @@ bot.on('message', message => {
 
     else if (factTriggers.some(function (v) {
             return message.content.toLowerCase().indexOf(v) >= 0;
-        }) && localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 10) == 0) {
+        }) && localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 5) == 0) {
 
         //Determine fact store
         var f = message.content.toLowerCase().includes("thopter") ? {

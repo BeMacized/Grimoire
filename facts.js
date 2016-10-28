@@ -95,7 +95,7 @@ mod.servoFacts = [
     "Servos are allowed to be used in Ovalchase Racing Events as vehicle pilots, despite Servos causing just as many, if not more, fatal crashes.",
     "Servos used as household appliances have a 85% higher chance of spontaneously self-destructing than Servos used in the Ovalchase Races.",
     "Servos were then programmed to not feel anything once Servos started experiencing bliss as pain. This average is found as the mean between Servos being destroyed immediately after creation and Servos working as household appliances.",
-    "Servos where originally programmed to feel pain when damaged. This was quickly changed to have them feel bliss when damaged. ",
+    "Servos were originally programmed to feel pain when damaged. This was quickly changed to have them feel bliss when damaged. ",
     "Once a Servo is rendered inoperable, it is melted down, to be reshaped into other servos. We understand that modern Servos feel no pain.",
     "The average \"life\" span of a Servo is about 20 minutes, though there has been no record of a Servo malfunctioning without outside influence."
 ];
