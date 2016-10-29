@@ -102,6 +102,9 @@ bot.on('message', message => {
                             response += "**" + ruling.date + "**\n" + ruling.text + "\n\n";
                         }
                         message.reply(response);
+                    })
+                    .catch(function (err) {
+                        message.reply("I could not contact my sources at this moment. Please try again later!");
                     });
                 break;
             case "prints":
@@ -161,6 +164,9 @@ bot.on('message', message => {
                             response += " - " + card.setName + " (" + card.set + ")\n";
                         }
                         message.reply(response);
+                    })
+                    .catch(function (err) {
+                        message.reply("I could not contact my sources at this moment. Please try again later!");
                     });
                 break;
             case "help":
@@ -293,6 +299,9 @@ bot.on('message', message => {
                         stathat.trackEZCount(config.statHatEZKey, "Card Lookup", images.length, function (status, json) {
                         });
                     }
+                })
+                .catch(function (err) {
+                    message.reply("I could not contact my sources at this moment. Please try again later!");
                 });
         }
     }
