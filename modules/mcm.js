@@ -44,6 +44,13 @@ const generateHeader = function (httpMethod, realm) {
 
 const getCardPricing = function (name, setName, callback) {
 
+    //Map MTG API sets to MCM sets
+    const setMap = {
+        "limited edition alpha": "alpha"
+    };
+    if (setName.toLowerCase() in setMap)
+        setName = setMap[setName.toLowerCase()];
+
     //First we look it up in our database
     dbmgr.CardData.find({name: name, setName: setName}, function (err, models) {
         //If an error occurred, we let the callback know
@@ -98,7 +105,7 @@ const getCardPricing = function (name, setName, callback) {
                     return;
                 }
 
-                var endpoint = "https://"+config.MCM_HOST+"/ws/v1.1/output.json/products/" + rawurlencode(name) + "/1/1/false";
+                var endpoint = "https://" + config.MCM_HOST + "/ws/v1.1/output.json/products/" + rawurlencode(name) + "/1/1/false";
                 var method = "GET";
                 request({
                     uri: endpoint,
@@ -125,7 +132,7 @@ const getCardPricing = function (name, setName, callback) {
                         var resp = JSON.parse(body);
 
                         //Let's remove all non magic single products (deckboxes, playmats, etc)
-                        resp.product = resp.product.filter(function(obj){
+                        resp.product = resp.product.filter(function (obj) {
                             return obj.category.idCategory == 1;
                         });
 
@@ -138,6 +145,15 @@ const getCardPricing = function (name, setName, callback) {
                         //First of all, let's save & update all new data we found! We can immediately find the card of the correct set.
                         var setCard = null;
                         for (const card of resp.product) {
+
+                            //Remove old data
+                            dbmgr.CardData.remove({
+                                name: card.name["1"].productName,
+                                setName: card.expansion
+                            }, function (err) {
+                            });
+
+                            //Insert new data
                             const cardData = new dbmgr.CardData({
                                 name: card.name["1"].productName,
                                 setName: card.expansion,
@@ -155,7 +171,9 @@ const getCardPricing = function (name, setName, callback) {
                                 if (err)
                                     console.log(err);
                             });
-                            if (card.expansion == setName)
+
+                            //Check if this is the card we were looking for
+                            if (card.expansion.toLowerCase() == setName.toLowerCase())
                                 setCard = {
                                     price: cardData.price,
                                     lastUpdated: cardData.lastUpdated,
