@@ -98,7 +98,7 @@ const getCardPricing = function (name, setName, callback) {
                     return;
                 }
 
-                var endpoint = "https://sandbox.mkmapi.eu/ws/v1.1/output.json/products/" + rawurlencode(name) + "/1/1/false";
+                var endpoint = "https://"+config.MCM_HOST+"/ws/v1.1/output.json/products/" + rawurlencode(name) + "/1/1/false";
                 var method = "GET";
                 request({
                     uri: endpoint,

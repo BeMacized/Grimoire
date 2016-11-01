@@ -96,7 +96,7 @@ bot.on('message', message => {
                                         message.reply("Too many requests have been made to <http://MagicCardMarket.eu> over the past hour. In order to keep them happy too, we have to throttle these requests. Please try again in a few minutes!");
                                         break;
                                     case "MCM_UNHANDLED_RESPONSE":
-                                        message.reply("Something fucky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        message.reply("Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
                                         break;
                                     case "NO_DATA_AVAILABLE":
                                         message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "'!");
@@ -105,7 +105,7 @@ bot.on('message', message => {
                                         message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "' in set '" + card.setName + "'!");
                                         break;
                                     case "MCM_UNHANDLED_BODY":
-                                        message.reply("Something fucky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        message.reply("Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
                                         break;
                                     default:
                                         message.reply("I cannot help you right now because " + message.guild.members.get(config.devId) + " messed up big time. Tell him to fix me up! Here's a (" + data + ")");
