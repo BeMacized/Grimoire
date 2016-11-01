@@ -6,7 +6,7 @@ mod.options = {
 };
 
 mod.save = function () {
-    fs.writeFile('./localstore.json', JSON.stringify(mod.options), function (err) {
+    fs.writeFile('./data/localstore.json', JSON.stringify(mod.options), function (err) {
         if (err) {
             console.log('An error occurred saving the localstore');
             console.log(err.message);
@@ -17,12 +17,12 @@ mod.save = function () {
 
 mod.load = function () {
 
-    if (!fs.exists("./localstore.json")) {
+    if (!fs.exists("./data/localstore.json")) {
         mod.save();
         return;
     }
 
-    var data = fs.readFileSync('./localstore.json');
+    var data = fs.readFileSync('./data/localstore.json');
 
     try {
         mod.options = JSON.parse(data);

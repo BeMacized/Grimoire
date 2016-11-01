@@ -1,46 +1,45 @@
 //Imports
 const Discord = require('discord.js');
-const config = require('./config.js');
+const config = require('./data/config.js');
 const mtg = require('mtgsdk');
-const facts = require("./facts.js");
-const localstore = require("./localstore.js");
+const facts = require("./modules/facts.js");
+const localstore = require("./modules/localstore.js");
 const stathat = require('stathat');
+const mcm = require('./modules/mcm.js');
+const moment = require("moment");
+const momentT = require("moment-timezone");
 
 //Load localstore
 localstore.load();
-
 //Global initializations
 const bot = new Discord.Client();
 const factTriggers = ["thopter", "servo", "kaladesh", "fabricate"];
 var lastCard = {};
-
 //Notify when ready for use
 bot.on('ready', () => {
     console.log('Ready.');
 });
 
-
 //Handle message receive event
 bot.on('message', message => {
-
     //Don't respond to bot users
     if (message.author.bot) return;
-
     //Extract names from message
     var names = message.content.match(/<<[^<>]+>>/g);
-
     //Handle commands
     if (message.content.startsWith("!")) {
         var split = message.content.trim().split(/\s+/);
         var cmd = split[0].substr(1, split[0].length);
         var args = split.splice(1, split.length);
-
         switch (cmd) {
-            case "rulings":
+            case "time": {
+                message.reply("My system time is set to " + moment(moment().unix() * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC");
+                break;
+            }
+            case "pricing": {
                 //Log statistic
-                stathat.trackEZCount(config.statHatEZKey, "Command: !rulings", 1, function (status, json) {
+                stathat.trackEZCount(config.statHatEZKey, "Command: !pricing", 1, function (status, json) {
                 });
-
                 //First, let's check if a card was specified.
                 var manual = false;
                 var cardShell;
@@ -55,7 +54,6 @@ bot.on('message', message => {
                 } else {
                     cardShell = lastCard[message.channel.id];
                 }
-
                 //Find the card
                 mtg.card.where({name: cardShell.name})
                     .then(cards => {
@@ -64,10 +62,9 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
-
                         //Get the card that has an ID match
                         var card = null;
-
+                        cards.reverse();
                         if (!manual) {
                             for (var c of cards) {
                                 if (c.id == cardShell.id) {
@@ -83,35 +80,55 @@ bot.on('message', message => {
                                 }
                             }
                         }
-
                         //We couldn't find a matching card.
                         if (card == null) {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
-
-                        //check if the card has rulings, if not let the user know
-                        if (!card.hasOwnProperty("rulings")) {
-                            message.reply("'" + cardShell.name + "' does not seem to have any specified rulings!");
-                            return;
-                        }
-
-                        //Show the user all the rulings.
-                        var response = "**Rulings for '" + card.name + "':**\n\n";
-                        for (ruling of card.rulings) {
-                            response += "**" + ruling.date + "**\n" + ruling.text + "\n\n";
-                        }
-                        message.reply(response);
+                        //Retrieve the pricing
+                        mcm.getCardPricing(card.name, card.setName, function (success, data) {
+                            if (!success) {
+                                switch (data) {
+                                    case "DB_ERROR":
+                                        message.reply("A problem occurred with my database. Pinging " + message.guild.members.get(config.devId) + " to fix his shit.");
+                                        break;
+                                    case "RATE_LIMIT":
+                                        message.reply("Too many requests have been made to <http://MagicCardMarket.eu> over the past hour. In order to keep them happy too, we have to throttle these requests. Please try again in a few minutes!");
+                                        break;
+                                    case "MCM_UNHANDLED_RESPONSE":
+                                        message.reply("Something fucky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        break;
+                                    case "NO_DATA_AVAILABLE":
+                                        message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "'!");
+                                        break;
+                                    case "NO_DATA_AVAILABLE_SET":
+                                        message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "' in set '" + card.setName + "'!");
+                                        break;
+                                    case "MCM_UNHANDLED_BODY":
+                                        message.reply("Something fucky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        break;
+                                    default:
+                                        message.reply("I cannot help you right now because " + message.guild.members.get(config.devId) + " messed up big time. Tell him to fix me up! Here's a (" + data + ")");
+                                        break;
+                                }
+                                return;
+                            }
+                            message.reply("\n**Pricing Data for '" + card.name + "' from set '" + card.setName + "':**\n\n"
+                                + "**MagicCardMarket.eu: ** Low: €" + data.price.low + " _(Foil: €" + data.price.lowFoil + ")_ **|** Average: €" + data.price.avg + " **|** Trend: €" + data.price.trend + "\n" +
+                                "For more information visit <" + data.url + ">\n"
+                                + "_(Last updated at " + moment(data.lastUpdated * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC)_");
+                        });
                     })
                     .catch(function (err) {
-                        message.reply("I could not contact my sources at this moment. Please try again later!");
+                        message.reply("I wasn't able to retrieve information about '" + cardShell.name + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
                     });
                 break;
-            case "prints":
-                //Log statistic
-                stathat.trackEZCount(config.statHatEZKey, "Command: !prints", 1, function (status, json) {
-                });
+            }
+            case "oracle":
 
+                //Log statistic
+                stathat.trackEZCount(config.statHatEZKey, "Command: !oracle", 1, function (status, json) {
+                });
                 //First, let's check if a card was specified.
                 var manual = false;
                 var cardShell;
@@ -119,7 +136,6 @@ bot.on('message', message => {
                     cardShell = {name: args.join(" "), id: null};
                     manual = true;
                 }
-
                 //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
                 else if (!lastCard.hasOwnProperty(message.channel.id)) {
                     message.reply("I don't remember the last card mentioned!");
@@ -127,7 +143,6 @@ bot.on('message', message => {
                 } else {
                     cardShell = lastCard[message.channel.id];
                 }
-
                 //Find the card
                 mtg.card.where({name: cardShell.name})
                     .then(cards => {
@@ -136,10 +151,128 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+                        //Get the card that has an ID match
+                        var card = null;
+                        if (!manual) {
+                            for (var c of cards) {
+                                if (c.id == cardShell.id) {
+                                    card = c;
+                                    break;
+                                }
+                            }
+                        } else {
+                            for (var c of cards) {
+                                if (c.name.toLowerCase() == cardShell.name.toLowerCase()) {
+                                    card = c;
+                                    break;
+                                }
+                            }
+                        }
+                        //We couldn't find a matching card.
+                        if (card == null) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+                        message.reply("**Oracle text for '" + cardShell.name + "':**\n\n_" + card.text + "_");
+                    })
+                    .catch(function (err) {
+                        message.reply("I wasn't able to retrieve information about '" + cardShell.name + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
+                    });
+                break;
+            case "rulings":
 
+                //Log statistic
+                stathat.trackEZCount(config.statHatEZKey, "Command: !rulings", 1, function (status, json) {
+                });
+                //First, let's check if a card was specified.
+                var manual = false;
+                var cardShell;
+                if (args.length > 0) {
+                    cardShell = {name: args.join(" "), id: null};
+                    manual = true;
+                }
+                //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
+                else if (!lastCard.hasOwnProperty(message.channel.id)) {
+                    message.reply("I don't remember the last card mentioned!");
+                    return;
+                } else {
+                    cardShell = lastCard[message.channel.id];
+                }
+                //Find the card
+                mtg.card.where({name: cardShell.name})
+                    .then(cards => {
+                        //No cards found!
+                        if (cards.length == 0) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+                        //Get the card that has an ID match
+                        var card = null;
+                        if (!manual) {
+                            for (var c of cards) {
+                                if (c.id == cardShell.id) {
+                                    card = c;
+                                    break;
+                                }
+                            }
+                        } else {
+                            for (var c of cards) {
+                                if (c.name.toLowerCase() == cardShell.name.toLowerCase()) {
+                                    card = c;
+                                    break;
+                                }
+                            }
+                        }
+                        //We couldn't find a matching card.
+                        if (card == null) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
+                        //check if the card has rulings, if not let the user know
+                        if (!card.hasOwnProperty("rulings")) {
+                            message.reply("'" + cardShell.name + "' does not seem to have any specified rulings!");
+                            return;
+                        }
+                        //Show the user all the rulings.
+                        var response = "**Rulings for '" + card.name + "':**\n\n";
+                        for (ruling of card.rulings) {
+                            response += "**" + ruling.date + "**\n" + ruling.text + "\n\n";
+                        }
+                        message.reply(response);
+                    })
+                    .catch(function (err) {
+                        message.reply("I wasn't able to retrieve information about '" + cardShell.name + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
+                    });
+                break;
+            case "prints":
+
+                //Log statistic
+                stathat.trackEZCount(config.statHatEZKey, "Command: !prints", 1, function (status, json) {
+                });
+                //First, let's check if a card was specified.
+                var manual = false;
+                var cardShell;
+                if (args.length > 0) {
+                    cardShell = {name: args.join(" "), id: null};
+                    manual = true;
+                }
+                //Check if we know of any card that was previously mentioned, if not tell the user we don't know what to do
+                else if (!lastCard.hasOwnProperty(message.channel.id)) {
+                    message.reply("I don't remember the last card mentioned!");
+                    return;
+                } else {
+                    cardShell = lastCard[message.channel.id];
+                }
+                //Find the card
+                mtg.card.where({name: cardShell.name})
+                    .then(cards => {
+                        //No cards found!
+                        if (cards.length == 0) {
+                            message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
+                            return;
+                        }
                         //Get the card that has an ID match
                         var filtered_cards = [];
-
                         if (!manual) {
                             for (var c of cards) {
                                 if (c.name.toLowerCase() == cardShell.name.toLowerCase())
@@ -151,13 +284,11 @@ bot.on('message', message => {
                                     filtered_cards.push(c);
                             }
                         }
-
                         //We couldn't find a matching card.
                         if (filtered_cards.length == 0) {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
-
                         //Show the user all the sets.
                         var response = "**Card '" + filtered_cards[0].name + "' was printed in the following sets:**\n\n";
                         for (var card of filtered_cards) {
@@ -166,7 +297,7 @@ bot.on('message', message => {
                         message.reply(response);
                     })
                     .catch(function (err) {
-                        message.reply("I could not contact my sources at this moment. Please try again later!");
+                        message.reply("I wasn't able to retrieve information about '" + cardShell.name + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
                     });
                 break;
             case "help":
@@ -182,7 +313,9 @@ bot.on('message', message => {
                         "**!help** - That is this command you dummy!\n" +
                         "**!rulings** _[cardname]_ - Pull up the rulings for a card. If no cardname is supplied, it will take the last card mentioned in the channel.\n" +
                         "**!stats** - Pull up some bot related statistics!\n" +
-                        "**!prints** _[cardname]_ - Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.\n\n" +
+                        "**!prints** _[cardname]_ - Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.\n" +
+                        "**!oracle** _[cardname]_ - Pull up the oracle (current) text of a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.\n" +
+                        "**!pricing** _[cardname]_ - Pull up pricing data for a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.\n\n" +
                         "If you have any issues or questions about me, please shoot my developer " + message.guild.members.get(config.devId) + " a PM!"
                     );
                 } catch (err) {
@@ -191,26 +324,21 @@ bot.on('message', message => {
             case "stats":
                 message.reply("**Bot Statistics**\n\n**Card Lookups:** https://www.stathat.com/s/WKI6qS4tPTjI");
                 break;
-
         }
     }
-
     //Otherwise attempt finding card names
     else if (names != null && names.length > 0) {
 
         //Initialize response variables
         var response = "";
         var images = [];
-
         //Remove excess names above threshold
         names = names.slice(0, config.maxCardsPerMessage);
-
         //Evaluate every card name
         var callsRemaining = names.length;
         for (var name of names) {
             //Remove << & >>
             name = name.substr(2, name.length - 4);
-
             //Start making API requests
             var split = name.split(/\|/);
             const cname = split[0].trim();
@@ -228,7 +356,6 @@ bot.on('message', message => {
                             return e.name.toLowerCase() == cname.toLowerCase()
                         });
                         if (tmpCards.length > 0) cards = tmpCards;
-
                         //If we still have multiple unique cards, present user with a list of names.
                         var uniqueCards = [];
                         for (var c of cards)
@@ -240,11 +367,8 @@ bot.on('message', message => {
                                 response += " - " + c + "\n";
                             response += "\n";
                         }
-
                         else {
-
                             var sets = [];
-
                             //If we specified the set, remove all cards with a nonmatching set
                             if (set != null && set !== "") {
                                 var tmpCards = [];
@@ -258,7 +382,6 @@ bot.on('message', message => {
                                 cards = tmpCards;
                             }
 
-
                             //If we have no more cards left remaining, inform the user we cannot find the card in that set.
                             if (cards.length == 0) {
                                 response += "No results found for '" + cname + "' in set '" + set + "'\n" +
@@ -267,19 +390,16 @@ bot.on('message', message => {
                                     response += " - " + s + "\n";
                             }
 
-
                             //Queue the image for upload if we have a definitive result
                             else {
                                 //Get last card in array with art
                                 var card = null;
-
                                 for (var i = cards.length - 1; i >= 0; i--) {
                                     if (cards[i].hasOwnProperty("imageUrl")) {
                                         card = cards[i];
                                         break;
                                     }
                                 }
-
                                 if (card == null) {
                                     response += "There is no card art available for '" + card.name + "' from set '" + card.setName + "' (" + card.set + ")!\n\n";
                                 } else {
@@ -289,7 +409,6 @@ bot.on('message', message => {
                             }
                         }
                     }
-
                     //Upload the images and send the message
                     callsRemaining--;
                     if (callsRemaining == 0) {
@@ -301,11 +420,10 @@ bot.on('message', message => {
                     }
                 })
                 .catch(function (err) {
-                    message.reply("I could not contact my sources at this moment. Please try again later!");
+                    message.reply("I wasn't able to retrieve information about '" + cname + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
                 });
         }
     }
-
     else if (factTriggers.some(function (v) {
             return message.content.toLowerCase().indexOf(v) >= 0;
         }) && localstore.options.nextFact - Math.floor(Date.now() / 1000) < 0 && Math.floor(Math.random() * 5) == 0) {
@@ -321,19 +439,16 @@ bot.on('message', message => {
             facts: facts.thopterFacts,
             name: "Thopter"
         }));
-
         //Set timeout for next fact
         localstore.options.nextFact = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * (3600 * 3 - 3600) + 3600);
         localstore.save();
-
         //Send the fact
         message.channel.sendMessage(f.name + " Fact: " + f.facts[Math.floor(Math.random() * f.facts.length)]);
-
         //Log statistic
         stathat.trackEZCount(config.statHatEZKey, "Show Fact", 1, function (status, json) {
         });
+
     }
 });
-
 //Login to discord
 bot.login(config.botToken);
