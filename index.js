@@ -20,6 +20,15 @@ bot.on('ready', () => {
     console.log('Ready.');
 });
 
+var getEmoji = function (name, guild) {
+    for (var emoji of guild.emojis) {
+        if (emoji[1].name == name) {
+            return emoji[1];
+        }
+    }
+    return null;
+};
+
 //Handle message receive event
 bot.on('message', message => {
     //Don't respond to bot users
@@ -85,6 +94,10 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+
+                        //Save as last card mentioned
+                        if (manual) lastCard[message.channel.id] = {id: card.id, name: card.name};
+
                         //Retrieve the pricing
                         mcm.getCardPricing(card.name, card.setName, function (success, data) {
                             if (!success) {
@@ -125,10 +138,62 @@ bot.on('message', message => {
                 break;
             }
             case "oracle":
-
                 //Log statistic
                 stathat.trackEZCount(config.statHatEZKey, "Command: !oracle", 1, function (status, json) {
                 });
+
+                //Define variable mapping:
+                var emojiMap = {
+                    "W": "manaW",
+                    "U": "manaU",
+                    "B": "manaB",
+                    "R": "manaR",
+                    "G": "manaG",
+                    "C": "manaC",
+                    "W/U": "manaWU",
+                    "U/B": "manaUB",
+                    "B/R": "manaBR",
+                    "R/G": "manaRG",
+                    "G/W": "manaGW",
+                    "W/B": "manaWB",
+                    "U/R": "manaUR",
+                    "B/G": "manaBG",
+                    "R/W": "manaRW",
+                    "G/U": "manaGU",
+                    "2/W": "mana2W",
+                    "2/U": "mana2U",
+                    "2/B": "mana2B",
+                    "2/R": "mana2R",
+                    "2/G": "mana2G",
+                    "WP": "manaWP",
+                    "UP": "manaUP",
+                    "BP": "manaBP",
+                    "RP": "manaRP",
+                    "GP": "manaGP",
+                    "0": "manaZero",
+                    "1": "manaOne",
+                    "2": "manaTwo",
+                    "3": "manaThree",
+                    "4": "manaFour",
+                    "5": "manaFive",
+                    "6": "manaSix",
+                    "7": "manaSeven",
+                    "8": "manaEight",
+                    "9": "manaNine",
+                    "10": "manaTen",
+                    "11": "manaEleven",
+                    "12": "manaTwelve",
+                    "13": "manaThirteen",
+                    "14": "manaFourteen",
+                    "15": "manaFifteen",
+                    "16": "manaSixteen",
+                    "20": "manaTwenty",
+                    "T": "manaT",
+                    "Q": "manaQ",
+                    "S": "manaS",
+                    "X": "manaX"
+                };
+
                 //First, let's check if a card was specified.
                 var manual = false;
                 var cardShell;
@@ -173,9 +238,23 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
-                        message.reply("**Oracle text for '" + cardShell.name + "':**\n\n_" + card.text + "_");
+
+                        //Save as last card mentioned
+                        if (manual) lastCard[message.channel.id] = {id: card.id, name: card.name};
+
+                        //replacing symbols
+                        var oracle = card.text;
+                        for (var v in emojiMap) {
+                            var emoji = getEmoji(emojiMap[v], message.guild);
+                            if (!emoji) continue;
+                            oracle = oracle.replace(new RegExp("\\{" + v + "\\}","g"), emoji.toString());
+                        }
+
+                        //reply
+                        message.reply("**Oracle text for '" + cardShell.name + "':**\n\n_" + oracle + "_");
                     })
                     .catch(function (err) {
+                        console.log(err);
                         message.reply("I wasn't able to retrieve information about '" + cardShell.name + "', as either the card is not available on the Gatherer, or the data source is currently offline.");
                     });
                 break;
@@ -228,6 +307,10 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+
+                        //Save as last card mentioned
+                        if (manual) lastCard[message.channel.id] = {id: card.id, name: card.name};
+
                         //check if the card has rulings, if not let the user know
                         if (!card.hasOwnProperty("rulings")) {
                             message.reply("'" + cardShell.name + "' does not seem to have any specified rulings!");
@@ -289,6 +372,10 @@ bot.on('message', message => {
                             message.reply("I wasn't able to retrieve information about '" + cardShell.name + "'");
                             return;
                         }
+
+                        //Save as last card mentioned
+                        if (manual) lastCard[message.channel.id] = {id: card.id, name: card.name};
+
                         //Show the user all the sets.
                         var response = "**Card '" + filtered_cards[0].name + "' was printed in the following sets:**\n\n";
                         for (var card of filtered_cards) {
