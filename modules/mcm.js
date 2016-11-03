@@ -136,6 +136,13 @@ const getCardPricing = function (name, setName, callback) {
                             return obj.category.idCategory == 1;
                         });
 
+                        //If we found an exact match, remove all non exact matches
+                        var exact = resp.product.filter(function (obj) {
+                            return obj.name.name["1"].productName.toLowerCase() == name;
+                        });
+                        if (exact.length > 0)
+                            resp.product = exact;
+
                         //We found no data!
                         if (resp.product.length == 0) {
                             callback(false, "NO_DATA_AVAILABLE");
