@@ -6,8 +6,8 @@ const facts = require("./modules/facts.js");
 const localstore = require("./modules/localstore.js");
 const stathat = require('stathat');
 const mcm = require('./modules/mcm.js');
+const tcg = require('./modules/tcg.js');
 const moment = require("moment");
-const momentT = require("moment-timezone");
 
 //Load localstore
 localstore.load();
@@ -98,38 +98,87 @@ bot.on('message', message => {
                         //Save as last card mentioned
                         if (manual) lastCard[message.channel.id] = {id: card.id, name: card.name};
 
-                        //Retrieve the pricing
-                        mcm.getCardPricing(card.name, card.setName, function (success, data) {
+                        //TODO: Make requests async.
+
+                        //Retrieve the pricing for MCM
+                        mcm.getCardPricing(card.name, card.set, function (success, mcmData) {
+                            var MCM_resp = "";
                             if (!success) {
-                                switch (data) {
-                                    case "DB_ERROR":
-                                        message.reply("A problem occurred with my database. Pinging " + message.guild.members.get(config.devId) + " to fix his shit.");
+                                switch (mcmData) {
+                                    case "MCM_NO_SET_SUPPORT":
+                                        MCM_resp = "Set '" + card.setName + "' is currently unsupported by <http://MagicCardMarket.eu>.";
+                                        break;
+                                    case "UNKNOWN_SET":
+                                        MCM_resp = "Set '" + card.setName + " (" + card.set + ")' has not been implemented for <http://MagicCardMarket.eu>.  Pinging " + message.guild.members.get(config.devId) + " to implement this set for MagicCardMarket. ";
                                         break;
                                     case "RATE_LIMIT":
-                                        message.reply("Too many requests have been made to <http://MagicCardMarket.eu> over the past hour. In order to keep them happy too, we have to throttle these requests. Please try again in a few minutes!");
-                                        break;
-                                    case "MCM_UNHANDLED_RESPONSE":
-                                        message.reply("Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        MCM_resp = "I've asked too much data from <http://MagicCardMarket.eu>. Please try again later!";
                                         break;
                                     case "NO_DATA_AVAILABLE":
-                                        message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "'!");
+                                        MCM_resp = "I couldn't find any results on <http://MagicCardMarket.eu> about '" + card.name + "'.";
                                         break;
                                     case "NO_DATA_AVAILABLE_SET":
-                                        message.reply("I cannot find any results on <http://MagicCardMarket.eu> about '" + card.name + "' in set '" + card.setName + "'!");
+                                        MCM_resp = "I couldn't find any results on <http://MagicCardMarket.eu> about '" + card.name + "' in set '" + card.setName + "'.";
                                         break;
                                     case "MCM_UNHANDLED_BODY":
-                                        message.reply("Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + data + ")");
+                                        MCM_resp = "Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + mcmData + ")";
                                         break;
+                                    case "MCM_UNHANDLED_RESPONSE":
+                                        MCM_resp = "Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + mcmData + ")";
+                                        break;
+                                    case "DB_ERROR":
+                                        message.reply("A problem occurred with my database. Pinging " + message.guild.members.get(config.devId) + " to fix his shit.");
+                                        return;
                                     default:
-                                        message.reply("I cannot help you right now because " + message.guild.members.get(config.devId) + " messed up big time. Tell him to fix me up! Here's a (" + data + ")");
-                                        break;
+                                        message.reply("I cannot help you right now because " + message.guild.members.get(config.devId) + " messed up big time. Tell him to fix me up! (" + mcmData + ")");
+                                        return;
                                 }
-                                return;
+                            } else {
+                                MCM_resp = "Low: €" + mcmData.price.low + " _(Foil: €" + mcmData.price.lowFoil + ")_ **|** Average: €" + mcmData.price.avg + " **|** Trend: €" + mcmData.price.trend + "\n" +
+                                    "For more information visit <" + mcmData.url + ">\n"
+                                    + "_(Last updated at " + moment(mcmData.lastUpdated * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC)_"
                             }
-                            message.reply("\n**Pricing Data for '" + card.name + "' from set '" + card.setName + "':**\n\n"
-                                + "**MagicCardMarket.eu: ** Low: €" + data.price.low + " _(Foil: €" + data.price.lowFoil + ")_ **|** Average: €" + data.price.avg + " **|** Trend: €" + data.price.trend + "\n" +
-                                "For more information visit <" + data.url + ">\n"
-                                + "_(Last updated at " + moment(data.lastUpdated * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC)_");
+
+                            //Retrieve the pricing for TCGPlayer
+                            tcg.getCardPricing(card.name, card.set, function(success,tcgData){
+                                var TCG_resp = "";
+                                if (!success) {
+                                    switch (tcgData) {
+                                        case "TCG_NO_SET_SUPPORT":
+                                            TCG_resp = "Set '" + card.setName + "' is currently unsupported by <http://tcgplayer.com/>.";
+                                            break;
+                                        case "UNKNOWN_SET":
+                                            TCG_resp = "Set '" + card.setName + " (" + card.set + ")' has not been implemented for <http://tcgplayer.com/>.  Pinging " + message.guild.members.get(config.devId) + " to implement this set for TCGPlayer. ";
+                                            break;
+                                        case "RATE_LIMIT":
+                                            TCG_resp = "I've asked too much data from <http://tcgplayer.com/>. Please try again later!";
+                                            break;
+                                        case "NO_DATA_AVAILABLE":
+                                            TCG_resp = "I couldn't find any results on <http://tcgplayer.com/> about '" + card.name + "'.";
+                                            break;
+                                        case "TCG_UNHANDLED_BODY":
+                                            TCG_resp = "Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + tcgData + ")";
+                                            break;
+                                        case "TCG_UNHANDLED_RESPONSE":
+                                            TCG_resp = "Something funky went down and I don't know how to deal with it. Pinging " + message.guild.members.get(config.devId) + " to fix his shit. (" + tcgData + ")";
+                                            break;
+                                        case "DB_ERROR":
+                                            message.reply("A problem occurred with my database. Pinging " + message.guild.members.get(config.devId) + " to fix his shit.");
+                                            return;
+                                        default:
+                                            message.reply("I cannot help you right now because " + message.guild.members.get(config.devId) + " messed up big time. Tell him to fix me up! (" + tcgData + ")");
+                                            return;
+                                    }
+                                } else {
+                                    TCG_resp = "Low: €" + tcgData.price.low + " **|** Average: €" + tcgData.price.avg + " _(Foil: €" + tcgData.price.avgFoil + ")_ **|** High: €" + tcgData.price.high + "\n" +
+                                        "For more information visit <" + tcgData.url + ">\n"
+                                        + "_(Last updated at " + moment(tcgData.lastUpdated * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC)_"
+                                }
+                                message.reply("\n**Pricing Data for '" + card.name + "' from set '" + card.setName + "':**\n\n"
+                                    + "**MagicCardMarket.eu:** " + MCM_resp +"\n\n"
+                                    + "**TCGPlayer.com:** " + TCG_resp
+                                );
+                            });
                         });
                     })
                     .catch(function (err) {
@@ -191,7 +240,8 @@ bot.on('message', message => {
                     "T": "manaT",
                     "Q": "manaQ",
                     "S": "manaS",
-                    "X": "manaX"
+                    "X": "manaX",
+                    "E": "manaE"
                 };
 
                 //First, let's check if a card was specified.
@@ -247,7 +297,7 @@ bot.on('message', message => {
                         for (var v in emojiMap) {
                             var emoji = getEmoji(emojiMap[v], message.guild);
                             if (!emoji) continue;
-                            oracle = oracle.replace(new RegExp("\\{" + v + "\\}","g"), emoji.toString());
+                            oracle = oracle.replace(new RegExp("\\{" + v + "\\}", "g"), emoji.toString());
                         }
 
                         //reply

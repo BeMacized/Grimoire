@@ -6,6 +6,7 @@ const request = require("request");
 const moment = require("moment");
 const dbmgr = require("./dbmgr.js");
 const stathat = require('stathat');
+const setDictionary = require("./setdictionary.js");
 
 
 const generateHeader = function (httpMethod, realm) {
@@ -42,17 +43,18 @@ const generateHeader = function (httpMethod, realm) {
         "oauth_signature=\"" + oauth_signature + "\"";
 };
 
-const getCardPricing = function (name, setName, callback) {
 
-    //Map MTG API sets to MCM sets
-    const setMap = {
-        "limited edition alpha": "alpha"
-    };
-    if (setName.toLowerCase() in setMap)
-        setName = setMap[setName.toLowerCase()];
+const getCardPricing = function (name, setCode, callback) {
+
+    var setName = (setDictionary.hasOwnProperty(setCode) && setDictionary[setCode].mcm != '') ? setDictionary[setCode].mcm : null;
+
+    if (setName == null) {
+        callback(false, (setDictionary.hasOwnProperty(setCode)) ? "MCM_NO_SET_SUPPORT" : "UNKNOWN_SET");
+        return;
+    }
 
     //First we look it up in our database
-    dbmgr.CardData.find({name: name, setName: setName}, function (err, models) {
+    dbmgr.CardData.find({name: name, setCode: setCode}, function (err, models) {
         //If an error occurred, we let the callback know
         if (err) {
             console.log(error);
@@ -61,12 +63,8 @@ const getCardPricing = function (name, setName, callback) {
         }
 
         //If we find a record, we check if its still "fresh". If it is, use this as data.
-        if (models.length > 0 && moment().unix() - models[0].lastUpdated < config.cardRefreshInterval) {
-            callback(true, {
-                price: models[0].price,
-                lastUpdated: models[0].lastUpdated,
-                url: models[0].url
-            });
+        if (models.length > 0 && models[0].marketplaces.hasOwnProperty("mcm") && moment().unix() - models[0].marketplaces.mcm.lastUpdated < config.cardRefreshInterval) {
+            callback(true, models[0].marketplaces.mcm);
             return;
         }
 
@@ -92,9 +90,10 @@ const getCardPricing = function (name, setName, callback) {
             //First log that we made the request with stathat and our db
             stathat.trackEZCount(config.statHatEZKey, "MagicCardMarket Data Retrieval", 1, function (status, json) {
             });
+
             new dbmgr.RetrievalRecord({
                 cardName: name,
-                setName: setName,
+                setCode: setCode,
                 provider: "MCM",
                 timestamp: moment().unix()
             }).save(function (err) {
@@ -138,7 +137,7 @@ const getCardPricing = function (name, setName, callback) {
 
                         //If we found an exact match, remove all non exact matches
                         var exact = resp.product.filter(function (obj) {
-                            return obj.name.name["1"].productName.toLowerCase() == name;
+                            return obj.name["1"].productName.toLowerCase() == name;
                         });
                         if (exact.length > 0)
                             resp.product = exact;
@@ -150,51 +149,90 @@ const getCardPricing = function (name, setName, callback) {
                         }
 
                         //First of all, let's save & update all new data we found! We can immediately find the card of the correct set.
-                        var setCard = null;
+                        var calledback = false;
                         for (const card of resp.product) {
 
-                            //Remove old data
-                            dbmgr.CardData.remove({
-                                name: card.name["1"].productName,
-                                setName: card.expansion
-                            }, function (err) {
-                            });
-
-                            //Insert new data
-                            const cardData = new dbmgr.CardData({
-                                name: card.name["1"].productName,
-                                setName: card.expansion,
-                                lastUpdated: moment().unix(),
-                                url: "https://www.magiccardmarket.eu" + card.website,
-                                price: {
-                                    low: card.priceGuide.LOWEX,
-                                    lowFoil: card.priceGuide.LOWFOIL,
-                                    avg: card.priceGuide.AVG,
-                                    trend: card.priceGuide.TREND
+                            //Find the setcode of the card to save
+                            var setCode = null;
+                            for (var set in setDictionary) {
+                                if (setDictionary[set].mcm == card.expansion) {
+                                    setCode = set;
+                                    break;
                                 }
-                            });
-                            cardData.save(function (err) {
-                                //We can still continue if the caching fails. Rate limiting acts as a safety net.
-                                if (err)
-                                    console.log(err);
-                            });
+                            }
 
-                            //Check if this is the card we were looking for
-                            if (card.expansion.toLowerCase() == setName.toLowerCase())
-                                setCard = {
-                                    price: cardData.price,
-                                    lastUpdated: cardData.lastUpdated,
-                                    url: cardData.url
+                            //If we found it, save the data.
+                            if (setCode != null) {
+
+                                //construct new data
+                                const mcm = {
+                                    url: "https://www.magiccardmarket.eu" + card.website,
+                                    price: {
+                                        low: card.priceGuide.LOWEX,
+                                        lowFoil: card.priceGuide.LOWFOIL,
+                                        avg: card.priceGuide.AVG,
+                                        trend: card.priceGuide.TREND
+                                    },
+                                    lastUpdated: moment().unix()
                                 };
+
+                                //Let's check if data exists first
+                                const tmpSetCode = setCode;
+                                dbmgr.CardData.find({name: name, setCode: tmpSetCode}, function (err, models) {
+
+                                    //log error if it exists
+                                    if (err) {
+                                        console.log(err);
+                                        return;
+                                    }
+
+                                    //Data exists, let's update it
+                                    if (models.length > 0) {
+                                        for (var model of models) {
+                                            model.marketplaces.mcm = mcm;
+                                            model.save(function (err) {
+                                                //We can still continue if the caching fails. Rate limiting acts as a safety net.
+                                                if (err)
+                                                    console.log(err);
+                                            });
+                                        }
+                                    }
+
+                                    //No data exists, let's insert something new
+                                    else {
+                                        const cardData = new dbmgr.CardData({
+                                            name: name,
+                                            setCode: tmpSetCode,
+                                            marketplaces: {
+                                                mcm: mcm
+                                            }
+                                        });
+                                        cardData.save(function (err) {
+                                            //We can still continue if the caching fails. Rate limiting acts as a safety net.
+                                            if (err)
+                                                console.log(err);
+                                        });
+                                    }
+                                });
+
+                                //Check if this is the card we were looking for
+                                if (card.expansion == setName && !calledback) {
+                                    //If so, return it
+                                    callback(true, mcm);
+                                    //prevent multiple callbacks
+                                    calledback = true;
+                                }
+                            } else {
+                                console.log("[NOTE]: Unknown MCM expansion: " + card.expansion);
+                            }
                         }
 
                         //If we did not find a result, notify the callback
-                        if (setCard == null) {
+                        if (!calledback) {
                             callback(false, "NO_DATA_AVAILABLE_SET");
                             return;
                         }
 
-                        callback(true, setCard);
                     } catch (err) {
                         console.log({
                             stackTrace: err,
