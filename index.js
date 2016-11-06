@@ -170,7 +170,7 @@ bot.on('message', message => {
                                             return;
                                     }
                                 } else {
-                                    TCG_resp = "Low: €" + tcgData.price.low + " **|** Average: €" + tcgData.price.avg + " _(Foil: €" + tcgData.price.avgFoil + ")_ **|** High: €" + tcgData.price.high + "\n" +
+                                    TCG_resp = "Low: $" + tcgData.price.low + " **|** Average: $" + tcgData.price.avg + " _(Foil: $" + tcgData.price.avgFoil + ")_ **|** High: $" + tcgData.price.high + "\n" +
                                         "For more information visit <" + tcgData.url + ">\n"
                                         + "_(Last updated at " + moment(tcgData.lastUpdated * 1000).utcOffset("+0000").format('YYYY-MM-DD HH:mm:ss') + " UTC)_"
                                 }
