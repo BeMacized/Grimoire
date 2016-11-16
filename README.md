@@ -3,11 +3,11 @@
 
 ##Usage
 The main use of this bot is pulling up Magic The Gathering card art. You can do this by surrounding card names with << >>.
-For example: _<<Shivan Dragon>> has been reprinted many times!_
+For example: _<\<Shivan Dragon>> has been reprinted many times!_
 
 You can too specify a specific set if you want to. You can do this by either supplying the set name, or a 3 letter set code.
-For example: _<<Shivan Dragon|Limited Edition Alpha>> is a very old card!_
-Or alternatively: _<<Shivan Dragon|LEA>> is a very old card!_
+For example: _<\<Shivan Dragon|Limited Edition Alpha>> is a very old card!_
+Or alternatively: _<\<Shivan Dragon|LEA>> is a very old card!_
 
 ##Commands
 The following commands are currently implemented:
