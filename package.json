@@ -4,13 +4,11 @@
   "description": "A Discord bot used to provide assistance in Magic The Gathering Discord Guilds.",
   "main": "src/Grimoire.js",
   "scripts": {
-    "init": "rm -rf node_modules && rm -rf flow-typed && npm install && flow-typed update",
-    "winit": "RD /S /Q node_modules && RD /S /Q flow-typed && npm install && flow-typed update",
-    "test": "TIMING=1 eslint --format=node_modules/eslint-formatter-pretty . && mocha --compilers js:babel-register --require babel-polyfill",
-    "test-jenkins": "TIMING=1 eslint -f checkstyle -o eslint.xml . && JUNIT_REPORT_PATH=report.xml mocha --colors --compilers js:babel-register --require babel-polyfill --reporter mocha-jenkins-reporter",
+    "test": "TIMING=1 eslint -f checkstyle -o eslint.xml . && JUNIT_REPORT_PATH=report.xml mocha --colors --compilers js:babel-register --require babel-polyfill --reporter mocha-jenkins-reporter",
     "compile-es2015": "webpack --config webpack.prod.config.js",
     "start-pm2": "pm2 start src/Grimoire.js --interpreter ./node_modules/.bin/babel-node",
-    "start": "./node_modules/.bin/babel-node src/Grimoire.js"
+    "start": "./node_modules/.bin/babel-node src/Grimoire.js",
+    "install": "rm -rf flow-typed; flow-typed install || true"
   },
   "author": "BeMacized",
   "license": "GPL-3.0",
