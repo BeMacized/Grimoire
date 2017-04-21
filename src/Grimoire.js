@@ -13,8 +13,6 @@ class Grimoire {
 
   discordController: DiscordController;
   chatProcessor: ChatProcessor;
-  config: Config;
-  appState: AppState;
   commandDispatcher: CommandDispatcher;
   commons: Commons;
 
@@ -25,14 +23,14 @@ class Grimoire {
     });
 
     // Load config
-    this.config = new Config('./config.json', FSPromise);
-    this.config.initialize().then(() => {
+    const config = new Config('./config.json', FSPromise);
+    config.initialize().then(() => {
       // Initialize App State
-      this.appState = new AppState();
+      const appState = new AppState();
       // Instantiate Discord controller
-      this.discordController = new DiscordController(Discord, this.config.values.botToken, this.config.values.botUsername);
+      this.discordController = new DiscordController(Discord, config.values.botToken, config.values.botUsername);
       // Initialize commons
-      this.commons = new Commons(this.appState, mtg, this.config.values, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage);
+      this.commons = new Commons(appState, mtg, config.values, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage);
       // Instantiate Command Dispatcher
       this.commandDispatcher = new CommandDispatcher(this.commons);
       // Instantiate Chat processor
