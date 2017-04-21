@@ -1,4 +1,4 @@
-# Magister's Grimoire
+# Magister's Grimoire [![Build Status](https://travis-ci.org/BeMacized/Grimoire.svg?branch=master)](https://travis-ci.org/BeMacized/Grimoire)
 "Magister's Grimoire" is a Discord Bot developed for the "Magic & Chill" Discord guild. It provides functionality surrounding the trading card game "Magic The Gathering" by Wizards of the Coast.
 
 ## Usage
