@@ -2,8 +2,7 @@
 
 type MentionData = {
   channelId: string,
-  cardId: string,
-  setCode: string
+  card: Object
 };
 
 export default class AppState {
@@ -13,12 +12,11 @@ export default class AppState {
     this.lastMentioned = [];
   }
 
-  setLastMentioned: (channelId: string, cardId: string, setCode: string) => void;
-  setLastMentioned(channelId: string, cardId: string, setCode: string) {
+  setLastMentioned: (channelId: string, card: Object) => void;
+  setLastMentioned(channelId: string, card: Object) {
     this.lastMentioned = this.lastMentioned.filter(md => md.channelId !== channelId).concat([{
       channelId,
-      cardId,
-      setCode
+      card
     }]);
   }
 }

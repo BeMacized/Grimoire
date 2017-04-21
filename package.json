@@ -47,6 +47,6 @@
     "discord.js": "^11.0.0",
     "fs-promise": "^2.0.2",
     "lodash": "^4.17.4",
-    "mtgsdk": "^0.1.1"
+    "mtgsdk": "BeMacized/mtg-sdk-javascript#feature/set-support"
   }
 }

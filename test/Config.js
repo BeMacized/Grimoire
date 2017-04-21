@@ -3,7 +3,7 @@
 // Dependencies
 import { describe, it } from 'mocha';
 import { assert } from 'chai';
-import Config, { defaultConfig } from '../../src/Utils/Config';
+import Config, { defaultConfig } from '../src/Utils/Config';
 
 describe('Config', () => {
   it('attempts generating a default config when none exists', (done) => {

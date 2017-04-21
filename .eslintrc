@@ -34,7 +34,8 @@
     "max-len": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-throw-literal": "off"
   },
   "plugins": [
     "flowtype",

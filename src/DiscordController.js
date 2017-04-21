@@ -1,7 +1,6 @@
 // @flow
-import Discord, { Client } from 'discord.js';
+import Discord, { Client, Message } from 'discord.js';
 import ChatProcessor from './ChatProcessor';
-import type { ChatTools } from './ChatProcessor';
 
 export default class DiscordController {
 
@@ -55,7 +54,10 @@ export default class DiscordController {
     this.client.login(this.botToken).catch(() => {});
   }
 
-  getChatTools: () => ChatTools;
+  getChatTools: () => {
+    sendFile: (url: string, text: string, userId: string, channelId?: ?string) => Promise<Message>,
+    sendMessage: (text: string, userId: string, channelId?: ?string) => Promise<Message>
+  }
   getChatTools() {
     return {
       sendFile: async (url: string, text: string, userId: string, channelId?: ?string) => {
@@ -66,7 +68,7 @@ export default class DiscordController {
           if (!destination) throw Error(`DiscordController could not obtain channel object for Channel ID '${channelId || 'Not Supplied'}' or User ID'${userId}'`);
         }
         // Send file
-        return destination.sendFile(url, 'card.png', text);
+        return destination.sendFile(url, 'card.png', text, { split: true });
       },
       sendMessage: async (text: string, userId: string, channelId?: ?string) => {
         // Obtain destination
@@ -76,7 +78,7 @@ export default class DiscordController {
           if (!destination) throw Error(`DiscordController could not obtain channel object for Channel ID '${channelId || 'Not Supplied'}' or User ID'${userId}'`);
         }
         // Send message
-        return destination.sendMessage(text);
+        return destination.sendMessage(text, { split: true });
       }
     };
   }

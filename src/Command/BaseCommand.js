@@ -1,18 +1,14 @@
 // @flow
-import type { MTGSDK } from 'mtgsdk';
-import type { Message } from 'discord.js';
-import type { ConfigType } from '../Utils/Config';
-import AppState from '../AppState';
-
+import Commons from '../Utils/Commons';
 
 export default class BaseCommand {
   name: string;
   usage: string;
   description: string;
   aliases: Array<string>;
-  tools: CommandTools;
+  commons: Commons;
 
-  constructor(commandTools: CommandTools, name: string, usage: string, description: string, aliases?: Array<string> = []) {
+  constructor(commons: Commons, name: string, usage: string, description: string, aliases?: Array<string> = []) {
     // Verify input
     if (!name) throw Error('Command name cannot be empty');
     // Initialize fields
@@ -20,19 +16,12 @@ export default class BaseCommand {
     this.usage = usage;
     this.description = description;
     this.aliases = aliases;
-    this.tools = commandTools;
+    this.commons = commons;
   }
 
-  exec(/* args: Array<string>, userId: string, channelId?: ?string, guildId?: ?string*/) {
+  // eslint-disable-next-line no-unused-vars
+  async exec(args: Array<string>, userId: string, channelId: string, guildId?: ?string) {
     // override me
   }
 
 }
-
-export type CommandTools = {
-  sendFile: (url: string, text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>,
-  sendMessage: (text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>,
-  mtg: MTGSDK,
-  config: ConfigType,
-  appState: AppState
-};

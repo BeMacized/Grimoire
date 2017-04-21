@@ -3,7 +3,7 @@
 // Dependencies
 import { describe, it } from 'mocha';
 import { assert } from 'chai';
-import CommandDispatcher from '../../src/Command/CommandDispatcher';
+import CommandDispatcher from '../src/Command/CommandDispatcher';
 
 describe('CommandDispatcher', () => {
   it('returns false when supplying no command', (done) => {
