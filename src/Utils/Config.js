@@ -4,7 +4,7 @@ import FSPromise from 'fs-promise';
 export const defaultConfig = {
   maxInlineCardReferences: 6,
   botToken: '',
-  botUsername: 'Grimoire'
+  botUsername: 'Mac\'s Grimoire'
 };
 
 export type ConfigType = {
