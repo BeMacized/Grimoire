@@ -1,5 +1,5 @@
-# Spark
-"Spark" is a Discord Bot to assist communication in the "Magic and Chill" Discord guild.
+# Magister's Grimoire
+"Magister's Grimoire" is a Discord Bot developed for the "Magic & Chill" Discord guild. It provides functionality surrounding the trading card game "Magic The Gathering" by Wizards of the Coast.
 
 ##Usage
 The main use of this bot is pulling up Magic The Gathering card art. You can do this by surrounding card names with << >>.
