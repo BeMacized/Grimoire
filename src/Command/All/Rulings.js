@@ -8,10 +8,10 @@ export default class Prints extends BaseCommand {
   constructor(commons: Commons) {
     super(
       commons,
-      'prints',
+      'rulings',
       '[card name]',
-      'Retrieve all sets that a card was printed in. Lists for the last shown card if no card name supplied.',
-      ['sets', 'versions']
+      'Retrieves the current rulings of the specified card. Lists for the last shown card if no card name supplied.',
+      ['rules', 'ruling']
     );
     // Bind method(s)
     this.exec = this.exec.bind(this);
@@ -27,15 +27,22 @@ export default class Prints extends BaseCommand {
       return;
     }
 
-    // Obtain sets
-    const sets = await Promise.all(card.printings.map(async (setCode) => {
-      const set = await this.commons.mtg.set.find(setCode);
-      return { code: setCode, name: set.set.name };
-    }));
+    // Let the user know if there are no known rulings
+    if (!card.rulings || card.rulings.length === 0) {
+      this.commons.sendMessage(`<@${userId}>, There are no known rulings for **'${card.name}'**`, userId, channelId);
+      return;
+    }
 
     // Construct message
-    let message: string = `The card **'${card.name}'** was printed in the following sets:\n`;
-    sets.forEach(set => { message += `\n - ${set.name} (**${set.code}**)`; });
+    let message: string = `The following ruling(s) were released for **'${card.name}'**:`;
+    let lastDate = '';
+    card.rulings.forEach(ruling => {
+      if (ruling.date !== lastDate) {
+        lastDate = ruling.date;
+        message += `\n\n**${ruling.date}**:`;
+      }
+      message += `\n - ${ruling.text}`;
+    });
 
     // Send message
     this.commons.sendMessage(message, userId, channelId);

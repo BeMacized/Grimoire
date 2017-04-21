@@ -1,6 +1,7 @@
 // @flow
 import BaseCommand from './BaseCommand';
 import Prints from './All/Prints';
+import Rulings from './All/Rulings';
 import Commons from '../Utils/Commons';
 
 export default class CommandDispatcher {
@@ -11,7 +12,8 @@ export default class CommandDispatcher {
   constructor(commons: Commons) {
     // Initialize fields
     this.commands = [
-      new Prints(commons)
+      new Prints(commons),
+      new Rulings(commons)
     ];
 
     // Bind functions

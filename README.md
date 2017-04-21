@@ -1,5 +1,5 @@
-# Magister's Grimoire
-"Magister's Grimoire" is a Discord Bot developed for the "Magic & Chill" Discord guild. It provides functionality surrounding the trading card game "Magic The Gathering" by Wizards of the Coast.
+# Mac's Grimoire
+"Mac's Grimoire" is a Discord Bot developed for the "Magic & Chill" Discord guild. It provides functionality surrounding the trading card game "Magic The Gathering" by Wizards of the Coast.
 
 ## Usage
 The main use of this bot is pulling up Magic The Gathering card art. You can do this by surrounding card names with << >>.
@@ -16,7 +16,6 @@ Command | Parameters | Description
 ------------ | ------------- | -------------
 **!help** | _None_ | Pull up the bot documentation
 **!rulings** | _[cardname]_ | Pull up the rulings for a card. If no cardname is supplied, it will take the last card mentioned in the channel.
-**!stats** | _None_ | Pull up some bot related statistics!
 **!prints** | _[cardname]_ | Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.
 **!oracle** | _[cardname]_ | Pull up the oracle (current) text of a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.
 **!pricing** | _[cardname]_ | Pull up pricing data for a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.
