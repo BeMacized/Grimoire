@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import type { MTGSDK } from 'mtgsdk';
-import type { Message } from 'discord.js';
+import type { Message, Emoji } from 'discord.js';
 import type { ConfigType } from './Config';
 import AppState from './AppState';
 
@@ -13,16 +13,19 @@ export default class Commons {
   sendFile: (url: string, text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>;
   sendMessage: (text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>;
   config: ConfigType;
+  getEmoji: (name: string, guildId: string) => ?Emoji;
 
   constructor(appState: AppState, mtg: MTGSDK, config: ConfigType,
     sendFile: (url: string, text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>,
-    sendMessage: (text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>) {
+    sendMessage: (text: string, userId: string, channelId?: ?string, guildId?: ?string) => Promise<Message>,
+    getEmoji: (name: string, guildId: string) => ?Emoji) {
     // Initialize fields
     this.mtg = mtg;
     this.appState = appState;
     this.sendMessage = sendMessage;
     this.sendFile = sendFile;
     this.config = config;
+    this.getEmoji = getEmoji;
 
     // Bind function(s)
     this.obtainRecentOrSpecifiedCard = this.obtainRecentOrSpecifiedCard.bind(this);

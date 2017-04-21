@@ -1,5 +1,5 @@
 // @flow
-import Discord, { Client, Message } from 'discord.js';
+import Discord, { Client, Message, Emoji } from 'discord.js';
 import ChatProcessor from './ChatProcessor';
 
 export default class DiscordController {
@@ -46,6 +46,10 @@ export default class DiscordController {
       // Pass message onto processor
       if (this.chatProcessor) this.chatProcessor.process(message.content, message.author.id, message.channel.id, message.guild ? message.guild.id : null);
     });
+
+    // Bind functions
+    this.login = this.login.bind(this);
+    this.getChatTools = this.getChatTools.bind(this);
   }
 
   login: Function;
@@ -56,10 +60,11 @@ export default class DiscordController {
 
   getChatTools: () => {
     sendFile: (url: string, text: string, userId: string, channelId?: ?string) => Promise<Message>,
-    sendMessage: (text: string, userId: string, channelId?: ?string) => Promise<Message>
+    sendMessage: (text: string, userId: string, channelId?: ?string) => Promise<Message>,
+    getEmoji: (name: string, guildId: string) => ?Emoji
   }
   getChatTools() {
-    return {
+    const tools = {
       sendFile: async (url: string, text: string, userId: string, channelId?: ?string) => {
         // Obtain destination
         let destination = this.client.channels.get(channelId);
@@ -79,8 +84,17 @@ export default class DiscordController {
         }
         // Send message
         return destination.sendMessage(text, { split: true });
+      },
+      getEmoji: (name: string, guildId: string) => {
+        const guild = this.client.guilds.get(guildId);
+        if (!guild) return null;
+        return guild.emojis.find(e => e.name === name);
       }
     };
+    tools.sendFile = tools.sendFile.bind(this);
+    tools.sendMessage = tools.sendMessage.bind(this);
+    tools.getEmoji = tools.getEmoji.bind(this);
+    return tools;
   }
 
 

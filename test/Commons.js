@@ -18,7 +18,7 @@ describe('Commons', () => {
         ]
       };
       // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}));
+      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Invoke function
       const result = await commons.obtainRecentOrSpecifiedCard('', 'channel id');
       // Test
@@ -36,7 +36,7 @@ describe('Commons', () => {
         ]
       };
       // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}));
+      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
         await commons.obtainRecentOrSpecifiedCard('', 'channel id2');
@@ -63,7 +63,7 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');
     });
@@ -83,7 +83,7 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
         await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');
@@ -109,7 +109,7 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
         await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');

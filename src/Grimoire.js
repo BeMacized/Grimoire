@@ -30,7 +30,7 @@ class Grimoire {
       // Instantiate Discord controller
       this.discordController = new DiscordController(Discord, config.values.botToken, config.values.botUsername);
       // Initialize commons
-      this.commons = new Commons(appState, mtg, config.values, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage);
+      this.commons = new Commons(appState, mtg, config.values, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage, this.discordController.getChatTools().getEmoji);
       // Instantiate Command Dispatcher
       this.commandDispatcher = new CommandDispatcher(this.commons);
       // Instantiate Chat processor

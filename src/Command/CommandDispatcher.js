@@ -2,6 +2,7 @@
 import BaseCommand from './BaseCommand';
 import Prints from './All/Prints';
 import Rulings from './All/Rulings';
+import Oracle from './All/Oracle';
 import Commons from '../Utils/Commons';
 
 export default class CommandDispatcher {
@@ -13,7 +14,8 @@ export default class CommandDispatcher {
     // Initialize fields
     this.commands = [
       new Prints(commons),
-      new Rulings(commons)
+      new Rulings(commons),
+      new Oracle(commons)
     ];
 
     // Bind functions
