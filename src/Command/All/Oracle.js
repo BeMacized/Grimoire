@@ -3,14 +3,14 @@
 import BaseCommand from '../BaseCommand';
 import Commons from '../../Utils/Commons';
 
-export default class Prints extends BaseCommand {
+export default class Oracle extends BaseCommand {
 
   constructor(commons: Commons) {
     super(
       commons,
       'oracle',
       '[card name]',
-      'Retrieves the oracle text of a card. If no card is specified, it will take the last mentioned card.',
+      'Retrieves the oracle text of a card. Lists for the last shown card if no card name supplied.',
       ['cardtext']
     );
     // Bind method(s)

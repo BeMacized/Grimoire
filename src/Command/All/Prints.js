@@ -10,7 +10,7 @@ export default class Prints extends BaseCommand {
       commons,
       'prints',
       '[card name]',
-      'Retrieve all sets that a card was printed in. Lists for the last shown card if no card name supplied.',
+      'Retrieves all sets that a card was printed in. Lists for the last shown card if no card name supplied.',
       ['sets', 'versions']
     );
     // Bind method(s)
