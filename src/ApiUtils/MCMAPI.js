@@ -6,7 +6,7 @@ import didYouMean from 'didyoumean';
 import moment from 'moment';
 import rawurlencode from 'locutus/php/url/rawurlencode';
 import SetDictionary from './SetDictionary';
-import type { ConfigType } from './Config';
+import type { ConfigType } from '../Utils/Config';
 
 export default class MCMAPI {
 

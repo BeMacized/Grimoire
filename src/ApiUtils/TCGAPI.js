@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import didYouMean from 'didyoumean';
 import * as xml2js from 'xml2js';
 import SetDictionary from './SetDictionary';
-import type { ConfigType } from './Config';
+import type { ConfigType } from '../Utils/Config';
 
 const parseXML = Promise.promisify(xml2js.parseString);
 
