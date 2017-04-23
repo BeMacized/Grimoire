@@ -8,7 +8,8 @@ export const defaultConfig = {
   mcmApiHost: 'sandbox.mkmapi.eu',
   mcmToken: '',
   mcmSecret: '',
-  tcgApiHost: ''
+  tcgApiHost: '',
+  tcgKey: '',
 };
 
 export type ConfigType = {
@@ -18,7 +19,8 @@ export type ConfigType = {
   mcmApiHost: string,
   mcmToken: string,
   mcmSecret: string,
-  tcgApiHost: string
+  tcgApiHost: string,
+  tcgKey: string
 };
 
 export default class Config {

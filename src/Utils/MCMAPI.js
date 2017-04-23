@@ -20,6 +20,7 @@ export default class MCMAPI {
     // Bind function(s)
     this.getPricing = this.getPricing.bind(this);
     this.genAuthHeader = this.genAuthHeader.bind(this);
+    this.updateSetDictionary = this.updateSetDictionary.bind(this);
   }
 
   updateSetDictionary: Function;
@@ -70,9 +71,7 @@ export default class MCMAPI {
       // Map expansion name to known set name
       const setName = didYouMean(expansion.name, this.setDictionary.dictionary.map(item => item.setName));
       // If we don't know the expansion, discard it.
-      if (!setName) {
-        return;
-      }
+      if (!setName) return;
       // Obtain set code (which definitely exists because we just obtained its name)
       const setCode : string = (this.setDictionary.dictionary.find(item => item.setName === setName): any).setCode;
       // Register the MCM name
@@ -174,5 +173,4 @@ export default class MCMAPI {
       `oauth_signature="${oauthSignature}"`
     ].join('');
   }
-
 }
