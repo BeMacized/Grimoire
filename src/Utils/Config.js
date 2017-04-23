@@ -4,13 +4,21 @@ import FSPromise from 'fs-promise';
 export const defaultConfig = {
   maxInlineCardReferences: 6,
   botToken: '',
-  botUsername: 'Mac\'s Grimoire'
+  botUsername: 'Mac\'s Grimoire',
+  mcmApiHost: 'sandbox.mkmapi.eu',
+  mcmToken: '',
+  mcmSecret: '',
+  tcgApiHost: ''
 };
 
 export type ConfigType = {
   maxInlineCardReferences: number,
   botToken: string,
-  botUsername: string
+  botUsername: string,
+  mcmApiHost: string,
+  mcmToken: string,
+  mcmSecret: string,
+  tcgApiHost: string
 };
 
 export default class Config {

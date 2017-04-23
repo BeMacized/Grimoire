@@ -43,9 +43,14 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "didyoumean": "^1.2.1",
     "discord.js": "^11.0.0",
     "fs-promise": "^2.0.2",
+    "locutus": "^2.0.8",
     "lodash": "^4.17.4",
-    "mtgsdk": "BeMacized/mtg-sdk-javascript#feature/set-support"
+    "moment": "^2.18.1",
+    "mtgsdk": "MagicTheGathering/mtg-sdk-javascript",
+    "randomstring": "^1.1.5",
+    "superagent": "^3.5.2"
   }
 }
