@@ -11,7 +11,7 @@ describe('ChatProcessor', () => {
     it('properly extracts an inline card name.', (done) => {
       const extractedNames: Array<string> = [];
       // Instantiate chatProcessor
-      const commons: any = { sendFile: async () => ({}), sendMessage: async () => ({}), config: defaultConfig, mtg: {}, appState: ({ setLastMentioned: () => {} }: any) };
+      const commons: any = { sendFile: async () => ({}), sendMessage: async () => ({ edit: async () => {} }), config: defaultConfig, mtg: {}, appState: ({ setLastMentioned: () => {} }: any) };
       const chatProcessor: ChatProcessor = new ChatProcessor(commons, ({ processMessage: () => {} }: any));
       // Mock the showInlineCard function
       chatProcessor.showInlineCard = async (cardName) => { extractedNames.push(cardName); return {}; };
@@ -25,7 +25,7 @@ describe('ChatProcessor', () => {
     it('properly extracts multiple inline card names.', (done) => {
       const extractedNames: Array<string> = [];
       // Instantiate chatProcessor
-      const commons: any = { sendFile: async () => ({}), sendMessage: async () => ({}), config: defaultConfig, mtg: {}, appState: ({ setLastMentioned: () => {} }: any) };
+      const commons: any = { sendFile: async () => ({}), sendMessage: async () => ({ edit: async () => {} }), config: defaultConfig, mtg: {}, appState: ({ setLastMentioned: () => {} }: any) };
       const chatProcessor: ChatProcessor = new ChatProcessor(commons, ({ processMessage: () => {} }: any));
       // Mock the showInlineCard function
       chatProcessor.showInlineCard = async (cardName) => { extractedNames.push(cardName); return {}; };
@@ -42,10 +42,7 @@ describe('ChatProcessor', () => {
       // Mock Commons, App State & MTG SDK
       const commons: any = {
         sendFile: async () => ({}),
-        sendMessage: async () => {
-          done('Unexpected call to sendMessage method');
-          return null;
-        },
+        sendMessage: async () => ({ edit: async () => {}, delete: async () => {} }),
         config: defaultConfig,
         mtg: {
           card: {
@@ -74,10 +71,7 @@ describe('ChatProcessor', () => {
           done();
           return {};
         },
-        sendMessage: async () => {
-          done('Unexpected call to sendMessage method');
-          return null;
-        },
+        sendMessage: async () => ({ edit: async () => {}, delete: async () => {} }),
         config: defaultConfig,
         mtg: {
           card: {
@@ -98,7 +92,7 @@ describe('ChatProcessor', () => {
       // Mock MTG SDK & Commons
       const commons: any = {
         sendFile: async () => ({}),
-        sendMessage: async () => ({}),
+        sendMessage: async () => ({ edit: async () => {}, delete: async () => {} }),
         config: defaultConfig,
         mtg: {
           card: {
@@ -126,9 +120,11 @@ describe('ChatProcessor', () => {
           return {};
         },
         sendMessage: async (message) => {
-          assert.equal(message, "<@0>, I could not find any results for **'example card name'**!", 'Received unexpected feedback!');
-          done();
-          return null;
+          if (message !== '```\nLoading card...\n```') {
+            assert.equal(message, "<@0>, I could not find any results for **'example card name'**!", 'Received unexpected feedback!');
+            done();
+          }
+          return { edit: async () => {}, delete: async () => {} };
         },
         config: defaultConfig,
         mtg: {
@@ -154,9 +150,11 @@ describe('ChatProcessor', () => {
           return {};
         },
         sendMessage: async (message) => {
-          assert.match(message, /^<@0>, I ran into some problems when trying to retrieve data for \*\*'example card name'\*\*.*/, 'Received unexpected feedback!');
-          done();
-          return null;
+          if (message !== '```\nLoading card...\n```') {
+            assert.match(message, /^<@0>, I ran into some problems when trying to retrieve data for \*\*'example card name'\*\*.*/, 'Received unexpected feedback!');
+            done();
+          }
+          return { edit: async () => {}, delete: async () => {} };
         },
         config: defaultConfig,
         mtg: {
@@ -182,9 +180,11 @@ describe('ChatProcessor', () => {
           return {};
         },
         sendMessage: async (message) => {
-          assert.equal(message, '<@0>, There were too many results for **\'example card name\'**. Did you perhaps mean to pick any of the following?\n\n - example card 2\n - example card 1\n', 'Received unexpected feedback!');
-          done();
-          return null;
+          if (message !== '```\nLoading card...\n```') {
+            assert.equal(message, '<@0>, There were too many results for **\'example card name\'**. Did you perhaps mean to pick any of the following?\n\n - example card 2\n - example card 1\n', 'Received unexpected feedback!');
+            done();
+          }
+          return { edit: async () => {}, delete: async () => {} };
         },
         mtg: {
           card: {
@@ -211,9 +211,11 @@ describe('ChatProcessor', () => {
           return {};
         },
         sendMessage: async (message) => {
-          assert.equal(message, '<@0>, There is no card image available for **\'example card name\'**!', 'Received unexpected feedback!');
-          done();
-          return null;
+          if (message !== '```\nLoading card...\n```') {
+            assert.equal(message, '<@0>, There is no card image available for **\'example card name\'**!', 'Received unexpected feedback!');
+            done();
+          }
+          return { edit: async () => {}, delete: async () => {} };
         },
         mtg: {
           card: {
@@ -245,6 +247,7 @@ describe('ChatProcessor', () => {
             error = 'ChatProcessor did not permit given amount of card references.';
             throw e;
           }
+          return { edit: async () => {}, delete: async () => {} };
         },
         mtg: {},
         config: defaultConfig,
@@ -268,6 +271,7 @@ describe('ChatProcessor', () => {
         sendMessage: async (message) => {
           assert.match(message, /<@0>, It is not permitted to use more than [0-9]+ card references per message\./);
           done();
+          return { edit: async () => {}, delete: async () => {} };
         },
         mtg: {},
         config: defaultConfig,
