@@ -53,7 +53,12 @@ export default class Pricing extends BaseCommand {
           this.commons.sendMessage(`<@${userId}>, An error occurred with my database. Please try again later.`, userId, channelId);
           return;
         }
+        case 'ARTIFICIAL_RATE_LIMIT': {
+          this.commons.sendMessage(`<@${userId}>, We have reached our own rate limit for retrieving card pricing. We do this in order to prevent abuse. If this happens quite often, please contact my developer to raise the limit.`, userId, channelId);
+          return;
+        }
         default: {
+          console.log(e);
           this.commons.sendMessage(`<@${userId}>, An unknown error occurred. Please try again later.`, userId, channelId);
           return;
         }

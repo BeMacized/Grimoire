@@ -4,6 +4,7 @@ import _MCMAPI from './ApiUtils/MCMAPI';
 import _TCGAPI from './ApiUtils/TCGAPI';
 import Commons from './Utils/Commons';
 import _PricingRecord from './Database/PricingRecord';
+import _RateLimiter from './Utils/RateLimiter';
 
 export type PricingRecordType = {
   cardName: string,
@@ -25,13 +26,17 @@ export default class PricingUtils {
   mcmApi: _MCMAPI;
   tcgApi: _TCGAPI;
   PricingRecord: _PricingRecord;
+  RateLimiter: Class<_RateLimiter>;
+  rateLimiters: Array<{storeId: string, limiter: _RateLimiter}>;
 
-  constructor(MCMAPI: Class<_MCMAPI>, TCGAPI: Class<_TCGAPI>, commons: Commons, PricingRecord: _PricingRecord) {
+  constructor(MCMAPI: Class<_MCMAPI>, TCGAPI: Class<_TCGAPI>, commons: Commons, PricingRecord: _PricingRecord, RateLimiter: Class<_RateLimiter>) {
     // Initialize fields
     this.mcmApi = new MCMAPI(commons.config, commons.setDictionary);
     this.tcgApi = new TCGAPI(commons.config, commons.setDictionary);
     this.commons = commons;
     this.PricingRecord = PricingRecord;
+    this.RateLimiter = RateLimiter;
+    this.rateLimiters = [];
 
     // Update set dictionary when ready
     const updateSetDictionary = () => {
@@ -84,6 +89,21 @@ export default class PricingUtils {
       console.error(e);
       throw { errType: 'DATABASE_ERROR' };
     }
+    // Get rate limiter for storeId
+    const limiter = (() => {
+      let entry = this.rateLimiters.find(e => e.storeId === storeId);
+      if (!entry) {
+        entry = { storeId, limiter: new this.RateLimiter(200, 3600) };
+        this.rateLimiters.push(entry);
+      }
+      return entry.limiter;
+    })();
+
+    if (!limiter.checkPermission()) {
+      console.error(`Surpassed artificial rate limit for ${storeId}`);
+      throw { errType: 'ARTIFICIAL_RATE_LIMIT' };
+    }
+
     console.log('RETRIEVING FROM API', storeId);
     // Get pricing from store API
     let pricing: {
