@@ -13,11 +13,29 @@ The following commands are currently implemented:
 
 Command | Parameters | Description
 ------------ | ------------- | -------------
-**!help** | _None_ | Pull up the bot documentation
-**!rulings** | _[cardname]_ | Pull up the rulings for a card. If no cardname is supplied, it will take the last card mentioned in the channel.
-**!prints** | _[cardname]_ | Pull up all the sets a card has been printed in. If no cardname is supplied, it will take the last card mentioned in the channel.
-**!oracle** | _[cardname]_ | Pull up the oracle (current) text of a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.
-**!pricing** | _[cardname]_ | Pull up pricing data for a specific card. If no cardname is supplied, it will take the last card mentioned in the channel.
-
+**!help** | _None_ | Shows the help text, containing all of the command references.
+**!rulings** | _[cardname]_ | Retrieves the current rulings of the specified card. Lists for the last shown card if no card name supplied.
+**!prints** | _[cardname]_ | Retrieves all sets that a card was printed in. Lists for the last shown card if no card name supplied.
+**!oracle** | _[cardname]_ | Retrieves the oracle text of a card. Lists for the last shown card if no card name supplied.
+**!pricing** | _[cardname]_ | Retrieves the current pricing for a card. Lists for the last shown card if no card name supplied.
 
 The data for the **!pricing** command is graciously provided by [TCGPlayer](http://tcgplayer.com) and [MagicCardMarket.EU](http://magiccardmarket.eu)
+
+## Config
+A config file will be automatically generated if none is present. It's located in the working directory with the name `config.json`.
+
+It contains the following fields:
+
+```javascript
+{
+  "maxInlineCardReferences": 6, // The maximum amount of inline references per message
+  "botToken": "", // The Discord bot token
+  "botUsername": "Mac's Grimoire", // The username for the bot
+  "mcmApiHost": "sandbox.mkmapi.eu", // The API hostname for the MagicCardMarket API
+  "mcmToken": "", // The MagicCardMarket Application Token
+  "mcmSecret": "", // The MagicCardMarket Application Secret
+  "tcgApiHost": "partner.tcgplayer.com", // The hostname for the TCGPlayer API
+  "tcgKey": "", // The key to use for the TCGPlayer API
+  "mongoURL": "mongodb://User:Password@Host:Port/Database" // The connection details for the mongo database.
+}
+```

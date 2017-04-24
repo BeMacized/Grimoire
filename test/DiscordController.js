@@ -29,12 +29,17 @@ describe('DiscordController', () => {
                 stages++;
                 return {};
               },
+              setGame: async (text: string) => {
+                assert.equal(text, 'Magic: The Gathering', 'The given game text was not what we expected');
+                stages++;
+                return {};
+              }
             };
           }
         }
       };
     // Queue final Check
-      setTimeout(() => { assert.equal(stages, 3, 'Not enough stages activated for the result to be correct!'); done(); }, 150);
+      setTimeout(() => { assert.equal(stages, 4, 'Not enough stages activated for the result to be correct!'); done(); }, 150);
     // Instantiate controller
       const controller: DiscordController = new DiscordController(DJS, 'token', 'username');
       assert.equal(controller.botToken, 'token', 'Set token was not what we expected');
