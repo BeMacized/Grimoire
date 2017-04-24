@@ -51,16 +51,17 @@ export default class ChatProcessor {
     if (msg.substring(0, 1) === '!' || msg.substring(0, 1) === '/') { this.commandDispatcher.processMessage(msg, userId, channelId, guildId); }
   }
 
-  showInlineCard: (cardName: string, userId: string, channelId?: ?string, guildId?: ?string, setCode?: string) => Promise<?Object>;
-  async showInlineCard(cardName: string, userId: string, channelId?: ?string, guildId?: ?string, setCode?: string = '') {
-    // Ensure setcode validity
-    if (!guildId && !setCode && channelId) setCode = channelId;
+  showInlineCard: (cardName: string, userId: string, channelId: string, guildId: ?string, setCode?: string) => Promise<?Object>;
+  async showInlineCard(cardName: string, userId: string, channelId: string, guildId: ?string, setCode?: string = '') {
+    console.log('SHOWING INLINE CARD', cardName, setCode);
 
     const loadMsg = await this.commons.sendMessage('```\nLoading card...\n```', userId, channelId).catch(e => { throw e; });
 
     // Construct query
     const query: Object = { name: cardName };
     if (setCode) query.set = setCode;
+
+    console.log('QUERY', query);
 
     // Retrieve search results
     let matches;
