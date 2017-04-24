@@ -50,6 +50,7 @@
     "locutus": "^2.0.8",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "mongoose": "^4.9.6",
     "mtgsdk": "MagicTheGathering/mtg-sdk-javascript",
     "randomstring": "^1.1.5",
     "superagent": "^3.5.2",

@@ -1,18 +1,24 @@
 // @flow
 
+import moment from 'moment';
 import BaseCommand from '../BaseCommand';
 import Commons from '../../Utils/Commons';
+import PricingUtils from '../../PricingUtils';
 
-export default class Prints extends BaseCommand {
+export default class Pricing extends BaseCommand {
 
-  constructor(commons: Commons) {
+  pricingUtils: PricingUtils;
+
+  constructor(commons: Commons, pricingUtils: PricingUtils) {
     super(
       commons,
-      'rulings',
+      'pricing',
       '[card name]',
-      'Retrieves the current rulings of the specified card. Lists for the last shown card if no card name supplied.',
-      ['rules', 'ruling']
+      'Retrieves the current pricing for a card. Lists for the last shown card if no card name supplied.',
+      ['price', 'dollarydoos']
     );
+    // Initialize field
+    this.pricingUtils = pricingUtils;
     // Bind method(s)
     this.exec = this.exec.bind(this);
   }
@@ -37,22 +43,35 @@ export default class Prints extends BaseCommand {
       return;
     }
 
-    // Let the user know if there are no known rulings
-    if (!card.rulings || card.rulings.length === 0) {
-      this.commons.sendMessage(`<@${userId}>, There are no known rulings for **'${card.name}'**`, userId, channelId);
-      return;
+    // Obtain pricing
+    let pricing;
+    try {
+      pricing = await this.pricingUtils.getPricing(card.name, card.set);
+    } catch (e) {
+      switch (e.errType) {
+        case 'DATABASE_ERROR': {
+          this.commons.sendMessage(`<@${userId}>, An error occurred with my database. Please try again later.`, userId, channelId);
+          return;
+        }
+        default: {
+          this.commons.sendMessage(`<@${userId}>, An unknown error occurred. Please try again later.`, userId, channelId);
+          return;
+        }
+      }
     }
 
-    // Construct message
-    let message: string = `The following ruling(s) were released for **'${card.name}'**:`;
-    let lastDate = '';
-    card.rulings.forEach(ruling => {
-      if (ruling.date !== lastDate) {
-        lastDate = ruling.date;
-        message += `\n\n**${ruling.date}**:`;
-      }
-      message += `\n - ${ruling.text}`;
-    });
+    // Construct Message
+    let message = `<@${userId}>, There is no pricing data available for **'${card.name}'** in set **'${card.setName}'**.`;
+    if (pricing.length > 0) {
+      message = `<@${userId}>, I found the following pricing data for **'${card.name}'** in set **'${card.setName}'**:`;
+      pricing.forEach(price => {
+        message += '\n\n';
+        message += `**${price.storeName}**: `;
+        message += `${price.pricings.map(priceType => `${priceType.key}: ${priceType.currency}${priceType.value}`).join('** | **')}\n`;
+        message += `For more information visit ${price.storeUrl}\n`;
+        message += `_(Last updated at ${moment(price.lastUpdated * 1000).utcOffset('+0000').format('YYYY-MM-DD HH:mm:ss')} UTC)_`;
+      });
+    }
 
     // Send message
     this.commons.sendMessage(message, userId, channelId);

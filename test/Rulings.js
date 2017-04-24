@@ -11,7 +11,7 @@ describe('Command: Rulings', () => {
     // Mock Commons
     const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), sendFile: async () => ({}), sendMessage: async () => ({}) };
     // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async (name: string, channelId: string) => {
+    commons.obtainRecentOrSpecifiedCard = async (name: string, setCode: ?string, channelId: string) => {
       assert.equal(name, 'test card', 'Card name was not what we expected.');
       assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
       done();
@@ -26,7 +26,7 @@ describe('Command: Rulings', () => {
     // Mock Commons
     const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), sendFile: async () => ({}), sendMessage: async () => ({}) };
     // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async (name: string, channelId: string) => {
+    commons.obtainRecentOrSpecifiedCard = async (name: string, setCode: ?string, channelId: string) => {
       assert.equal(name, '', 'Card name was not what we expected.');
       assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
       done();
@@ -45,7 +45,7 @@ describe('Command: Rulings', () => {
       config: ({}: any),
       sendFile: async () => ({}),
       sendMessage: async (msg: string, userId: string, channelId: string) => {
-        assert.equal(msg, '<@user id>, TEST', 'Error was not what we expected');
+        assert.equal(msg, '<@user id>, An unknown error occurred.', 'Error was not what we expected');
         assert.equal(userId, 'user id', 'User ID was not what we expected');
         assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
         done();

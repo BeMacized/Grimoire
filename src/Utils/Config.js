@@ -10,6 +10,8 @@ export const defaultConfig = {
   mcmSecret: '',
   tcgApiHost: '',
   tcgKey: '',
+  mongoURL: '',
+  pricingDataTimeout: 21600
 };
 
 export type ConfigType = {
@@ -20,7 +22,9 @@ export type ConfigType = {
   mcmToken: string,
   mcmSecret: string,
   tcgApiHost: string,
-  tcgKey: string
+  tcgKey: string,
+  mongoURL: string,
+  pricingDataTimeout: number
 };
 
 export default class Config {

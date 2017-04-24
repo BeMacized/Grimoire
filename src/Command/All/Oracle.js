@@ -21,9 +21,19 @@ export default class Oracle extends BaseCommand {
   async exec(args: Array<string>, userId: string, channelId: string, guildId?: ?string) {
     let card;
     try {
-      card = await this.commons.obtainRecentOrSpecifiedCard(args.join(' '), channelId);
+      card = await this.commons.obtainRecentOrSpecifiedCard(args.join(' '), null, channelId);
     } catch (err) {
-      this.commons.sendMessage(`<@${userId}>, ${err}`, userId, channelId);
+      switch (err.e) {
+        case 'RETRIEVE_ERROR': this.commons.sendMessage(`<@${userId}>, I ran into some problems when trying to retrieve data for **'${args.join(' ')}'**!${err.error}`, userId, channelId); break;
+        case 'NO_RESULTS': this.commons.sendMessage(`<@${userId}>, I could not find any results for **'${args.join(' ')}'**!`, userId, channelId); break;
+        case 'MANY_RESULTS': {
+          const cardList: string = err.cards.map(c => ` - ${c.name}`).reduce((total, value) => `${total + value}\n`, '');
+          this.commons.sendMessage(`<@${userId}>, There were too many results for **'${args.join(' ')}'**. Did you perhaps mean to pick any of the following?\n\n${cardList}`, userId, channelId);
+          break;
+        }
+        case 'NON_MENTIONED': this.commons.sendMessage(`<@${userId}>, Please either specify a card name, or make sure to mention a card using an inline reference beforehand.`, userId, channelId); break;
+        default: { console.error(err); this.commons.sendMessage(`<@${userId}>, An unknown error occurred.`, userId, channelId); break; }
+      }
       return;
     }
 

@@ -229,7 +229,12 @@ export default class TCGAPI {
     });
   }
 
-  getPricing: (cardName: string, setCode?: ?string) => Promise<{ SELL: number, LOW: number, LOWEX: number, LOWFOIL: number, AVG: number }>;
+  getPricing: (cardName: string, setCode?: ?string) => Promise<{
+    url: string,
+    pricing: Object,
+    currency: string,
+    storeName: string
+  }>;
   async getPricing(cardName: string, setCode?: ?string) {
     // Obtain TCG name from set code if specified
     const tcgSet = setCode ? this.setDictionary.setCodeToTcgName(setCode) : '';
@@ -238,15 +243,14 @@ export default class TCGAPI {
     // Make request safely
     let result;
     try {
-      result = await request.get(this.config.tcgApiHost).query({ pk: this.config.tcgKey, s: tcgSet, p: cardName });
-      console.log('XML', result.text);
+      result = await request.get(`http://${this.config.tcgApiHost}/x3/phl.asmx/p`).query({ pk: this.config.tcgKey, s: tcgSet, p: cardName });
       if (!result.text) {
         console.error('TCG API Issue: Text not present.');
-        throw { errType: 'MISC_ERROR', result };
+        throw { errType: 'RESPONSE_ERROR', result };
       }
       result = result.text;
     } catch (e) {
-      if (e.errType === 'MISC_ERROR') throw e;
+      if (e.errType === 'RESPONSE_ERROR') throw e;
       switch (e.status) {
         case 401: {
           console.error('TCG API Issue: 401 Unauthorized.');
@@ -264,6 +268,10 @@ export default class TCGAPI {
           console.error('TCG API Issue: 500 Internal Server Error.');
           throw { errType: 'SERVER_ERROR' };
         }
+        case 503: {
+          console.error('TCG API Issue: 503 Service Unavailable.');
+          throw { errType: 'SERVER_ERROR' };
+        }
         default: {
           console.error(`TCG API Issue: Unknown Status: ${e.status}.`, e);
           throw { errType: 'REQUEST_ERROR' };
@@ -278,20 +286,21 @@ export default class TCGAPI {
     let tcgData;
     try {
       tcgData = await parseXML(result);
-      console.log('TCGDATA', JSON.stringify(tcgData, null, 2));
     } catch (e) {
       throw { errType: 'RESPONSE_ERROR' };
     }
 
     // Construct data
-    const tcg = {
+    return {
       url: tcgData.products.product[0].link[0],
-      LOW: tcgData.products.product[0].lowprice[0],
-      AVG: tcgData.products.product[0].avgprice[0],
-      HIGH: tcgData.products.product[0].hiprice[0],
-      AVG_FOIL: tcgData.products.product[0].foilavgprice[0]
+      pricing: {
+        Low: tcgData.products.product[0].lowprice[0],
+        Average: tcgData.products.product[0].avgprice[0],
+        High: tcgData.products.product[0].hiprice[0],
+        'Average Foil': tcgData.products.product[0].foilavgprice[0]
+      },
+      currency: '$',
+      storeName: 'TCGPlayer.com'
     };
-
-    return tcg;
   }
 }

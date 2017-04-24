@@ -4,19 +4,22 @@ import Prints from './All/Prints';
 import Rulings from './All/Rulings';
 import Oracle from './All/Oracle';
 import Help from './All/Help';
+import Pricing from './All/Pricing';
 import Commons from '../Utils/Commons';
+import PricingUtils from '../PricingUtils';
 
 export default class CommandDispatcher {
 
   commands: Array<BaseCommand>;
   commons: Commons;
 
-  constructor(commons: Commons) {
+  constructor(commons: Commons, pricingUtils: PricingUtils) {
     // Initialize fields
     this.commands = [
       new Prints(commons),
       new Rulings(commons),
       new Oracle(commons),
+      new Pricing(commons, pricingUtils),
       new Help(commons, () => this.commands)
     ];
 

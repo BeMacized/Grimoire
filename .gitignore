@@ -16,6 +16,7 @@ flow-typed/
 
 #Config file
 config.json
+config_test.json
 
 #Transpiler output
 dist/

@@ -8,7 +8,7 @@ import CommandDispatcher from '../src/Command/CommandDispatcher';
 describe('CommandDispatcher', () => {
   it('returns false when supplying no command', (done) => {
     // Instantiate command dispatcher
-    const dispatcher = new CommandDispatcher(({}: any));
+    const dispatcher = new CommandDispatcher(({}: any), ({}: any));
     // Dispatch invalid command
     const result = dispatcher.processMessage('!', 'user id', 'channel id', 'guild id');
     // Test
@@ -18,7 +18,7 @@ describe('CommandDispatcher', () => {
 
   it('returns false when supplying an unknown', (done) => {
     // Instantiate command dispatcher
-    const dispatcher = new CommandDispatcher(({}: any));
+    const dispatcher = new CommandDispatcher(({}: any), ({}: any));
     // Remove all registered commands
     dispatcher.commands = [];
     // Dispatch unknown command
@@ -31,7 +31,7 @@ describe('CommandDispatcher', () => {
   it('It executes a known command with arguments (and returns true)', (done) => {
     let executed = false;
     // Instantiate command dispatcher
-    const dispatcher = new CommandDispatcher(({}: any));
+    const dispatcher = new CommandDispatcher(({}: any), ({}: any));
     // Replace all registered commands
     dispatcher.commands = ([{
       name: 'cmd',

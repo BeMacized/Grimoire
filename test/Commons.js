@@ -18,9 +18,9 @@ describe('Commons', () => {
         ]
       };
       // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      const commons = new Commons(appState, ({}: any), ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Invoke function
-      const result = await commons.obtainRecentOrSpecifiedCard('', 'channel id');
+      const result = await commons.obtainRecentOrSpecifiedCard('', '', 'channel id');
       // Test
       assert.deepEqual(result, { cardObject: true }, 'The result is not what we expected');
     });
@@ -36,12 +36,12 @@ describe('Commons', () => {
         ]
       };
       // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      const commons = new Commons(appState, ({}: any), ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('', 'channel id2');
+        await commons.obtainRecentOrSpecifiedCard('', '', 'channel id2');
       } catch (e) {
-        assert.equal(e, 'Please either specify a card name, or make sure to mention a card using an inline reference beforehand.', 'The error message we obtained was not the one we expected');
+        assert.deepEqual(e, { e: 'NON_MENTIONED' }, 'The error message we obtained was not the one we expected');
         return;
       }
       assert.fail();
@@ -63,9 +63,9 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
-      await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');
+      await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
     });
 
     it('gives appropriate feedback when the provided name does not yield results', async () => {
@@ -83,12 +83,12 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');
+        await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
       } catch (e) {
-        assert.equal(e, 'I could not find any results for **\'card name\'**!', 'The error message we obtained was not the one we expected');
+        assert.deepEqual(e, { e: 'NO_RESULTS' }, 'The error message we obtained was not the one we expected');
         return;
       }
       assert.fail();
@@ -109,15 +109,16 @@ describe('Commons', () => {
         }
       };
       // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), async () => ({}), async () => ({}), () => ({}));
+      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('card name', 'channel id');
+        await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
       } catch (e) {
-        assert.match(e, /^There were too many results for \*\*'card name'\*\*. Did you perhaps mean to pick any of the following?.*/, 'The error message we obtained was not the one we expected');
+        assert.deepEqual(e, { e: 'MANY_RESULTS', cards: [{ name: 'card 2' }, { name: 'card 1' }] }, 'The error message we obtained was not the one we expected');
         return;
       }
       assert.fail();
     });
   });
+  // TODO: ADD TESTS FOR SPECIFIED SET
 });

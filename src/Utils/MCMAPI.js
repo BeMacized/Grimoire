@@ -6,7 +6,7 @@ import didYouMean from 'didyoumean';
 import moment from 'moment';
 import rawurlencode from 'locutus/php/url/rawurlencode';
 import SetDictionary from './SetDictionary';
-import type { ConfigType } from '../Utils/Config';
+import type { ConfigType } from './Config';
 
 export default class MCMAPI {
 
@@ -33,11 +33,11 @@ export default class MCMAPI {
       result = await request.get(endpoint).set('Authorization', this.genAuthHeader(method, endpoint));
       if (!result.body) {
         console.error('MCM API Issue: Body not present.');
-        throw { errType: 'RESPONSE_ERROR', result };
+        throw { errType: 'MISC_ERROR', result };
       }
       result = result.body;
     } catch (e) {
-      if (e.errType === 'RESPONSE_ERROR') throw e;
+      if (e.errType === 'MISC_ERROR') throw e;
       switch (e.status) {
         case 401: {
           console.error('MCM API Issue: 401 Unauthorized.');
@@ -53,10 +53,6 @@ export default class MCMAPI {
         }
         case 500: {
           console.error('MCM API Issue: 500 Internal Server Error.');
-          throw { errType: 'SERVER_ERROR' };
-        }
-        case 503: {
-          console.error('MCM API Issue: 503 Service Unavailable.');
           throw { errType: 'SERVER_ERROR' };
         }
         default: {
@@ -83,13 +79,7 @@ export default class MCMAPI {
     });
   }
 
-  getPricing: (cardName: string, setCode?: ?string) => Promise<{
-    url: string,
-    pricing: Object,
-    currency: string,
-    storeName: string
-  }>;
-
+  getPricing: (cardName: string, setCode?: ?string) => Promise<{ SELL: number, LOW: number, LOWEX: number, LOWFOIL: number, AVG: number }>;
   async getPricing(cardName: string, setCode?: ?string) {
     // Obtain MCM name from set code if specified
     const mcmSet = setCode ? this.setDictionary.setCodeToMcmName(setCode) : '';
@@ -143,18 +133,8 @@ export default class MCMAPI {
     if (result.product.length === 0) throw { errType: 'NOT_FOUND' };
     // Extract the product
     const product = result.product[0];
-    // Return the price guide (We disregard LOWEX)
-    return {
-      url: `https://www.magiccardmarket.eu${product.website}`,
-      pricing: {
-        Low: product.priceGuide.LOW,
-        'Average Sell Price': product.priceGuide.SELL,
-        'Low Foil': product.priceGuide.LOWFOIL,
-        Average: product.priceGuide.AVG
-      },
-      currency: '€',
-      storeName: 'MagicCardMarket.eu'
-    };
+    // Return the price guide
+    return Object.assign({}, product.priceGuide, { url: `https://www.magiccardmarket.eu${product.website}` });
   }
 
   genAuthHeader: (httpMethod: string, realm: string) => string;
