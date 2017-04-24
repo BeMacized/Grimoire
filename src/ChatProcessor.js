@@ -56,6 +56,8 @@ export default class ChatProcessor {
     // Ensure setcode validity
     if (!guildId && !setCode && channelId) setCode = channelId;
 
+    const loadMsg = await this.commons.sendMessage('```\nLoading card...\n```', userId, channelId).catch(e => { throw e; });
+
     // Construct query
     const query: Object = { name: cardName };
     if (setCode) query.set = setCode;
@@ -69,6 +71,7 @@ export default class ChatProcessor {
         `<@${userId}>, I ran into some problems when trying to retrieve data for **'${cardName}'**!${error}`,
         userId,
         channelId).catch(e => { throw e; }); // eslint-disable-line no-shadow
+      loadMsg.delete().catch(() => {});
       return null;
     }
 
@@ -85,6 +88,7 @@ export default class ChatProcessor {
           `<@${userId}>, I could not find any results for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`,
           userId,
           channelId).catch(e => { throw e; });
+        loadMsg.delete().catch(() => {});
         return null;
       }
       // 1 Result
@@ -95,14 +99,20 @@ export default class ChatProcessor {
             `<@${userId}>, There is no card image available for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`,
             userId,
             channelId).catch(e => { throw e; });
+          loadMsg.delete().catch(() => {});
           return null;
         }
         // Show the user the card art
-        this.commons.sendFile(
+        loadMsg.edit(`\`\`\`\nLoading '${matches[0].name}' from set '${matches[0].setName}'\n\`\`\``).catch(() => {});
+        await this.commons.sendFile(
           matches[0].imageUrl,
             `**${matches[0].name}**\n${matches[0].setName} (${matches[0].set})`,
             userId,
-            channelId).catch(e => { throw e; });
+            channelId).catch(e => {
+              console.error(e);
+              loadMsg.edit(`<@${userId}>, I was not able to finish uploading the card art!`).catch(() => {});
+            });
+        loadMsg.delete().catch(() => {});
         return matches[0];
       }
       // Multiple results
@@ -112,6 +122,7 @@ export default class ChatProcessor {
         `<@${userId}>, There were too many results for **'${cardName}'**${setCode ? ` with set code ${setCode}.` : '.'} Did you perhaps mean to pick any of the following?\n\n${cardList}`,
           userId,
           channelId).catch(e => { throw e; });
+        loadMsg.delete().catch(() => {});
         return null;
       }
     }
