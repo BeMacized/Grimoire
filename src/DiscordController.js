@@ -26,6 +26,9 @@ export default class DiscordController {
       this.client.user.setUsername(this.username).catch(e => {
         if (e) console.error('Warning: DiscordController could not assert username.');
       });
+      this.client.user.setGame('Magic: The Gathering').catch(e => {
+        if (e) console.error('Warning: DiscordController could not assert game status.');
+      });
       console.log('Connected to Discord.');
     });
 
