@@ -38,7 +38,7 @@ export default class Oracle extends BaseCommand {
     }
 
     // Let the user know if there are no known rulings
-    if (!card.originalText) {
+    if (!card.text && !card.originalText) {
       this.commons.sendMessage(`<@${userId}>, There is no known oracle text for **'${card.name}'**`, userId, channelId);
       return;
     }
@@ -96,7 +96,7 @@ export default class Oracle extends BaseCommand {
     };
 
     // Replace symols
-    let text = card.originalText;
+    let text = card.text || card.originalText;
     if (guildId) {
       Object.keys(emojiMap).forEach(v => {
         const emoji = this.commons.getEmoji(emojiMap[v], guildId || '');

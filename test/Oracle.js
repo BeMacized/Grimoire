@@ -96,7 +96,7 @@ describe('Command: Oracle', () => {
       }
     };
     // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async () => ({ originalText: 'Test text',
+    commons.obtainRecentOrSpecifiedCard = async () => ({ text: 'Test text',
       name: 'TEST CARD' });
     // Initialize Prints
     const oracle = new Oracle(commons);
