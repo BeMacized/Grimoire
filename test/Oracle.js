@@ -8,30 +8,30 @@ import Oracle from '../src/Command/All/Oracle';
 
 describe('Command: Oracle', () => {
   it('attempts retrieving a card based on arguments', (done) => {
-    // Mock Commons
-    const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), sendFile: async () => ({}), sendMessage: async () => ({}) };
-    // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async (name: string, setCode: ?string, channelId: string) => {
+    // Mock CardUtils
+    const cardUtils = { obtainRecentOrSpecifiedCard: async (name: string, setCode: ?string, channelId: string) => {
       assert.equal(name, 'test card', 'Card name was not what we expected.');
       assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
       done();
       return { printings: [], name: 'card name' };
-    };
+    } };
+    // Mock Commons
+    const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), cardUtils, sendFile: async () => ({}), sendMessage: async () => ({}) };
     // Initialize Prints
     const oracle = new Oracle(commons);
     // Execute command
     oracle.exec(['test', 'card'], 'user id', 'channel id');
   });
   it('attempts retrieving a card without arguments', (done) => {
-    // Mock Commons
-    const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), sendFile: async () => ({}), sendMessage: async () => ({}) };
-    // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async (name: string, setCode: ?string, channelId: string) => {
+    // Mock CardUtils
+    const cardUtils = { obtainRecentOrSpecifiedCard: async (name: string, setCode: ?string, channelId: string) => {
       assert.equal(name, '', 'Card name was not what we expected.');
       assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
       done();
       return { printings: [], name: 'card name' };
-    };
+    } };
+    // Mock Commons
+    const commons: any = { appState: ({}: any), mtg: ({}: any), config: ({}: any), cardUtils, sendFile: async () => ({}), sendMessage: async () => ({}) };
     // Initialize Prints
     const oracle = new Oracle(commons);
     // Execute command
@@ -43,6 +43,9 @@ describe('Command: Oracle', () => {
       appState: ({}: any),
       mtg: ({}: any),
       config: ({}: any),
+      cardUtils: { obtainRecentOrSpecifiedCard: async () => {
+        throw 'TEST';
+      } },
       sendFile: async () => ({}),
       sendMessage: async (msg: string, userId: string, channelId: string) => {
         assert.equal(msg, '<@user id>, An unknown error occurred.', 'Error was not what we expected');
@@ -50,10 +53,6 @@ describe('Command: Oracle', () => {
         assert.equal(channelId, 'channel id', 'Channel ID was not what we expected');
         done();
       }
-    };
-    // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async () => {
-      throw 'TEST';
     };
     // Initialize Prints
     const oracle = new Oracle(commons);
@@ -66,6 +65,7 @@ describe('Command: Oracle', () => {
       appState: ({}: any),
       mtg: ({}: any),
       config: ({}: any),
+      cardUtils: { obtainRecentOrSpecifiedCard: async () => ({ originalText: '', name: 'TEST CARD' }) },
       sendFile: async () => ({}),
       sendMessage: async (msg: string, userId: string, channelId: string) => {
         assert.equal(msg, '<@user id>, There is no known oracle text for **\'TEST CARD\'**', 'Error was not what we expected');
@@ -74,8 +74,6 @@ describe('Command: Oracle', () => {
         done();
       }
     };
-    // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async () => ({ originalText: '', name: 'TEST CARD' });
     // Initialize Prints
     const oracle = new Oracle(commons);
     // Execute command
@@ -87,6 +85,7 @@ describe('Command: Oracle', () => {
       appState: ({}: any),
       mtg: ({}: any),
       config: ({}: any),
+      cardUtils: { obtainRecentOrSpecifiedCard: async () => ({ text: 'Test text', name: 'TEST CARD' }) },
       sendFile: async () => ({}),
       sendMessage: async (msg: string, userId: string, channelId: string) => {
         assert.equal(msg, '<@user id>, Here is the oracle text for **\'TEST CARD\'**:\n\nTest text', 'Message was not what we expected');
@@ -95,9 +94,6 @@ describe('Command: Oracle', () => {
         done();
       }
     };
-    // Inject mock of obtainRecentOrSpecifiedCard
-    commons.obtainRecentOrSpecifiedCard = async () => ({ text: 'Test text',
-      name: 'TEST CARD' });
     // Initialize Prints
     const oracle = new Oracle(commons);
     // Execute command

@@ -15,6 +15,7 @@ import Config from './Utils/Config';
 import RateLimiter from './Utils/RateLimiter';
 import AppState from './Utils/AppState';
 import Commons from './Utils/Commons';
+import CardUtils from './Utils/CardUtils';
 import CommandDispatcher from './Command/CommandDispatcher';
 
 class Grimoire {
@@ -44,8 +45,10 @@ class Grimoire {
       this.discordController = new DiscordController(Discord, config.values.botToken, config.values.botUsername);
       // Instantiate Set dictionary
       this.setDictionary = new SetDictionary(mtg, SetDictionaryRecord);
+      // Instantiate Card Utils
+      const cardUtils: CardUtils = new CardUtils(appState, mtg, `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, this.setDictionary);
       // Initialize commons
-      this.commons = new Commons(appState, mtg, config.values, this.setDictionary, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage, this.discordController.getChatTools().getEmoji);
+      this.commons = new Commons(appState, mtg, config.values, this.setDictionary, cardUtils, this.discordController.getChatTools().sendFile, this.discordController.getChatTools().sendMessage, this.discordController.getChatTools().getEmoji);
       // Instantiate Pricing Utils
       this.pricingUtils = new PricingUtils(MCMAPI, TCGAPI, this.commons, PricingRecord, RateLimiter);
       // Instantiate Command Dispatcher

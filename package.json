@@ -9,7 +9,10 @@
     "compile-es2015": "webpack --config webpack.prod.config.js",
     "start-pm2": "pm2 start src/Grimoire.js --interpreter ./node_modules/.bin/babel-node",
     "start": "./node_modules/.bin/babel-node src/Grimoire.js",
-    "install": "rm -rf flow-typed; flow-typed install || true"
+    "install": "napa; rm -rf flow-typed; flow-typed install || true"
+  },
+  "napa": {
+    "mtg-tokens": "Cockatrice/Magic-Token"
   },
   "author": "BeMacized",
   "license": "GPL-3.0",
@@ -52,6 +55,7 @@
     "moment": "^2.18.1",
     "mongoose": "^4.9.6",
     "mtgsdk": "MagicTheGathering/mtg-sdk-javascript",
+    "napa": "^2.3.0",
     "randomstring": "^1.1.5",
     "superagent": "^3.5.2",
     "xml2js": "^0.4.17"

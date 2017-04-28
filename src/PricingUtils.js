@@ -58,7 +58,7 @@ export default class PricingUtils {
   getPricing: (cardName: string, setCode?: ?string) => Promise<Array<PricingRecordType>>;
   async getPricing(cardName: string, setCode?: ?string) {
     // Obtain card reference
-    const card = await this.commons.obtainSpecifiedCard(cardName, setCode);
+    const card = await this.commons.cardUtils.obtainSpecifiedCard(cardName, setCode);
     // Assert MCM & TCG records
     await this.assertStoreRecord(card.name, card.set, 'MCM');
     await this.assertStoreRecord(card.name, card.set, 'TCG');

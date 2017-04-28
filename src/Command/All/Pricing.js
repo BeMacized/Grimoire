@@ -27,7 +27,7 @@ export default class Pricing extends BaseCommand {
   async exec(args: Array<string>, userId: string, channelId: string) {
     let card;
     try {
-      card = await this.commons.obtainRecentOrSpecifiedCard(args.join(' '), null, channelId);
+      card = await this.commons.cardUtils.obtainRecentOrSpecifiedCard(args.join(' '), null, channelId);
     } catch (err) {
       switch (err.e) {
         case 'RETRIEVE_ERROR': this.commons.sendMessage(`<@${userId}>, I ran into some problems when trying to retrieve data for **'${args.join(' ')}'**!${err.error}`, userId, channelId); break;

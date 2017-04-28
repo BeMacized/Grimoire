@@ -1,7 +1,6 @@
 // @flow
 
 // Dependencies
-import _ from 'lodash';
 import CommandDispatcher from './Command/CommandDispatcher';
 import Commons from './Utils/Commons';
 
@@ -41,7 +40,7 @@ export default class ChatProcessor {
           const code = split[1];
           card = await this.showInlineCard(name, userId, channelId, guildId, code);
         } else card = await this.showInlineCard(name, userId, channelId, guildId); // Just the most recent one if not specified
-      // Save card as last mentioned to state
+        // Save card as last mentioned to state
         if (index === cardNames.length - 1 && card) this.commons.appState.setLastMentioned(channelId, card);
       });
       return;
@@ -53,80 +52,51 @@ export default class ChatProcessor {
 
   showInlineCard: (cardName: string, userId: string, channelId: string, guildId: ?string, setCode?: string) => Promise<?Object>;
   async showInlineCard(cardName: string, userId: string, channelId: string, guildId: ?string, setCode?: string = '') {
-    console.log('SHOWING INLINE CARD', cardName, setCode);
-
     const loadMsg = await this.commons.sendMessage('```\nLoading card...\n```', userId, channelId).catch(e => { throw e; });
 
     // Construct query
     const query: Object = { name: cardName };
     if (setCode) query.set = setCode;
 
-    console.log('QUERY', query);
-
-    // Retrieve search results
-    let matches;
-    try { matches = await this.commons.mtg.card.where(query); } catch (e) {
-      // Let the user know if we encountered an error.
-      const error: string = `\n\`\`\`\n${e}\n${e.stack}\n\`\`\`\n`;
-      this.commons.sendMessage(
-        `<@${userId}>, I ran into some problems when trying to retrieve data for **'${cardName}'**!${error}`,
-        userId,
-        channelId).catch(e => { throw e; }); // eslint-disable-line no-shadow
-      loadMsg.delete().catch(() => {});
-      return null;
-    }
-
-    // Filter out duplicate results
-    matches = _.uniqWith(matches.reverse(), (a, b) => a.name === b.name);
-    // If there is a direct match, use that one.
-    const exactMatch = matches.find(m => m.name.toLowerCase() === cardName.toLowerCase());
-    if (exactMatch) matches = [exactMatch];
-
-    switch (matches.length) {
-      // No results
-      case 0: {
-        this.commons.sendMessage(
-          `<@${userId}>, I could not find any results for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`,
-          userId,
-          channelId).catch(e => { throw e; });
-        loadMsg.delete().catch(() => {});
-        return null;
-      }
-      // 1 Result
-      case 1: {
-        // Inform the user if there's no card image available
-        if (!matches[0].imageUrl) {
-          this.commons.sendMessage(
-            `<@${userId}>, There is no card image available for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`,
-            userId,
-            channelId).catch(e => { throw e; });
-          loadMsg.delete().catch(() => {});
-          return null;
+    let card;
+    try {
+      card = await this.commons.cardUtils.obtainSpecifiedCard(cardName, setCode, channelId);
+    } catch (err) {
+      switch (err.e) {
+        case 'RETRIEVE_ERROR': this.commons.sendMessage(`<@${userId}>, I ran into some problems when trying to retrieve data for **'${cardName}'**!${err.error}`, userId, channelId); break;
+        case 'NO_RESULTS': this.commons.sendMessage(`<@${userId}>, I could not find any results for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`, userId, channelId); break;
+        case 'MANY_RESULTS': {
+          const cardList: string = err.cards.map(c => ` - ${c.token ? '_[TOKEN]_ ' : ''}${c.name}`).reduce((total, value) => `${total + value}\n`, '');
+          this.commons.sendMessage(`<@${userId}>, There were too many results for **'${cardName}'**${setCode ? ` with set code ${setCode}.` : '.'} Did you perhaps mean to pick any of the following?\n\n${cardList}`, userId, channelId);
+          break;
         }
-        // Show the user the card art
-        loadMsg.edit(`\`\`\`\nLoading '${matches[0].name}' from set '${matches[0].setName}'\n\`\`\``).catch(() => {});
-        await this.commons.sendFile(
-          matches[0].imageUrl,
-            `**${matches[0].name}**\n${matches[0].setName} (${matches[0].set})`,
-            userId,
-            channelId).catch(e => {
-              console.error(e);
-              loadMsg.edit(`<@${userId}>, I was not able to finish uploading the card art!`).catch(() => {});
-            });
-        loadMsg.delete().catch(() => {});
-        return matches[0];
+        case 'NON_MENTIONED': this.commons.sendMessage(`<@${userId}>, Please either specify a card name, or make sure to mention a card using an inline reference beforehand.`, userId, channelId); break;
+        default: { console.error(err); this.commons.sendMessage(`<@${userId}>, An unknown error occurred.`, userId, channelId); break; }
       }
-      // Multiple results
-      default: {
-        const cardList: string = matches.map(card => ` - ${card.name}`).reduce((total, value) => `${total + value}\n`, '');
-        this.commons.sendMessage(
-        `<@${userId}>, There were too many results for **'${cardName}'**${setCode ? ` with set code ${setCode}.` : '.'} Did you perhaps mean to pick any of the following?\n\n${cardList}`,
-          userId,
-          channelId).catch(e => { throw e; });
-        loadMsg.delete().catch(() => {});
-        return null;
-      }
+      loadMsg.delete().catch(() => {});
+      return;
     }
+
+    if (!card.imageUrl) {
+      this.commons.sendMessage(
+        `<@${userId}>, There is no card image available for **'${cardName}'**${setCode ? ` with set code ${setCode}!` : '!'}`,
+        userId,
+        channelId).catch(e => { throw e; });
+      loadMsg.delete().catch(() => {});
+      return;
+    }
+
+    // Show the user the card art
+    loadMsg.edit(`\`\`\`\nLoading '${card.name}' from set '${card.setName}'\n\`\`\``).catch(() => {});
+    await this.commons.sendFile(
+      card.imageUrl,
+        `**${card.name}**${card.token ? ' _[TOKEN]_' : ''}\n${card.setName} (${card.set})`,
+        userId,
+        channelId).catch(e => {
+          console.error(e);
+          loadMsg.edit(`<@${userId}>, I was not able to finish uploading the card art!`).catch(() => {});
+        });
+    loadMsg.delete().catch(() => {});
   }
 
 }

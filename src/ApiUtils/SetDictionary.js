@@ -98,6 +98,7 @@ export default class SetDictionary extends EventEmitter {
         records.forEach(r => { this.dictionary = this.dictionary.filter(e => e.setCode !== r.setCode).concat([r]); });
         this.ready = true;
         this.emit('ready');
+        console.log('Initialized Set Dictionary.');
       } catch (e) {
         throw Error('Encountered error with database', e);
       }

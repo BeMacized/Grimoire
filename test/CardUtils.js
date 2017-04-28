@@ -3,9 +3,9 @@
 // Dependencies
 import { describe, it } from 'mocha';
 import { assert } from 'chai';
-import Commons from '../src/Utils/Commons';
+import CardUtils from '../src/Utils/CardUtils';
 
-describe('Commons', () => {
+describe('CardUtils', () => {
   describe('obtainRecentOrSpecifiedCard', () => {
     it('finds the most recent card if none is supplied', async () => {
       // Mock App State
@@ -17,10 +17,10 @@ describe('Commons', () => {
           }
         ]
       };
-      // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      // Initialize cardUtils
+      const cardUtils = new CardUtils(appState, ({}: any), `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, ({}: any));
       // Invoke function
-      const result = await commons.obtainRecentOrSpecifiedCard('', '', 'channel id');
+      const result = await cardUtils.obtainRecentOrSpecifiedCard('', '', 'channel id');
       // Test
       assert.deepEqual(result, { cardObject: true }, 'The result is not what we expected');
     });
@@ -35,11 +35,11 @@ describe('Commons', () => {
           }
         ]
       };
-      // Initialize commons
-      const commons = new Commons(appState, ({}: any), ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      // Initialize cardUtils
+      const cardUtils = new CardUtils(appState, ({}: any), `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, ({}: any));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('', '', 'channel id2');
+        await cardUtils.obtainRecentOrSpecifiedCard('', '', 'channel id2');
       } catch (e) {
         assert.deepEqual(e, { e: 'NON_MENTIONED' }, 'The error message we obtained was not the one we expected');
         return;
@@ -62,10 +62,10 @@ describe('Commons', () => {
           }
         }
       };
-      // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      // Initialize cardUtils
+      const cardUtils = new CardUtils(appState, mtg, `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, ({}: any));
       // Test
-      await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
+      await cardUtils.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
     });
 
     it('gives appropriate feedback when the provided name does not yield results', async () => {
@@ -82,11 +82,11 @@ describe('Commons', () => {
           }
         }
       };
-      // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      // Initialize cardUtils
+      const cardUtils = new CardUtils(appState, mtg, `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, ({}: any));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
+        await cardUtils.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
       } catch (e) {
         assert.deepEqual(e, { e: 'NO_RESULTS' }, 'The error message we obtained was not the one we expected');
         return;
@@ -108,11 +108,11 @@ describe('Commons', () => {
           }
         }
       };
-      // Initialize commons
-      const commons = new Commons(appState, mtg, ({}: any), ({}: any), async () => ({}), async () => ({}), () => ({}));
+      // Initialize cardUtils
+      const cardUtils = new CardUtils(appState, mtg, `${__dirname}/../node_modules/mtg-tokens/tokens.xml`, ({}: any));
       // Test
       try {
-        await commons.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
+        await cardUtils.obtainRecentOrSpecifiedCard('card name', null, 'channel id');
       } catch (e) {
         assert.deepEqual(e, { e: 'MANY_RESULTS', cards: [{ name: 'card 2' }, { name: 'card 1' }] }, 'The error message we obtained was not the one we expected');
         return;
