@@ -6,19 +6,19 @@ import java.util.logging.Logger;
 
 public abstract class BaseCommand {
 
-    final Logger LOG;
+	final Logger LOG;
 
-    BaseCommand() {
-        LOG = Logger.getLogger(this.getClass().getName());
-    }
+	BaseCommand() {
+		LOG = Logger.getLogger(this.getClass().getName());
+	}
 
-    public abstract String name();
+	public abstract String name();
 
-    public abstract String[] aliases();
+	public abstract String[] aliases();
 
-    public abstract String description();
+	public abstract String description();
 
-    public abstract String paramUsage();
+	public abstract String paramUsage();
 
-    public abstract void exec(String[] args, MessageReceivedEvent e);
+	public abstract void exec(String[] args, MessageReceivedEvent e);
 }

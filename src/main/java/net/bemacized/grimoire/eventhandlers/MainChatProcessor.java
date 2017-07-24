@@ -14,40 +14,40 @@ import java.util.List;
 
 public class MainChatProcessor extends ListenerAdapter {
 
-    private List<ChatHandler> chatHandlers;
+	private List<ChatHandler> chatHandlers;
 
-    public MainChatProcessor() {
-        // Make sure chatHandlers is initialized
-        if (chatHandlers == null) chatHandlers = new ArrayList<>();
-        // Register handlers
-        List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
-                ArtRetrieveHandler.class,
-                CommandHandler.class
-        );
-        Collections.reverse(handlerClasses);
-        handlerClasses.forEach(this::registerChatHandler);
-    }
+	public MainChatProcessor() {
+		// Make sure chatHandlers is initialized
+		if (chatHandlers == null) chatHandlers = new ArrayList<>();
+		// Register handlers
+		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
+				ArtRetrieveHandler.class,
+				CommandHandler.class
+		);
+		Collections.reverse(handlerClasses);
+		handlerClasses.forEach(this::registerChatHandler);
+	}
 
-    private void registerChatHandler(Class<? extends ChatHandler> handler) {
-        // Obtain top handler
-        ChatHandler lastHandler = (!chatHandlers.isEmpty()) ? chatHandlers.get(0) : new ChatHandler(null) {
-            @Override
-            protected void handle(MessageReceivedEvent e, ChatHandler next) {
-            }
-        };
+	private void registerChatHandler(Class<? extends ChatHandler> handler) {
+		// Obtain top handler
+		ChatHandler lastHandler = (!chatHandlers.isEmpty()) ? chatHandlers.get(0) : new ChatHandler(null) {
+			@Override
+			protected void handle(MessageReceivedEvent e, ChatHandler next) {
+			}
+		};
 
-        // Instantiate & Register handler with top handler
-        try {
-            chatHandlers.add(0, handler.getDeclaredConstructor(ChatHandler.class).newInstance(lastHandler));
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
+		// Instantiate & Register handler with top handler
+		try {
+			chatHandlers.add(0, handler.getDeclaredConstructor(ChatHandler.class).newInstance(lastHandler));
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent e) {
-        if (!chatHandlers.isEmpty() && !e.getAuthor().isBot()) this.chatHandlers.get(0).handle(e);
-    }
+	@Override
+	public void onMessageReceived(MessageReceivedEvent e) {
+		if (!chatHandlers.isEmpty() && !e.getAuthor().isBot()) this.chatHandlers.get(0).handle(e);
+	}
 
 
 }
