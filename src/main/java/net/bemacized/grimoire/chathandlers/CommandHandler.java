@@ -18,7 +18,8 @@ public class CommandHandler extends ChatHandler {
 				new HelpCommand(),
 				new RulingsCommand(),
 				new PrintsCommand(),
-				new OracleCommand()
+				new OracleCommand(),
+				new RandomCommand()
 		).collect(Collectors.toList());
 	}
 
