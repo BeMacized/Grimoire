@@ -70,7 +70,7 @@ public class RandomCommand extends BaseCommand {
 				} else if (allTypes.stream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 					if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
 				} else if (allSubtypes.stream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
-					if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
+					if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 				} else {
 					loadMsg.get().editMessage(String.format(
 							"<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.",
