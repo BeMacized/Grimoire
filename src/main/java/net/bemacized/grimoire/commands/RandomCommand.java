@@ -131,6 +131,8 @@ public class RandomCommand extends BaseCommand {
 
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred getting a random card", ex);
+			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting a random card. Please notify my developer to fix me up!").submit();
+
 		}
 	}
 }

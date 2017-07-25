@@ -58,7 +58,7 @@ public class ArtRetrieveHandler extends ChatHandler {
 				handleCardRequest(cardReq, e);
 			} catch (ExecutionException | InterruptedException ex) {
 				LOG.log(Level.SEVERE, "Could not handle card art request", ex);
-				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching your card data. Please notify my developer to fix me up!");
+				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching your card data. Please notify my developer to fix me up!").submit();
 			}
 		});
 	}
@@ -97,6 +97,7 @@ public class ArtRetrieveHandler extends ChatHandler {
 						s.getCode())
 				);
 			loadMsg.get().editMessage(sb.toString()).submit();
+			return;
 		}
 		// Handle no results
 		catch (SetUtils.NoResultsException e1) {

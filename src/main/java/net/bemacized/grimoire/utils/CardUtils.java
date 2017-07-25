@@ -110,9 +110,6 @@ public class CardUtils {
 		}
 
 		public List<Card> exec() {
-			StringBuilder tempPath = new StringBuilder("cards?");
-			for (String filter : filters) tempPath.append("&").append(filter);
-			System.out.println(tempPath);
 			return CardAPI.getAllCards(filters);
 		}
 	}

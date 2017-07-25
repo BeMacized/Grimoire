@@ -27,7 +27,7 @@ public class OracleCommand extends BaseCommand {
 
 	@Override
 	public String paramUsage() {
-		return "[card name]";
+		return "<card name>";
 	}
 
 	@SuppressWarnings("Duplicates")
