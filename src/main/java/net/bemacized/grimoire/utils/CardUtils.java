@@ -1,6 +1,5 @@
 package net.bemacized.grimoire.utils;
 
-import com.sun.istack.internal.NotNull;
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
 
@@ -13,11 +12,11 @@ public class CardUtils {
 
 	private final static int MAX_ALTERNATIVES = 20;
 
-	public static Card getCard(@NotNull String name) throws TooManyResultsException, MultipleResultsException, NoResultsException {
+	public static Card getCard(String name) throws TooManyResultsException, MultipleResultsException, NoResultsException {
 		return getCard(name, null);
 	}
 
-	public static Card getCard(@NotNull String name, String setCode) throws TooManyResultsException, MultipleResultsException, NoResultsException {
+	public static Card getCard(String name, String setCode) throws TooManyResultsException, MultipleResultsException, NoResultsException {
 		// Create search for the card
 		CardSearchQuery query = new CardSearchQuery().setName(name);
 		// Specify set if provided

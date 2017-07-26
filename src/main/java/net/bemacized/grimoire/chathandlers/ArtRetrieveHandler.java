@@ -1,6 +1,5 @@
 package net.bemacized.grimoire.chathandlers;
 
-import com.sun.istack.internal.NotNull;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.utils.CardUtils;
@@ -183,7 +182,7 @@ public class ArtRetrieveHandler extends ChatHandler {
 		private String cardName;
 		private String set;
 
-		RawCardRequest(@NotNull String cardName, String set) {
+		RawCardRequest(String cardName, String set) {
 			this.cardName = cardName;
 			this.set = set;
 		}

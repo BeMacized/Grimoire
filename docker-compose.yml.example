@@ -1,0 +1,25 @@
+version: "2"
+services:
+   mongo:
+      image: mongo
+      container_name: "mongo"
+      volumes:
+        - "./mongodata:/data/db"
+      command: "--smallfiles --logpath=/dev/null"
+   grimoire:
+      build: .
+      container_name: "Grimoire"
+      links:
+        - mongo
+      environment:
+#        - "BOT_TOKEN="
+#        - "MCM_HOST="
+#        - "MCM_TOKEN="
+#        - "MCM_SECRET="
+#        - "TCG_HOST="
+#        - "TCG_KEY="
+#        - "MONGO_PORT="
+#        - "MONGO_HOST="
+#        - "MONGO_DB="
+#        - "MONGO_USER="
+#        - "MONGO_PASSWORD="

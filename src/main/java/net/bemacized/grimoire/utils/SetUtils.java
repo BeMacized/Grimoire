@@ -1,6 +1,5 @@
 package net.bemacized.grimoire.utils;
 
-import com.sun.istack.internal.NotNull;
 import io.magicthegathering.javasdk.api.SetAPI;
 import io.magicthegathering.javasdk.resource.MtgSet;
 
@@ -11,7 +10,7 @@ public class SetUtils {
 
 	private final static int MAX_ALTERNATIVES = 20;
 
-	public static MtgSet getSet(@NotNull String nameOrCode) throws TooManyResultsException, MultipleResultsException, NoResultsException {
+	public static MtgSet getSet(String nameOrCode) throws TooManyResultsException, MultipleResultsException, NoResultsException {
 		// Check set code
 		MtgSet set = SetAPI.getSet(nameOrCode.toUpperCase());
 		if (set != null) return set;

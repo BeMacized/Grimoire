@@ -1,6 +1,5 @@
 package net.bemacized.grimoire.commands;
 
-import com.sun.istack.internal.NotNull;
 import io.magicthegathering.javasdk.api.SetAPI;
 import io.magicthegathering.javasdk.resource.MtgSet;
 import net.dv8tion.jda.core.entities.Message;
@@ -252,7 +251,7 @@ public class TokenCommand extends BaseCommand {
 		private String pt;
 		private String color;
 
-		public Token(@NotNull String name, List<TokenSetArt> tokenSetArt, @NotNull String type, List<String> reverseRelated, String pt, String color) {
+		public Token(String name, List<TokenSetArt> tokenSetArt, String type, List<String> reverseRelated, String pt, String color) {
 			this.name = name;
 			this.tokenSetArt = (tokenSetArt != null) ? tokenSetArt : new ArrayList<>();
 			this.type = type;
@@ -290,7 +289,7 @@ public class TokenCommand extends BaseCommand {
 		private String url;
 		private String setCode;
 
-		public TokenSetArt(@NotNull String url, @NotNull String setCode) {
+		public TokenSetArt(String url, String setCode) {
 			this.url = url;
 			this.setCode = setCode;
 		}
