@@ -46,7 +46,8 @@ public class MainChatProcessor extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
-		if (!chatHandlers.isEmpty() && !e.getAuthor().isBot()) this.chatHandlers.get(0).handle(e);
+		if (!chatHandlers.isEmpty() && !e.getAuthor().isBot())
+			new Thread(() -> this.chatHandlers.get(0).handle(e)).start();
 	}
 
 
