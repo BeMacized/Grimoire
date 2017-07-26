@@ -20,7 +20,8 @@ public class CommandHandler extends ChatHandler {
 				new PrintsCommand(),
 				new OracleCommand(),
 				new RandomCommand(),
-				new PricingCommand()
+				new PricingCommand(),
+				new TokenCommand()
 		).collect(Collectors.toList());
 	}
 

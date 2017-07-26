@@ -24,12 +24,12 @@ public class SetDictionary {
 		// Load from database
 		MongoCursor<SetDictionaryItem> items = Grimoire.getInstance().getDBManager().getJongo().getCollection("SetDictionaryItems").find("{}").as(SetDictionaryItem.class);
 
-		for (SetDictionaryItem item : items) {
+		items.forEach(item -> {
 			// Remove old entry
 			new ArrayList<>(dictionary).stream().filter(i -> i.getCode().equalsIgnoreCase(item.getCode())).forEach(i -> dictionary.remove(i));
 			// Insert new entry
 			dictionary.add(item);
-		}
+		});
 
 		LOG.info("Loaded " + items.count() + " sets for the dictionary.");
 
@@ -80,6 +80,10 @@ public class SetDictionary {
 		private String code;
 		private String displayName;
 		private Map<String, String> storeNames;
+
+		public SetDictionaryItem() {
+
+		}
 
 		public SetDictionaryItem(String code, String displayName) {
 			this.displayName = displayName;
