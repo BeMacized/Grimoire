@@ -39,8 +39,8 @@ public class ArtRetrieveHandler extends ChatHandler {
 		List<RawCardRequest> requests = new ArrayList<RawCardRequest>() {{
 			for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) {
 				String[] data = m.group().substring(2, m.group().length() - 2).split("[|]");
-				String cardName = data[0];
-				String set = (data.length > 1) ? data[1] : null;
+				String cardName = data[0].trim();
+				String set = (data.length > 1) ? data[1].trim() : null;
 				add(new RawCardRequest(cardName, set));
 			}
 		}};

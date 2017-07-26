@@ -191,8 +191,7 @@ public class PricingCommand extends BaseCommand {
 			});
 
 			//Send the message
-			e.getChannel().sendMessage(sb.toString()).submit();
-			loadMsg.get().delete().submit();
+			loadMsg.get().editMessage(sb.toString()).submit();
 
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred getting price data", ex);
