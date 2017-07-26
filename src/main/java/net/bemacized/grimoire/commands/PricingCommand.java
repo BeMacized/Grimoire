@@ -175,7 +175,7 @@ public class PricingCommand extends BaseCommand {
 					case SUCCESS:
 						sb.append(String.format("**%s**: ", storeprice.getStoreName()));
 						DecimalFormat formatter = new DecimalFormat("#.00");
-						sb.append(String.join(" **|** ", storeprice.getRecord().getPrices().entrySet().stream().map(price -> String.format(
+						sb.append(String.join(" **|** ", storeprice.getRecord().getPrices().entrySet().parallelStream().map(price -> String.format(
 								"%s: %s%s",
 								price.getKey(),
 								storeprice.getRecord().getCurrency(),

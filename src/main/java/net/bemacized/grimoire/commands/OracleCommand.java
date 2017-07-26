@@ -145,7 +145,7 @@ public class OracleCommand extends BaseCommand {
 		if (e.getGuild() != null) {
 			for (Map.Entry<String, String> entry : emojiMap.entrySet()) {
 				if (msg.contains("{" + entry.getKey() + "}")) {
-					Emote emote = e.getGuild().getEmotesByName(entry.getValue(), true).stream().findAny().orElse(null);
+					Emote emote = e.getGuild().getEmotesByName(entry.getValue(), true).parallelStream().findAny().orElse(null);
 					if (emote != null) msg = msg.replaceAll("\\{" + entry.getKey() + "\\}", emote.getAsMention());
 				}
 			}

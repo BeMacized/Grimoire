@@ -65,11 +65,11 @@ public class RandomCommand extends BaseCommand {
 
 			// Extract types
 			for (String arg : args) {
-				if (allSupertypes.stream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				if (allSupertypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 					if (!supertypes.contains(arg.toLowerCase())) supertypes.add(arg.toLowerCase());
-				} else if (allTypes.stream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				} else if (allTypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 					if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
-				} else if (allSubtypes.stream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 					if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 				} else {
 					loadMsg.get().editMessage(String.format(
@@ -86,7 +86,7 @@ public class RandomCommand extends BaseCommand {
 				addAll(supertypes);
 				addAll(types);
 				addAll(subtypes);
-			}}.stream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
+			}}.parallelStream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
 			loadMsg.get().editMessage(String.format(
 					"```\n" + "Drawing random %s..." + "\n```",
 					joinedType

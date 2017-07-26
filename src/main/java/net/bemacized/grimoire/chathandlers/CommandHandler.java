@@ -56,6 +56,6 @@ public class CommandHandler extends ChatHandler {
 		}
 
 		// Execute command otherwise
-		command.exec(args, e);
+		new Thread(() -> command.exec(args, e)).start();
 	}
 }

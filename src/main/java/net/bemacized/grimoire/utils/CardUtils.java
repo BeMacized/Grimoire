@@ -29,12 +29,12 @@ public class CardUtils {
 		if (cards.size() == 1) return cards.get(0);
 		else {
 			// Find exact match (of the most recent set
-			Card card = cards.stream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
+			Card card = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
 			if (card != null) return card;
 			// If none found return alternatives
 			// Get the newest distinct results
 			Collections.reverse(cards);
-			cards = cards.stream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).collect(Collectors.toList());
+			cards = cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).collect(Collectors.toList());
 			// Quit if too many results
 			if (cards.size() > MAX_ALTERNATIVES) throw new TooManyResultsException(cards);
 			else throw new MultipleResultsException(cards);

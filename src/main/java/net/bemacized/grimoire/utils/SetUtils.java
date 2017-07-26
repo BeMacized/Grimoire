@@ -19,7 +19,7 @@ public class SetUtils {
 		// Check for single name match
 		if (sets.size() == 1) return sets.get(0);
 		// If none, check for exact name match
-		set = sets.stream().filter(s -> s.getName().equalsIgnoreCase(nameOrCode)).findAny().orElse(null);
+		set = sets.parallelStream().filter(s -> s.getName().equalsIgnoreCase(nameOrCode)).findAny().orElse(null);
 		if (set != null) return set;
 		// If none found, list options to user and quit
 		if (sets.size() > MAX_ALTERNATIVES) throw new TooManyResultsException(sets);

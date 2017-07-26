@@ -26,7 +26,7 @@ public class SetDictionary {
 
 		items.forEach(item -> {
 			// Remove old entry
-			new ArrayList<>(dictionary).stream().filter(i -> i.getCode().equalsIgnoreCase(item.getCode())).forEach(i -> dictionary.remove(i));
+			new ArrayList<>(dictionary).parallelStream().filter(i -> i.getCode().equalsIgnoreCase(item.getCode())).forEach(i -> dictionary.remove(i));
 			// Insert new entry
 			dictionary.add(item);
 		});
@@ -49,7 +49,7 @@ public class SetDictionary {
 	 * @return - The found item
 	 */
 	public SetDictionaryItem getItemByStore(String storeId, String setName) {
-		return dictionary.stream().filter(sdi -> setName.equalsIgnoreCase(sdi.getStoreSetName(storeId))).findFirst().orElse(null);
+		return dictionary.parallelStream().filter(sdi -> setName.equalsIgnoreCase(sdi.getStoreSetName(storeId))).findFirst().orElse(null);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class SetDictionary {
 	 * @return The item with the specified set code
 	 */
 	public SetDictionaryItem getItem(String setCode) {
-		return dictionary.stream().filter(sdi -> sdi.getCode().equalsIgnoreCase(setCode)).findFirst().orElse(null);
+		return dictionary.parallelStream().filter(sdi -> sdi.getCode().equalsIgnoreCase(setCode)).findFirst().orElse(null);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class SetDictionary {
 	 * @return - The best matching item
 	 */
 	public SetDictionaryItem findItem(String roughName) {
-		return dictionary.stream()
+		return dictionary.parallelStream()
 				.sorted(Comparator.comparingInt(o -> StringUtils.getLevenshteinDistance(roughName, o.getDisplayName())))
 				.findFirst().orElse(null);
 	}

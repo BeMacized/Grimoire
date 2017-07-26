@@ -174,7 +174,7 @@ public class TokenCommand extends BaseCommand {
 					));
 					for (int i = 0; i < matches.size(); i++) {
 						Token m = matches.get(i);
-						boolean hasArts = m.getTokenSetArt().stream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty());
+						boolean hasArts = m.getTokenSetArt().parallelStream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty());
 						sb.append(String.format(
 								"\n**%s.**%s%s%s%s",
 								i + 1,
@@ -191,7 +191,7 @@ public class TokenCommand extends BaseCommand {
 				}
 
 				// Check if match has image
-				List<TokenSetArt> arts = match.getTokenSetArt().stream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
+				List<TokenSetArt> arts = match.getTokenSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 				if (arts.isEmpty()) {
 					loadMsg.get().editMessage(String.format(
 							"<@%s>, I sadly do not know of any art for this token. Please try a different one!",

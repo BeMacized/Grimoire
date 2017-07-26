@@ -161,7 +161,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 						response.getJSONArray("product").iterator(),
 						Spliterator.ORDERED),
 				false
-		).filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(setDictionaryItem.getStoreSetName(getStoreId())))).findFirst().orElse(null);
+		).parallel().filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(setDictionaryItem.getStoreSetName(getStoreId())))).findFirst().orElse(null);
 		// Return null if we didn't find anything
 		if (product == null) return null;
 

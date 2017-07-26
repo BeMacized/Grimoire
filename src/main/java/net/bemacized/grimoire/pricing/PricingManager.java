@@ -35,7 +35,7 @@ public class PricingManager {
 	}
 
 	public List<StoreCardPrice> getPricing(Card card) {
-		return stores.stream().map(store -> {
+		return stores.parallelStream().map(store -> {
 			try {
 				StoreAPI.StoreCardPriceRecord price = store.getPrice(card);
 				return new StoreCardPrice((price == null) ? StoreCardPriceStatus.CARD_UNKNOWN : StoreCardPriceStatus.SUCCESS, card, store.getStoreName(), store.getStoreId(), price);
