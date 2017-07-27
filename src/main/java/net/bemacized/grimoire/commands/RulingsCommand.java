@@ -63,7 +63,7 @@ public class RulingsCommand extends BaseCommand {
 					e.getAuthor().getId(),
 					cardname
 			));
-			for (Card c : ex.getResults()) sb.append(String.format("\n - %s", c.getName()));
+			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
 			e.getChannel().sendMessage(sb.toString()).submit();
 			return;
 		}

@@ -176,7 +176,7 @@ public class TokenCommand extends BaseCommand {
 						Token m = matches.get(i);
 						boolean hasArts = m.getTokenSetArt().parallelStream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty());
 						sb.append(String.format(
-								"\n**%s.**%s%s%s%s",
+								"\n:small_orange_diamond: **%s.**%s%s%s%s",
 								i + 1,
 								(m.getColor() == null) ? "" : " " + m.getColor(),
 								(m.getPt() == null) ? "" : " _" + m.getPt() + "_",

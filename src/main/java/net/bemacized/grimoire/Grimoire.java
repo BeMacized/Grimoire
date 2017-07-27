@@ -3,6 +3,7 @@ package net.bemacized.grimoire;
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.pricing.PricingManager;
+import net.bemacized.grimoire.utils.CardUtils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

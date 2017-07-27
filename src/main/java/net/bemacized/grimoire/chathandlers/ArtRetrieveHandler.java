@@ -129,7 +129,7 @@ public class ArtRetrieveHandler extends ChatHandler {
 					e.getAuthor().getId(),
 					cardReq.getCardName()
 			));
-			for (Card c : ex.getResults()) sb.append(String.format("\n - %s", c.getName()));
+			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
 			loadMsg.get().editMessage(sb.toString()).submit();
 			return;
 		}
