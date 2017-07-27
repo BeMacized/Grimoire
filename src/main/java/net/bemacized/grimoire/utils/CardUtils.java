@@ -26,7 +26,8 @@ public class CardUtils {
 		// Quit if there are no results
 		if (cards.isEmpty()) throw new NoResultsException();
 		// Find single match
-		if (cards.size() == 1) return cards.get(0);
+		if (cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).count() == 1)
+			return cards.get(0);
 		else {
 			// Find exact match (of the most recent set
 			Card card = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
