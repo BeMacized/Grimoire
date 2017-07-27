@@ -4,8 +4,8 @@ import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.parsers.ComprehensiveRules;
 import net.bemacized.grimoire.parsers.Tokens;
+import net.bemacized.grimoire.parsers.TournamentRules;
 import net.bemacized.grimoire.pricing.PricingManager;
-import net.bemacized.grimoire.utils.CardUtils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -33,6 +33,7 @@ public class Grimoire {
 	private PricingManager pricingManager;
 	private Tokens tokens;
 	private ComprehensiveRules comprehensiveRules;
+	private TournamentRules tournamentRules;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -66,6 +67,9 @@ public class Grimoire {
 
 		// Load comprehensive rules
 		comprehensiveRules = new ComprehensiveRules();
+
+		// Load tournament rules
+		tournamentRules = new TournamentRules();
 
 		// Log in to Discord
 		try {
@@ -108,5 +112,9 @@ public class Grimoire {
 
 	public ComprehensiveRules getComprehensiveRules() {
 		return comprehensiveRules;
+	}
+
+	public TournamentRules getTournamentRules() {
+		return tournamentRules;
 	}
 }

@@ -25,6 +25,7 @@ public class ComprehensiveRules {
 		// Fetch text
 		String ruleText;
 		try {
+			// Sourced from http://media.wizards.com/2016/docs/MagicCompRules_20160930.txt
 			ruleText = IOUtils.toString(getClass().getResourceAsStream("/comprehensive_rules.txt"));
 		} catch (IOException e) {
 			LOG.log(Level.SEVERE, "Could not load comprehensive rules!", e);
