@@ -1,7 +1,6 @@
 package net.bemacized.grimoire.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,6 @@ public class StringUtils {
 			message.append(s).append("\n");
 		}
 		messages.add(message.toString());
-
 		return messages.parallelStream().map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
 	}
 }

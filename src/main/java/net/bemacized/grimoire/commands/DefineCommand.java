@@ -28,10 +28,10 @@ public class DefineCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that a keyword was given
 		if (args.length == 0) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, Please specify a keyword to look up",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 			return;
 		}
 
@@ -43,19 +43,19 @@ public class DefineCommand extends BaseCommand {
 				.findFirst()
 				.orElse(null);
 		if (keyword == null) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, Unknown keyword :(",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 			return;
 		}
 
 		// Show definition
-		e.getChannel().sendMessage(String.format(
+		e.getChannel().sendMessageFormat(
 				"<@%s>, __**%s:**__\n%s",
 				e.getAuthor().getId(),
 				keyword,
 				Grimoire.getInstance().getComprehensiveRules().getDefinitions().get(keyword)
-		)).submit();
+		).submit();
 	}
 }

@@ -36,10 +36,10 @@ public class CompRulesCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, Please specify a paragraph number to display.\nYou can find the full comprehensive rules over here: <https://blogs.magicjudges.org/rules/cr/>",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 			return;
 		}
 
@@ -63,10 +63,10 @@ public class CompRulesCommand extends BaseCommand {
 
 		// If we couldn't find anything, tell the user
 		if (rulesToShow.isEmpty()) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, Unknown paragraph.\n**Comprehensive Rules:** <https://blogs.magicjudges.org/rules/cr/>",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 			return;
 		}
 

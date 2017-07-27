@@ -75,11 +75,11 @@ public class ArtRetrieveHandler extends ChatHandler {
 		}
 		// Handle too many results
 		catch (SetUtils.TooManyResultsException ex) {
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
 					e.getAuthor().getId(),
 					cardReq.getSet()
-			)).submit();
+			).submit();
 			return;
 		}
 		// Handle multiple results
@@ -100,11 +100,11 @@ public class ArtRetrieveHandler extends ChatHandler {
 		}
 		// Handle no results
 		catch (SetUtils.NoResultsException e1) {
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"<@%s>, I could not find a set with **'%s' as its code or name**.",
 					e.getAuthor().getId(),
 					cardReq.getSet()
-			)).submit();
+			).submit();
 			return;
 		}
 
@@ -115,11 +115,11 @@ public class ArtRetrieveHandler extends ChatHandler {
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 					e.getAuthor().getId(),
 					cardReq.getCardName()
-			)).submit();
+			).submit();
 			return;
 		}
 		// Handle multiple results
@@ -150,12 +150,12 @@ public class ArtRetrieveHandler extends ChatHandler {
 		}
 
 		// Update load text
-		loadMsg.get().editMessage(String.format(
+		loadMsg.get().editMessageFormat(
 				"```\n" + "Loading card '%s' from set '%s, (%s)'..." + "\n```",
 				card.getName(),
 				card.getSetName(),
 				card.getSet()
-		)).submit();
+		).submit();
 
 		// Show card
 		try {
@@ -164,15 +164,15 @@ public class ArtRetrieveHandler extends ChatHandler {
 			// Upload art
 			RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
 			// Attach card name & set name + code
-			artMsg.get().editMessage(String.format("**%s**\n%s (%s)", card.getName(), card.getSetName(), card.getSet())).submit();
+			artMsg.get().editMessageFormat("**%s**\n%s (%s)", card.getName(), card.getSetName(), card.getSet()).submit();
 			// Delete loading message
 			loadMsg.get().delete().submit();
 		} catch (IOException ex) {
 			LOG.log(Level.SEVERE, "Could not upload card art", ex);
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"<@%s>, An error occurred while uploading the card art! Please try again later.",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 		}
 	}
 

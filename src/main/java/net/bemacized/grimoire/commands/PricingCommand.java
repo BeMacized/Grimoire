@@ -46,10 +46,10 @@ public class PricingCommand extends BaseCommand {
 		try {
 			// Quit and error out if none provided
 			if (args.length == 0) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, please provide a card name to check pricing for!",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -68,11 +68,11 @@ public class PricingCommand extends BaseCommand {
 			}
 			// Handle too many results
 			catch (SetUtils.TooManyResultsException ex) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
 						e.getAuthor().getId(),
 						setname
-				)).submit();
+				).submit();
 				return;
 			}
 			// Handle multiple results
@@ -93,11 +93,11 @@ public class PricingCommand extends BaseCommand {
 			}
 			// Handle no results
 			catch (SetUtils.NoResultsException e1) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, I could not find a set with **'%s' as its code or name**.",
 						e.getAuthor().getId(),
 						setname
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -108,11 +108,11 @@ public class PricingCommand extends BaseCommand {
 			}
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 						e.getAuthor().getId(),
 						cardname
-				)).submit();
+				).submit();
 				return;
 			}
 			// Handle multiple results
@@ -128,21 +128,21 @@ public class PricingCommand extends BaseCommand {
 			}
 			// Handle no results
 			catch (CardUtils.NoResultsException e1) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, There are no results for a card named **'%s'**" + ((set == null) ? "" : " in the set you requested."),
 						e.getAuthor().getId(),
 						cardname
-				)).submit();
+				).submit();
 				return;
 			}
 
 			// Update load text
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"```\n" + "Loading price data for card '%s' from set '%s, (%s)'..." + "\n```",
 					card.getName(),
 					card.getSetName(),
 					card.getSet()
-			)).submit();
+			).submit();
 
 			// Fetch pricing
 			List<PricingManager.StoreCardPrice> pricing = Grimoire.getInstance().getPricingManager().getPricing(card);

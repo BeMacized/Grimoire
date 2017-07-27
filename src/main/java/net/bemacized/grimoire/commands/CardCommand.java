@@ -48,10 +48,10 @@ public class CardCommand extends BaseCommand {
 
 			// Quit and error out if none provided
 			if (cardname.isEmpty()) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, please provide a card name to fetch info for!",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -66,11 +66,11 @@ public class CardCommand extends BaseCommand {
 
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 						e.getAuthor().getId(),
 						cardname
-				)).submit();
+				).submit();
 				return;
 			}
 			// Handle multiple results
@@ -86,19 +86,19 @@ public class CardCommand extends BaseCommand {
 			}
 			// Handle no results
 			catch (CardUtils.NoResultsException e1) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, There are no results for a card named **'%s'**",
 						e.getAuthor().getId(),
 						cardname
-				)).submit();
+				).submit();
 				return;
 			}
 
 			// Update load text
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"```\n" + "Loading card '%s'..." + "\n```",
 					card.getName()
-			)).submit();
+			).submit();
 
 			// Define emoji mapping
 			Map<String, String> emojiMap = new HashMap<String, String>() {{
@@ -198,10 +198,10 @@ public class CardCommand extends BaseCommand {
 				loadMsg.get().delete().submit();
 			} catch (IOException ex) {
 				LOG.log(Level.SEVERE, "Could not upload card art + info", ex);
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, An error occurred while uploading the card info! Please try again later.",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 			}
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred fetching card info", ex);

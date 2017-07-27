@@ -47,10 +47,10 @@ public class TokenCommand extends BaseCommand {
 		try {
 			// Verify token name presence
 			if (args.length == 0) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, Please provide a valid token name",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -82,11 +82,11 @@ public class TokenCommand extends BaseCommand {
 
 			// Test for no matches
 			if (matches.isEmpty()) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, I couldn't find any tokens called **'%s'**",
 						e.getAuthor().getId(),
 						cardName
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -99,21 +99,21 @@ public class TokenCommand extends BaseCommand {
 				if (choice != -1) {
 					// Check if choice # is in range
 					if (choice < 1 || choice > matches.size()) {
-						loadMsg.get().editMessage(String.format(
+						loadMsg.get().editMessageFormat(
 								"<@%s>, The choice number you provided is not within range. Please only pick a valid option.",
 								e.getAuthor().getId()
-						)).submit();
+						).submit();
 						return;
 					}
 					// Replace match with choice
 					match = matches.get(choice - 1);
 				} else if (matches.size() > MAX_TOKEN_RESULTS) {
 					// List options
-					loadMsg.get().editMessage(String.format(
+					loadMsg.get().editMessageFormat(
 							"<@%s>, There are too many tokens matching your search. Please be more specific.",
 							e.getAuthor().getId(),
 							cardName
-					)).submit();
+					).submit();
 					return;
 				} else {
 					// List options
@@ -143,16 +143,16 @@ public class TokenCommand extends BaseCommand {
 				// Check if match has image
 				List<Tokens.TokenSetArt> arts = match.getTokenSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 				if (arts.isEmpty()) {
-					loadMsg.get().editMessage(String.format(
+					loadMsg.get().editMessageFormat(
 							"<@%s>, I sadly do not know of any art for this token. Please try a different one!",
 							e.getAuthor().getId(),
 							cardName
-					)).submit();
+					).submit();
 					return;
 				}
 
 				// Update load message
-				loadMsg.get().editMessage(String.format("```\n" + "Loading '%s' token..." + "\n```", match.getName())).submit();
+				loadMsg.get().editMessageFormat("```\n" + "Loading '%s' token..." + "\n```", match.getName()).submit();
 
 				// Pick random art
 				Tokens.TokenSetArt art = arts.get(new Random().nextInt(arts.size()));
@@ -167,21 +167,21 @@ public class TokenCommand extends BaseCommand {
 					// Upload art
 					RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "token.png", null).submit();
 					// Attach card name & set name + code
-					artMsg.get().editMessage(String.format(
+					artMsg.get().editMessageFormat(
 							"**%s%s**\n%s%s",
 							(match.getPt() != null) ? match.getPt() + " " : "",
 							match.getName(),
 							match.getType(),
 							(set != null) ? String.format("\n%s (%s)", set.getName(), set.getCode()) : ""
-					)).submit();
+					).submit();
 					// Delete loading message
 					loadMsg.get().delete().submit();
 				} catch (IOException ex) {
 					LOG.log(Level.SEVERE, "Could not upload card art", ex);
-					loadMsg.get().editMessage(String.format(
+					loadMsg.get().editMessageFormat(
 							"<@%s>, An error occurred while uploading the card art! Please try again later.",
 							e.getAuthor().getId()
-					)).submit();
+					).submit();
 				}
 			}
 

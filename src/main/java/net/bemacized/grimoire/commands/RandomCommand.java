@@ -48,10 +48,10 @@ public class RandomCommand extends BaseCommand {
 
 			// Make sure we have at least one argument
 			if (args.length < 1) {
-				e.getChannel().sendMessage(String.format(
+				e.getChannel().sendMessageFormat(
 						"<@%s>, Please specify one or more (sub/super)types.",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -72,11 +72,11 @@ public class RandomCommand extends BaseCommand {
 				} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 					if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 				} else {
-					loadMsg.get().editMessage(String.format(
+					loadMsg.get().editMessageFormat(
 							"<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.",
 							e.getAuthor().getId(),
 							arg
-					)).submit();
+					).submit();
 					return;
 				}
 			}
@@ -87,10 +87,10 @@ public class RandomCommand extends BaseCommand {
 				addAll(types);
 				addAll(subtypes);
 			}}.parallelStream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
-			loadMsg.get().editMessage(String.format(
+			loadMsg.get().editMessageFormat(
 					"```\n" + "Drawing random %s..." + "\n```",
 					joinedType
-			)).submit();
+			).submit();
 
 			//Find cards
 			CardUtils.CardSearchQuery query = new CardUtils.CardSearchQuery();
@@ -101,10 +101,10 @@ public class RandomCommand extends BaseCommand {
 
 			//Stop if none found
 			if (cards.isEmpty()) {
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, No cards have been found with the type(s) you've supplied.",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 				return;
 			}
 
@@ -118,15 +118,15 @@ public class RandomCommand extends BaseCommand {
 				// Upload art
 				RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
 				// Attach text, card name & set name + code
-				artMsg.get().editMessage(String.format("<@!%s> Here is your random **%s**:\n\n**%s**\n%s (%s)", e.getAuthor().getId(), joinedType, card.getName(), card.getSetName(), card.getSet())).submit();
+				artMsg.get().editMessageFormat("<@!%s> Here is your random **%s**:\n\n**%s**\n%s (%s)", e.getAuthor().getId(), joinedType, card.getName(), card.getSetName(), card.getSet()).submit();
 				// Delete loading message
 				loadMsg.get().delete().submit();
 			} catch (IOException ex) {
 				LOG.log(Level.SEVERE, "Could not upload random card art", ex);
-				loadMsg.get().editMessage(String.format(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, An error occurred while uploading the random card art! Please try again later.",
 						e.getAuthor().getId()
-				)).submit();
+				).submit();
 			}
 
 		} catch (InterruptedException | ExecutionException ex) {

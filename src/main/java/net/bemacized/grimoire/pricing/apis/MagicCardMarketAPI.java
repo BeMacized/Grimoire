@@ -45,6 +45,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 		return "MCM";
 	}
 
+	@SuppressWarnings("Duplicates")
 	@Override
 	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
 

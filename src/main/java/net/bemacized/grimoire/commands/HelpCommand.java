@@ -50,10 +50,8 @@ public class HelpCommand extends BaseCommand {
 			try {
 				BaseCommand c = cmd.getDeclaredConstructor().newInstance();
 				sb.append(String.format("**!%s** %s", c.name(), c.paramUsage())).append("\n");
-				;
 				if (c.aliases() != null && c.aliases().length > 0)
 					sb.append(String.format("**!Aliases:** _%s_", String.join(", ", c.aliases()))).append("\n");
-				;
 				sb.append(c.description()).append("\n");
 				sb.append("\n");
 			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {

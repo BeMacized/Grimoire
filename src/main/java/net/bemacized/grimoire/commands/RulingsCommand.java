@@ -35,10 +35,10 @@ public class RulingsCommand extends BaseCommand {
 
 		// Quit and error out if none provided
 		if (cardname.isEmpty()) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, please provide a card name to check rulings for!",
 					e.getAuthor().getId()
-			)).submit();
+			).submit();
 			return;
 		}
 
@@ -49,11 +49,11 @@ public class RulingsCommand extends BaseCommand {
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 					e.getAuthor().getId(),
 					cardname
-			)).submit();
+			).submit();
 			return;
 		}
 		// Handle multiple results
@@ -69,21 +69,21 @@ public class RulingsCommand extends BaseCommand {
 		}
 		// Handle no results
 		catch (CardUtils.NoResultsException e1) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, There are no results for a card named **'%s'**",
 					e.getAuthor().getId(),
 					cardname
-			)).submit();
+			).submit();
 			return;
 		}
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings() == null || card.getRulings().length == 0) {
-			e.getChannel().sendMessage(String.format(
+			e.getChannel().sendMessageFormat(
 					"<@%s>, Card **'%s'** does not have any rulings.",
 					e.getAuthor().getId(),
 					card.getName()
-			)).submit();
+			).submit();
 			return;
 		}
 
