@@ -3,6 +3,7 @@ package net.bemacized.grimoire;
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.parsers.ComprehensiveRules;
+import net.bemacized.grimoire.parsers.InfractionProcedureGuide;
 import net.bemacized.grimoire.parsers.Tokens;
 import net.bemacized.grimoire.parsers.TournamentRules;
 import net.bemacized.grimoire.pricing.PricingManager;
@@ -34,6 +35,7 @@ public class Grimoire {
 	private Tokens tokens;
 	private ComprehensiveRules comprehensiveRules;
 	private TournamentRules tournamentRules;
+	private InfractionProcedureGuide infractionProcedureGuide;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -70,6 +72,9 @@ public class Grimoire {
 
 		// Load tournament rules
 		tournamentRules = new TournamentRules();
+
+		// Load infraction procedure guide
+		infractionProcedureGuide = new InfractionProcedureGuide();
 
 		// Log in to Discord
 		try {
@@ -116,5 +121,9 @@ public class Grimoire {
 
 	public TournamentRules getTournamentRules() {
 		return tournamentRules;
+	}
+
+	public InfractionProcedureGuide getInfractionProcedureGuide() {
+		return infractionProcedureGuide;
 	}
 }

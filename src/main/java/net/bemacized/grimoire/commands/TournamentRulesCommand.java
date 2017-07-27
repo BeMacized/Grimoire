@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.parsers.TournamentRules;
+import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.stream.Collectors;
@@ -63,15 +64,15 @@ public class TournamentRulesCommand extends BaseCommand {
 				return;
 			}
 			// Show text
-			e.getChannel().sendMessageFormat(
-					"<@%s>\n**Magic Tournament Rules** - _%s %s_ - **%s %s**\n\n%s",
+			for (String s : StringUtils.splitMessage(String.format("<@%s>\n**Magic Tournament Rules** - _%s %s_ - **%s %s**\n\n%s",
 					e.getAuthor().getId(),
 					section.getParagraphNr(),
 					section.getTitle(),
 					subsection.getParagraphNr(),
 					subsection.getTitle(),
 					subsection.getContent()
-			).submit();
+			)))
+				e.getChannel().sendMessage(s).submit();
 			// Handle sections
 		} else {
 			// Find section
