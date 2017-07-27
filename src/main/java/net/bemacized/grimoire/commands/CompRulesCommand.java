@@ -4,9 +4,11 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CompRulesCommand extends BaseCommand {
 
@@ -17,7 +19,7 @@ public class CompRulesCommand extends BaseCommand {
 
 	@Override
 	public String[] aliases() {
-		return new String[]{"cr", "crules"};
+		return new String[]{"cr", "crules", "comprehensiverules"};
 	}
 
 	@Override
@@ -74,7 +76,23 @@ public class CompRulesCommand extends BaseCommand {
 		));
 		rulesToShow.entrySet().parallelStream()
 				.sorted(Comparator.comparing(Map.Entry::getKey))
-				.map(entry -> String.format("\n:small_orange_diamond: __**%s**__ %s\n", entry.getKey(), entry.getValue()))
+				.map(entry -> {
+
+					// Underline keywords
+					String ruleText = String.join("\n", Arrays.stream(entry.getValue().split("[\r\n]")).parallel().map(line ->
+							String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
+									(Grimoire.getInstance().getComprehensiveRules().getDefinitions().keySet().parallelStream().anyMatch(w -> w.equalsIgnoreCase(word)))
+											? "__" + word + "__"
+											: word
+							).collect(Collectors.toList()))
+					).collect(Collectors.toList()));
+
+					return String.format(
+							"\n:small_orange_diamond: __**%s**__ %s\n",
+							entry.getKey(),
+							ruleText
+					);
+				})
 				.forEachOrdered(sb::append);
 		for (String s : StringUtils.splitMessage(sb.toString())) e.getChannel().sendMessage(s).submit();
 	}
