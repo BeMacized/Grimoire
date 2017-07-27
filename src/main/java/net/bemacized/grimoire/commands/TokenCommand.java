@@ -2,21 +2,15 @@ package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.api.SetAPI;
 import io.magicthegathering.javasdk.resource.MtgSet;
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.parsers.Tokens;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -27,50 +21,6 @@ import java.util.stream.Collectors;
 public class TokenCommand extends BaseCommand {
 
 	private static final int MAX_TOKEN_RESULTS = 15;
-
-	private List<Token> tokens;
-
-	public TokenCommand() {
-		try {
-			tokens = new ArrayList<>();
-
-			// Parse token.xml
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(getClass().getResourceAsStream("/tokens.xml"));
-
-			// Extract card nodes
-			for (Element card : new ArrayList<Element>() {{
-				NodeList cardNodeList = doc.getElementsByTagName("card");
-				for (int i = 0; i < cardNodeList.getLength(); i++) add((Element) cardNodeList.item(i));
-			}}) {
-				tokens.add(new Token(
-						card.getElementsByTagName("name").item(0).getTextContent().trim(),
-						new ArrayList<TokenSetArt>() {{
-							NodeList arts = card.getElementsByTagName("set");
-							for (int i = 0; i < arts.getLength(); i++) {
-								add(new TokenSetArt(
-										(arts.item(i).getAttributes().getNamedItem("picURL") == null) ? null : arts.item(i).getAttributes().getNamedItem("picURL").getTextContent().trim(),
-										arts.item(i).getTextContent().trim()
-								));
-							}
-						}},
-						card.getElementsByTagName("type").item(0).getTextContent().trim(),
-						new ArrayList<String>() {{
-							NodeList cards = card.getElementsByTagName("reverse-related");
-							for (int i = 0; i < cards.getLength(); i++) {
-								add(cards.item(i).getTextContent().trim());
-							}
-						}},
-						(card.getElementsByTagName("pt").getLength() > 0) ? card.getElementsByTagName("pt").item(0).getTextContent().trim() : null,
-						(card.getElementsByTagName("color").getLength() > 0) ? colourIdToName(card.getElementsByTagName("color").item(0).getTextContent().trim()) : "Colourless"
-				));
-			}
-			LOG.info("Loaded " + tokens.size() + " tokens");
-		} catch (ParserConfigurationException | SAXException | IOException ex) {
-			LOG.log(Level.SEVERE, "Could not parse tokens.xml", ex);
-		}
-	}
 
 	@Override
 	public String name() {
@@ -118,9 +68,9 @@ public class TokenCommand extends BaseCommand {
 			}
 
 			// Find token(s)
-			List<Token> matches = tokens.parallelStream().filter(token -> token.getName().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().contains(cardName.toLowerCase())).collect(Collectors.toList());
+			List<Tokens.Token> matches = Grimoire.getInstance().getTokens().getTokens().parallelStream().filter(token -> token.getName().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().contains(cardName.toLowerCase())).collect(Collectors.toList());
 			// filter down to exact matches only if available
-			List<Token> exactMatches = matches.parallelStream().filter(token -> token.getName().trim().equalsIgnoreCase(cardName.toLowerCase())).collect(Collectors.toList());
+			List<Tokens.Token> exactMatches = matches.parallelStream().filter(token -> token.getName().trim().equalsIgnoreCase(cardName.toLowerCase())).collect(Collectors.toList());
 			if (!exactMatches.isEmpty()) matches = exactMatches;
 
 			// Sort matches
@@ -141,7 +91,7 @@ public class TokenCommand extends BaseCommand {
 			}
 
 			// Get 1st match
-			Token match = matches.get(0);
+			Tokens.Token match = matches.get(0);
 
 			// Test for multiple matches
 			if (matches.size() > 1) {
@@ -173,7 +123,7 @@ public class TokenCommand extends BaseCommand {
 							cardName
 					));
 					for (int i = 0; i < matches.size(); i++) {
-						Token m = matches.get(i);
+						Tokens.Token m = matches.get(i);
 						boolean hasArts = m.getTokenSetArt().parallelStream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty());
 						sb.append(String.format(
 								"\n:small_orange_diamond: **%s.**%s%s%s%s",
@@ -191,7 +141,7 @@ public class TokenCommand extends BaseCommand {
 				}
 
 				// Check if match has image
-				List<TokenSetArt> arts = match.getTokenSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
+				List<Tokens.TokenSetArt> arts = match.getTokenSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 				if (arts.isEmpty()) {
 					loadMsg.get().editMessage(String.format(
 							"<@%s>, I sadly do not know of any art for this token. Please try a different one!",
@@ -205,7 +155,7 @@ public class TokenCommand extends BaseCommand {
 				loadMsg.get().editMessage(String.format("```\n" + "Loading '%s' token..." + "\n```", match.getName())).submit();
 
 				// Pick random art
-				TokenSetArt art = arts.get(new Random().nextInt(arts.size()));
+				Tokens.TokenSetArt art = arts.get(new Random().nextInt(arts.size()));
 
 				// Attempt finding set
 				MtgSet set = SetAPI.getSet(art.getSetCode());
@@ -241,68 +191,6 @@ public class TokenCommand extends BaseCommand {
 		}
 	}
 
-	private static class Token {
-
-		private String name;
-		private List<TokenSetArt> tokenSetArt;
-		private String type;
-		private List<String> reverseRelated;
-		//Optional fields
-		private String pt;
-		private String color;
-
-		public Token(String name, List<TokenSetArt> tokenSetArt, String type, List<String> reverseRelated, String pt, String color) {
-			this.name = name;
-			this.tokenSetArt = (tokenSetArt != null) ? tokenSetArt : new ArrayList<>();
-			this.type = type;
-			this.reverseRelated = (reverseRelated != null) ? reverseRelated : new ArrayList<>();
-			this.pt = pt;
-			this.color = color;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public List<TokenSetArt> getTokenSetArt() {
-			return tokenSetArt;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-		public List<String> getReverseRelated() {
-			return reverseRelated;
-		}
-
-		public String getPt() {
-			return pt;
-		}
-
-		public String getColor() {
-			return color;
-		}
-	}
-
-	private static class TokenSetArt {
-		private String url;
-		private String setCode;
-
-		public TokenSetArt(String url, String setCode) {
-			this.url = url;
-			this.setCode = setCode;
-		}
-
-		public String getUrl() {
-			return url;
-		}
-
-		public String getSetCode() {
-			return setCode;
-		}
-	}
-
 	private boolean isNumber(String str) {
 		try {
 			Integer.parseInt(str);
@@ -312,20 +200,5 @@ public class TokenCommand extends BaseCommand {
 		}
 	}
 
-	private String colourIdToName(String id) {
-		switch (id.toUpperCase()) {
-			case "R":
-				return "Red";
-			case "B":
-				return "Black";
-			case "U":
-				return "Blue";
-			case "W":
-				return "White";
-			case "G":
-				return "Green";
-			default:
-				return "Colourless";
-		}
-	}
+
 }

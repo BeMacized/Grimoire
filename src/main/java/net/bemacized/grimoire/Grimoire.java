@@ -2,6 +2,8 @@ package net.bemacized.grimoire;
 
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
+import net.bemacized.grimoire.parsers.ComprehensiveRules;
+import net.bemacized.grimoire.parsers.Tokens;
 import net.bemacized.grimoire.pricing.PricingManager;
 import net.bemacized.grimoire.utils.CardUtils;
 import net.dv8tion.jda.core.AccountType;
@@ -29,12 +31,14 @@ public class Grimoire {
 	private JDA discord;
 	private DBManager dbManager;
 	private PricingManager pricingManager;
+	private Tokens tokens;
+	private ComprehensiveRules comprehensiveRules;
 
-	private Grimoire(String token) {
+	private Grimoire(String bot_token) {
 		instance = this;
 
 		// Verify existence of token
-		if (token == null) {
+		if (bot_token == null) {
 			LOG.severe("No discord bot token was set in the BOT_TOKEN environment variable! Quitting...");
 			System.exit(1);
 		}
@@ -57,12 +61,18 @@ public class Grimoire {
 		this.pricingManager = new PricingManager();
 		this.pricingManager.init();
 
+		// Load tokens
+		this.tokens = new Tokens();
+
+		// Load comprehensive rules
+		comprehensiveRules = new ComprehensiveRules();
+
 		// Log in to Discord
 		try {
 			LOG.info("Logging in to Discord...");
 			discord = new JDABuilder(AccountType.BOT)
 					.setAutoReconnect(true)
-					.setToken(token)
+					.setToken(bot_token)
 					.buildBlocking();
 			LOG.info("Discord login complete.");
 		} catch (LoginException e) {
@@ -90,5 +100,13 @@ public class Grimoire {
 
 	public PricingManager getPricingManager() {
 		return pricingManager;
+	}
+
+	public Tokens getTokens() {
+		return tokens;
+	}
+
+	public ComprehensiveRules getComprehensiveRules() {
+		return comprehensiveRules;
 	}
 }

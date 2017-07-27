@@ -1,8 +1,9 @@
 package net.bemacized.grimoire.commands;
 
+import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class DefineCommand extends CompRulesSuperCommand {
+public class DefineCommand extends BaseCommand {
 	@Override
 	public String name() {
 		return "define";
@@ -35,7 +36,12 @@ public class DefineCommand extends CompRulesSuperCommand {
 		}
 
 		// Verify that paragraph number exists
-		String keyword = this.definitions.keySet().parallelStream().filter(k -> k.equalsIgnoreCase(String.join(" ", args))).findFirst().orElse(null);
+		String keyword = Grimoire.getInstance().getComprehensiveRules().getDefinitions()
+				.keySet()
+				.parallelStream()
+				.filter(k -> k.equalsIgnoreCase(String.join(" ", args)))
+				.findFirst()
+				.orElse(null);
 		if (keyword == null) {
 			e.getChannel().sendMessage(String.format(
 					"<@%s>, Unknown keyword :(",
@@ -44,11 +50,12 @@ public class DefineCommand extends CompRulesSuperCommand {
 			return;
 		}
 
+		// Show definition
 		e.getChannel().sendMessage(String.format(
 				"<@%s>, __**%s:**__\n%s",
 				e.getAuthor().getId(),
 				keyword,
-				this.definitions.get(keyword)
+				Grimoire.getInstance().getComprehensiveRules().getDefinitions().get(keyword)
 		)).submit();
 	}
 }
