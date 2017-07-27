@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CompRulesCommand extends BaseCommand {
@@ -45,21 +46,12 @@ public class CompRulesCommand extends BaseCommand {
 
 		Map<String, String> rulesToShow = new HashMap<>();
 
-		// Check if we referenced a section
-		if (args[0].matches("[0-9]{3}[.][0-9][.]?")) {
-			// Get possible results
-			final String paragraphNr = (args[0].endsWith(".")) ? args[0].substring(0, args[0].length() - 1) : args[0];
-			Grimoire.getInstance().getComprehensiveRules().getRules()
-					.keySet()
-					.parallelStream()
-					.filter(p -> p.substring(0, paragraphNr.length()).equals(paragraphNr))
-					.forEach(p -> rulesToShow.put(p, Grimoire.getInstance().getComprehensiveRules().getRules().get(p)));
-		}
-		// If not try find exact match instead
-		else {
-			String rule = Grimoire.getInstance().getComprehensiveRules().getRules().get(args[0]);
-			if (rule != null) rulesToShow.put(args[0], rule);
-		}
+		// Find rules
+		Grimoire.getInstance().getComprehensiveRules().getRules()
+				.keySet()
+				.parallelStream()
+				.filter(p -> (args[0].endsWith(".") && p.equalsIgnoreCase(args[0])) || p.equalsIgnoreCase(args[0]) || p.equalsIgnoreCase(args[0] + ".") || p.matches(Pattern.quote(args[0]) + "[a-z]"))
+				.forEach(p -> rulesToShow.put(p, Grimoire.getInstance().getComprehensiveRules().getRules().get(p)));
 
 		// If we couldn't find anything, tell the user
 		if (rulesToShow.isEmpty()) {

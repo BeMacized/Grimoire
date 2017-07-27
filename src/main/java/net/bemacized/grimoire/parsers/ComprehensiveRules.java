@@ -41,7 +41,7 @@ public class ComprehensiveRules {
 
 			// Parse rule text
 			{
-				Pattern rulePattern = Pattern.compile("[0-9]{3}[.][0-9]([.]|[a-z])([^\\n\\r]+[\n]?)+");
+				Pattern rulePattern = Pattern.compile("([0-9]+[.])+([0-9]*[a-z])?([^\\n\\r]+[\n]?)+");
 				Matcher matcher = rulePattern.matcher(ruleText);
 				while (matcher.find()) {
 					String p = matcher.group().split("\\s+")[0];
