@@ -2,11 +2,11 @@ package net.bemacized.grimoire.utils;
 
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
+import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.Guild;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,6 +103,70 @@ public class CardUtils {
 			default:
 				return Color.GRAY;
 		}
+	}
+
+	public static String parseEmoji(Guild guild, String msg) {
+		// Return message if we don't have the necessary info
+		if (guild == null || msg == null || msg.isEmpty()) return msg;
+		// Define emoji mapping
+		Map<String, String> emojiMap = new HashMap<String, String>() {{
+			put("W", "manaW");
+			put("U", "manaU");
+			put("B", "manaB");
+			put("R", "manaR");
+			put("G", "manaG");
+			put("C", "manaC");
+			put("W/U", "manaWU");
+			put("U/B", "manaUB");
+			put("B/R", "manaBR");
+			put("R/G", "manaRG");
+			put("G/W", "manaGW");
+			put("W/B", "manaWB");
+			put("U/R", "manaUR");
+			put("B/G", "manaBG");
+			put("R/W", "manaRW");
+			put("G/U", "manaGU");
+			put("2/W", "mana2W");
+			put("2/U", "mana2U");
+			put("2/B", "mana2B");
+			put("2/R", "mana2R");
+			put("2/G", "mana2G");
+			put("WP", "manaWP");
+			put("UP", "manaUP");
+			put("BP", "manaBP");
+			put("RP", "manaRP");
+			put("GP", "manaGP");
+			put("0", "manaZero");
+			put("1", "manaOne");
+			put("2", "manaTwo");
+			put("3", "manaThree");
+			put("4", "manaFour");
+			put("5", "manaFive");
+			put("6", "manaSix");
+			put("7", "manaSeven");
+			put("8", "manaEight");
+			put("9", "manaNine");
+			put("10", "manaTen");
+			put("11", "manaEleven");
+			put("12", "manaTwelve");
+			put("13", "manaThirteen");
+			put("14", "manaFourteen");
+			put("15", "manaFifteen");
+			put("16", "manaSixteen");
+			put("20", "manaTwenty");
+			put("T", "manaT");
+			put("Q", "manaQ");
+			put("S", "manaS");
+			put("X", "manaX");
+			put("E", "manaE");
+		}};
+		for (Map.Entry<String, String> entry : emojiMap.entrySet()) {
+			if (msg.contains("{" + entry.getKey() + "}")) {
+				Emote emote = guild.getEmotesByName(entry.getValue(), true).parallelStream().findAny().orElse(null);
+				if (emote != null) msg = msg.replaceAll("\\{" + entry.getKey() + "\\}", emote.getAsMention());
+			}
+		}
+		return msg;
 	}
 
 	public static class NoResultsException extends Exception {

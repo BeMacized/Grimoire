@@ -1,7 +1,10 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
+import java.awt.*;
 
 public class DefineCommand extends BaseCommand {
 	@Override
@@ -51,11 +54,10 @@ public class DefineCommand extends BaseCommand {
 		}
 
 		// Show definition
-		e.getChannel().sendMessageFormat(
-				"<@%s>, __**%s:**__\n%s",
-				e.getAuthor().getId(),
-				keyword,
-				Grimoire.getInstance().getComprehensiveRules().getDefinitions().get(keyword)
+		e.getChannel().sendMessage(
+				new EmbedBuilder()
+						.addField(keyword, Grimoire.getInstance().getComprehensiveRules().getDefinitions().get(keyword), false)
+						.build()
 		).submit();
 	}
 }

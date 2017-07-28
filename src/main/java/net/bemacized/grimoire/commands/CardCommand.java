@@ -115,11 +115,11 @@ public class CardCommand extends BaseCommand {
 			String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
 			String title = card.getName()
 					+ " "
-					+ parseEmoji(e.getGuild(), card.getManaCost());
+					+ CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
 			String separateCost = "";
 			if (title.length() > 256) {
 				title = card.getName();
-				separateCost = parseEmoji(e.getGuild(), card.getManaCost());
+				separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
 			}
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setThumbnail(card.getImageUrl());
@@ -130,7 +130,7 @@ public class CardCommand extends BaseCommand {
 			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 			eb.appendDescription(card.getType());
 			eb.appendDescription("\n\n");
-			eb.appendDescription(parseEmoji(e.getGuild(), card.getText()));
+			eb.appendDescription(CardUtils.parseEmoji(e.getGuild(), card.getText()));
 			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
 			if (rarities.isEmpty()) eb.addField("Rarities", rarities, true);
 			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
@@ -141,71 +141,6 @@ public class CardCommand extends BaseCommand {
 			LOG.log(Level.SEVERE, "An error occurred fetching card info", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching card info. Please notify my developer to fix me up!").submit();
 		}
-	}
-
-	@SuppressWarnings("Duplicates")
-	private String parseEmoji(Guild guild, String msg) {
-		// Return message if we don't have the necessary info
-		if (guild == null || msg == null || msg.isEmpty()) return msg;
-		// Define emoji mapping
-		Map<String, String> emojiMap = new HashMap<String, String>() {{
-			put("W", "manaW");
-			put("U", "manaU");
-			put("B", "manaB");
-			put("R", "manaR");
-			put("G", "manaG");
-			put("C", "manaC");
-			put("W/U", "manaWU");
-			put("U/B", "manaUB");
-			put("B/R", "manaBR");
-			put("R/G", "manaRG");
-			put("G/W", "manaGW");
-			put("W/B", "manaWB");
-			put("U/R", "manaUR");
-			put("B/G", "manaBG");
-			put("R/W", "manaRW");
-			put("G/U", "manaGU");
-			put("2/W", "mana2W");
-			put("2/U", "mana2U");
-			put("2/B", "mana2B");
-			put("2/R", "mana2R");
-			put("2/G", "mana2G");
-			put("WP", "manaWP");
-			put("UP", "manaUP");
-			put("BP", "manaBP");
-			put("RP", "manaRP");
-			put("GP", "manaGP");
-			put("0", "manaZero");
-			put("1", "manaOne");
-			put("2", "manaTwo");
-			put("3", "manaThree");
-			put("4", "manaFour");
-			put("5", "manaFive");
-			put("6", "manaSix");
-			put("7", "manaSeven");
-			put("8", "manaEight");
-			put("9", "manaNine");
-			put("10", "manaTen");
-			put("11", "manaEleven");
-			put("12", "manaTwelve");
-			put("13", "manaThirteen");
-			put("14", "manaFourteen");
-			put("15", "manaFifteen");
-			put("16", "manaSixteen");
-			put("20", "manaTwenty");
-			put("T", "manaT");
-			put("Q", "manaQ");
-			put("S", "manaS");
-			put("X", "manaX");
-			put("E", "manaE");
-		}};
-		for (Map.Entry<String, String> entry : emojiMap.entrySet()) {
-			if (msg.contains("{" + entry.getKey() + "}")) {
-				Emote emote = guild.getEmotesByName(entry.getValue(), true).parallelStream().findAny().orElse(null);
-				if (emote != null) msg = msg.replaceAll("\\{" + entry.getKey() + "\\}", emote.getAsMention());
-			}
-		}
-		return msg;
 	}
 
 	private String parsePowerAndToughness(String power, String toughness) {
