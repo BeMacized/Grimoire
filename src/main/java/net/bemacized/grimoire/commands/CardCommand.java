@@ -214,11 +214,11 @@ public class CardCommand extends BaseCommand {
 			case "B":
 				return Color.BLACK;
 			case "G":
-				return Color.GREEN;
+				return new Color(0, 153, 0);
 			case "R":
-				return Color.RED;
+				return new Color(255, 51, 0);
 			case "U":
-				return Color.BLUE;
+				return new Color(0, 153, 255);
 			case "W":
 				return Color.WHITE;
 			case "BG":
