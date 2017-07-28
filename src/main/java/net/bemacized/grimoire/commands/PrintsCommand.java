@@ -2,9 +2,11 @@ package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.StringUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class PrintsCommand extends BaseCommand {
 
@@ -78,16 +80,14 @@ public class PrintsCommand extends BaseCommand {
 			return;
 		}
 
-		// Retrieve all versions of this card
-		List<Card> cards = new CardUtils.CardSearchQuery().setExactName(card.getName()).exec();
-
 		// Show the sets
-		StringBuilder sb = new StringBuilder(String.format(
-				"<@%s>, The card **'%s'** was printed in the following sets:\n",
-				e.getAuthor().getId(),
-				card.getName())
-		);
-		for (Card c : cards) sb.append(String.format("\n - %s (%s)", c.getSetName(), c.getSet()));
-		e.getChannel().sendMessage(sb.toString()).submit();
+		String sets = String.join("\n", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(c -> String.format(":small_orange_diamond: %s (%s)", c.getSetName(), c.getSet())).collect(Collectors.toList()));
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		String[] splits = StringUtils.splitMessage(sets, 1000);
+		for (int i = 0; i < splits.length; i++)
+			eb.addField((i == 0) ? "Sets" : "", splits[i], false);
+		e.getChannel().sendMessage(eb.build()).submit();
 	}
 }
