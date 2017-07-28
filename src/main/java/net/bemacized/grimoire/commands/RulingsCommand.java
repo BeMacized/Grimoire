@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.Ruling;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class RulingsCommand extends BaseCommand {
@@ -97,6 +98,8 @@ public class RulingsCommand extends BaseCommand {
 			sb.append(String.format("\n\n**%s**:", ruling.getDate()));
 			sb.append(String.format("\n%s", ruling.getText()));
 		}
-		e.getChannel().sendMessage(sb.toString()).submit();
+		for (String s : StringUtils.splitMessage(sb.toString()))
+			e.getChannel().sendMessage(s).submit();
+
 	}
 }

@@ -180,7 +180,7 @@ public class ArtRetrieveHandler extends ChatHandler {
 
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("**" + card.getName() + "**", (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		eb.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 		eb.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
