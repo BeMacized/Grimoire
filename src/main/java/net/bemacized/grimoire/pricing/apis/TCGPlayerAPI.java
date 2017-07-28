@@ -127,6 +127,9 @@ public class TCGPlayerAPI extends StoreAPI {
 			throw new UnknownStoreException();
 		}
 
+		// Return null if we don't have a link
+		if (doc.getDocumentElement().getElementsByTagName("link").getLength() == 0) return null;
+
 		return new StoreCardPriceRecord(
 				card.getName(),
 				card.getSet(),
