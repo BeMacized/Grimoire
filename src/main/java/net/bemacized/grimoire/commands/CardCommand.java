@@ -10,7 +10,6 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +123,7 @@ public class CardCommand extends BaseCommand {
 			}
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setThumbnail(card.getImageUrl());
-			eb.setColor(colorCodesToColor(card.getColorIdentity()));
+			eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
 			eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 			if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
 			eb.appendDescription(":small_orange_diamond: ");
@@ -207,41 +206,6 @@ public class CardCommand extends BaseCommand {
 			}
 		}
 		return msg;
-	}
-
-	private Color colorCodesToColor(String[] colorCodes) {
-		switch (String.join("", Arrays.stream(colorCodes).sorted().collect(Collectors.toList()))) {
-			case "B":
-				return Color.BLACK;
-			case "G":
-				return new Color(0, 153, 0);
-			case "R":
-				return new Color(255, 51, 0);
-			case "U":
-				return new Color(0, 153, 255);
-			case "W":
-				return Color.WHITE;
-			case "BG":
-			case "BR":
-			case "BU":
-			case "BW":
-			case "BGR":
-			case "BGU":
-			case "BGW":
-			case "BRU":
-			case "BRW":
-			case "BUW":
-			case "GRU":
-			case "GRW":
-			case "GUW":
-			case "RUW":
-			case "BGRU":
-			case "GRUW":
-			case "BGRUW":
-				return Color.ORANGE;
-			default:
-				return Color.GRAY;
-		}
 	}
 
 	private String parsePowerAndToughness(String power, String toughness) {

@@ -3,7 +3,9 @@ package net.bemacized.grimoire.utils;
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,6 +70,40 @@ public class CardUtils {
 		return getCards(cardname, null);
 	}
 
+	public static Color colorIdentitiesToColor(String[] colorCodes) {
+		switch (String.join("", Arrays.stream(colorCodes).sorted().collect(Collectors.toList()))) {
+			case "B":
+				return Color.BLACK;
+			case "G":
+				return new Color(0, 153, 0);
+			case "R":
+				return new Color(255, 51, 0);
+			case "U":
+				return new Color(0, 153, 255);
+			case "W":
+				return Color.WHITE;
+			case "BG":
+			case "BR":
+			case "BU":
+			case "BW":
+			case "BGR":
+			case "BGU":
+			case "BGW":
+			case "BRU":
+			case "BRW":
+			case "BUW":
+			case "GRU":
+			case "GRW":
+			case "GUW":
+			case "RUW":
+			case "BGRU":
+			case "GRUW":
+			case "BGRUW":
+				return Color.ORANGE;
+			default:
+				return Color.GRAY;
+		}
+	}
 
 	public static class NoResultsException extends Exception {
 	}
