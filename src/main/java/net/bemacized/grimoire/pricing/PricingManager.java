@@ -108,6 +108,7 @@ public class PricingManager {
 				LOG.log(Level.SEVERE, "Unknown error occurred with " + store.getStoreName() + " while updating the set dictionary", e);
 			}
 		});
+		setDictionary.save();
 	}
 
 	public SetDictionary getSetDictionary() {

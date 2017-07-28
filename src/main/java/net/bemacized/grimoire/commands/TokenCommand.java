@@ -4,6 +4,8 @@ import io.magicthegathering.javasdk.api.SetAPI;
 import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.parsers.Tokens;
+import net.bemacized.grimoire.utils.CardUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
@@ -132,7 +134,6 @@ public class TokenCommand extends BaseCommand {
 								(m.getPt() == null) ? "" : " _" + m.getPt() + "_",
 								" " + m.getName(),
 								(hasArts) ? "" : " __[NO ART AVAILABLE]__"
-
 						));
 					}
 
@@ -160,29 +161,37 @@ public class TokenCommand extends BaseCommand {
 				// Attempt finding set
 				MtgSet set = SetAPI.getSet(art.getSetCode());
 
+				// Build embed & show
+				EmbedBuilder eb = new EmbedBuilder();
+				eb.setTitle(match.getName());
+				if (set != null) eb.setDescription(String.format("%s (%s)", set.getName(), set.getCode()));
+				eb.setImage(art.getUrl());
+				eb.setColor(CardUtils.colorIdentitiesToColor(new String[]{match.getColor()}));
+				loadMsg.get().editMessage(eb.build()).submit();
+
 				// Show card
-				try {
-					// Obtain stream
-					InputStream artStream = new URL(art.getUrl()).openStream();
-					// Upload art
-					RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "token.png", null).submit();
-					// Attach card name & set name + code
-					artMsg.get().editMessageFormat(
-							"**%s%s**\n%s%s",
-							(match.getPt() != null) ? match.getPt() + " " : "",
-							match.getName(),
-							match.getType(),
-							(set != null) ? String.format("\n%s (%s)", set.getName(), set.getCode()) : ""
-					).submit();
-					// Delete loading message
-					loadMsg.get().delete().submit();
-				} catch (IOException ex) {
-					LOG.log(Level.SEVERE, "Could not upload card art", ex);
-					loadMsg.get().editMessageFormat(
-							"<@%s>, An error occurred while uploading the card art! Please try again later.",
-							e.getAuthor().getId()
-					).submit();
-				}
+//				try {
+//					// Obtain stream
+//					InputStream artStream = new URL(art.getUrl()).openStream();
+//					// Upload art
+//					RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "token.png", null).submit();
+//					// Attach card name & set name + code
+//					artMsg.get().editMessageFormat(
+//							"**%s%s**\n%s%s",
+//							(match.getPt() != null) ? match.getPt() + " " : "",
+//							match.getName(),
+//							match.getType(),
+//							(set != null) ? String.format("\n%s (%s)", set.getName(), set.getCode()) : ""
+//					).submit();
+//					// Delete loading message
+//					loadMsg.get().delete().submit();
+//				} catch (IOException ex) {
+//					LOG.log(Level.SEVERE, "Could not upload card art", ex);
+//					loadMsg.get().editMessageFormat(
+//							"<@%s>, An error occurred while uploading the card art! Please try again later.",
+//							e.getAuthor().getId()
+//					).submit();
+//				}
 			}
 
 		} catch (InterruptedException | ExecutionException ex) {
@@ -199,6 +208,5 @@ public class TokenCommand extends BaseCommand {
 			return false;
 		}
 	}
-
 
 }

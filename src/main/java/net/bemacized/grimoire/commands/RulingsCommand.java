@@ -3,7 +3,7 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.Ruling;
 import net.bemacized.grimoire.utils.CardUtils;
-import net.bemacized.grimoire.utils.StringUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class RulingsCommand extends BaseCommand {
@@ -80,26 +80,23 @@ public class RulingsCommand extends BaseCommand {
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings() == null || card.getRulings().length == 0) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Card **'%s'** does not have any rulings.",
-					e.getAuthor().getId(),
-					card.getName()
-			).submit();
+			e.getChannel().sendMessage(
+					new EmbedBuilder()
+							.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+							.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
+							.setDescription("**Rulings**")
+							.addField("", "There are no rulings for this card.", false)
+							.build()).submit();
 			return;
 		}
 
 		// Show the rulings
-		StringBuilder sb = new StringBuilder(String.format(
-				"<@%s>, The following ruling(s) were released for **'%s'**:",
-				e.getAuthor().getId(),
-				card.getName())
-		);
-		for (Ruling ruling : card.getRulings()) {
-			sb.append(String.format("\n\n**%s**:", ruling.getDate()));
-			sb.append(String.format("\n%s", ruling.getText()));
-		}
-		for (String s : StringUtils.splitMessage(sb.toString()))
-			e.getChannel().sendMessage(s).submit();
-
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
+				.setDescription("**Rulings**");
+		for (Ruling ruling : card.getRulings())
+			eb.addField(ruling.getDate(), ruling.getText(), false);
+		e.getChannel().sendMessage(eb.build()).submit();
 	}
 }

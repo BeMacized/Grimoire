@@ -8,14 +8,15 @@ import org.jongo.MongoCursor;
 import org.jongo.marshall.jackson.oid.MongoId;
 
 import java.util.*;
-
-import static net.dv8tion.jda.core.requests.Requester.LOG;
+import java.util.logging.Logger;
 
 public class SetDictionary {
 
+	private static final Logger LOG = Logger.getLogger(SetDictionary.class.getName());
+
 	private List<SetDictionaryItem> dictionary;
 
-	public SetDictionary() {
+	SetDictionary() {
 		dictionary = new ArrayList<>();
 
 		// Load initial data
@@ -36,7 +37,7 @@ public class SetDictionary {
 		save();
 	}
 
-	public void save() {
+	void save() {
 		MongoCollection collection = Grimoire.getInstance().getDBManager().getJongo().getCollection("SetDictionaryItems");
 		dictionary.forEach(collection::save);
 	}
