@@ -15,7 +15,7 @@ public class RulingsCommand extends BaseCommand {
 
 	@Override
 	public String[] aliases() {
-		return new String[]{"rules", "ruling"};
+		return new String[]{"rules", "ruling", "ruling"};
 	}
 
 	@Override
