@@ -165,14 +165,13 @@ public class CardCommand extends BaseCommand {
 					.collect(Collectors.toList()));
 			String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
 			String printings = String.join(", ", card.getPrintings());
+			String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
 			String msg = String.format(
 					"<@%s>\n:black_square_button: **%s** %s\n:small_orange_diamond: %s%s\n\n%s\n%s%s%s\n%s",
 					e.getAuthor().getId(),
 					card.getName(),
 					card.getManaCost(),
-					(card.getPower() != null && card.getToughness() != null)
-							? String.format("**%s/%s** ", (card.getPower().equals("*")) ? "\\*" : card.getPower(), (card.getToughness().equals("*")) ? "\\*" : card.getToughness())
-							: "",
+					(pat.isEmpty()) ? pat : "**" + pat + "** ",
 					card.getType(),
 					card.getText(),
 					(!formats.isEmpty()) ? "\n**Formats:** " + formats : "",
@@ -216,6 +215,19 @@ public class CardCommand extends BaseCommand {
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred fetching card info", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching card info. Please notify my developer to fix me up!").submit();
+		}
+	}
+
+	private String parsePowerAndToughness(String power, String toughness) {
+		if (power == null || toughness == null || power.isEmpty() || toughness.isEmpty()) return "";
+		return parsePowerOrToughness(power) + "/" + parsePowerOrToughness(toughness);
+	}
+
+	private String parsePowerOrToughness(String value) {
+		if (value == null) return null;
+		switch(value) {
+			case "*": return "\\*";
+			default: return value;
 		}
 	}
 }
