@@ -3,14 +3,14 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.Legality;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -105,58 +105,6 @@ public class CardCommand extends BaseCommand {
 					card.getName()
 			).submit();
 
-			// Define emoji mapping
-			Map<String, String> emojiMap = new HashMap<String, String>() {{
-				put("W", "manaW");
-				put("U", "manaU");
-				put("B", "manaB");
-				put("R", "manaR");
-				put("G", "manaG");
-				put("C", "manaC");
-				put("W/U", "manaWU");
-				put("U/B", "manaUB");
-				put("B/R", "manaBR");
-				put("R/G", "manaRG");
-				put("G/W", "manaGW");
-				put("W/B", "manaWB");
-				put("U/R", "manaUR");
-				put("B/G", "manaBG");
-				put("R/W", "manaRW");
-				put("G/U", "manaGU");
-				put("2/W", "mana2W");
-				put("2/U", "mana2U");
-				put("2/B", "mana2B");
-				put("2/R", "mana2R");
-				put("2/G", "mana2G");
-				put("WP", "manaWP");
-				put("UP", "manaUP");
-				put("BP", "manaBP");
-				put("RP", "manaRP");
-				put("GP", "manaGP");
-				put("0", "manaZero");
-				put("1", "manaOne");
-				put("2", "manaTwo");
-				put("3", "manaThree");
-				put("4", "manaFour");
-				put("5", "manaFive");
-				put("6", "manaSix");
-				put("7", "manaSeven");
-				put("8", "manaEight");
-				put("9", "manaNine");
-				put("10", "manaTen");
-				put("11", "manaEleven");
-				put("12", "manaTwelve");
-				put("13", "manaThirteen");
-				put("14", "manaFourteen");
-				put("15", "manaFifteen");
-				put("16", "manaSixteen");
-				put("20", "manaTwenty");
-				put("T", "manaT");
-				put("Q", "manaQ");
-				put("S", "manaS");
-				put("X", "manaX");
-				put("E", "manaE");
-			}};
 
 			// We have found it. Let's construct the oracle text.
 			String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
@@ -166,55 +114,133 @@ public class CardCommand extends BaseCommand {
 			String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
 			String printings = String.join(", ", card.getPrintings());
 			String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
-			String msg = String.format(
-					"<@%s>\n:black_square_button: **%s** %s\n:small_orange_diamond: %s%s\n\n%s\n%s%s%s\n%s",
-					e.getAuthor().getId(),
-					card.getName(),
-					card.getManaCost(),
-					(pat.isEmpty()) ? pat : "**" + pat + "** ",
-					card.getType(),
-					card.getText(),
-					(!formats.isEmpty()) ? "\n**Formats:** " + formats : "",
-					(!rarities.isEmpty()) ? "\n**Rarities:** " + rarities : "",
-					(!printings.isEmpty()) ? "\n**Printings:** " + printings : "",
-					(card.getMultiverseid() == -1) ? "" : "**Gatherer:** http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid()
-			);
-
-			// Convert emojis if guild supports it
-			if (e.getGuild() != null) {
-				for (Map.Entry<String, String> entry : emojiMap.entrySet()) {
-					if (msg.contains("{" + entry.getKey() + "}")) {
-						Emote emote = e.getGuild().getEmotesByName(entry.getValue(), true).parallelStream().findAny().orElse(null);
-						if (emote != null) msg = msg.replaceAll("\\{" + entry.getKey() + "\\}", emote.getAsMention());
-					}
-				}
+			String title = card.getName()
+					+ " "
+					+ parseEmoji(e.getGuild(), card.getManaCost());
+			String separateCost = "";
+			if (title.length() > 256) {
+				title = card.getName();
+				separateCost = parseEmoji(e.getGuild(), card.getManaCost());
 			}
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setThumbnail(card.getImageUrl());
+			eb.setColor(colorCodesToColor(card.getColorIdentity()));
+			eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+			if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
+			eb.appendDescription(":small_orange_diamond: ");
+			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
+			eb.appendDescription(card.getType());
+			eb.appendDescription("\n\n");
+			eb.appendDescription(parseEmoji(e.getGuild(), card.getText()));
+			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
+			if (rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
 
-			// Show card
-			try {
-				if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
-					// Obtain stream
-					InputStream artStream = new URL(card.getImageUrl()).openStream();
-					// Upload art
-					RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
-					// Attach card name & set name + code
-					artMsg.get().editMessage(msg).submit();
-					// Delete loading message
-					loadMsg.get().delete().submit();
-				} else {
-					loadMsg.get().editMessage(msg).submit();
-				}
-
-			} catch (IOException ex) {
-				LOG.log(Level.SEVERE, "Could not upload card art + info", ex);
-				loadMsg.get().editMessageFormat(
-						"<@%s>, An error occurred while uploading the card info! Please try again later.",
-						e.getAuthor().getId()
-				).submit();
-			}
+			// Show message
+			loadMsg.get().editMessage(eb.build()).submit();
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred fetching card info", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching card info. Please notify my developer to fix me up!").submit();
+		}
+	}
+
+	@SuppressWarnings("Duplicates")
+	private String parseEmoji(Guild guild, String msg) {
+		// Return message if we don't have the necessary info
+		if (guild == null || msg == null || msg.isEmpty()) return msg;
+		// Define emoji mapping
+		Map<String, String> emojiMap = new HashMap<String, String>() {{
+			put("W", "manaW");
+			put("U", "manaU");
+			put("B", "manaB");
+			put("R", "manaR");
+			put("G", "manaG");
+			put("C", "manaC");
+			put("W/U", "manaWU");
+			put("U/B", "manaUB");
+			put("B/R", "manaBR");
+			put("R/G", "manaRG");
+			put("G/W", "manaGW");
+			put("W/B", "manaWB");
+			put("U/R", "manaUR");
+			put("B/G", "manaBG");
+			put("R/W", "manaRW");
+			put("G/U", "manaGU");
+			put("2/W", "mana2W");
+			put("2/U", "mana2U");
+			put("2/B", "mana2B");
+			put("2/R", "mana2R");
+			put("2/G", "mana2G");
+			put("WP", "manaWP");
+			put("UP", "manaUP");
+			put("BP", "manaBP");
+			put("RP", "manaRP");
+			put("GP", "manaGP");
+			put("0", "manaZero");
+			put("1", "manaOne");
+			put("2", "manaTwo");
+			put("3", "manaThree");
+			put("4", "manaFour");
+			put("5", "manaFive");
+			put("6", "manaSix");
+			put("7", "manaSeven");
+			put("8", "manaEight");
+			put("9", "manaNine");
+			put("10", "manaTen");
+			put("11", "manaEleven");
+			put("12", "manaTwelve");
+			put("13", "manaThirteen");
+			put("14", "manaFourteen");
+			put("15", "manaFifteen");
+			put("16", "manaSixteen");
+			put("20", "manaTwenty");
+			put("T", "manaT");
+			put("Q", "manaQ");
+			put("S", "manaS");
+			put("X", "manaX");
+			put("E", "manaE");
+		}};
+		for (Map.Entry<String, String> entry : emojiMap.entrySet()) {
+			if (msg.contains("{" + entry.getKey() + "}")) {
+				Emote emote = guild.getEmotesByName(entry.getValue(), true).parallelStream().findAny().orElse(null);
+				if (emote != null) msg = msg.replaceAll("\\{" + entry.getKey() + "\\}", emote.getAsMention());
+			}
+		}
+		return msg;
+	}
+
+	private Color colorCodesToColor(String[] colorCodes) {
+		switch (String.join("", Arrays.stream(colorCodes).sorted().collect(Collectors.toList()))) {
+			case "B":
+				return Color.BLACK;
+			case "G":
+				return Color.GREEN;
+			case "R":
+				return Color.RED;
+			case "U":
+				return Color.BLUE;
+			case "W":
+				return Color.WHITE;
+			case "BG":
+			case "BR":
+			case "BU":
+			case "BW":
+			case "BGR":
+			case "BGU":
+			case "BGW":
+			case "BRU":
+			case "BRW":
+			case "BUW":
+			case "GRU":
+			case "GRW":
+			case "GUW":
+			case "RUW":
+			case "BGRU":
+			case "GRUW":
+			case "BGRUW":
+				return Color.ORANGE;
+			default:
+				return Color.GRAY;
 		}
 	}
 
@@ -225,9 +251,11 @@ public class CardCommand extends BaseCommand {
 
 	private String parsePowerOrToughness(String value) {
 		if (value == null) return null;
-		switch(value) {
-			case "*": return "\\*";
-			default: return value;
+		switch (value) {
+			case "*":
+				return "\\*";
+			default:
+				return value;
 		}
 	}
 }

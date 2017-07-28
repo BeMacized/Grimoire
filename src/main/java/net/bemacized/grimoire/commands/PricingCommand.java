@@ -108,7 +108,7 @@ public class PricingCommand extends BaseCommand {
 			}
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
-				e.getChannel().sendMessageFormat(
+				loadMsg.get().editMessageFormat(
 						"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 						e.getAuthor().getId(),
 						cardname
@@ -123,7 +123,7 @@ public class PricingCommand extends BaseCommand {
 						cardname
 				));
 				for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-				e.getChannel().sendMessage(sb.toString()).submit();
+				loadMsg.get().editMessage(sb.toString()).submit();
 				return;
 			}
 			// Handle no results
@@ -179,7 +179,7 @@ public class PricingCommand extends BaseCommand {
 								"%s: %s%s",
 								price.getKey(),
 								(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
-								(price.getValue() > 0) ? formatter.format(price.getValue()) : "none"
+								(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
 						)).collect(Collectors.toList())));
 						sb.append("\nFor more information visit ").append(storeprice.getRecord().getUrl());
 						final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
