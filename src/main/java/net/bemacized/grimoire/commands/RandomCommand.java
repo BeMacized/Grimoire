@@ -3,13 +3,11 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -112,23 +110,14 @@ public class RandomCommand extends BaseCommand {
 			Card card = cards.get(new Random().nextInt(cards.size()));
 
 			// Show card
-			try {
-				// Obtain stream
-				InputStream artStream = new URL(card.getImageUrl()).openStream();
-				// Upload art
-				RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
-				// Attach text, card name & set name + code
-				artMsg.get().editMessageFormat("<@!%s> Here is your random **%s**:\n\n**%s**\n%s (%s)", e.getAuthor().getId(), joinedType, card.getName(), card.getSetName(), card.getSet()).submit();
-				// Delete loading message
-				loadMsg.get().delete().submit();
-			} catch (IOException ex) {
-				LOG.log(Level.SEVERE, "Could not upload random card art", ex);
-				loadMsg.get().editMessageFormat(
-						"<@%s>, An error occurred while uploading the random card art! Please try again later.",
-						e.getAuthor().getId()
-				).submit();
-			}
-
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setTitle(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType);
+			if (("Random " + joinedType).length() > 128) eb.appendDescription(joinedType + "\n");
+			eb.appendDescription("**" + card.getName() + "**");
+			eb.appendDescription(String.format("\n%s (%s)", card.getSetName(), card.getSet()));
+			eb.setImage(card.getImageUrl());
+			eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
+			loadMsg.get().editMessage(eb.build()).submit();
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred getting a random card", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting a random card. Please notify my developer to fix me up!").submit();
