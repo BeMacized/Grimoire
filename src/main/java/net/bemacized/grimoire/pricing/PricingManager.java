@@ -4,7 +4,10 @@ import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.pricing.apis.MagicCardMarketAPI;
 import net.bemacized.grimoire.pricing.apis.StoreAPI;
 import net.bemacized.grimoire.pricing.apis.TCGPlayerAPI;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,6 +52,45 @@ public class PricingManager {
 				return new StoreCardPrice(StoreCardPriceStatus.SET_UNKNOWN, card, store.getStoreName(), store.getStoreId(), null);
 			}
 		}).collect(Collectors.toList());
+	}
+
+	public MessageEmbed getPricingInEmbed(Card card) {
+		// Get pricing
+		List<StoreCardPrice> pricing = getPricing(card);
+		// Build embed
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle("Pricing: " + card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		for (StoreCardPrice storeprice : pricing) {
+			DecimalFormat formatter = new DecimalFormat("#.00");
+			String priceText = "N/A";
+			switch (storeprice.getStatus()) {
+				case SUCCESS:
+					priceText = String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().map(price -> String.format(
+							"%s: **%s%s**",
+							price.getKey(),
+							(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
+							(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
+					)).collect(Collectors.toList()));
+					break;
+				case UNKNOWN_ERROR:
+					priceText = "An unknown error occurred.";
+					break;
+				case CARD_UNKNOWN:
+					priceText = "No results.";
+					break;
+				case AUTH_ERROR:
+					priceText = "Could not authenticate.";
+					break;
+				case SET_UNKNOWN:
+					priceText = "Card set not supported.";
+					break;
+				case SERVER_ERROR:
+					priceText = "Store is having server problems.";
+					break;
+			}
+			eb.addField(storeprice.getStoreName(), priceText, true);
+		}
+		return eb.build();
 	}
 
 	public void init() {

@@ -6,6 +6,7 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.pricing.PricingManager;
 import net.bemacized.grimoire.utils.CardUtils;
 import net.bemacized.grimoire.utils.SetUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
@@ -144,55 +145,8 @@ public class PricingCommand extends BaseCommand {
 					card.getSet()
 			).submit();
 
-			// Fetch pricing
-			List<PricingManager.StoreCardPrice> pricing = Grimoire.getInstance().getPricingManager().getPricing(card);
-
-			// Construct response message;
-			StringBuilder sb = new StringBuilder(String.format(
-					"<@%s>, I found the following pricing data for **'%s'** from set **'%s'**:",
-					e.getAuthor().getId(),
-					card.getName(),
-					card.getSetName()
-			));
-			pricing.forEach(storeprice -> {
-				sb.append("\n\n");
-				switch (storeprice.getStatus()) {
-					case UNKNOWN_ERROR:
-						sb.append(String.format("**%s**: An unknown error occurred for this store. Please notify my developer.", storeprice.getStoreName()));
-						break;
-					case CARD_UNKNOWN:
-						sb.append(String.format("**%s**: I could not find this card in this store.", storeprice.getStoreName()));
-						break;
-					case AUTH_ERROR:
-						sb.append(String.format("**%s**: This store rejected my authentication attempt. Please notify my developer.", storeprice.getStoreName()));
-						break;
-					case SET_UNKNOWN:
-						sb.append(String.format("**%s**: Set **'%s'** is currently not supported for this store.", storeprice.getStoreName(), card.getSetName()));
-						break;
-					case SERVER_ERROR:
-						sb.append(String.format("**%s**: This store is currently having server issues!", storeprice.getStoreName()));
-						break;
-					case SUCCESS:
-						sb.append(String.format("**%s**: ", storeprice.getStoreName()));
-						DecimalFormat formatter = new DecimalFormat("#.00");
-						sb.append(String.join(" **|** ", storeprice.getRecord().getPrices().entrySet().parallelStream().map(price -> String.format(
-								"%s: %s%s",
-								price.getKey(),
-								(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
-								(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
-						)).collect(Collectors.toList())));
-						sb.append("\nFor more information visit ").append(storeprice.getRecord().getUrl());
-						final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
-						sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-						sb.append(String.format("\n_(Last updated at %s)_", sdf.format(new Date(storeprice.getRecord().getTimestamp()))));
-						break;
-
-				}
-			});
-
 			//Send the message
-			loadMsg.get().editMessage(sb.toString()).submit();
-
+			loadMsg.get().editMessage(Grimoire.getInstance().getPricingManager().getPricingInEmbed(card)).submit();
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred getting price data", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting the price data. Please notify my developer to fix me up!").submit();

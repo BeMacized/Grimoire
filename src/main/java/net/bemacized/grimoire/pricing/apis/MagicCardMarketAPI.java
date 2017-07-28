@@ -126,7 +126,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 				this.getStoreId(),
 				new HashMap<String, Double>() {{
 					put("Low", product.getJSONObject("priceGuide").getDouble("LOW"));
-					put("Average Sell Price", product.getJSONObject("priceGuide").getDouble("LOW"));
+					put("Avg. Sell Price", product.getJSONObject("priceGuide").getDouble("SELL"));
 					put("Low Foil", product.getJSONObject("priceGuide").getDouble("LOWFOIL"));
 					put("Average", product.getJSONObject("priceGuide").getDouble("AVG"));
 				}}
