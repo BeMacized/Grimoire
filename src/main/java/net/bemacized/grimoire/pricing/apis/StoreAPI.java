@@ -3,13 +3,19 @@ package net.bemacized.grimoire.pricing.apis;
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.pricing.SetDictionary;
+import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class StoreAPI {
 
@@ -118,5 +124,29 @@ public abstract class StoreAPI {
 	}
 
 	public class StoreSetUnknownException extends Exception {
+	}
+
+	protected Map<String, String> parseSetDictionary() {
+		// Load config
+		String configText;
+		try {
+			configText = IOUtils.toString(getClass().getResourceAsStream("/set_dictionary_" + getStoreId().toLowerCase() + ".txt"));
+		} catch (IOException e) {
+			LOG.log(Level.SEVERE, "Could not load set dictionary!", e);
+			return new HashMap<>();
+		}
+
+		// Parse config
+		Map<String, String> map = new HashMap<>();
+		Pattern pattern = Pattern.compile("[^=\\n\\r]+[=].*?(?=[#])?");
+		for (String s : configText.split("[\r\n]")) {
+			Matcher matcher = pattern.matcher(s.trim());
+			if (matcher.find()) {
+				String setcode = matcher.group().split("[=]")[0];
+				String name = s.substring(setcode.length() + 1);
+				map.put(setcode, (name.isEmpty()) ? null : name);
+			}
+		}
+		return map;
 	}
 }

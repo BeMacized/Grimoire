@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class TCGPlayerAPI extends StoreAPI {
@@ -42,16 +43,9 @@ public class TCGPlayerAPI extends StoreAPI {
 
 	@Override
 	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
-		try {
-			String content = IOUtils.toString(getClass().getResourceAsStream("/tcgplayer_sets.txt"));
-			for (String set : content.split("\n")) {
-				SetDictionary.SetDictionaryItem item = setDictionary.findItem(set);
-				if (item != null) item.setStoreSetName(getStoreId(), set);
-				else LOG.warning("No match found for set: " + set);
-			}
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not update the set dictionary for TCGPlayer", e);
-		}
+		Map<String, String> map = this.parseSetDictionary();
+		map.forEach((key, value) -> setDictionary.getItem(key).setStoreSetName(getStoreId(), value));
+		LOG.info(getStoreName() + ": Loaded " + map.entrySet().parallelStream().filter(e -> e.getValue() != null).count() + " sets.");
 	}
 
 	@Override

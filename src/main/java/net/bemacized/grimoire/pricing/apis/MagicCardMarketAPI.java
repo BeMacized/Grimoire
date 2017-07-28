@@ -16,10 +16,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.StreamSupport;
 
@@ -48,56 +45,9 @@ public class MagicCardMarketAPI extends StoreAPI {
 	@SuppressWarnings("Duplicates")
 	@Override
 	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
-
-		// Construct endpoint URL
-		String endpoint = String.format("https://%s/ws/v1.1/output.json/expansion/1", MCM_HOST);
-		// Make request
-		String responseBody;
-		int responseCode;
-		try {
-			HttpURLConnection connection = (HttpURLConnection) new URL(endpoint).openConnection();
-			String authHeader = getAuthorizationHeader("GET", endpoint);
-			connection.addRequestProperty("Authorization", authHeader);
-			connection.connect();
-			responseCode = connection.getResponseCode();
-			try {
-				responseBody = IOUtils.toString((responseCode == 200) ? connection.getInputStream() : connection.getErrorStream());
-			} catch (Exception e) {
-				responseBody = "";
-			}
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not fetch response", e);
-			throw new UnknownStoreException();
-		}
-
-		// Handle errors
-		switch (responseCode) {
-			case 401:
-			case 403:
-				LOG.severe("Received a " + responseCode + " response while updating the set dictionary.");
-				throw new StoreAuthException();
-			case 404:
-				LOG.severe("Received a " + responseCode + " response while updating the set dictionary.");
-				return;
-			case 500:
-			case 503:
-				LOG.severe("Received a " + responseCode + " response while updating the set dictionary.");
-				throw new StoreServerErrorException();
-			case 200:
-				break;
-			default:
-				LOG.severe("Received an UNKNOWN " + responseCode + " response while updating the set dictionary.");
-				throw new UnknownStoreException();
-		}
-
-		// Parse response
-		JSONObject response = new JSONObject(responseBody);
-		response.getJSONArray("expansion").forEach(expansionObj -> {
-			JSONObject expansion = (JSONObject) expansionObj;
-			SetDictionary.SetDictionaryItem sdi = setDictionary.findItem(expansion.getString("name"));
-			if (sdi != null) sdi.setStoreSetName(getStoreId(), expansion.getString("name"));
-			else LOG.warning("No match found for set: " + expansion.getString("name"));
-		});
+		Map<String, String> map = this.parseSetDictionary();
+		map.forEach((key, value) -> setDictionary.getItem(key).setStoreSetName(getStoreId(), value));
+		LOG.info(getStoreName() + ": Loaded " + map.entrySet().parallelStream().filter(e -> e.getValue() != null).count() + " sets.");
 	}
 
 	@Override

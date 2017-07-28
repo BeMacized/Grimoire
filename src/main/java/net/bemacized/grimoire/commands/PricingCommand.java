@@ -178,13 +178,13 @@ public class PricingCommand extends BaseCommand {
 						sb.append(String.join(" **|** ", storeprice.getRecord().getPrices().entrySet().parallelStream().map(price -> String.format(
 								"%s: %s%s",
 								price.getKey(),
-								storeprice.getRecord().getCurrency(),
-								formatter.format(price.getValue())
+								(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
+								(price.getValue() > 0) ? formatter.format(price.getValue()) : "none"
 						)).collect(Collectors.toList())));
 						sb.append("\nFor more information visit ").append(storeprice.getRecord().getUrl());
 						final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
 						sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-						sb.append(String.format("\n_(Last updated at %s)", sdf.format(new Date(storeprice.getRecord().getTimestamp()))));
+						sb.append(String.format("\n_(Last updated at %s)_", sdf.format(new Date(storeprice.getRecord().getTimestamp()))));
 						break;
 
 				}

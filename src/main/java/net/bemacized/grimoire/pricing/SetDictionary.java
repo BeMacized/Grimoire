@@ -92,7 +92,8 @@ public class SetDictionary {
 		}
 
 		public SetDictionaryItem setStoreSetName(String storeId, String setName) {
-			storeNames.put(storeId, setName);
+			if (setName != null && !setName.isEmpty()) storeNames.put(storeId, setName);
+			else storeNames.remove(storeId);
 			return this;
 		}
 

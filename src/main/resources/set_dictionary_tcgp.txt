@@ -1,0 +1,421 @@
+#TCGPlayer
+#Limited Edition Alpha
+LEA=Alpha Edition
+#Limited Edition Beta
+LEB=Beta Edition
+#Arabian Nights
+ARN=Arabian Nights
+#Unlimited Edition
+2ED=Unlimited Edition
+#Collector's Edition
+CED=Collector's Edition
+#International Collector's Edition
+CEI=International Edition
+#Dragon Con
+pDRC=
+#Antiquities
+ATQ=Antiquities
+#Revised Edition
+3ED=Revised Edition
+#Legends
+LEG=Legends
+#The Dark
+DRK=The Dark
+#Fallen Empires
+FEM=Fallen Empires
+#Media Inserts
+pMEI=Media Promos
+#Legend Membership
+pLGM=
+#Fourth Edition
+4ED=Fourth Edition
+#Ice Age
+ICE=Ice Age
+#Chronicles
+CHR=Chronicles
+#Homelands
+HML=Homelands
+#Alliances
+ALL=Alliances
+#Rivals Quick Start Set
+RQS=
+#Arena League
+pARL=Arena Promos
+#Celebration
+pCEL=Special Occasion
+#Mirage
+MIR=Mirage
+#Multiverse Gift Box
+MGB=
+#Introductory Two-Player Set
+ITP=
+#Visions
+VIS=Visions
+#Fifth Edition
+5ED=Fifth Edition
+#Portal Demo Game
+pPOD=
+#Portal
+POR=Portal
+#Vanguard
+VAN=Vanguard
+#Weatherlight
+WTH=Weatherlight
+#Prerelease Events
+pPRE=Prerelease Cards
+#Tempest
+TMP=Tempest
+#Stronghold
+STH=Stronghold
+#Portal Second Age
+PO2=Portal Second Age
+#Judge Gift Program
+pJGP=Judge Promos
+#Exodus
+EXO=Exodus
+#Unglued
+UGL=Unglued
+#Asia Pacific Land Program
+pALP=
+#Urza's Saga
+USG=Urza's Saga
+#Anthologies
+ATH=Anthologies
+#Urza's Legacy
+ULG=Urza's Legacy
+#Classic Sixth Edition
+6ED=Sixth Edition
+#Portal Three Kingdoms
+PTK=Portal Three Kingdoms
+#Urza's Destiny
+UDS=Urza's Destiny
+#Starter 1999
+S99=Starter 1999
+#Guru
+pGRU=Guru Lands
+#Worlds
+pWOR=
+#Wizards of the Coast Online Store
+pWOS=
+#Mercadian Masques
+MMQ=Mercadian Masques
+#Battle Royale Box Set
+BRB=Battle Royale Box Set
+#Super Series
+pSUS=JSS/MSS Promos
+#Friday Night Magic
+pFNM=FNM Promos
+#European Land Program
+pELP=
+#Nemesis
+NMS=Nemesis
+#Starter 2000
+S00=Starter 2000
+#From the Vault: Lore
+V16=From the Vault: Lore
+#Prophecy
+PCY=Prophecy
+#Beatdown Box Set
+BTD=Beatdown Box Set
+#Invasion
+INV=Invasion
+#Planeshift
+PLS=Planeshift
+#Seventh Edition
+7ED=Seventh Edition
+#Magic Player Rewards
+pMPR=Magic Player Rewards
+#Apocalypse
+APC=Apocalypse
+#Odyssey
+ODY=Odyssey
+#Deckmasters
+DKM=
+#Torment
+TOR=Torment
+#Judgment
+JUD=Judgment
+#Onslaught
+ONS=Onslaught
+#Legions
+LGN=Legions
+#Scourge
+SCG=Scourge
+#Release Events
+pREL=Launch Party & Release Event Cards
+#Eighth Edition
+8ED=Eighth Edition
+#Planechase Anthology
+PCA=Planechase Anthology
+#Mirrodin
+MRD=Mirrodin
+#Darksteel
+DST=Darksteel
+#Fifth Dawn
+5DN=Fifth Dawn
+#Champions of Kamigawa
+CHK=Champions of Kamigawa
+#Unhinged
+UNH=Unhinged
+#Betrayers of Kamigawa
+BOK=Betrayers of Kamigawa
+#Saviors of Kamigawa
+SOK=Saviors of Kamigawa
+#Ninth Edition
+9ED=Ninth Edition
+#Ravnica: City of Guilds
+RAV=Ravnica
+#Two-Headed Giant Tournament
+p2HG=
+#Gateway
+pGTW=WPN & Gateway Promos
+#Guildpact
+GPT=Guildpact
+#Champs and States
+pCMP=Champs Promos
+#Dissension
+DIS=Dissension
+#Coldsnap
+CSP=Coldsnap
+#Coldsnap Theme Decks
+CST=
+#Time Spiral
+TSP=Time Spiral
+#Time Spiral "Timeshifted"
+TSB=Timeshifted
+#Happy Holidays
+pHHO=Special Occasion
+#Planar Chaos
+PLC=Planar Chaos
+#Pro Tour
+pPRO=Pro Tour Promos
+#Grand Prix
+pGPX=Grand Prix Promos
+#Future Sight
+FUT=Future Sight
+#Tenth Edition
+10E=Tenth Edition
+#Magic Game Day
+pMGD=Game Day Promos
+#Masters Edition
+MED=
+#Lorwyn
+LRW=Lorwyn
+#Duel Decks: Elves vs. Goblins
+EVG=Elves vs. Goblins
+#Launch Parties
+pLPA=Launch Party & Release Event Cards
+#Aether Revolt
+AER=Aether Revolt
+#Morningtide
+MOR=Morningtide
+#15th Anniversary
+p15A=
+#Shadowmoor
+SHM=Shadowmoor
+#Summer of Magic
+pSUM=
+#Eventide
+EVE=Eventide
+#From the Vault: Dragons
+DRB=From the Vault: Dragons
+#Masters Edition II
+ME2=
+#Wizards Play Network
+pWPN=WPN & Gateway Promos
+#Shards of Alara
+ALA=Shards of Alara
+#Duel Decks: Jace vs. Chandra
+DD2=Jace vs. Chandra
+#Conflux
+CON=Conflux
+#Duel Decks: Divine vs. Demonic
+DDC=Divine vs. Demonic
+#Alara Reborn
+ARB=Alara Reborn
+#Magic 2010
+M10=Magic 2010 (M10)
+#From the Vault: Exiled
+V09=From the Vault: Exiled
+#Planechase
+HOP=Planechase
+#Masters Edition III
+ME3=
+#Zendikar
+ZEN=Zendikar
+#Duel Decks: Garruk vs. Liliana
+DDD=Garruk vs. Liliana
+#Premium Deck Series: Slivers
+H09=PDS: Slivers
+#Worldwake
+WWK=Worldwake
+#Duel Decks: Phyrexia vs. the Coalition
+DDE=Phyrexia vs. The Coalition
+#Rise of the Eldrazi
+ROE=Rise of the Eldrazi
+#Duels of the Planeswalkers
+DPA=Duels of the Planeswalkers
+#Archenemy
+ARC=Archenemy
+#Magic 2011
+M11=Magic 2011 (M11)
+#From the Vault: Relics
+V10=From the Vault: Relics
+#Duel Decks: Elspeth vs. Tezzeret
+DDF=Elspeth vs. Tezzeret
+#Scars of Mirrodin
+SOM=Scars of Mirrodin
+#Premium Deck Series: Fire and Lightning
+PD2=PDS: Fire and Lightning
+#Masters Edition IV
+ME4=
+#Mirrodin Besieged
+MBS=Mirrodin Besieged
+#Duel Decks: Knights vs. Dragons
+DDG=Knights vs. Dragons
+#New Phyrexia
+NPH=New Phyrexia
+#Magic: The Gathering-Commander
+CMD=Commander
+#Magic 2012
+M12=Magic 2012 (M12)
+#From the Vault: Legends
+V11=From the Vault: Legends
+#Duel Decks: Ajani vs. Nicol Bolas
+DDH=Ajani vs. Nicol Bolas
+#Innistrad
+ISD=Innistrad
+#Premium Deck Series: Graveborn
+PD3=PDS: Graveborn
+#Dark Ascension
+DKA=Dark Ascension
+#Duel Decks: Venser vs. Koth
+DDI=Venser vs. Koth
+#Avacyn Restored
+AVR=Avacyn Restored
+#Planechase 2012 Edition
+PC2=Planechase 2012
+#Magic 2013
+M13=Magic 2013 (M13)
+#From the Vault: Realms
+V12=From the Vault: Realms
+#Duel Decks: Izzet vs. Golgari
+DDJ=Izzet vs. Golgari
+#Conspiracy: Take the Crown
+CN2=Conspiracy: Take the Crown
+#Duel Decks: Nissa vs. Ob Nixilis
+DDR=Duel Decks: Nissa vs. Ob Nixilis
+#Return to Ravnica
+RTR=Return to Ravnica
+#Commander's Arsenal
+CM1=Commander's Arsenal
+#Gatecrash
+GTC=Gatecrash
+#Duel Decks: Sorin vs. Tibalt
+DDK=Sorin vs. Tibalt
+#World Magic Cup Qualifiers
+pWCQ=
+#Dragon's Maze
+DGM=Dragon's Maze
+#Modern Masters
+MMA=Modern Masters
+#Magic 2014 Core Set
+M14=Magic 2014 (M14)
+#From the Vault: Twenty
+V13=From the Vault: Twenty
+#Duel Decks: Heroes vs. Monsters
+DDL=Heroes vs. Monsters
+#Theros
+THS=Theros
+#Commander 2013 Edition
+C13=Commander 2013
+#Born of the Gods
+BNG=Born of the Gods
+#Duel Decks: Jace vs. Vraska
+DDM=Jace vs. Vraska
+#Kaladesh
+KLD=Kaladesh
+#Masterpiece Series: Kaladesh Inventions
+MPS=Kaladesh Inventions
+#Journey into Nyx
+JOU=Journey Into Nyx
+#Modern Event Deck 2014
+MD1=Modern Event Deck
+#Magic: The Gatheringâ€”Conspiracy
+CNS=Conspiracy
+#Vintage Masters
+VMA=
+#Magic 2015 Core Set
+M15=Magic 2015 (M15)
+#Clash Pack
+CPK=
+#From the Vault: Annihilation (2014)
+V14=From the Vault: Annihilation
+#Duel Decks: Speed vs. Cunning
+DDN=Speed vs. Cunning
+#Khans of Tarkir
+KTK=Khans of Tarkir
+#Commander 2014
+C14=Commander 2014
+#Duel Decks Anthology, Divine vs. Demonic
+DD3_DVD=Duel Decks: Anthology
+#Duel Decks Anthology, Elves vs. Goblins
+DD3_EVG=Duel Decks: Anthology
+#Duel Decks Anthology, Garruk vs. Liliana
+DD3_GVL=Duel Decks: Anthology
+#Duel Decks Anthology, Jace vs. Chandra
+DD3_JVC=Duel Decks: Anthology
+#Ugin's Fate promos
+FRF_UGIN=Ugin's Fate Promos
+#Fate Reforged
+FRF=Fate Reforged
+#Duel Decks: Elspeth vs. Kiora
+DDO=Duel Decks: Elspeth vs. Kiora
+#Commander 2016
+C16=Commander 2016
+#Dragons of Tarkir
+DTK=Dragons of Tarkir
+#Tempest Remastered
+TPR=
+#Modern Masters 2015 Edition
+MM2=Modern Masters 2015
+#Magic Origins
+ORI=Magic Origins
+#From the Vault: Angels
+V15=From the Vault: Angels
+#Duel Decks: Zendikar vs. Eldrazi
+DDP=Duel Decks: Zendikar vs. Eldrazi
+#Battle for Zendikar
+BFZ=Battle for Zendikar
+#Zendikar Expeditions
+EXP=Zendikar Expeditions
+#Commander 2015
+C15=Commander 2015
+#Oath of the Gatewatch
+OGW=Oath of the Gatewatch
+#Duel Decks: Blessed vs. Cursed
+DDQ=Duel Decks: Blessed vs. Cursed
+#Welcome Deck 2016
+W16=
+#Shadows over Innistrad
+SOI=Shadows Over Innistrad
+#Eternal Masters
+EMA=Eternal Masters
+#Eldritch Moon
+EMN=Eldritch Moon
+#Modern Masters 2017 Edition
+MM3=Modern Masters 2017
+#Duel Decks: Mind vs. Might
+DDS=Duel Decks: Mind vs. Might
+#Welcome Deck 2017
+W17=
+#Amonkhet
+AKH=Amonkhet
+#Masterpiece Series: Amonkhet Invocations
+MPS_AKH=Amonkhet Invocations
+#Commander Anthology
+CMA=
+#Archenemy: Nicol Bolas
+E01=Archenemy: Nicol Bolas
+#Hour of Devastation
+HOU=Hour of Devastation
