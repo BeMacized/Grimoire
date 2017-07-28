@@ -76,6 +76,7 @@ public class Grimoire {
 		// Load infraction procedure guide
 		infractionProcedureGuide = new InfractionProcedureGuide();
 
+
 		// Log in to Discord
 		try {
 			LOG.info("Logging in to Discord...");

@@ -132,7 +132,7 @@ public class CardCommand extends BaseCommand {
 			eb.appendDescription("\n\n");
 			eb.appendDescription(CardUtils.parseEmoji(e.getGuild(), card.getText()));
 			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
-			if (rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+			if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
 			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
 
 			// Show message
