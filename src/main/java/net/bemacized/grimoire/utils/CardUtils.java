@@ -71,6 +71,7 @@ public class CardUtils {
 	}
 
 	public static Color colorIdentitiesToColor(String[] colorCodes) {
+		if (colorCodes == null) return Color.GRAY;
 		switch (String.join("", Arrays.stream(colorCodes).sorted().collect(Collectors.toList()))) {
 			case "B":
 				return Color.BLACK;
