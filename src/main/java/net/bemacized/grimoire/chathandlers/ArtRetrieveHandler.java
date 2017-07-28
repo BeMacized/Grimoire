@@ -111,7 +111,30 @@ public class ArtRetrieveHandler extends ChatHandler {
 		// Retrieve cards
 		Card card;
 		try {
-			card = CardUtils.getCard(cardReq.getCardName(), (set == null) ? null : set.getCode());
+			// Retrieve all card variations
+			List<Card> cards = CardUtils.getCards(cardReq.getCardName(), (set != null) ? set.getCode() : null);
+			// Find variation with art
+			card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).findFirst().orElse(null);
+			if (card == null) {
+				if (set == null) {
+					loadMsg.get().editMessageFormat(
+							"<@%s>, I could not find any art for **'%s'**. ",
+							e.getAuthor().getId(),
+							cardReq.getCardName()
+					).submit();
+					return;
+				} else {
+					card = (CardUtils.getCards(cardReq.getCardName(), null).stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty())).findFirst().orElse(null);
+					e.getChannel().sendMessageFormat(
+							"<@%s>, I could not find any art for **'%s'**%s",
+							e.getAuthor().getId(),
+							cardReq.getCardName(),
+							(card != null)
+									? " in this specific set. There is however art available from another set. This will be shown instead."
+									: "."
+					).submit();
+				}
+			}
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {

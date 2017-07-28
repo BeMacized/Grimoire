@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -61,9 +62,13 @@ public class CardCommand extends BaseCommand {
 			// Retrieve card
 			Card card;
 			try {
-				card = CardUtils.getCard(cardname);
+				// Retrieve all card variations
+				List<Card> cards = CardUtils.getCards(cardname);
+				// Find variation with art
+				card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).findFirst().orElse(null);
+				// Fallback to non-art card if needed
+				if (card == null) card = CardUtils.getCard(cardname);
 			}
-
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
 				loadMsg.get().editMessageFormat(
@@ -154,7 +159,7 @@ public class CardCommand extends BaseCommand {
 			}};
 
 			// We have found it. Let's construct the oracle text.
-			String formats = String.join(", ", Arrays.stream(card.getLegalities())
+			String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
 					.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
 					.map(Legality::getFormat)
 					.collect(Collectors.toList()));
@@ -166,14 +171,14 @@ public class CardCommand extends BaseCommand {
 					card.getName(),
 					card.getManaCost(),
 					(card.getPower() != null && card.getToughness() != null)
-							? String.format("**%s/%s** ", card.getPower(), card.getToughness())
+							? String.format("**%s/%s** ", (card.getPower().equals("*")) ? "\\*" : card.getPower(), (card.getToughness().equals("*")) ? "\\*" : card.getToughness())
 							: "",
 					card.getType(),
 					card.getText(),
 					(!formats.isEmpty()) ? "\n**Formats:** " + formats : "",
 					(!rarities.isEmpty()) ? "\n**Rarities:** " + rarities : "",
 					(!printings.isEmpty()) ? "\n**Printings:** " + printings : "",
-					"**Gatherer:** http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid()
+					(card.getMultiverseid() == -1) ? "" : "**Gatherer:** http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid()
 			);
 
 			// Convert emojis if guild supports it
@@ -188,14 +193,19 @@ public class CardCommand extends BaseCommand {
 
 			// Show card
 			try {
-				// Obtain stream
-				InputStream artStream = new URL(card.getImageUrl()).openStream();
-				// Upload art
-				RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
-				// Attach card name & set name + code
-				artMsg.get().editMessage(msg).submit();
-				// Delete loading message
-				loadMsg.get().delete().submit();
+				if (card.getImageUrl() != null && !card.getImageUrl().isEmpty()) {
+					// Obtain stream
+					InputStream artStream = new URL(card.getImageUrl()).openStream();
+					// Upload art
+					RequestFuture<Message> artMsg = e.getChannel().sendFile(artStream, "card.png", null).submit();
+					// Attach card name & set name + code
+					artMsg.get().editMessage(msg).submit();
+					// Delete loading message
+					loadMsg.get().delete().submit();
+				} else {
+					loadMsg.get().editMessage(msg).submit();
+				}
+
 			} catch (IOException ex) {
 				LOG.log(Level.SEVERE, "Could not upload card art + info", ex);
 				loadMsg.get().editMessageFormat(

@@ -28,19 +28,46 @@ public class CardUtils {
 		// Find single match
 		if (cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).count() == 1)
 			return cards.get(0);
-		else {
-			// Find exact match (of the most recent set
-			Card card = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
-			if (card != null) return card;
-			// If none found return alternatives
-			// Get the newest distinct results
-			Collections.reverse(cards);
-			cards = cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).collect(Collectors.toList());
-			// Quit if too many results
-			if (cards.size() > MAX_ALTERNATIVES) throw new TooManyResultsException(cards);
-			else throw new MultipleResultsException(cards);
-		}
+		// Find exact match (of the most recent set
+		Card card = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
+		if (card != null) return card;
+		// If none found return alternatives
+		// Get the newest distinct results
+		Collections.reverse(cards);
+		cards = cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).collect(Collectors.toList());
+		// Quit if too many results
+		if (cards.size() > MAX_ALTERNATIVES) throw new TooManyResultsException(cards);
+		else throw new MultipleResultsException(cards);
 	}
+
+	public static List<Card> getCards(String name, String setCode) throws TooManyResultsException, MultipleResultsException, NoResultsException {
+		// Create search for the card
+		CardSearchQuery query = new CardSearchQuery().setName(name);
+		// Specify set if provided
+		if (setCode != null) query = query.setSetCode(setCode);
+		// Execute search
+		List<Card> cards = query.exec();
+		// Quit if there are no results
+		if (cards.isEmpty()) throw new NoResultsException();
+		// Find single match
+		if (cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).count() == 1)
+			return cards;
+		// Find exact match (of the most recent set)
+		List<Card> _cards = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+		if (!_cards.isEmpty()) return _cards;
+		// If none found return alternatives
+		// Get the newest distinct results
+		Collections.reverse(cards);
+		cards = cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).collect(Collectors.toList());
+		// Quit if too many results
+		if (cards.size() > MAX_ALTERNATIVES) throw new TooManyResultsException(cards);
+		else throw new MultipleResultsException(cards);
+	}
+
+	public static List<Card> getCards(String cardname) throws TooManyResultsException, MultipleResultsException, NoResultsException {
+		return getCards(cardname, null);
+	}
+
 
 	public static class NoResultsException extends Exception {
 	}
