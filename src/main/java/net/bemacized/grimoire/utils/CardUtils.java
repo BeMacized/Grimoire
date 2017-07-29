@@ -29,7 +29,7 @@ public class CardUtils {
 		if (cards.isEmpty()) throw new NoResultsException();
 		// Find single match
 		if (cards.parallelStream().filter(ExtraStreamUtils.distinctByKey(Card::getName)).count() == 1)
-			return cards.get(0);
+			return cards.get(cards.size() - 1);
 		// Find exact match (of the most recent set
 		Card card = cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).reduce((a, b) -> b).orElse(null);
 		if (card != null) return card;

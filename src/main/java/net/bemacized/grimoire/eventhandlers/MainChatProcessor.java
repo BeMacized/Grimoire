@@ -3,6 +3,7 @@ package net.bemacized.grimoire.eventhandlers;
 import net.bemacized.grimoire.chathandlers.CardRetrieveHandler;
 import net.bemacized.grimoire.chathandlers.ChatHandler;
 import net.bemacized.grimoire.chathandlers.CommandHandler;
+import net.bemacized.grimoire.chathandlers.PriceRetrieveHandler;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -21,8 +22,9 @@ public class MainChatProcessor extends ListenerAdapter {
 		if (chatHandlers == null) chatHandlers = new ArrayList<>();
 		// Register handlers
 		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
-				CardRetrieveHandler.class,
-				CommandHandler.class
+				CommandHandler.class,
+				PriceRetrieveHandler.class,
+				CardRetrieveHandler.class
 		);
 		Collections.reverse(handlerClasses);
 		handlerClasses.forEach(this::registerChatHandler);
