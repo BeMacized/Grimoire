@@ -38,7 +38,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 		List<String> matches = new ArrayList<>();
 		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) matches.add(m.group());
 
-		matches.parallelStream().forEach(match -> new Thread(() -> {
+		matches.parallelStream().forEach(match -> new Thread(() ->{
 			try {
 				String[] data = match.substring(3, match.length() - 2).split("[|]");
 				String cardname = data[0].trim();
@@ -70,7 +70,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 					));
 					for (MtgSet s : ex.getResults())
 						sb.append(String.format(
-								"\n - %s _(%s)_",
+								"\n:small_orange_diamond: %s _(%s)_",
 								s.getName(),
 								s.getCode())
 						);

@@ -84,7 +84,7 @@ public class CardRetrieveHandler extends ChatHandler {
 			));
 			for (MtgSet s : ex.getResults())
 				sb.append(String.format(
-						"\n - %s _(%s)_",
+						"\n:small_orange_diamond: %s _(%s)_",
 						s.getName(),
 						s.getCode())
 				);
