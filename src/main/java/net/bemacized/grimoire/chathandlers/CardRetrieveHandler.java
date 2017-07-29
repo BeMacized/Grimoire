@@ -45,14 +45,14 @@ public class CardRetrieveHandler extends ChatHandler {
 		}};
 
 		// Retrieve card
-		requests.parallelStream().forEach(cardReq -> {
+		requests.parallelStream().forEach(cardReq -> new Thread(() -> {
 			try {
 				handleCardRequest(cardReq, e);
 			} catch (ExecutionException | InterruptedException ex) {
 				LOG.log(Level.SEVERE, "Could not handle card art request", ex);
 				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching your card data. Please notify my developer to fix me up!").submit();
 			}
-		});
+		}).start());
 
 		next.handle(e);
 	}

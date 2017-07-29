@@ -38,7 +38,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 		List<String> matches = new ArrayList<>();
 		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) matches.add(m.group());
 
-		matches.parallelStream().forEach(match -> {
+		matches.parallelStream().forEach(match -> new Thread(() -> {
 			try {
 				String[] data = match.substring(3, match.length() - 2).split("[|]");
 				String cardname = data[0].trim();
@@ -136,7 +136,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 				LOG.log(Level.SEVERE, "An error occurred getting price data", ex);
 				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting the price data. Please notify my developer to fix me up!").submit();
 			}
-		});
+		}).start());
 
 		next.handle(e);
 	}
