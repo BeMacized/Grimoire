@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.eventhandlers;
 
-import net.bemacized.grimoire.chathandlers.ArtRetrieveHandler;
+import net.bemacized.grimoire.chathandlers.CardRetrieveHandler;
 import net.bemacized.grimoire.chathandlers.ChatHandler;
 import net.bemacized.grimoire.chathandlers.CommandHandler;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -21,7 +21,7 @@ public class MainChatProcessor extends ListenerAdapter {
 		if (chatHandlers == null) chatHandlers = new ArrayList<>();
 		// Register handlers
 		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
-				ArtRetrieveHandler.class,
+				CardRetrieveHandler.class,
 				CommandHandler.class
 		);
 		Collections.reverse(handlerClasses);

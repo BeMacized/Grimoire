@@ -1,14 +1,15 @@
 package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.resource.Card;
-import io.magicthegathering.javasdk.resource.Legality;
+import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.SetUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -22,47 +23,110 @@ public class CardCommand extends BaseCommand {
 
 	@Override
 	public String[] aliases() {
-		return new String[0];
+		return new String[]{"art", "cardart"};
 	}
 
 	@Override
 	public String description() {
-		return "Fetch general card information about a card";
+		return "Fetch the full art of a card";
 	}
 
 	@Override
 	public String paramUsage() {
-		return "<card name>";
+		return "<card name>[|setcode/setname]";
 	}
 
 	@SuppressWarnings("Duplicates")
 	@Override
 	public void exec(String[] args, MessageReceivedEvent e) {
 		try {
-			// Obtain card name
-			String cardname = String.join(" ", args);
-
 			// Quit and error out if none provided
-			if (cardname.isEmpty()) {
+			if (args.length == 0) {
 				e.getChannel().sendMessageFormat(
-						"<@%s>, please provide a card name to fetch info for!",
+						"<@%s>, please provide a card name to fetch art for!",
 						e.getAuthor().getId()
 				).submit();
 				return;
 			}
 
-			// Send load message
-			RequestFuture<Message> loadMsg = e.getChannel().sendMessage("```\n" + "Fetching card info..." + "\n```").submit();
+			// Obtain card name
+			String[] split = String.join(" ", args).split("\\|");
+			String cardname = split[0].trim();
+			String setname = (split.length > 1 && !split[1].trim().isEmpty()) ? split[1].trim() : null;
 
-			// Retrieve card
+			// Send initial status message
+			RequestFuture<Message> loadMsg = e.getChannel().sendMessage("```\n" + "Loading card art..." + "\n```").submit();
+
+			// If a set(code) was provided, check its validity.
+			MtgSet set = null;
+			try {
+				if (setname != null) set = SetUtils.getSet(setname);
+			}
+			// Handle too many results
+			catch (SetUtils.TooManyResultsException ex) {
+				loadMsg.get().editMessageFormat(
+						"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
+						e.getAuthor().getId(),
+						setname
+				).submit();
+				return;
+			}
+			// Handle multiple results
+			catch (SetUtils.MultipleResultsException ex) {
+				StringBuilder sb = new StringBuilder(String.format(
+						"<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n",
+						e.getAuthor().getId(),
+						setname
+				));
+				for (MtgSet s : ex.getResults())
+					sb.append(String.format(
+							"\n - %s _(%s)_",
+							s.getName(),
+							s.getCode())
+					);
+				loadMsg.get().editMessage(sb.toString()).submit();
+				return;
+			}
+			// Handle no results
+			catch (SetUtils.NoResultsException e1) {
+				loadMsg.get().editMessageFormat(
+						"<@%s>, I could not find a set with **'%s' as its code or name**.",
+						e.getAuthor().getId(),
+						setname
+				).submit();
+				return;
+			}
+
+			// Retrieve cards
 			Card card;
 			try {
 				// Retrieve all card variations
-				List<Card> cards = CardUtils.getCards(cardname);
+				List<Card> cards = CardUtils.getCards(cardname, (set != null) ? set.getCode() : null);
 				// Find variation with art
-				card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).findFirst().orElse(null);
-				// Fallback to non-art card if needed
-				if (card == null) card = CardUtils.getCard(cardname);
+				card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).collect(Collectors.collectingAndThen(Collectors.toList(), collected -> {
+					Collections.shuffle(collected);
+					return collected.stream();
+				})).findFirst().orElse(null);
+				if (card == null) {
+					if (set == null) {
+						loadMsg.get().editMessageFormat(
+								"<@%s>, I could not find any art for **'%s'**. ",
+								e.getAuthor().getId(),
+								cardname
+						).submit();
+						return;
+					} else {
+						card = (CardUtils.getCards(cardname, null).stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty())).findFirst().orElse(null);
+						e.getChannel().sendMessageFormat(
+								"<@%s>, I could not find any art for **'%s'**%s",
+								e.getAuthor().getId(),
+								cardname,
+								(card != null)
+										? " in this specific set. There is however art available from another set. This will be shown instead."
+										: "."
+						).submit();
+					}
+				}
 			}
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
@@ -86,70 +150,38 @@ public class CardCommand extends BaseCommand {
 			}
 			// Handle no results
 			catch (CardUtils.NoResultsException e1) {
-				loadMsg.get().editMessageFormat(
+				StringBuilder newMsg = new StringBuilder(String.format(
 						"<@%s>, There are no results for a card named **'%s'**",
 						e.getAuthor().getId(),
 						cardname
-				).submit();
+				));
+				if (set != null) newMsg.append(String.format(
+						" in set **'%s (%s)'**",
+						set.getName(),
+						set.getCode()
+				));
+				loadMsg.get().editMessage(newMsg.toString()).submit();
 				return;
 			}
 
 			// Update load text
 			loadMsg.get().editMessageFormat(
-					"```\n" + "Loading card '%s'..." + "\n```",
-					card.getName()
+					"```\n" + "Loading card '%s' from set '%s, (%s)'..." + "\n```",
+					card.getName(),
+					card.getSetName(),
+					card.getSet()
 			).submit();
 
-			// We have found it. Let's construct the oracle text.
-			String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
-					.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
-					.map(Legality::getFormat)
-					.collect(Collectors.toList()));
-			String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
-			String printings = String.join(", ", card.getPrintings());
-			String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
-			String title = card.getName()
-					+ " "
-					+ CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
-			String separateCost = "";
-			if (title.length() > 256) {
-				title = card.getName();
-				separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
-			}
+			// Build embed & show
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setThumbnail(card.getImageUrl());
+			eb.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+			eb.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
+			eb.setImage(card.getImageUrl());
 			eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
-			eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
-			if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
-			eb.appendDescription(":small_orange_diamond: ");
-			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
-			eb.appendDescription(card.getType());
-			eb.appendDescription("\n\n");
-			eb.appendDescription(CardUtils.parseEmoji(e.getGuild(), card.getText()));
-			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
-			if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
-			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
-
-			// Show message
 			loadMsg.get().editMessage(eb.build()).submit();
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred fetching card info", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching card info. Please notify my developer to fix me up!").submit();
-		}
-	}
-
-	private String parsePowerAndToughness(String power, String toughness) {
-		if (power == null || toughness == null || power.isEmpty() || toughness.isEmpty()) return "";
-		return parsePowerOrToughness(power) + "/" + parsePowerOrToughness(toughness);
-	}
-
-	private String parsePowerOrToughness(String value) {
-		if (value == null) return null;
-		switch (value) {
-			case "*":
-				return "\\*";
-			default:
-				return value;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.chathandlers;
 
 import io.magicthegathering.javasdk.resource.Card;
+import io.magicthegathering.javasdk.resource.Legality;
 import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.utils.CardUtils;
 import net.bemacized.grimoire.utils.SetUtils;
@@ -9,21 +10,21 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public class ArtRetrieveHandler extends ChatHandler {
+public class CardRetrieveHandler extends ChatHandler {
 
-	private final static Logger LOG = Logger.getLogger(ArtRetrieveHandler.class.getName());
+	private final static Logger LOG = Logger.getLogger(CardRetrieveHandler.class.getName());
 
 	private final static int MAX_REQUESTS_PER_MESSAGE = 5;
 
-	public ArtRetrieveHandler(ChatHandler next) {
+	public CardRetrieveHandler(ChatHandler next) {
 		super(next);
 	}
 
@@ -61,8 +62,6 @@ public class ArtRetrieveHandler extends ChatHandler {
 	}
 
 	private void handleCardRequest(RawCardRequest cardReq, MessageReceivedEvent e) throws ExecutionException, InterruptedException {
-		LOG.info("Retrieving card art for card '" + cardReq.getCardName() + "'" + ((cardReq.getSet() == null) ? "" : " from set '" + cardReq.getSet() + "'"));
-
 		// Send initial status message
 		RequestFuture<Message> loadMsg = e.getChannel().sendMessage("```\n" + "Loading card..." + "\n```").submit();
 
@@ -112,27 +111,11 @@ public class ArtRetrieveHandler extends ChatHandler {
 			// Retrieve all card variations
 			List<Card> cards = CardUtils.getCards(cardReq.getCardName(), (set != null) ? set.getCode() : null);
 			// Find variation with art
-			card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).findFirst().orElse(null);
-			if (card == null) {
-				if (set == null) {
-					loadMsg.get().editMessageFormat(
-							"<@%s>, I could not find any art for **'%s'**. ",
-							e.getAuthor().getId(),
-							cardReq.getCardName()
-					).submit();
-					return;
-				} else {
-					card = (CardUtils.getCards(cardReq.getCardName(), null).stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty())).findFirst().orElse(null);
-					e.getChannel().sendMessageFormat(
-							"<@%s>, I could not find any art for **'%s'**%s",
-							e.getAuthor().getId(),
-							cardReq.getCardName(),
-							(card != null)
-									? " in this specific set. There is however art available from another set. This will be shown instead."
-									: "."
-					).submit();
-				}
-			}
+			card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).collect(Collectors.collectingAndThen(Collectors.toList(), collected -> {
+				Collections.shuffle(collected);
+				return collected.stream();
+			})).findFirst().orElse(null);
+			if (card == null) card = cards.get(new Random().nextInt(cards.size()));
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {
@@ -178,15 +161,47 @@ public class ArtRetrieveHandler extends ChatHandler {
 				card.getSet()
 		).submit();
 
-		// Build embed & show
+		// We have found it. Let's construct the oracle text.
+		String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
+				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
+				.map(Legality::getFormat)
+				.collect(Collectors.toList()));
+		String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
+		String printings = String.join(", ", card.getPrintings());
+		String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
+
+		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---
+		//		String title = card.getName()
+		//				+ " "
+		//				+ CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		//		String separateCost = "";
+		//		if (title.length() > 256) {
+		//			title = card.getName();
+		//			separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		//		}
+
+		String title = card.getName();
+		String separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		//TODO: ---END
+
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
-		eb.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
-		eb.setImage(card.getImageUrl());
+		eb.setThumbnail(card.getImageUrl());
 		eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
+		eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
+		eb.appendDescription(":small_orange_diamond: ");
+		if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
+		eb.appendDescription(card.getType());
+		eb.appendDescription("\n\n");
+		eb.appendDescription(CardUtils.parseEmoji(e.getGuild(), card.getText()));
+		if (!formats.isEmpty()) eb.addField("Formats", formats, true);
+		eb.addField("Displayed Set", card.getSetName() + " (" + card.getSet() + ")", true);
+		if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
+
+		// Show message
 		loadMsg.get().editMessage(eb.build()).submit();
 	}
-
 
 	private class RawCardRequest {
 
@@ -204,6 +219,21 @@ public class ArtRetrieveHandler extends ChatHandler {
 
 		String getSet() {
 			return set;
+		}
+	}
+
+	private String parsePowerAndToughness(String power, String toughness) {
+		if (power == null || toughness == null || power.isEmpty() || toughness.isEmpty()) return "";
+		return parsePowerOrToughness(power) + "/" + parsePowerOrToughness(toughness);
+	}
+
+	private String parsePowerOrToughness(String value) {
+		if (value == null) return null;
+		switch (value) {
+			case "*":
+				return "\\*";
+			default:
+				return value;
 		}
 	}
 }
