@@ -5,12 +5,13 @@ import net.bemacized.grimoire.pricing.apis.MagicCardMarketAPI;
 import net.bemacized.grimoire.pricing.apis.StoreAPI;
 import net.bemacized.grimoire.pricing.apis.TCGPlayerAPI;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.LinkShortener;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -55,25 +56,29 @@ public class PricingManager {
 		}).collect(Collectors.toList());
 	}
 
-	public MessageEmbed getPricingInEmbed(Card card) {
+	public MessageEmbed getPricingEmbed(Card card) {
+		final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm z");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		// Get pricing
 		List<StoreCardPrice> pricing = getPricing(card);
-		// Build embed
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("Pricing: " + card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
-		eb.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
-		eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		for (StoreCardPrice storeprice : pricing) {
+		// Build embeds
+		EmbedBuilder priceEmbed = new EmbedBuilder();
+		priceEmbed.setTitle("Pricing: " + card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		priceEmbed.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
+		priceEmbed.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
+		pricing.forEach(storeprice -> {
 			DecimalFormat formatter = new DecimalFormat("#.00");
 			String priceText = "N/A";
 			switch (storeprice.getStatus()) {
 				case SUCCESS:
-					priceText = String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().map(price -> String.format(
+					priceText = LinkShortener.shorten(storeprice.getRecord().getUrl()) + "\n";
+					priceText += String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().sorted(Comparator.comparing(Map.Entry::getKey)).map(price -> String.format(
 							"%s: **%s%s**",
 							price.getKey(),
 							(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
 							(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
 					)).collect(Collectors.toList()));
+					priceText += "\n**Last updated: **" + sdf.format(new Date(storeprice.getRecord().getTimestamp()));
 					break;
 				case UNKNOWN_ERROR:
 					priceText = "An unknown error occurred.";
@@ -91,9 +96,10 @@ public class PricingManager {
 					priceText = "Store is having server problems.";
 					break;
 			}
-			eb.addField(storeprice.getStoreName(), priceText, true);
-		}
-		return eb.build();
+			priceEmbed.addField(storeprice.getStoreName(), priceText, true);
+		});
+
+		return priceEmbed.build();
 	}
 
 	public void init() {

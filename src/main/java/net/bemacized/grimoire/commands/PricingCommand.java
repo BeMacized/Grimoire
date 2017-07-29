@@ -3,22 +3,15 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.pricing.PricingManager;
 import net.bemacized.grimoire.utils.CardUtils;
 import net.bemacized.grimoire.utils.SetUtils;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class PricingCommand extends BaseCommand {
 	@Override
@@ -146,7 +139,7 @@ public class PricingCommand extends BaseCommand {
 			).submit();
 
 			//Send the message
-			loadMsg.get().editMessage(Grimoire.getInstance().getPricingManager().getPricingInEmbed(card)).submit();
+			loadMsg.get().editMessage(Grimoire.getInstance().getPricingManager().getPricingEmbed(card)).submit();
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.log(Level.SEVERE, "An error occurred getting price data", ex);
 			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting the price data. Please notify my developer to fix me up!").submit();

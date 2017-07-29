@@ -104,7 +104,6 @@ public class CardCommand extends BaseCommand {
 					card.getName()
 			).submit();
 
-
 			// We have found it. Let's construct the oracle text.
 			String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
 					.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
