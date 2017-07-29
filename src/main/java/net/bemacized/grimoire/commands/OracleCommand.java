@@ -1,14 +1,9 @@
 package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.resource.Card;
-import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.utils.CardUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class OracleCommand extends BaseCommand {
 

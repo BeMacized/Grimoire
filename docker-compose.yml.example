@@ -23,3 +23,4 @@ services:
 #        - "MONGO_DB="
 #        - "MONGO_USER="
 #        - "MONGO_PASSWORD="
+#        - "GOOGLE_KEY="

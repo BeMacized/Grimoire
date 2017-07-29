@@ -5,7 +5,6 @@ import net.bemacized.grimoire.pricing.apis.MagicCardMarketAPI;
 import net.bemacized.grimoire.pricing.apis.StoreAPI;
 import net.bemacized.grimoire.pricing.apis.TCGPlayerAPI;
 import net.bemacized.grimoire.utils.CardUtils;
-import net.bemacized.grimoire.utils.LinkShortener;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
@@ -71,14 +70,14 @@ public class PricingManager {
 			String priceText = "N/A";
 			switch (storeprice.getStatus()) {
 				case SUCCESS:
-					priceText = LinkShortener.shorten(storeprice.getRecord().getUrl()) + "\n";
-					priceText += String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().sorted(Comparator.comparing(Map.Entry::getKey)).map(price -> String.format(
+					priceText = String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().sorted(Comparator.comparing(Map.Entry::getKey)).map(price -> String.format(
 							"%s: **%s%s**",
 							price.getKey(),
 							(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
 							(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
 					)).collect(Collectors.toList()));
 					priceText += "\n**Last updated: **" + sdf.format(new Date(storeprice.getRecord().getTimestamp()));
+					priceText += String.format("\n[`[%s]`](%s)", "Store Page", storeprice.getRecord().getUrl());
 					break;
 				case UNKNOWN_ERROR:
 					priceText = "An unknown error occurred.";

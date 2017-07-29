@@ -74,7 +74,7 @@ public class CardUtils {
 		if (colorCodes == null) return Color.GRAY;
 		switch (String.join("", Arrays.stream(colorCodes).sorted().collect(Collectors.toList()))) {
 			case "B":
-				return new Color(1,1,1);
+				return new Color(1, 1, 1);
 			case "G":
 				return new Color(0, 153, 0);
 			case "R":

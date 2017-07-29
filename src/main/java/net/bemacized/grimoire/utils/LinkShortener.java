@@ -41,7 +41,7 @@ public class LinkShortener {
 			return link;
 		}
 
-		switch(responseCode) {
+		switch (responseCode) {
 			case 401:
 			case 403:
 				LOG.warning("Could not authenticate with Google!");
@@ -49,7 +49,8 @@ public class LinkShortener {
 			case 200:
 				return new JSONObject(responseText).getString("id");
 			default:
-				if (responseCode < 500 || responseCode >= 600) LOG.severe("Google gave an unknown response: " + responseCode);
+				if (responseCode < 500 || responseCode >= 600)
+					LOG.severe("Google gave an unknown response: " + responseCode);
 				else LOG.warning("Google encountered an internal server error.");
 				break;
 		}

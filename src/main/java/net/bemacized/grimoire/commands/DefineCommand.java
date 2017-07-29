@@ -4,8 +4,6 @@ import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.awt.*;
-
 public class DefineCommand extends BaseCommand {
 	@Override
 	public String name() {
