@@ -31,18 +31,12 @@ public class PriceRetrieveHandler extends ChatHandler {
 	@Override
 	protected void handle(MessageReceivedEvent e, ChatHandler next) {
 		// Find matches for <<$CARD[|SET(CODE)]>> pattern.
-		Pattern p = Pattern.compile("<<\\$[^<|>]+([|][^<|>]+)?>>");
+		Pattern p = Pattern.compile("<<[$][^<|>]+([|][^<|>]+)?>>");
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
 		List<String> matches = new ArrayList<>();
 		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) matches.add(m.group());
-
-		// Stop here if no matches found
-		if (matches.isEmpty()) {
-			next.handle(e);
-			return;
-		}
 
 		matches.parallelStream().forEach(match -> {
 			try {
@@ -143,6 +137,8 @@ public class PriceRetrieveHandler extends ChatHandler {
 				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting the price data. Please notify my developer to fix me up!").submit();
 			}
 		});
+
+		next.handle(e);
 	}
 
 

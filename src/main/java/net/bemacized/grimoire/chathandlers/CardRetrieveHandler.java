@@ -31,7 +31,7 @@ public class CardRetrieveHandler extends ChatHandler {
 	@Override
 	protected void handle(MessageReceivedEvent e, ChatHandler next) {
 		// Find matches for <<CARD[|SET(CODE)]>> pattern.
-		Pattern p = Pattern.compile("<<[^<|>]+([|][^<|>]+)?>>");
+		Pattern p = Pattern.compile("<<[^$<|>]+([|][^<|>]+)?>>");
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
@@ -44,12 +44,6 @@ public class CardRetrieveHandler extends ChatHandler {
 			}
 		}};
 
-		// Stop here if no matches found
-		if (requests.isEmpty()) {
-			next.handle(e);
-			return;
-		}
-
 		// Retrieve card
 		requests.parallelStream().forEach(cardReq -> {
 			try {
@@ -59,6 +53,8 @@ public class CardRetrieveHandler extends ChatHandler {
 				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching your card data. Please notify my developer to fix me up!").submit();
 			}
 		});
+
+		next.handle(e);
 	}
 
 	private void handleCardRequest(RawCardRequest cardReq, MessageReceivedEvent e) throws ExecutionException, InterruptedException {
@@ -189,7 +185,6 @@ public class CardRetrieveHandler extends ChatHandler {
 		eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 		if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
-		eb.appendDescription(":small_orange_diamond: ");
 		if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 		eb.appendDescription(card.getType());
 		eb.appendDescription("\n\n");
