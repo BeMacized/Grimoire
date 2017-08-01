@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -163,7 +164,11 @@ public class CardRetrieveHandler extends ChatHandler {
 				.map(Legality::getFormat)
 				.collect(Collectors.toList()));
 		String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
-		String printings = String.join(", ", card.getPrintings());
+		Card finalCard = card;
+		String printings = String.join(", ", new ArrayList<String>() {{
+			add("**" + finalCard.getSetName() + " (" + finalCard.getSet() + ")**");
+			addAll(Arrays.stream(finalCard.getPrintings()).parallel().filter(s -> !s.equalsIgnoreCase(finalCard.getSet())).collect(Collectors.toList()));
+		}});
 		String pat = parsePowerAndToughness(card.getPower(), card.getToughness());
 
 		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---
@@ -177,7 +182,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		//		}
 
 		String title = card.getName();
-		String separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		String separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
 		//TODO: ---END
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -190,7 +195,6 @@ public class CardRetrieveHandler extends ChatHandler {
 		eb.appendDescription("\n\n");
 		eb.appendDescription(CardUtils.parseEmoji(e.getGuild(), card.getText()));
 		if (!formats.isEmpty()) eb.addField("Formats", formats, true);
-		eb.addField("Displayed Set", card.getSetName() + " (" + card.getSet() + ")", true);
 		if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
 		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
 
