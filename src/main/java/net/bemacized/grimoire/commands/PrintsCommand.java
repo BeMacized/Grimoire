@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.MTGUtils;
 import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -83,7 +84,7 @@ public class PrintsCommand extends BaseCommand {
 		// Show the sets
 		String sets = String.join("\n", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(c -> String.format(":small_orange_diamond: %s (%s)", c.getSetName(), c.getSet())).collect(Collectors.toList()));
 		EmbedBuilder eb = new EmbedBuilder()
-				.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 		String[] splits = StringUtils.splitMessage(sets, 1000);
 		for (int i = 0; i < splits.length; i++)

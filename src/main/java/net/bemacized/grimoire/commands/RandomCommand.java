@@ -3,17 +3,15 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.LoadMessage;
+import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.RequestFuture;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class RandomCommand extends BaseCommand {
@@ -39,89 +37,71 @@ public class RandomCommand extends BaseCommand {
 
 	@Override
 	public void exec(String[] args, MessageReceivedEvent e) {
-		try {
-			List<String> supertypes = new ArrayList<>();
-			List<String> types = new ArrayList<>();
-			List<String> subtypes = new ArrayList<>();
+		List<String> supertypes = new ArrayList<>();
+		List<String> types = new ArrayList<>();
+		List<String> subtypes = new ArrayList<>();
 
-			// Make sure we have at least one argument
-			if (args.length < 1) {
-				e.getChannel().sendMessageFormat(
-						"<@%s>, Please specify one or more (sub/super)types.",
-						e.getAuthor().getId()
-				).submit();
-				return;
-			}
-
-			// Send load message
-			RequestFuture<Message> loadMsg = e.getChannel().sendMessage("```\n" + "Drawing random card..." + "\n```").submit();
-
-			// Retrieve all types
-			List<String> allSupertypes = CardAPI.getAllCardSupertypes();
-			List<String> allTypes = CardAPI.getAllCardTypes();
-			List<String> allSubtypes = CardAPI.getAllCardSubtypes();
-
-			// Extract types
-			for (String arg : args) {
-				if (allSupertypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
-					if (!supertypes.contains(arg.toLowerCase())) supertypes.add(arg.toLowerCase());
-				} else if (allTypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
-					if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
-				} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
-					if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
-				} else {
-					loadMsg.get().editMessageFormat(
-							"<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.",
-							e.getAuthor().getId(),
-							arg
-					).submit();
-					return;
-				}
-			}
-
-			// Edit load message to reflect chosen types
-			String joinedType = String.join(" ", new ArrayList<String>() {{
-				addAll(supertypes);
-				addAll(types);
-				addAll(subtypes);
-			}}.parallelStream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
-			loadMsg.get().editMessageFormat(
-					"```\n" + "Drawing random %s..." + "\n```",
-					joinedType
+		// Make sure we have at least one argument
+		if (args.length < 1) {
+			e.getChannel().sendMessageFormat("<@%s>, Please specify one or more (sub/super)types.", e.getAuthor().getId()
 			).submit();
+			return;
+		}
 
-			//Find cards
-			CardUtils.CardSearchQuery query = new CardUtils.CardSearchQuery();
-			if (!supertypes.isEmpty()) query.setSuperType(String.join(",", supertypes));
-			if (!types.isEmpty()) query.setType(String.join(",", types));
-			if (!subtypes.isEmpty()) query.setSubType(String.join(",", subtypes));
-			List<Card> cards = query.exec();
+		// Send load message
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true);
 
-			//Stop if none found
-			if (cards.isEmpty()) {
-				loadMsg.get().editMessageFormat(
-						"<@%s>, No cards have been found with the type(s) you've supplied.",
-						e.getAuthor().getId()
-				).submit();
+		// Retrieve all types
+		List<String> allSupertypes = CardAPI.getAllCardSupertypes();
+		List<String> allTypes = CardAPI.getAllCardTypes();
+		List<String> allSubtypes = CardAPI.getAllCardSubtypes();
+
+		// Extract types
+		for (String arg : args) {
+			if (allSupertypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				if (!supertypes.contains(arg.toLowerCase())) supertypes.add(arg.toLowerCase());
+			} else if (allTypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
+			} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
+				if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
+			} else {
+				loadMsg.setLineFinalFormat("<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.", e.getAuthor().getId(), arg);
 				return;
 			}
-
-			//Draw a random card
-			Card card = cards.get(new Random().nextInt(cards.size()));
-
-			// Show card
-			EmbedBuilder eb = new EmbedBuilder();
-			eb.setTitle(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType);
-			if (("Random " + joinedType).length() > 128) eb.appendDescription(joinedType + "\n");
-			eb.appendDescription("**" + card.getName() + "**");
-			eb.appendDescription(String.format("\n%s (%s)", card.getSetName(), card.getSet()));
-			eb.setImage(card.getImageUrl());
-			eb.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
-			loadMsg.get().editMessage(eb.build()).submit();
-		} catch (InterruptedException | ExecutionException ex) {
-			LOG.log(Level.SEVERE, "An error occurred getting a random card", ex);
-			e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred getting a random card. Please notify my developer to fix me up!").submit();
-
 		}
+
+		// Edit load message to reflect chosen types
+		String joinedType = String.join(" ", new ArrayList<String>() {{
+			addAll(supertypes);
+			addAll(types);
+			addAll(subtypes);
+		}}.parallelStream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
+		loadMsg.setLineFormat("Drawing random %s...", joinedType);
+
+		//Find cards
+		CardUtils.CardSearchQuery query = new CardUtils.CardSearchQuery();
+		if (!supertypes.isEmpty()) query.setSuperType(String.join(",", supertypes));
+		if (!types.isEmpty()) query.setType(String.join(",", types));
+		if (!subtypes.isEmpty()) query.setSubType(String.join(",", subtypes));
+		List<Card> cards = query.exec();
+
+		//Stop if none found
+		if (cards.isEmpty()) {
+			loadMsg.setLineFinalFormat("<@%s>, No cards have been found with the type(s) you've supplied.", e.getAuthor().getId());
+			return;
+		}
+
+		//Draw a random card
+		Card card = cards.get(new Random().nextInt(cards.size()));
+
+		// Show card
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType);
+		if (("Random " + joinedType).length() > 128) eb.appendDescription(joinedType + "\n");
+		eb.appendDescription("**" + card.getName() + "**");
+		eb.appendDescription(String.format("\n%s (%s)", card.getSetName(), card.getSet()));
+		eb.setImage(card.getImageUrl());
+		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
+		loadMsg.setLineFinal(eb.build());
 	}
 }

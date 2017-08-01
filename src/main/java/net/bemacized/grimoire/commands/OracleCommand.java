@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands;
 
 import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -80,9 +81,9 @@ public class OracleCommand extends BaseCommand {
 		// Show the text
 		e.getChannel().sendMessage(
 				new EmbedBuilder()
-						.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
-						.addField("Oracle Text", CardUtils.parseEmoji(e.getGuild(), card.getText()), false)
+						.addField("Oracle Text", MTGUtils.parseEmoji(e.getGuild(), card.getText()), false)
 						.build()
 		).submit();
 	}

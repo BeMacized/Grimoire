@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.parsers.TournamentRules;
+import net.bemacized.grimoire.model.models.TournamentRule;
 import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -43,7 +43,7 @@ public class TournamentRulesCommand extends BaseCommand {
 		// Handle subsections
 		if (args[0].matches("[0-9]+[.][0-9]+")) {
 			// Find section
-			TournamentRules.Section section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> args[0].startsWith(s.getParagraphNr())).findFirst().orElse(null);
+			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> args[0].startsWith(s.getParagraphNr())).findFirst().orElse(null);
 			if (section == null) {
 				e.getChannel().sendMessageFormat(
 						"<@%s>, The section you specified is unknown. Please choose one of the following:\n%s",
@@ -53,7 +53,7 @@ public class TournamentRulesCommand extends BaseCommand {
 				return;
 			}
 			// Find subsection
-			TournamentRules.SubSection subsection = section.getSubsections().parallelStream().filter(s -> s.getParagraphNr().equalsIgnoreCase(args[0])).findFirst().orElse(null);
+			TournamentRule.SubSection subsection = section.getSubsections().parallelStream().filter(s -> s.getParagraphNr().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 			if (subsection == null) {
 				e.getChannel().sendMessageFormat(
 						"<@%s>, The subsection you specified is unknown. \nThe following subsections are available in **%s %s**:\n%s",
@@ -76,7 +76,7 @@ public class TournamentRulesCommand extends BaseCommand {
 			// Handle sections
 		} else {
 			// Find section
-			TournamentRules.Section section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> s.getParagraphNr().startsWith(args[0])).findFirst().orElse(null);
+			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> s.getParagraphNr().startsWith(args[0])).findFirst().orElse(null);
 			// Check if section was found
 			if (section == null) {
 				e.getChannel().sendMessageFormat(

@@ -1,13 +1,14 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.ComprehensiveRule;
+import net.bemacized.grimoire.model.models.Definition;
 import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -37,28 +38,21 @@ public class CompRulesCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Please specify a paragraph number to display.\nYou can find the full comprehensive rules over here: <https://blogs.magicjudges.org/rules/cr/>",
-					e.getAuthor().getId()
-			).submit();
+			e.getChannel().sendMessageFormat("<@%s>, Please specify a paragraph number to display.\nYou can find the full comprehensive rules over here: <https://blogs.magicjudges.org/rules/cr/>", e.getAuthor().getId()).submit();
 			return;
 		}
 
-		Map<String, String> rulesToShow = new HashMap<>();
-
 		// Find rules
-		Grimoire.getInstance().getComprehensiveRules().getRules()
-				.keySet()
-				.parallelStream()
-				.filter(p -> (args[0].endsWith(".") && p.equalsIgnoreCase(args[0])) || p.equalsIgnoreCase(args[0]) || p.equalsIgnoreCase(args[0] + ".") || p.matches(Pattern.quote(args[0]) + "[a-z]"))
-				.forEach(p -> rulesToShow.put(p, Grimoire.getInstance().getComprehensiveRules().getRules().get(p)));
+		List<ComprehensiveRule> rulesToShow = Grimoire.getInstance().getComprehensiveRules().getRules().parallelStream()
+				.filter(rule -> (args[0].endsWith(".") && rule.getParagraphId().equalsIgnoreCase(args[0])) ||
+						rule.getParagraphId().equalsIgnoreCase(args[0]) ||
+						rule.getParagraphId().equalsIgnoreCase(args[0] + ".") ||
+						rule.getParagraphId().matches(Pattern.quote(args[0]) + "[a-z]")
+				).collect(Collectors.toList());
 
 		// If we couldn't find anything, tell the user
 		if (rulesToShow.isEmpty()) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Unknown paragraph.\n**Comprehensive Rules:** <https://blogs.magicjudges.org/rules/cr/>",
-					e.getAuthor().getId()
-			).submit();
+			e.getChannel().sendMessageFormat("<@%s>, Unknown paragraph.\n**Comprehensive Rules:** <https://blogs.magicjudges.org/rules/cr/>", e.getAuthor().getId()).submit();
 			return;
 		}
 
@@ -66,24 +60,20 @@ public class CompRulesCommand extends BaseCommand {
 				"<@%s>",
 				e.getAuthor().getId()
 		));
-		rulesToShow.entrySet().parallelStream()
-				.sorted(Comparator.comparing(Map.Entry::getKey))
-				.map(entry -> {
+		rulesToShow.parallelStream()
+				.sorted(Comparator.comparing(ComprehensiveRule::getParagraphId))
+				.map(rule -> {
 
 					// Underline keywords
-					String ruleText = String.join("\n", Arrays.stream(entry.getValue().split("[\r\n]")).parallel().map(line ->
+					String ruleText = String.join("\n", Arrays.stream(rule.getText().split("[\r\n]")).parallel().map(line ->
 							String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
-									(Grimoire.getInstance().getComprehensiveRules().getDefinitions().keySet().parallelStream().anyMatch(w -> w.equalsIgnoreCase(word)))
+									(Grimoire.getInstance().getDefinitions().getDefinitions().parallelStream().map(Definition::getKeyword).anyMatch(w -> w.equalsIgnoreCase(word)))
 											? "__" + word + "__"
 											: word
 							).collect(Collectors.toList()))
 					).collect(Collectors.toList()));
 
-					return String.format(
-							"\n:small_orange_diamond: __**%s**__ %s\n",
-							entry.getKey(),
-							ruleText
-					);
+					return String.format("\n:small_orange_diamond: __**%s**__ %s\n", rule.getParagraphId(), ruleText);
 				})
 				.forEachOrdered(sb::append);
 		for (String s : StringUtils.splitMessage(sb.toString())) e.getChannel().sendMessage(s).submit();

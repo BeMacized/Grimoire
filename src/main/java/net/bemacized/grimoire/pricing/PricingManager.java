@@ -4,7 +4,7 @@ import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.pricing.apis.MagicCardMarketAPI;
 import net.bemacized.grimoire.pricing.apis.StoreAPI;
 import net.bemacized.grimoire.pricing.apis.TCGPlayerAPI;
-import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
@@ -64,7 +64,7 @@ public class PricingManager {
 		EmbedBuilder priceEmbed = new EmbedBuilder();
 		priceEmbed.setTitle("Pricing: " + card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 		priceEmbed.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
-		priceEmbed.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()));
+		priceEmbed.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		pricing.forEach(storeprice -> {
 			DecimalFormat formatter = new DecimalFormat("#.00");
 			String priceText = "N/A";

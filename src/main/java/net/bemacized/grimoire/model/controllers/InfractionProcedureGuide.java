@@ -1,5 +1,6 @@
-package net.bemacized.grimoire.parsers;
+package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.model.models.InfractionProcedureGuideSection;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,18 +18,27 @@ public class InfractionProcedureGuide {
 
 	private static final Logger LOG = Logger.getLogger(InfractionProcedureGuide.class.getName());
 
-	private List<Section> sections;
+	private List<InfractionProcedureGuideSection> sections;
 
 	public InfractionProcedureGuide() {
 		sections = new ArrayList<>();
+	}
+
+	public List<InfractionProcedureGuideSection> getSections() {
+		return sections;
+	}
+
+	public void load() {
+		sections.clear();
+		LOG.info("Loading infraction procedure guide...");
 
 		// Fetch text
 		String ruleText;
 		try {
 			// Sourced from https://sites.google.com/site/mtgfamiliar/rules/InfractionProcedureGuide-light.html
-			ruleText = IOUtils.toString(getClass().getResourceAsStream("/infraction_procedure_guide.html"));
+			ruleText = IOUtils.toString(InfractionProcedureGuideSection.class.getResourceAsStream("/infraction_procedure_guide.html"));
 		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not load tournament rules!", e);
+			LOG.log(Level.SEVERE, "Could not load infraction procedure guide!", e);
 			return;
 		}
 
@@ -41,7 +51,7 @@ public class InfractionProcedureGuide {
 			add(Pattern.compile(".*"));
 		}};
 
-		Stack<Section> parentStack = new Stack<>();
+		Stack<InfractionProcedureGuideSection> parentStack = new Stack<>();
 		for (Element e : document.getElementsByTag("h4")) {
 			// Extract id & title
 			String id = e.text().split("\\s+")[0];
@@ -79,7 +89,7 @@ public class InfractionProcedureGuide {
 			}
 
 			// Create section
-			Section s = new Section(id, title, content);
+			InfractionProcedureGuideSection s = new InfractionProcedureGuideSection(id, title, content);
 
 			while (level < parentStack.size()) parentStack.pop();
 
@@ -88,52 +98,13 @@ public class InfractionProcedureGuide {
 				sections.add(s);
 				parentStack.push(s);
 			} else {
-				parentStack.get(parentStack.size() - 1).setSubSections(new ArrayList<Section>(parentStack.get(parentStack.size() - 1).getSubSections()) {{
+				parentStack.get(parentStack.size() - 1).setSubSections(new ArrayList<InfractionProcedureGuideSection>(parentStack.get(parentStack.size() - 1).getSubSections()) {{
 					add(s);
 				}});
 				parentStack.push(s);
 			}
 		}
 
-		LOG.info("Loaded infraction procedure guide");
-	}
-
-	public List<Section> getSections() {
-		return sections;
-	}
-
-	public static class Section {
-
-		private String sectionId;
-		private String title;
-		private String content;
-		private List<Section> subSections;
-
-		public Section(String sectionId, String title, String content) {
-			this.sectionId = sectionId;
-			this.title = title;
-			this.content = content;
-			this.subSections = new ArrayList<>();
-		}
-
-		public String getSectionId() {
-			return sectionId;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-		public List<Section> getSubSections() {
-			return new ArrayList<>(subSections);
-		}
-
-		void setSubSections(List<Section> subSections) {
-			this.subSections = new ArrayList<>(subSections);
-		}
+		LOG.info("Loaded infraction procedure guide with " + sections.size() + " sections.");
 	}
 }

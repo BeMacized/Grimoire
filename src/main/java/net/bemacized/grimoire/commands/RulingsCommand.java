@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands;
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.Ruling;
 import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -82,7 +83,7 @@ public class RulingsCommand extends BaseCommand {
 		if (card.getRulings() == null || card.getRulings().length == 0) {
 			e.getChannel().sendMessage(
 					new EmbedBuilder()
-							.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+							.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 							.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
 							.setDescription("**Rulings**")
 							.addField("", "There are no rulings for this card.", false)
@@ -92,7 +93,7 @@ public class RulingsCommand extends BaseCommand {
 
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
-				.setColor(CardUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
 				.setDescription("**Rulings**");
 		for (Ruling ruling : card.getRulings())

@@ -2,10 +2,7 @@ package net.bemacized.grimoire;
 
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
-import net.bemacized.grimoire.parsers.ComprehensiveRules;
-import net.bemacized.grimoire.parsers.InfractionProcedureGuide;
-import net.bemacized.grimoire.parsers.Tokens;
-import net.bemacized.grimoire.parsers.TournamentRules;
+import net.bemacized.grimoire.model.controllers.*;
 import net.bemacized.grimoire.pricing.PricingManager;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -29,13 +26,17 @@ public class Grimoire {
 		new Grimoire(System.getenv("BOT_TOKEN"));
 	}
 
+
 	private JDA discord;
 	private DBManager dbManager;
 	private PricingManager pricingManager;
+
+	// Model Controllers
 	private Tokens tokens;
 	private ComprehensiveRules comprehensiveRules;
-	private TournamentRules tournamentRules;
+	private Definitions definitions;
 	private InfractionProcedureGuide infractionProcedureGuide;
+	private TournamentRules tournamentRules;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -66,16 +67,23 @@ public class Grimoire {
 
 		// Load tokens
 		this.tokens = new Tokens();
+		this.tokens.load();
+
+		// Load definitions
+		this.definitions = new Definitions();
+		this.definitions.load();
 
 		// Load comprehensive rules
-		comprehensiveRules = new ComprehensiveRules();
+		this.comprehensiveRules = new ComprehensiveRules();
+		this.comprehensiveRules.load();
 
 		// Load tournament rules
-		tournamentRules = new TournamentRules();
+		this.tournamentRules = new TournamentRules();
+		this.tournamentRules.load();
 
 		// Load infraction procedure guide
-		infractionProcedureGuide = new InfractionProcedureGuide();
-
+		this.infractionProcedureGuide = new InfractionProcedureGuide();
+		this.infractionProcedureGuide.load();
 
 		// Log in to Discord
 		try {
@@ -120,11 +128,15 @@ public class Grimoire {
 		return comprehensiveRules;
 	}
 
-	public TournamentRules getTournamentRules() {
-		return tournamentRules;
+	public Definitions getDefinitions() {
+		return definitions;
 	}
 
 	public InfractionProcedureGuide getInfractionProcedureGuide() {
 		return infractionProcedureGuide;
+	}
+
+	public TournamentRules getTournamentRules() {
+		return tournamentRules;
 	}
 }

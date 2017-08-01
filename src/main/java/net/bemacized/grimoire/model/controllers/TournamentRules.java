@@ -1,5 +1,6 @@
-package net.bemacized.grimoire.parsers;
+package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.model.models.TournamentRule;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,16 +15,27 @@ import java.util.stream.Collectors;
 
 public class TournamentRules {
 
-	private static final Logger LOG = Logger.getLogger(TournamentRules.class.getName());
+	private static Logger LOG = Logger.getLogger(TournamentRules.class.getName());
 
-	private List<Section> rules;
+	private List<TournamentRule> rules;
 
 	public TournamentRules() {
+		rules = new ArrayList<>();
+	}
+
+	public List<TournamentRule> getRules() {
+		return new ArrayList<>(rules);
+	}
+
+	public void load() {
+		rules.clear();
+		LOG.info("Loading tournament rules...");
+
 		// Fetch text
 		String ruleText;
 		try {
 			// Sourced from https://sites.google.com/site/mtgfamiliar/rules/MagicTournamentRules-light.html
-			ruleText = IOUtils.toString(getClass().getResourceAsStream("/tournament_rules.html"));
+			ruleText = IOUtils.toString(TournamentRule.class.getResourceAsStream("/tournament_rules.html"));
 		} catch (IOException e) {
 			LOG.log(Level.SEVERE, "Could not load tournament rules!", e);
 			return;
@@ -32,12 +44,12 @@ public class TournamentRules {
 		// Parse HTML
 		Document document = Jsoup.parse(ruleText);
 		// Get sections
-		this.rules = document.getElementsByAttributeValueMatching("name", "[0-9]+[.]$")
+		rules = document.getElementsByAttributeValueMatching("name", "[0-9]+[.]$")
 				.parallelStream()
-				.map(sectionElement -> new Section(
+				.map(sectionElement -> new TournamentRule(
 						sectionElement.attr("name"),
 						sectionElement.parent().nextElementSibling().text().substring(sectionElement.attr("name").length()).trim(),
-						new ArrayList<SubSection>() {{
+						new ArrayList<TournamentRule.SubSection>() {{
 							document.getElementsByAttributeValueMatching("name", sectionElement.attr("name") + "[0-9]+").forEach(subSectionElement -> {
 								// Parse subsection id & name
 								boolean rootLevel = subSectionElement.parent().tagName().equalsIgnoreCase("body");
@@ -57,7 +69,7 @@ public class TournamentRules {
 								String content = contentSB.toString().replaceAll("[\n]{3,}", "\n\n").trim();
 
 								//Create subsection
-								add(new SubSection(
+								add(new TournamentRule.SubSection(
 										index,
 										name,
 										content
@@ -66,56 +78,7 @@ public class TournamentRules {
 						}}
 				))
 				.collect(Collectors.toList());
-	}
 
-	public List<Section> getRules() {
-		return rules;
-	}
-
-	public abstract static class TournamentRule {
-		private String paragraphNr;
-		private String title;
-
-		public TournamentRule(String paragraphNr, String title) {
-			this.paragraphNr = paragraphNr;
-			this.title = title;
-		}
-
-		public String getParagraphNr() {
-			return paragraphNr;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-	}
-
-	public static class Section extends TournamentRule {
-
-		private List<SubSection> subsections;
-
-		public Section(String paragraphNr, String title, List<SubSection> subsections) {
-			super(paragraphNr, title);
-			this.subsections = new ArrayList<>(subsections);
-		}
-
-		public List<SubSection> getSubsections() {
-			return subsections;
-		}
-	}
-
-	public static class SubSection extends TournamentRule {
-
-		private String content;
-
-		public SubSection(String paragraphNr, String title, String content) {
-			super(paragraphNr, title);
-			this.content = content;
-		}
-
-		public String getContent() {
-			return content;
-		}
+		LOG.info("Loaded " + rules.size() + " tournament rules");
 	}
 }

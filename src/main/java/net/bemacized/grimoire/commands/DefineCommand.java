@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Definition;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -29,33 +30,26 @@ public class DefineCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that a keyword was given
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Please specify a keyword to look up",
-					e.getAuthor().getId()
-			).submit();
+			e.getChannel().sendMessageFormat("<@%s>, Please specify a keyword to look up", e.getAuthor().getId()).submit();
 			return;
 		}
 
 		// Verify that paragraph number exists
-		String keyword = Grimoire.getInstance().getComprehensiveRules().getDefinitions()
-				.keySet()
+		Definition definition = Grimoire.getInstance().getDefinitions().getDefinitions()
 				.parallelStream()
-				.filter(k -> k.equalsIgnoreCase(String.join(" ", args)))
+				.filter(k -> k.getKeyword().equalsIgnoreCase(String.join(" ", args)))
 				.findFirst()
 				.orElse(null);
-		if (keyword == null) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Unknown keyword :(",
-					e.getAuthor().getId()
-			).submit();
+
+		if (definition == null) {
+			e.getChannel().sendMessageFormat("<@%s>, Unknown keyword :(", e.getAuthor().getId()).submit();
 			return;
 		}
 
 		// Show definition
-		e.getChannel().sendMessage(
-				new EmbedBuilder()
-						.addField(keyword, Grimoire.getInstance().getComprehensiveRules().getDefinitions().get(keyword), false)
-						.build()
+		e.getChannel().sendMessage(new EmbedBuilder()
+				.addField(definition.getKeyword(), definition.getExplanation(), false)
+				.build()
 		).submit();
 	}
 }

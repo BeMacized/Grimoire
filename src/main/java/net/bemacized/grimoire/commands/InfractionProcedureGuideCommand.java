@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.parsers.InfractionProcedureGuide;
+import net.bemacized.grimoire.model.models.InfractionProcedureGuideSection;
 import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -48,7 +48,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			if (!isSubsection && args[0].endsWith(".")) args[0] = args[0].replaceAll("[.]", "");
 
 			// Find section
-			InfractionProcedureGuide.Section section = Grimoire.getInstance().getInfractionProcedureGuide().getSections().parallelStream().filter(s -> args[0].startsWith(s.getSectionId())).findFirst().orElse(null);
+			InfractionProcedureGuideSection section = Grimoire.getInstance().getInfractionProcedureGuide().getSections().parallelStream().filter(s -> args[0].startsWith(s.getSectionId())).findFirst().orElse(null);
 
 			// Verify that section exists
 			if (section == null) {
@@ -62,7 +62,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			}
 
 			// Find subsection if needed
-			InfractionProcedureGuide.Section subsection = null;
+			InfractionProcedureGuideSection subsection = null;
 			if (isSubsection) {
 				subsection = section.getSubSections().parallelStream().filter(s -> s.getSectionId().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 				if (subsection == null) {
@@ -79,7 +79,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			}
 
 			// Find header section if needed
-			InfractionProcedureGuide.Section topic = null;
+			InfractionProcedureGuideSection topic = null;
 			if (subsection != null && args.length > 1 && !subsection.getSubSections().isEmpty()) {
 				String topicname = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 				topic = subsection.getSubSections().parallelStream().filter(s -> s.getTitle().equalsIgnoreCase(topicname)).findFirst().orElse(null);
