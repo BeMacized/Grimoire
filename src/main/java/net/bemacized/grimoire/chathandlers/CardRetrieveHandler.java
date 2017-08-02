@@ -69,7 +69,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		}
 		// Handle too many results
 		catch (SetUtils.TooManyResultsException ex) {
-			loadMsg.setLineFinalFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardReq.getSet());
+			loadMsg.finalizeFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardReq.getSet());
 			return;
 		}
 		// Handle multiple results
@@ -77,12 +77,12 @@ public class CardRetrieveHandler extends ChatHandler {
 			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardReq.getSet()));
 			for (MtgSet s : ex.getResults())
 				sb.append(String.format("\n:small_orange_diamond: %s _(%s)_", s.getName(), s.getCode()));
-			loadMsg.setLineFinal(sb.toString());
+			loadMsg.finalize(sb.toString());
 			return;
 		}
 		// Handle no results
 		catch (SetUtils.NoResultsException e1) {
-			loadMsg.setLineFinalFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), cardReq.getSet());
+			loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), cardReq.getSet());
 			return;
 		}
 
@@ -100,7 +100,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {
-			loadMsg.setLineFinalFormat(
+			loadMsg.finalizeFormat(
 					"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
 					e.getAuthor().getId(),
 					cardReq.getCardName()
@@ -111,7 +111,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		catch (CardUtils.MultipleResultsException ex) {
 			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardReq.getCardName()));
 			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-			loadMsg.setLineFinal(sb.toString());
+			loadMsg.finalize(sb.toString());
 			return;
 		}
 		// Handle no results
@@ -122,7 +122,7 @@ public class CardRetrieveHandler extends ChatHandler {
 					set.getName(),
 					set.getCode()
 			));
-			loadMsg.setLineFinal(newMsg.toString());
+			loadMsg.finalize(newMsg.toString());
 			return;
 		}
 
@@ -170,7 +170,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
 
 		// Show message
-		loadMsg.setLineFinal(eb.build());
+		loadMsg.finalize(eb.build());
 	}
 
 	private class RawCardRequest {

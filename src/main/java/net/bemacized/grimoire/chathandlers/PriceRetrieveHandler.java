@@ -50,7 +50,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 			}
 			// Handle too many results
 			catch (SetUtils.TooManyResultsException ex) {
-				loadMsg.setLineFinalFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), setname);
+				loadMsg.finalizeFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), setname);
 				return;
 			}
 			// Handle multiple results
@@ -58,12 +58,12 @@ public class PriceRetrieveHandler extends ChatHandler {
 				StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), setname));
 				for (MtgSet s : ex.getResults())
 					sb.append(String.format("\n:small_orange_diamond: %s _(%s)_", s.getName(), s.getCode()));
-				loadMsg.setLineFinal(sb.toString());
+				loadMsg.finalize(sb.toString());
 				return;
 			}
 			// Handle no results
 			catch (SetUtils.NoResultsException e1) {
-				loadMsg.setLineFinalFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
+				loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
 				return;
 			}
 
@@ -74,19 +74,19 @@ public class PriceRetrieveHandler extends ChatHandler {
 			}
 			// Handle too many results
 			catch (CardUtils.TooManyResultsException ex) {
-				loadMsg.setLineFinalFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
+				loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
 				return;
 			}
 			// Handle multiple results
 			catch (CardUtils.MultipleResultsException ex) {
 				StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
 				for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-				loadMsg.setLineFinal(sb.toString());
+				loadMsg.finalize(sb.toString());
 				return;
 			}
 			// Handle no results
 			catch (CardUtils.NoResultsException e1) {
-				loadMsg.setLineFinalFormat("<@%s>, There are no results for a card named **'%s'**" + ((set == null) ? "" : " in the set you requested."), e.getAuthor().getId(), cardname);
+				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**" + ((set == null) ? "" : " in the set you requested."), e.getAuthor().getId(), cardname);
 				return;
 			}
 
@@ -94,7 +94,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 			loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSetName(), card.getSet());
 
 			//Send the message
-			loadMsg.setLineFinal(Grimoire.getInstance().getPricingManager().getPricingEmbed(card));
+			loadMsg.finalize(Grimoire.getInstance().getPricingManager().getPricingEmbed(card));
 		}).start());
 
 		next.handle(e);

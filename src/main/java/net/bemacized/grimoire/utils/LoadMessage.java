@@ -88,8 +88,7 @@ public class LoadMessage {
 			String[] messageTexts = StringUtils.splitMessage(sb.toString().trim(), true);
 			for (int i = 0; i < messageTexts.length; i++) {
 				// Delete messages that exceed amount of messages required
-				for (int j = messages.size() - 1
-					 ; j >= messageTexts.length; j--) {
+				for (int j = messages.size() - 1; j >= messageTexts.length; j--) {
 					messages.get(j).delete().submit();
 					messages.remove(j);
 				}
@@ -116,7 +115,7 @@ public class LoadMessage {
 		spinnerTimer.cancel();
 	}
 
-	public void deleteFinal() {
+	public void finalize() {
 		if (this.finished) throw new FinishedException();
 		taskQueue.queue(() -> {
 			messages.forEach(msg -> msg.delete().submit());
@@ -125,23 +124,23 @@ public class LoadMessage {
 		});
 	}
 
-	public void setLineFinalFormat(String template, Object... objs) {
-		setLineFinal(String.format(template, objs));
+	public void finalizeFormat(String template, Object... objs) {
+		finalize(String.format(template, objs));
 	}
 
-	public void setLineFinal(String msg) {
-		this.setLineFinal((Object) msg);
+	public void finalize(String msg) {
+		this.finalize((Object) msg);
 	}
 
-	public void setLineFinal(Message msg) {
-		this.setLineFinal((Object) msg);
+	public void finalize(Message msg) {
+		this.finalize((Object) msg);
 	}
 
-	public void setLineFinal(MessageEmbed msg) {
-		this.setLineFinal((Object) msg);
+	public void finalize(MessageEmbed msg) {
+		this.finalize((Object) msg);
 	}
 
-	private void setLineFinal(Object msg) {
+	private void finalize(Object msg) {
 		if (this.finished) throw new FinishedException();
 		taskQueue.queue(() -> {
 			for (int i = 0; i < messages.size(); i++) {

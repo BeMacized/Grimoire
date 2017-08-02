@@ -65,7 +65,7 @@ public class RandomCommand extends BaseCommand {
 			} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 				if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 			} else {
-				loadMsg.setLineFinalFormat("<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.", e.getAuthor().getId(), arg);
+				loadMsg.finalizeFormat("<@%s>, **'%s'** is neither a type, supertype or subtype. Please only specify valid types.", e.getAuthor().getId(), arg);
 				return;
 			}
 		}
@@ -87,7 +87,7 @@ public class RandomCommand extends BaseCommand {
 
 		//Stop if none found
 		if (cards.isEmpty()) {
-			loadMsg.setLineFinalFormat("<@%s>, No cards have been found with the type(s) you've supplied.", e.getAuthor().getId());
+			loadMsg.finalizeFormat("<@%s>, No cards have been found with the type(s) you've supplied.", e.getAuthor().getId());
 			return;
 		}
 
@@ -102,6 +102,6 @@ public class RandomCommand extends BaseCommand {
 		eb.appendDescription(String.format("\n%s (%s)", card.getSetName(), card.getSet()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		loadMsg.setLineFinal(eb.build());
+		loadMsg.finalize(eb.build());
 	}
 }

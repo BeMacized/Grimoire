@@ -77,7 +77,7 @@ public class TokenCommand extends BaseCommand {
 
 		// Test for no matches
 		if (matches.isEmpty()) {
-			loadMsg.setLineFinalFormat("<@%s>, I couldn't find any tokens called **'%s'**", e.getAuthor().getId(), cardName);
+			loadMsg.finalizeFormat("<@%s>, I couldn't find any tokens called **'%s'**", e.getAuthor().getId(), cardName);
 			return;
 		}
 
@@ -90,14 +90,14 @@ public class TokenCommand extends BaseCommand {
 			if (choice != -1) {
 				// Check if choice # is in range
 				if (choice < 1 || choice > matches.size()) {
-					loadMsg.setLineFinalFormat("<@%s>, The choice number you provided is not within range. Please only pick a valid option.", e.getAuthor().getId());
+					loadMsg.finalizeFormat("<@%s>, The choice number you provided is not within range. Please only pick a valid option.", e.getAuthor().getId());
 					return;
 				}
 				// Replace match with choice
 				match = matches.get(choice - 1);
 			} else if (matches.size() > MAX_TOKEN_RESULTS) {
 				// List options
-				loadMsg.setLineFinalFormat("<@%s>, There are too many tokens matching your search. Please be more specific.", e.getAuthor().getId(), cardName);
+				loadMsg.finalizeFormat("<@%s>, There are too many tokens matching your search. Please be more specific.", e.getAuthor().getId(), cardName);
 				return;
 			} else {
 				// List options
@@ -114,7 +114,7 @@ public class TokenCommand extends BaseCommand {
 							(hasArts) ? "" : " __[NO ART AVAILABLE]__"
 					));
 				}
-				loadMsg.setLineFinal(sb.toString());
+				loadMsg.finalize(sb.toString());
 				return;
 			}
 		}
@@ -122,7 +122,7 @@ public class TokenCommand extends BaseCommand {
 		// Check if match has image
 		List<Token.SetArt> arts = match.getSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 		if (arts.isEmpty()) {
-			loadMsg.setLineFinalFormat("<@%s>, I sadly do not know of any art for this token. Please try a different one!", e.getAuthor().getId(), cardName);
+			loadMsg.finalizeFormat("<@%s>, I sadly do not know of any art for this token. Please try a different one!", e.getAuthor().getId(), cardName);
 			return;
 		}
 
@@ -141,7 +141,7 @@ public class TokenCommand extends BaseCommand {
 		if (set != null) eb.setDescription(String.format("%s (%s)", set.getName(), set.getCode()));
 		eb.setImage(art.getUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getColor()}));
-		loadMsg.setLineFinal(eb.build());
+		loadMsg.finalize(eb.build());
 	}
 
 	private boolean isNumber(String str) {

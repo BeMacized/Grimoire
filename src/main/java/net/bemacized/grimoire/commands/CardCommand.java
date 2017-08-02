@@ -58,7 +58,7 @@ public class CardCommand extends BaseCommand {
 		}
 		// Handle too many results
 		catch (SetUtils.TooManyResultsException ex) {
-			loadMsg.setLineFinalFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), setname);
+			loadMsg.finalizeFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), setname);
 			return;
 		}
 		// Handle multiple results
@@ -74,12 +74,12 @@ public class CardCommand extends BaseCommand {
 						s.getName(),
 						s.getCode())
 				);
-			loadMsg.setLineFinal(sb.toString());
+			loadMsg.finalize(sb.toString());
 			return;
 		}
 		// Handle no results
 		catch (SetUtils.NoResultsException e1) {
-			loadMsg.setLineFinalFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
+			loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class CardCommand extends BaseCommand {
 			})).findFirst().orElse(null);
 			if (card == null) {
 				if (set == null) {
-					loadMsg.setLineFinalFormat("<@%s>, I could not find any art for **'%s'**. ", e.getAuthor().getId(), cardname);
+					loadMsg.finalizeFormat("<@%s>, I could not find any art for **'%s'**. ", e.getAuthor().getId(), cardname);
 					return;
 				} else {
 					card = (CardUtils.getCards(cardname, null).stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty())).findFirst().orElse(null);
@@ -112,7 +112,7 @@ public class CardCommand extends BaseCommand {
 		}
 		// Handle too many results
 		catch (CardUtils.TooManyResultsException ex) {
-			loadMsg.setLineFinalFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
+			loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
 			return;
 		}
 		// Handle multiple results
@@ -123,7 +123,7 @@ public class CardCommand extends BaseCommand {
 					cardname
 			));
 			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-			loadMsg.setLineFinal(sb.toString());
+			loadMsg.finalize(sb.toString());
 			return;
 		}
 		// Handle no results
@@ -138,7 +138,7 @@ public class CardCommand extends BaseCommand {
 					set.getName(),
 					set.getCode()
 			));
-			loadMsg.setLineFinal(newMsg.toString());
+			loadMsg.finalize(newMsg.toString());
 			return;
 		}
 
@@ -151,6 +151,6 @@ public class CardCommand extends BaseCommand {
 		eb.setDescription(String.format("%s (%s)", card.getSetName(), card.getSet()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		loadMsg.setLineFinal(eb.build());
+		loadMsg.finalize(eb.build());
 	}
 }
