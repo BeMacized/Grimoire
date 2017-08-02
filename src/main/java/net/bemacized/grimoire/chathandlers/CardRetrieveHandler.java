@@ -32,7 +32,7 @@ public class CardRetrieveHandler extends ChatHandler {
 	@Override
 	protected void handle(MessageReceivedEvent e, ChatHandler next) {
 		// Find matches for <<CARD[|SET(CODE)]>> pattern.
-		Pattern p = Pattern.compile("<<[^$<|>]+([|][^<|>]+)?>>");
+		Pattern p = Pattern.compile("(<<|\\[\\[)[^$<|>]+([|][^<|>]+)?(>>|]])");
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
