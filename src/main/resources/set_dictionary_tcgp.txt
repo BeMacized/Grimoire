@@ -1,4 +1,5 @@
-#TCGPlayer
+###TCGPlayer
+
 #Limited Edition Alpha
 LEA=Alpha Edition
 #Limited Edition Beta

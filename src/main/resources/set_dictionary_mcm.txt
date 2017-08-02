@@ -1,4 +1,5 @@
-#MCMarket
+###Magic Card Market
+
 #Limited Edition Alpha
 LEA=Alpha
 #Limited Edition Beta
@@ -70,7 +71,7 @@ STH=Stronghold
 #Portal Second Age
 PO2=Portal Second Age
 #Judge Gift Program
-pJGP=Judge Program Tokens
+pJGP=Judge Rewards Promos
 #Exodus
 EXO=Exodus
 #Unglued
@@ -318,7 +319,7 @@ pWCQ=
 #Dragon's Maze
 DGM=Dragon's Maze
 #Modern Masters
-MMA=Modern Masters 2017
+MMA=Modern Masters
 #Magic 2014 Core Set
 M14=Magic 2014
 #From the Vault: Twenty
@@ -358,13 +359,13 @@ KTK=Khans of Tarkir
 #Commander 2014
 C14=Commander 2014
 #Duel Decks Anthology, Divine vs. Demonic
-DD3_DVD=Duel Decks: Anthology
+DD3_DVD=Duel Decks: Divine vs. Demonic
 #Duel Decks Anthology, Elves vs. Goblins
-DD3_EVG=Duel Decks: Anthology
+DD3_EVG=Duel Decks: Elves vs. Goblins
 #Duel Decks Anthology, Garruk vs. Liliana
-DD3_GVL=Duel Decks: Anthology
+DD3_GVL=Duel Decks: Garruk vs. Liliana
 #Duel Decks Anthology, Jace vs. Chandra
-DD3_JVC=Duel Decks: Anthology
+DD3_JVC=Duel Decks: Jace vs. Chandra
 #Ugin's Fate promos
 FRF_UGIN=Ugin's Fate Promos
 #Fate Reforged
