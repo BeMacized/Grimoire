@@ -6,7 +6,7 @@ public class Definition {
 	private String explanation;
 
 	public Definition(String keyword, String explanation) {
-		this.keyword = keyword.substring(0, 1).toUpperCase() + keyword.substring(1, keyword.length()).toUpperCase();
+		this.keyword = keyword.substring(0, 1).toUpperCase() + keyword.substring(1).toLowerCase();
 		this.explanation = explanation;
 	}
 
