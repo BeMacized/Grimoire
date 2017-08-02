@@ -74,7 +74,6 @@ public class Cards {
 
 		public SearchQuery distinctNames() {
 			return new SearchQuery(this.parallelStream().filter(distinctByKey(Card::getName)).collect(Collectors.toList()));
-
 		}
 
 		private <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

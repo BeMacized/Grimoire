@@ -8,10 +8,8 @@ import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.text.DecimalFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RandomCommand extends BaseCommand {
@@ -80,9 +78,9 @@ public class RandomCommand extends BaseCommand {
 
 		//Find cards
 		Cards.SearchQuery query = new Cards.SearchQuery();
-		supertypes.forEach(query::hasSupertype);
-		types.forEach(query::hasType);
-		subtypes.forEach(query::hasSubtype);
+		for (String supertype : supertypes) query = query.hasSupertype(supertype);
+		for (String type : types) query = query.hasType(type);
+		for (String subtype : subtypes) query = query.hasSubtype(subtype);
 
 		//Stop if none found
 		if (query.isEmpty()) {
@@ -93,14 +91,48 @@ public class RandomCommand extends BaseCommand {
 		//Draw a random card
 		Card card = query.get(new Random().nextInt(query.size()));
 
-		// Show card
+		// Construct the data we need
+
+		String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
+				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
+				.map(Card.Legality::getFormat)
+				.collect(Collectors.toList()));
+		String rarities = String.join(", ", new Cards.SearchQuery().hasExactName(card.getName()).parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
+		String printings = String.join(", ", new String[]{"**" + card.getSet().getName() + " (" + card.getSet().getCode() + ")**", String.join(", ", Arrays.stream(card.getPrintings()).parallel().filter(setCode -> !card.getSet().getCode().equalsIgnoreCase(setCode)).collect(Collectors.toList()))}).trim();
+		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
+		String pat = MTGUtils.parsePowerAndToughness(card.getPower(), card.getToughness());
+
+		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---
+		//		String title = card.getName()
+		//				+ " "
+		//				+ CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		//		String separateCost = "";
+		//		if (title.length() > 256) {
+		//			title = card.getName();
+		//			separateCost = CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
+		//		}
+
+		String title = card.getName();
+		String separateCost = MTGUtils.parseEmoji(e.getGuild(), card.getManaCost()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
+		//TODO: ---END
+
+		// Build the embed
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType);
+		eb.setAuthor(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid(), null);
 		if (("Random " + joinedType).length() > 128) eb.appendDescription(joinedType + "\n");
-		eb.appendDescription("**" + card.getName() + "**");
-		eb.appendDescription(String.format("\n%s (%s)", card.getSet().getName(), card.getSet().getName()));
-		eb.setImage(card.getImageUrl());
+		eb.setThumbnail(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
+		eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
+		if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
+		eb.appendDescription(card.getType());
+		eb.appendDescription("\n\n");
+		eb.appendDescription(MTGUtils.parseEmoji(e.getGuild(), card.getText()));
+		if (!formats.isEmpty()) eb.addField("Formats", formats, true);
+		if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
+
+		// Show card
 		loadMsg.finalize(eb.build());
 	}
 }
