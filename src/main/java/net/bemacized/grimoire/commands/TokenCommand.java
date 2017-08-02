@@ -131,13 +131,9 @@ public class TokenCommand extends BaseCommand {
 		// Pick random art
 		Token.SetArt art = arts.get(new Random().nextInt(arts.size()));
 
-		// Attempt finding set
-		MtgSet set = Grimoire.getInstance().getSets().forceSingleByNameOrCode(art.getSetCode());
-
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(match.getName());
-		if (set != null) eb.setDescription(String.format("%s (%s)", set.getName(), set.getCode()));
 		eb.setImage(art.getUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getColor()}));
 		loadMsg.finalize(eb.build());
