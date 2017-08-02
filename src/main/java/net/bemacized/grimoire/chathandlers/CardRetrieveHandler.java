@@ -1,19 +1,19 @@
 package net.bemacized.grimoire.chathandlers;
 
-import io.magicthegathering.javasdk.resource.Card;
-import io.magicthegathering.javasdk.resource.Legality;
-import io.magicthegathering.javasdk.resource.MtgSet;
-import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.controllers.Cards;
+import net.bemacized.grimoire.model.controllers.Sets;
+import net.bemacized.grimoire.model.models.Card;
+import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
-import net.bemacized.grimoire.utils.SetUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +24,8 @@ public class CardRetrieveHandler extends ChatHandler {
 	private final static Logger LOG = Logger.getLogger(CardRetrieveHandler.class.getName());
 
 	private final static int MAX_REQUESTS_PER_MESSAGE = 5;
+	private final static int MAX_SET_ALTERNATIVES = 15;
+	private final static int MAX_CARD_ALTERNATIVES = 15;
 
 	public CardRetrieveHandler(ChatHandler next) {
 		super(next);
@@ -36,110 +38,94 @@ public class CardRetrieveHandler extends ChatHandler {
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
-		List<RawCardRequest> requests = new ArrayList<RawCardRequest>() {{
+		List<CardRequest> requests = new ArrayList<CardRequest>() {{
 			for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) {
 				String[] data = m.group().substring(2, m.group().length() - 2).split("[|]");
 				String cardName = data[0].trim();
 				String set = (data.length > 1) ? data[1].trim() : null;
-				add(new RawCardRequest(cardName, set));
+				add(new CardRequest(cardName, set));
 			}
 		}};
 
 		// Retrieve card
-		requests.parallelStream().forEach(cardReq -> new Thread(() -> {
-			try {
-				handleCardRequest(cardReq, e);
-			} catch (ExecutionException | InterruptedException ex) {
-				LOG.log(Level.SEVERE, "Could not handle card art request", ex);
-				e.getChannel().sendMessage("<@" + e.getAuthor().getId() + ">, An unknown error occurred fetching your card data. Please notify my developer to fix me up!").submit();
-			}
-		}).start());
+		requests.parallelStream().forEach(cardReq -> new Thread(() -> handleCardRequest(cardReq, e)).start());
 
 		next.handle(e);
 	}
 
-	private void handleCardRequest(RawCardRequest cardReq, MessageReceivedEvent e) throws ExecutionException, InterruptedException {
+	private void handleCardRequest(CardRequest cardReq, MessageReceivedEvent e) {
 		// Construct load message
 		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading card...", true);
 
 		// If a set(code) was provided, check its validity.
-		MtgSet set = null;
+		MtgSet set;
 		try {
-			if (cardReq.getSet() != null) set = SetUtils.getSet(cardReq.getSet());
-		}
-		// Handle too many results
-		catch (SetUtils.TooManyResultsException ex) {
-			loadMsg.finalizeFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardReq.getSet());
-			return;
-		}
-		// Handle multiple results
-		catch (SetUtils.MultipleResultsException ex) {
-			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardReq.getSet()));
-			for (MtgSet s : ex.getResults())
-				sb.append(String.format("\n:small_orange_diamond: %s _(%s)_", s.getName(), s.getCode()));
-			loadMsg.finalize(sb.toString());
-			return;
-		}
-		// Handle no results
-		catch (SetUtils.NoResultsException e1) {
-			loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), cardReq.getSet());
+			set = cardReq.getSet() != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(cardReq.getSet()) : null;
+			if (set == null && cardReq.getSet() != null) {
+				loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), cardReq.getSet());
+				return;
+			}
+		} catch (Sets.MultipleResultsException ex) {
+			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
+				loadMsg.finalizeFormat(
+						"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
+						e.getAuthor().getId(),
+						cardReq.getCardName()
+				);
+			else
+				loadMsg.finalizeFormat("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n%s",
+						e.getAuthor().getId(), cardReq.getSet(),
+						String.join("", ex.getSets().parallelStream().map(s -> String.format("\n:small_orange_diamond: %s _(%s)_",
+								s.getName(), s.getCode())).collect(Collectors.toList())
+						));
 			return;
 		}
 
-		// Retrieve cards
+		// Retrieve card
 		Card card;
-		try {
-			// Retrieve all card variations
-			List<Card> cards = CardUtils.getCards(cardReq.getCardName(), (set != null) ? set.getCode() : null);
-			// Find variation with art
-			card = cards.stream().filter(c -> c.getImageUrl() != null && !c.getImageUrl().isEmpty()).collect(Collectors.collectingAndThen(Collectors.toList(), collected -> {
-				Collections.shuffle(collected);
-				return collected.stream();
-			})).findFirst().orElse(null);
-			if (card == null) card = cards.get(new Random().nextInt(cards.size()));
-		}
-		// Handle too many results
-		catch (CardUtils.TooManyResultsException ex) {
-			loadMsg.finalizeFormat(
-					"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
-					e.getAuthor().getId(),
-					cardReq.getCardName()
-			);
+		Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardReq.getCardName());
+		if (set != null) query = query.inSet(set);
+
+		// Find exact match
+		if (!query.hasExactName(cardReq.getCardName()).isEmpty())
+			card = query.hasExactName(cardReq.getCardName()).get(0);
+			// Find single match
+		else if (query.distinctNames().size() == 1)
+			card = query.distinctNames().get(0);
+			// No results then?
+		else if (query.isEmpty()) {
+			if (set == null)
+				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardReq.getCardName());
+			else
+				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardReq.getCardName(), set.getName(), set.getCode());
 			return;
 		}
-		// Handle multiple results
-		catch (CardUtils.MultipleResultsException ex) {
+		// We got multiple results. Check if too many?
+		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
+			loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardReq.getCardName());
+			return;
+		}
+		// Nope, show the alternatives!
+		else {
 			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardReq.getCardName()));
-			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
+			for (Card c : query.distinctNames()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
 			loadMsg.finalize(sb.toString());
 			return;
 		}
-		// Handle no results
-		catch (CardUtils.NoResultsException e1) {
-			StringBuilder newMsg = new StringBuilder(String.format("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardReq.getCardName()));
-			if (set != null) newMsg.append(String.format(
-					" in set **'%s (%s)'**",
-					set.getName(),
-					set.getCode()
-			));
-			loadMsg.finalize(newMsg.toString());
-			return;
-		}
+
+		//TODO: VERIFY ART EXISTENCE
 
 		// Update load text
-		loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSetName(), card.getSet());
+		loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
 
-		// We have found it. Let's construct the oracle text.
+		// Construct the data we need
+
 		String formats = (card.getLegalities() == null) ? "" : String.join(", ", Arrays.stream(card.getLegalities())
 				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
-				.map(Legality::getFormat)
+				.map(Card.Legality::getFormat)
 				.collect(Collectors.toList()));
-		String rarities = String.join(", ", new CardUtils.CardSearchQuery().setExactName(card.getName()).exec().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
-		Card finalCard = card;
-		String printings = String.join(", ", new ArrayList<String>() {{
-			add("**" + finalCard.getSetName() + " (" + finalCard.getSet() + ")**");
-			addAll(Arrays.stream(finalCard.getPrintings()).parallel().filter(s -> !s.equalsIgnoreCase(finalCard.getSet())).collect(Collectors.toList()));
-		}});
+		String rarities = String.join(", ", new Cards.SearchQuery().hasExactName(card.getName()).parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
+		String printings = String.join(", ", new String[]{"**" + card.getSet().getName() + " (" + card.getSet().getCode() + ")**", String.join(", ", Arrays.stream(card.getPrintings()).parallel().filter(setCode -> !card.getSet().getCode().equalsIgnoreCase(setCode)).collect(Collectors.toList()))});
 		String pat = MTGUtils.parsePowerAndToughness(card.getPower(), card.getToughness());
 
 		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---
@@ -156,6 +142,7 @@ public class CardRetrieveHandler extends ChatHandler {
 		String separateCost = MTGUtils.parseEmoji(e.getGuild(), card.getManaCost()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
 		//TODO: ---END
 
+		// Build the embed
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setThumbnail(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
@@ -173,12 +160,12 @@ public class CardRetrieveHandler extends ChatHandler {
 		loadMsg.finalize(eb.build());
 	}
 
-	private class RawCardRequest {
+	private class CardRequest {
 
 		private String cardName;
 		private String set;
 
-		RawCardRequest(String cardName, String set) {
+		CardRequest(String cardName, String set) {
 			this.cardName = cardName;
 			this.set = set;
 		}

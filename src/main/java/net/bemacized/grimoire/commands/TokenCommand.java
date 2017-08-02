@@ -1,8 +1,7 @@
 package net.bemacized.grimoire.commands;
 
-import io.magicthegathering.javasdk.api.SetAPI;
-import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.model.models.Token;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -133,7 +132,7 @@ public class TokenCommand extends BaseCommand {
 		Token.SetArt art = arts.get(new Random().nextInt(arts.size()));
 
 		// Attempt finding set
-		MtgSet set = SetAPI.getSet(art.getSetCode());
+		MtgSet set = Grimoire.getInstance().getSets().forceSingleByNameOrCode(art.getSetCode());
 
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();

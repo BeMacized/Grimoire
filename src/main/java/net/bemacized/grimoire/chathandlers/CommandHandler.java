@@ -22,7 +22,7 @@ public class CommandHandler extends ChatHandler {
 				new RandomCommand(),
 				new PricingCommand(),
 				new TokenCommand(),
-				new CardCommand(),
+				new ArtCommand(),
 				new CompRulesCommand(),
 				new DefineCommand(),
 				new TournamentRulesCommand(),

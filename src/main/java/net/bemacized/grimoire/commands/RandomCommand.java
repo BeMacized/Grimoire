@@ -1,8 +1,8 @@
 package net.bemacized.grimoire.commands;
 
-import io.magicthegathering.javasdk.api.CardAPI;
-import io.magicthegathering.javasdk.resource.Card;
-import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.controllers.Cards;
+import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -52,9 +52,9 @@ public class RandomCommand extends BaseCommand {
 		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true);
 
 		// Retrieve all types
-		List<String> allSupertypes = CardAPI.getAllCardSupertypes();
-		List<String> allTypes = CardAPI.getAllCardTypes();
-		List<String> allSubtypes = CardAPI.getAllCardSubtypes();
+		List<String> allSupertypes = Grimoire.getInstance().getCards().getAllSupertypes();
+		List<String> allTypes = Grimoire.getInstance().getCards().getAllTypes();
+		List<String> allSubtypes = Grimoire.getInstance().getCards().getAllSubtypes();
 
 		// Extract types
 		for (String arg : args) {
@@ -79,27 +79,26 @@ public class RandomCommand extends BaseCommand {
 		loadMsg.setLineFormat("Drawing random %s...", joinedType);
 
 		//Find cards
-		CardUtils.CardSearchQuery query = new CardUtils.CardSearchQuery();
-		if (!supertypes.isEmpty()) query.setSuperType(String.join(",", supertypes));
-		if (!types.isEmpty()) query.setType(String.join(",", types));
-		if (!subtypes.isEmpty()) query.setSubType(String.join(",", subtypes));
-		List<Card> cards = query.exec();
+		Cards.SearchQuery query = new Cards.SearchQuery();
+		supertypes.forEach(query::hasSupertype);
+		types.forEach(query::hasType);
+		subtypes.forEach(query::hasSubtype);
 
 		//Stop if none found
-		if (cards.isEmpty()) {
+		if (query.isEmpty()) {
 			loadMsg.finalizeFormat("<@%s>, No cards have been found with the type(s) you've supplied.", e.getAuthor().getId());
 			return;
 		}
 
 		//Draw a random card
-		Card card = cards.get(new Random().nextInt(cards.size()));
+		Card card = query.get(new Random().nextInt(query.size()));
 
 		// Show card
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(("Random " + joinedType).length() > 128 ? "Random" : "Random " + joinedType);
 		if (("Random " + joinedType).length() > 128) eb.appendDescription(joinedType + "\n");
 		eb.appendDescription("**" + card.getName() + "**");
-		eb.appendDescription(String.format("\n%s (%s)", card.getSetName(), card.getSet()));
+		eb.appendDescription(String.format("\n%s (%s)", card.getSet().getName(), card.getSet().getName()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		loadMsg.finalize(eb.build());

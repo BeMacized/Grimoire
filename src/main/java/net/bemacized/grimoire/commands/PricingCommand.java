@@ -1,14 +1,20 @@
 package net.bemacized.grimoire.commands;
 
-import io.magicthegathering.javasdk.resource.Card;
-import io.magicthegathering.javasdk.resource.MtgSet;
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.model.controllers.Cards;
+import net.bemacized.grimoire.model.controllers.Sets;
+import net.bemacized.grimoire.model.models.Card;
+import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.utils.LoadMessage;
-import net.bemacized.grimoire.utils.SetUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.stream.Collectors;
+
 public class PricingCommand extends BaseCommand {
+
+	private final static int MAX_SET_ALTERNATIVES = 15;
+	private final static int MAX_CARD_ALTERNATIVES = 15;
+
 	@Override
 	public String name() {
 		return "pricing";
@@ -50,54 +56,64 @@ public class PricingCommand extends BaseCommand {
 		String setname = (split.length > 1 && !split[1].trim().isEmpty()) ? split[1].trim() : null;
 
 		// If a set(code) was provided, check its validity.
-		MtgSet set = null;
+		MtgSet set;
 		try {
-			if (setname != null) set = SetUtils.getSet(setname);
-		}
-		// Handle too many results
-		catch (SetUtils.TooManyResultsException ex) {
-			loadMsg.finalizeFormat("<@%s>, There are too many results for a set named **'%s'**. Please be more specific.", e.getAuthor().getId(), setname);
-			return;
-		}
-		// Handle multiple results
-		catch (SetUtils.MultipleResultsException ex) {
-			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), setname));
-			for (MtgSet s : ex.getResults())
-				sb.append(String.format("\n:small_orange_diamond: %s _(%s)_", s.getName(), s.getCode()));
-			loadMsg.finalize(sb.toString());
-			return;
-		}
-		// Handle no results
-		catch (SetUtils.NoResultsException e1) {
-			loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
+			set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
+			if (set == null && setname != null) {
+				loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
+				return;
+			}
+		} catch (Sets.MultipleResultsException ex) {
+			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
+				loadMsg.finalizeFormat(
+						"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
+						e.getAuthor().getId(),
+						cardname
+				);
+			else
+				loadMsg.finalizeFormat("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n%s",
+						e.getAuthor().getId(), setname,
+						String.join("", ex.getSets().parallelStream().map(s -> String.format("\n:small_orange_diamond: %s _(%s)_",
+								s.getName(), s.getCode())).collect(Collectors.toList())
+						));
 			return;
 		}
 
 		// Retrieve card
 		Card card;
-		try {
-			card = CardUtils.getCard(cardname, (set == null) ? null : set.getCode());
+		Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardname);
+		if (set != null) query = query.inSet(set);
+
+		// Find exact match
+		if (!query.hasExactName(cardname).isEmpty())
+			card = query.hasExactName(cardname).get(0);
+			// Find single match
+		else if (query.distinctNames().size() == 1)
+			card = query.distinctNames().get(0);
+			// No results then?
+		else if (query.isEmpty()) {
+			if (set == null)
+				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname);
+			else
+				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardname, set.getName(), set.getCode());
+			return;
 		}
-		// Handle too many results
-		catch (CardUtils.TooManyResultsException ex) {
+		// We got multiple results. Check if too many?
+		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
 			loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
 			return;
 		}
-		// Handle multiple results
-		catch (CardUtils.MultipleResultsException ex) {
+		// Nope, show the alternatives!
+		else {
 			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
-			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
+			for (Card c : query.distinctNames())
+				sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
 			loadMsg.finalize(sb.toString());
-			return;
-		}
-		// Handle no results
-		catch (CardUtils.NoResultsException e1) {
-			loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**" + ((set == null) ? "" : " in the set you requested."), e.getAuthor().getId(), cardname);
 			return;
 		}
 
 		// Update load text
-		loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSetName(), card.getSet());
+		loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
 
 		//Send the message
 		loadMsg.finalize(Grimoire.getInstance().getPricingManager().getPricingEmbed(card));

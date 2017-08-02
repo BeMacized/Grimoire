@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.pricing.apis;
 
-import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
@@ -37,7 +37,7 @@ public abstract class StoreAPI {
 		StoreCardPriceRecord record = collection.findOne(String.format(
 				"{cardName: %s, setCode: %s, storeId: %s}",
 				JSONObject.quote(card.getName()),
-				JSONObject.quote(card.getSet()),
+				JSONObject.quote(card.getSet().getCode()),
 				JSONObject.quote(getStoreId())
 		)).as(StoreCardPriceRecord.class);
 

@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.pricing;
 
-import io.magicthegathering.javasdk.api.SetAPI;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.controllers.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
@@ -20,7 +20,7 @@ public class SetDictionary {
 		dictionary = new ArrayList<>();
 
 		// Load initial data
-		SetAPI.getAllSets().forEach(set -> dictionary.add(new SetDictionaryItem(set.getCode(), set.getName())));
+		Grimoire.getInstance().getSets().getSets().forEach(set -> dictionary.add(new SetDictionaryItem(set.getCode(), set.getName())));
 
 		// Load from database
 		MongoCursor<SetDictionaryItem> items = Grimoire.getInstance().getDBManager().getJongo().getCollection("SetDictionaryItems").find("{}").as(SetDictionaryItem.class);

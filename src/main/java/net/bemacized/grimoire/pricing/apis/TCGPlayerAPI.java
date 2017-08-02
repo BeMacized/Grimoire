@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.pricing.apis;
 
-import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -51,7 +51,7 @@ public class TCGPlayerAPI extends StoreAPI {
 	@Override
 	protected StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
 		// First fetch TCG set name
-		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet());
+		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet().getCode());
 		if (setDictionaryItem.getStoreSetName(getStoreId()) == null)
 			throw new StoreSetUnknownException();
 
@@ -126,7 +126,7 @@ public class TCGPlayerAPI extends StoreAPI {
 
 		return new StoreCardPriceRecord(
 				card.getName(),
-				card.getSet(),
+				card.getSet().getCode(),
 				doc.getDocumentElement().getElementsByTagName("link").item(0).getTextContent(),
 				"$",
 				System.currentTimeMillis(),

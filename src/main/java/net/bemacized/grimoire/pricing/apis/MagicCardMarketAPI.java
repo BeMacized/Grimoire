@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.pricing.apis;
 
-import io.magicthegathering.javasdk.resource.Card;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -53,7 +53,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 	@Override
 	protected StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
 		// First fetch MCM set name
-		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet());
+		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet().getCode());
 		if (setDictionaryItem.getStoreSetName(getStoreId()) == null)
 			throw new StoreSetUnknownException();
 
@@ -119,7 +119,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 		// Return the found data
 		return new StoreCardPriceRecord(
 				card.getName(),
-				card.getSet(),
+				card.getSet().getCode(),
 				"https://www.magiccardmarket.eu" + product.getString("website"),
 				"€",
 				System.currentTimeMillis(),

@@ -1,12 +1,14 @@
 package net.bemacized.grimoire.commands;
 
-import io.magicthegathering.javasdk.resource.Card;
-import net.bemacized.grimoire.utils.CardUtils;
+import net.bemacized.grimoire.model.controllers.Cards;
+import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class OracleCommand extends BaseCommand {
+
+	private final static int MAX_CARD_ALTERNATIVES = 15;
 
 	@Override
 	public String name() {
@@ -45,36 +47,30 @@ public class OracleCommand extends BaseCommand {
 
 		// Retrieve card
 		Card card;
-		try {
-			card = CardUtils.getCard(cardname);
-		}
-		// Handle too many results
-		catch (CardUtils.TooManyResultsException ex) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, There are too many results for a card named **'%s'**. Please be more specific.",
-					e.getAuthor().getId(),
-					cardname
-			).submit();
+		Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardname);
+
+		// Find exact match
+		if (!query.hasExactName(cardname).isEmpty())
+			card = query.hasExactName(cardname).get(0);
+			// Find single match
+		else if (query.distinctNames().size() == 1)
+			card = query.distinctNames().get(0);
+			// No results then?
+		else if (query.isEmpty()) {
+			e.getChannel().sendMessageFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname).submit();
 			return;
 		}
-		// Handle multiple results
-		catch (CardUtils.MultipleResultsException ex) {
-			StringBuilder sb = new StringBuilder(String.format(
-					"<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n",
-					e.getAuthor().getId(),
-					cardname
-			));
-			for (Card c : ex.getResults()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-			e.getChannel().sendMessage(sb.toString()).submit();
+		// We got multiple results. Check if too many?
+		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
+			e.getChannel().sendMessageFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname).submit();
 			return;
 		}
-		// Handle no results
-		catch (CardUtils.NoResultsException e1) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, There are no results for a card named **'%s'**",
-					e.getAuthor().getId(),
-					cardname
-			).submit();
+		// Nope, show the alternatives!
+		else {
+			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
+			for (Card c : query.distinctNames())
+				sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
+			e.getChannel().sendMessageFormat(sb.toString()).submit();
 			return;
 		}
 

@@ -26,17 +26,18 @@ public class Grimoire {
 		new Grimoire(System.getenv("BOT_TOKEN"));
 	}
 
-
-	private JDA discord;
-	private DBManager dbManager;
-	private PricingManager pricingManager;
-
 	// Model Controllers
+	private Cards cards;
+	private Sets sets;
 	private Tokens tokens;
 	private ComprehensiveRules comprehensiveRules;
 	private Definitions definitions;
 	private InfractionProcedureGuide infractionProcedureGuide;
 	private TournamentRules tournamentRules;
+
+	private PricingManager pricingManager;
+	private JDA discord;
+	private DBManager dbManager;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -61,9 +62,11 @@ public class Grimoire {
 				System.getenv("MONGO_PASSWORD")
 		);
 
-		// Instantiate pricing manager
-		this.pricingManager = new PricingManager();
-		this.pricingManager.init();
+		// Load sets and cards
+		MTGJSON mtgjson = new MTGJSON();
+		this.cards = new Cards(mtgjson);
+		this.sets = new Sets(mtgjson);
+		mtgjson.load();
 
 		// Load tokens
 		this.tokens = new Tokens();
@@ -84,6 +87,10 @@ public class Grimoire {
 		// Load infraction procedure guide
 		this.infractionProcedureGuide = new InfractionProcedureGuide();
 		this.infractionProcedureGuide.load();
+
+		// Instantiate pricing manager
+		this.pricingManager = new PricingManager();
+		this.pricingManager.init();
 
 		// Log in to Discord
 		try {
@@ -138,5 +145,13 @@ public class Grimoire {
 
 	public TournamentRules getTournamentRules() {
 		return tournamentRules;
+	}
+
+	public Cards getCards() {
+		return cards;
+	}
+
+	public Sets getSets() {
+		return sets;
 	}
 }
