@@ -22,6 +22,13 @@ public class Sets {
 	public MtgSet forceSingleByNameOrCode(String nameOrCode) {
 		List<MtgSet> sets = getByNameOrCode(nameOrCode);
 		if (sets.isEmpty()) return null;
+		MtgSet exactCodeMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getCode())).findAny().orElse(
+				sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getGathererCode())).findAny().orElse(
+						sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getOldCode())).findAny().orElse(null)
+				));
+		if (exactCodeMatch != null) return exactCodeMatch;
+		MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
+		if (exactNameMatch != null) return exactNameMatch;
 		return sets.get(0);
 	}
 
@@ -38,6 +45,8 @@ public class Sets {
 								sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getOldCode())).findAny().orElse(null)
 						));
 				if (exactCodeMatch != null) return exactCodeMatch;
+				MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
+				if (exactNameMatch != null) return exactNameMatch;
 				throw new MultipleResultsException(sets);
 			}
 		}
