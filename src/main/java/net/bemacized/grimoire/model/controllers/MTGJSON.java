@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +71,10 @@ public class MTGJSON {
 					return card;
 				})
 		).flatMap(o -> o).collect(Collectors.toList()));
+
+		// Sort lists by recency
+		setList.sort(Comparator.comparing(MtgSet::getReleaseDate).reversed());
+		cardList.sort((o1, o2) -> o2.getSet().getReleaseDate().compareTo(o1.getSet().getReleaseDate()));
 
 		LOG.info("Loaded " + setList.size() + " sets");
 		LOG.info("Loaded " + cardList.size() + " cards");

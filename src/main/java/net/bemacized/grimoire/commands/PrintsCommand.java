@@ -1,6 +1,5 @@
 package net.bemacized.grimoire.commands;
 
-import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.controllers.Cards;
 import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -8,7 +7,6 @@ import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PrintsCommand extends BaseCommand {
@@ -77,7 +75,7 @@ public class PrintsCommand extends BaseCommand {
 		}
 
 		// Show the sets
-		String sets = String.join("\n", Arrays.stream(card.getPrintings()).parallel().map(setCode -> Grimoire.getInstance().getSets().forceSingleByNameOrCode(setCode)).map(set -> String.format(":small_orange_diamond: %s (%s)", set.getName(), set.getCode())).collect(Collectors.toList()));
+		String sets = String.join("\n", new Cards.SearchQuery().hasExactName(card.getName()).stream().map(Card::getSet).map(set -> String.format(":small_orange_diamond: %s (%s)", set.getName(), set.getCode())).collect(Collectors.toList()));
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());

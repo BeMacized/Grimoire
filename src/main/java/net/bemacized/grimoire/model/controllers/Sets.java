@@ -5,6 +5,7 @@ import net.bemacized.grimoire.model.models.MtgSet;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Sets {
 
@@ -43,12 +44,14 @@ public class Sets {
 	}
 
 	public List<MtgSet> getByNameOrCode(String nameOrCode) {
-		return this.getSets().parallelStream()
-				.filter(set -> nameOrCode.equalsIgnoreCase(set.getCode())
-						|| nameOrCode.equalsIgnoreCase(set.getGathererCode())
-						|| nameOrCode.equalsIgnoreCase(set.getOldCode())
-						|| set.getName().toLowerCase().contains(nameOrCode.toLowerCase()))
-				.collect(Collectors.toList());
+		return Stream.concat(
+				this.getSets().parallelStream()
+						.filter(set -> nameOrCode.equalsIgnoreCase(set.getCode())
+								|| nameOrCode.equalsIgnoreCase(set.getGathererCode())
+								|| nameOrCode.equalsIgnoreCase(set.getOldCode())),
+				this.getSets().parallelStream()
+						.filter(set -> set.getName().toLowerCase().contains(nameOrCode.toLowerCase()))
+		).collect(Collectors.toList());
 	}
 
 	public class MultipleResultsException extends Exception {

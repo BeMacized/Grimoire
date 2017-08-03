@@ -3,8 +3,11 @@ package net.bemacized.grimoire.chathandlers;
 import net.bemacized.grimoire.commands.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,7 +44,15 @@ public class CommandHandler extends ChatHandler {
 		// Extract command and arguments
 		String[] data = e.getMessage().getContent().substring(1).split("\\s+");
 		String cmd = data[0];
-		String[] args = Arrays.copyOfRange(data, 1, data.length);
+		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(String.join(" ", Arrays.copyOfRange(data, 1, data.length)));
+		List<String> args = new ArrayList<>();
+		while (argsMatcher.find()) {
+			String arg = argsMatcher.group();
+			if (arg.startsWith("\"") && arg.endsWith("\"") && arg.length() > 1)
+				arg = arg.substring(1, arg.length() - 1);
+			arg = arg.replaceAll("\\\\\"", "\"");
+			args.add(arg);
+		}
 
 		// Search for command
 		BaseCommand command = commands
@@ -61,6 +72,6 @@ public class CommandHandler extends ChatHandler {
 		}
 
 		// Execute command otherwise
-		new Thread(() -> command.exec(args, e)).start();
+		new Thread(() -> command.exec(args.toArray(new String[0]), e)).start();
 	}
 }

@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.controllers.Cards;
 import net.bemacized.grimoire.model.models.Card;
+import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -29,7 +30,7 @@ public class RandomCommand extends BaseCommand {
 
 	@Override
 	public String paramUsage() {
-		return "<[supertype] [type] [subtype] [rarity]>...";
+		return "<[supertype] [type] [subtype] [rarity] [set] [setcode]>...";
 	}
 
 	@Override
@@ -38,6 +39,7 @@ public class RandomCommand extends BaseCommand {
 		List<String> types = new ArrayList<>();
 		List<String> subtypes = new ArrayList<>();
 		String rarity = null;
+		MtgSet set = null;
 
 		// Send load message
 		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true);
@@ -54,6 +56,7 @@ public class RandomCommand extends BaseCommand {
 
 		// Extract filters
 		for (String arg : args) {
+			MtgSet tmpSet = Grimoire.getInstance().getSets().forceSingleByNameOrCode(arg);
 			if (allSupertypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 				if (!supertypes.contains(arg.toLowerCase())) supertypes.add(arg.toLowerCase());
 			} else if (allTypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
@@ -66,8 +69,14 @@ public class RandomCommand extends BaseCommand {
 					return;
 				}
 				rarity = rarityAliases.containsKey(arg.toLowerCase()) ? rarityAliases.get(arg.toLowerCase()) : arg.substring(0, 1).toUpperCase() + arg.substring(1).toLowerCase();
+			} else if (tmpSet != null) {
+				if (set != null) {
+					loadMsg.finalizeFormat("<@%s>, please do not specify more than one set", e.getAuthor().getId(), arg);
+					return;
+				}
+				set = tmpSet;
 			} else {
-				loadMsg.finalizeFormat("<@%s>, **'%s'** is neither a rarity, type, supertype or subtype. Please only specify valid properties.", e.getAuthor().getId(), arg);
+				loadMsg.finalizeFormat("<@%s>, **'%s'** is neither a rarity, set, setcode, type, supertype or subtype. Please only specify valid properties.", e.getAuthor().getId(), arg);
 				return;
 			}
 		}
@@ -78,7 +87,14 @@ public class RandomCommand extends BaseCommand {
 			addAll(types);
 			addAll(subtypes);
 		}}.parallelStream().filter(Objects::nonNull).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1, t.length())).collect(Collectors.toList()));
-		loadMsg.setLineFormat("Drawing random %s%s...", rarity == null ? "" : rarity + " ", joinedType);
+		List<String> properties = new ArrayList<>();
+		if (rarity != null) properties.add(rarity);
+		if (joinedType != null && !joinedType.isEmpty()) properties.add(joinedType);
+		if (set != null) properties.add(String.format("from set '%s (%s)'", set.getName(), set.getCode()));
+		loadMsg.setLineFormat(
+				"Drawing random %s...",
+				String.join(" ", properties)
+		);
 
 		//Find cards
 		Cards.SearchQuery query = new Cards.SearchQuery();
@@ -86,6 +102,7 @@ public class RandomCommand extends BaseCommand {
 		for (String type : types) query = query.hasType(type);
 		for (String subtype : subtypes) query = query.hasSubtype(subtype);
 		if (rarity != null) query = query.isOfRarity(rarity);
+		if (set != null) query = query.inSet(set);
 
 		//Stop if none found
 		if (query.isEmpty()) {
@@ -98,7 +115,9 @@ public class RandomCommand extends BaseCommand {
 
 		// Build the embed
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setAuthor("Random " + joinedType, null, null);
+		if (("Random " + String.join(" ", properties)).length() <= 128)
+			eb.setAuthor("Random " + String.join(" ", properties), null, null);
+		else eb.appendDescription("Random " + String.join(" ", properties) + "\n");
 		eb.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
