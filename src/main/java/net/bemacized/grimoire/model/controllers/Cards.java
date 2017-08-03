@@ -34,6 +34,10 @@ public class Cards {
 		return getCards().parallelStream().map(c -> Arrays.stream(c.getTypes())).flatMap(o -> o).distinct().collect(Collectors.toList());
 	}
 
+	public List<String> getAllRarities() {
+		return getCards().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList());
+	}
+
 	public static class SearchQuery extends ArrayList<Card> {
 
 		public SearchQuery() {
@@ -68,6 +72,10 @@ public class Cards {
 			return new SearchQuery(this.parallelStream().filter(card -> card.getSet().equals(set)).collect(Collectors.toList()));
 		}
 
+		public SearchQuery isOfRarity(String rarity) {
+			return new SearchQuery(this.parallelStream().filter(card -> card.getRarity().equalsIgnoreCase(rarity)).collect(Collectors.toList()));
+		}
+
 		public SearchQuery distinctSets() {
 			return new SearchQuery(this.parallelStream().filter(distinctByKey(card -> card.getSet().getCode())).collect(Collectors.toList()));
 		}
@@ -80,6 +88,7 @@ public class Cards {
 			Map<Object, Boolean> seen = new ConcurrentHashMap<>();
 			return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
 		}
+
 
 	}
 }
