@@ -265,7 +265,7 @@ public class Card implements Cloneable {
 	private String getFreshImageUrl() {
 		// Check Scryfall presence
 		String scryfallURL = multiverseid > 0 ?
-				String.format("https://api.scryfall.com/cards/multiverse/%s", multiverseid) :
+				String.format("https://api.scryfall.com/cards/multiverse/%s?format=image", multiverseid) :
 				String.format("https://api.scryfall.com/cards/%s/%s?format=image", set.getCode().toLowerCase(), number);
 		if (imageAvailable(scryfallURL))
 			return scryfallURL;

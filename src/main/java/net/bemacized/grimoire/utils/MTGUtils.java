@@ -71,7 +71,7 @@ public class MTGUtils {
 
 	public static Color colorIdentitiesToColor(String[] colorCodes) {
 		// Return null if none provided
-		if (colorCodes == null) return Color.GRAY;
+		if (colorCodes == null) return new Color(128, 128, 128);
 		// First try parsing away full colour names
 		colorCodes = Arrays.stream(colorCodes).map(MTGUtils::colourNameToId).collect(Collectors.toList()).toArray(new String[0]);
 		// Return the colour identity
@@ -85,7 +85,7 @@ public class MTGUtils {
 			case "U":
 				return new Color(0, 153, 255);
 			case "W":
-				return Color.WHITE;
+				return new Color(255, 255, 255);
 			case "BG":
 			case "BR":
 			case "BU":
@@ -109,9 +109,9 @@ public class MTGUtils {
 			case "BGRU":
 			case "GRUW":
 			case "BGRUW":
-				return Color.ORANGE;
+				return new Color(255, 200, 0);
 			default:
-				return Color.GRAY;
+				return new Color(128, 128, 128);
 		}
 	}
 
