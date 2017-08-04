@@ -348,8 +348,6 @@ CNS=Conspiracy
 VMA=
 #Magic 2015 Core Set
 M15=Magic 2015
-#Clash Pack
-CPK=Clash Pack Promos
 #From the Vault: Annihilation (2014)
 V14=From the Vault: Annihilation
 #Duel Decks: Speed vs. Cunning

@@ -1,8 +1,8 @@
-package net.bemacized.grimoire.pricing.apis;
+package net.bemacized.grimoire.model.models.storeAPIs;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.controllers.Sets;
 import net.bemacized.grimoire.model.models.Card;
-import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
@@ -30,13 +30,13 @@ public abstract class StoreAPI {
 
 	public abstract String[] supportedLanguages();
 
-	public abstract void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException;
+	public abstract void updateSets() throws UnknownStoreException, StoreAuthException, StoreServerErrorException;
 
 	protected abstract StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException;
 
 	public StoreCardPriceRecord getPrice(Card card) throws StoreServerErrorException, StoreAuthException, UnknownStoreException, StoreSetUnknownException, LanguageUnsupportedException {
 		// Check language support
-		if (!Arrays.stream(supportedLanguages()).anyMatch(lang -> lang.equalsIgnoreCase(card.getLanguage())))
+		if (Arrays.stream(supportedLanguages()).noneMatch(lang -> lang.equalsIgnoreCase(card.getLanguage())))
 			throw new LanguageUnsupportedException(card.getLanguage());
 
 		// Fetch record
@@ -158,7 +158,7 @@ public abstract class StoreAPI {
 
 		// Parse config
 		Map<String, String> map = new HashMap<>();
-		Pattern pattern = Pattern.compile("[^=\\n\\r]+[=].*?(?=[#])?");
+		Pattern pattern = Pattern.compile("[^#][^=\\n\\r]+[=].*?(?=[#])?");
 		for (String s : configText.split("[\r\n]")) {
 			Matcher matcher = pattern.matcher(s.trim());
 			if (matcher.find()) {

@@ -1,5 +1,8 @@
 package net.bemacized.grimoire.model.models;
 
+import net.bemacized.grimoire.Grimoire;
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -194,7 +197,7 @@ public class Card implements Cloneable {
 	}
 
 	public String getImageUrl() {
-		if (imageUrl == null) imageUrl = getFreshImageUrl();
+		if (imageUrl == null) imageUrl = Grimoire.getInstance().getImageProviders().findUrl(this);
 		return imageUrl;
 	}
 
@@ -259,32 +262,6 @@ public class Card implements Cloneable {
 
 		public int getMultiverseid() {
 			return multiverseid;
-		}
-	}
-
-	private String getFreshImageUrl() {
-		// Check Scryfall presence
-		String scryfallURL = multiverseid > 0 ?
-				String.format("https://api.scryfall.com/cards/multiverse/%s?format=image", multiverseid) :
-				String.format("https://api.scryfall.com/cards/%s/%s?format=image", set.getCode().toLowerCase(), number);
-		if (imageAvailable(scryfallURL))
-			return scryfallURL;
-		// Check Gatherer presence
-		if (multiverseid <= 0) return null;
-		String gathererUrl = String.format("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=%s&type=card", multiverseid);
-		if (imageAvailable(gathererUrl))
-			return gathererUrl;
-		// None found
-		return null;
-	}
-
-	private boolean imageAvailable(String url) {
-		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-			con.connect();
-			return con.getResponseCode() == 200;
-		} catch (IOException e) {
-			return false;
 		}
 	}
 

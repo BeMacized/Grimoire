@@ -1,9 +1,9 @@
-package net.bemacized.grimoire.pricing;
+package net.bemacized.grimoire.model.controllers;
 
 import net.bemacized.grimoire.model.models.Card;
-import net.bemacized.grimoire.pricing.apis.MagicCardMarketAPI;
-import net.bemacized.grimoire.pricing.apis.StoreAPI;
-import net.bemacized.grimoire.pricing.apis.TCGPlayerAPI;
+import net.bemacized.grimoire.model.models.storeAPIs.MagicCardMarketAPI;
+import net.bemacized.grimoire.model.models.storeAPIs.StoreAPI;
+import net.bemacized.grimoire.model.models.storeAPIs.TCGPlayerAPI;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -19,12 +19,9 @@ public class PricingManager {
 
 	private final static Logger LOG = Logger.getLogger(PricingManager.class.getName());
 
-	private SetDictionary setDictionary;
-
 	private List<StoreAPI> stores;
 
 	public PricingManager() {
-		this.setDictionary = new SetDictionary();
 		this.stores = new ArrayList<StoreAPI>() {{
 			add(new MagicCardMarketAPI(
 					System.getenv("MCM_HOST"),
@@ -109,20 +106,15 @@ public class PricingManager {
 	public void init() {
 		this.stores.forEach(store -> {
 			try {
-				store.updateSetDictionary(setDictionary);
+				store.updateSets();
 			} catch (StoreAPI.StoreAuthException e) {
-				LOG.log(Level.SEVERE, "Authentication error occurred with " + store.getStoreName() + " while updating the set dictionary", e);
+				LOG.log(Level.SEVERE, "Authentication error occurred with " + store.getStoreName() + " while updating set names", e);
 			} catch (StoreAPI.StoreServerErrorException e) {
-				LOG.log(Level.WARNING, "Server error occurred with " + store.getStoreName() + " while updating the set dictionary", e);
+				LOG.log(Level.WARNING, "Server error occurred with " + store.getStoreName() + " while updating set names", e);
 			} catch (StoreAPI.UnknownStoreException e) {
-				LOG.log(Level.SEVERE, "Unknown error occurred with " + store.getStoreName() + " while updating the set dictionary", e);
+				LOG.log(Level.SEVERE, "Unknown error occurred with " + store.getStoreName() + " while updating set names", e);
 			}
 		});
-		setDictionary.save();
-	}
-
-	public SetDictionary getSetDictionary() {
-		return setDictionary;
 	}
 
 	public class StoreCardPrice {

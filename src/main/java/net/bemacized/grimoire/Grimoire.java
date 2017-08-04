@@ -3,7 +3,8 @@ package net.bemacized.grimoire;
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.model.controllers.*;
-import net.bemacized.grimoire.pricing.PricingManager;
+import net.bemacized.grimoire.model.controllers.PricingManager;
+import net.bemacized.grimoire.model.models.imageproviders.ImageProvider;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -34,8 +35,9 @@ public class Grimoire {
 	private Definitions definitions;
 	private InfractionProcedureGuide infractionProcedureGuide;
 	private TournamentRules tournamentRules;
-
 	private PricingManager pricingManager;
+	private ImageProviders imageProviders;
+
 	private JDA discord;
 	private DBManager dbManager;
 
@@ -61,6 +63,9 @@ public class Grimoire {
 				System.getenv("MONGO_USER"),
 				System.getenv("MONGO_PASSWORD")
 		);
+
+		// Setup image providers
+		this.imageProviders = new ImageProviders();
 
 		// Load sets and cards
 		MTGJSON mtgjson = new MTGJSON();
@@ -153,5 +158,9 @@ public class Grimoire {
 
 	public Sets getSets() {
 		return sets;
+	}
+
+	public ImageProviders getImageProviders() {
+		return imageProviders;
 	}
 }

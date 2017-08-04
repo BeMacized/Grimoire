@@ -119,6 +119,12 @@ public class ArtCommand extends BaseCommand {
 			return;
 		}
 
+		// Check if an image is available
+		if (card.getImageUrl() == null) {
+			loadMsg.finalizeFormat("<@%s>, There is no known art for **'%s'**.", e.getAuthor().getId(), cardname);
+			return;
+		}
+
 		// Update load text
 		loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
 

@@ -1,8 +1,7 @@
-package net.bemacized.grimoire.pricing.apis;
+package net.bemacized.grimoire.model.models.storeAPIs;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
-import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -47,17 +46,16 @@ public class TCGPlayerAPI extends StoreAPI {
 	}
 
 	@Override
-	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
+	public void updateSets() throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
 		Map<String, String> map = this.parseSetDictionary();
-		map.forEach((key, value) -> setDictionary.getItem(key).setStoreSetName(getStoreId(), value));
+		map.entrySet().stream().filter(e -> e.getValue() != null && !e.getValue().isEmpty()).forEach(e -> Grimoire.getInstance().getSets().getByCode(e.getKey()).setStoreSetName(getStoreId(), e.getValue()));
 		LOG.info(getStoreName() + ": Loaded " + map.entrySet().parallelStream().filter(e -> e.getValue() != null).count() + " sets.");
 	}
 
 	@Override
 	protected StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
 		// First fetch TCG set name
-		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet().getCode());
-		if (setDictionaryItem.getStoreSetName(getStoreId()) == null)
+		if (card.getSet().getStoreSetName(getStoreId()) == null)
 			throw new StoreSetUnknownException();
 
 		// Construct endpoint URL
@@ -68,7 +66,7 @@ public class TCGPlayerAPI extends StoreAPI {
 					TCG_HOST,
 					URLEncoder.encode(TCG_KEY, "UTF-8"),
 					URLEncoder.encode(card.getName(), "UTF-8"),
-					"&s=" + URLEncoder.encode(setDictionaryItem.getStoreSetName(getStoreId()), "UTF-8")
+					"&s=" + URLEncoder.encode(card.getSet().getStoreSetName(getStoreId()), "UTF-8")
 			);
 		} catch (UnsupportedEncodingException e) {
 			LOG.log(Level.SEVERE, "Could not construct endpoint url for price fetching", e);

@@ -1,5 +1,8 @@
 package net.bemacized.grimoire.model.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MtgSet {
 
 	private String name;
@@ -13,6 +16,12 @@ public class MtgSet {
 	private String block;
 	private boolean onlineOnly;
 	private Object[] booster;
+
+	private transient Map<String, String> storeSetNames;
+
+	public MtgSet() {
+		storeSetNames = new HashMap<>();
+	}
 
 	public String getName() {
 		return name;
@@ -56,6 +65,14 @@ public class MtgSet {
 
 	public Object[] getBooster() {
 		return booster;
+	}
+
+	public String getStoreSetName(String storeId) {
+		return storeSetNames.get(storeId);
+	}
+
+	public void setStoreSetName(String storeId, String setName) {
+		storeSetNames.put(storeId, setName);
 	}
 
 	@Override

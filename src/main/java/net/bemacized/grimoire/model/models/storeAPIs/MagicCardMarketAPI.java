@@ -1,8 +1,7 @@
-package net.bemacized.grimoire.pricing.apis;
+package net.bemacized.grimoire.model.models.storeAPIs;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
-import net.bemacized.grimoire.pricing.SetDictionary;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -49,17 +48,16 @@ public class MagicCardMarketAPI extends StoreAPI {
 
 	@SuppressWarnings("Duplicates")
 	@Override
-	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
+	public void updateSets() throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
 		Map<String, String> map = this.parseSetDictionary();
-		map.forEach((key, value) -> setDictionary.getItem(key).setStoreSetName(getStoreId(), value));
+		map.entrySet().stream().filter(e -> e.getValue() != null && !e.getValue().isEmpty()).forEach(e -> Grimoire.getInstance().getSets().getByCode(e.getKey()).setStoreSetName(getStoreId(), e.getValue()));
 		LOG.info(getStoreName() + ": Loaded " + map.entrySet().parallelStream().filter(e -> e.getValue() != null).count() + " sets.");
 	}
 
 	@Override
 	protected StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
 		// First fetch MCM set name
-		final SetDictionary.SetDictionaryItem setDictionaryItem = Grimoire.getInstance().getPricingManager().getSetDictionary().getItem(card.getSet().getCode());
-		if (setDictionaryItem.getStoreSetName(getStoreId()) == null)
+		if (card.getSet().getStoreSetName(getStoreId()) == null)
 			throw new StoreSetUnknownException();
 
 		// Construct endpoint URL
@@ -117,7 +115,7 @@ public class MagicCardMarketAPI extends StoreAPI {
 						response.getJSONArray("product").iterator(),
 						Spliterator.ORDERED),
 				false
-		).parallel().filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(setDictionaryItem.getStoreSetName(getStoreId())))).findFirst().orElse(null);
+		).parallel().filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(card.getSet().getStoreSetName(getStoreId())))).findFirst().orElse(null);
 		// Return null if we didn't find anything
 		if (product == null) return null;
 

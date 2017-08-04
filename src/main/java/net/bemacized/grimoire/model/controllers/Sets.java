@@ -22,10 +22,7 @@ public class Sets {
 	public MtgSet forceSingleByNameOrCode(String nameOrCode) {
 		List<MtgSet> sets = getByNameOrCode(nameOrCode);
 		if (sets.isEmpty()) return null;
-		MtgSet exactCodeMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getCode())).findAny().orElse(
-				sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getGathererCode())).findAny().orElse(
-						sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getOldCode())).findAny().orElse(null)
-				));
+		MtgSet exactCodeMatch = getByCode(nameOrCode);
 		if (exactCodeMatch != null) return exactCodeMatch;
 		MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
 		if (exactNameMatch != null) return exactNameMatch;
@@ -40,10 +37,7 @@ public class Sets {
 			case 1:
 				return sets.get(0);
 			default: {
-				MtgSet exactCodeMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getCode())).findAny().orElse(
-						sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getGathererCode())).findAny().orElse(
-								sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getOldCode())).findAny().orElse(null)
-						));
+				MtgSet exactCodeMatch = getByCode(nameOrCode);
 				if (exactCodeMatch != null) return exactCodeMatch;
 				MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
 				if (exactNameMatch != null) return exactNameMatch;
@@ -61,6 +55,13 @@ public class Sets {
 				this.getSets().parallelStream()
 						.filter(set -> set.getName().toLowerCase().contains(nameOrCode.toLowerCase()))
 		).collect(Collectors.toList());
+	}
+
+	public MtgSet getByCode(String code) {
+		return mtgjson.getSetList().parallelStream().filter(set -> code.equalsIgnoreCase(set.getCode())).findAny().orElse(
+				mtgjson.getSetList().parallelStream().filter(set -> code.equalsIgnoreCase(set.getGathererCode())).findAny().orElse(
+						mtgjson.getSetList().parallelStream().filter(set -> code.equalsIgnoreCase(set.getOldCode())).findAny().orElse(null)
+				));
 	}
 
 	public class MultipleResultsException extends Exception {
