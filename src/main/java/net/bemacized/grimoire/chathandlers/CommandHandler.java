@@ -29,7 +29,8 @@ public class CommandHandler extends ChatHandler {
 				new CompRulesCommand(),
 				new DefineCommand(),
 				new TournamentRulesCommand(),
-				new InfractionProcedureGuideCommand()
+				new InfractionProcedureGuideCommand(),
+				new NamesCommand()
 		).collect(Collectors.toList());
 	}
 

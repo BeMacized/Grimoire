@@ -80,10 +80,7 @@ public class ArtCommand extends BaseCommand {
 
 		// Retrieve card
 		Card card;
-		Cards.SearchQuery baseQuery = new Cards.SearchQuery().foreignAllowed().hasName(cardname);
-		if (set != null) baseQuery = baseQuery.inSet(set);
-		Cards.SearchQuery foreignQuery = baseQuery;
-		Cards.SearchQuery query = baseQuery.foreignAllowed(false);
+		Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardname).inSet(set);
 
 		// Find exact match
 		if (!query.hasExactName(cardname).isEmpty())
@@ -93,6 +90,7 @@ public class ArtCommand extends BaseCommand {
 			card = query.distinctNames().get(0);
 			// No results then?
 		else if (query.isEmpty()) {
+			Cards.SearchQuery foreignQuery = new Cards.SearchQuery().foreignAllowed().hasName(cardname).inSet(set);
 			// Check if there's an exact foreign match
 			if (!foreignQuery.hasExactName(cardname).isEmpty())
 				card = foreignQuery.hasExactName(cardname).get(0);

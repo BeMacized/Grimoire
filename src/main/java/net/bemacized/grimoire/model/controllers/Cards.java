@@ -70,6 +70,7 @@ public class Cards {
 		}
 
 		public SearchQuery inSet(MtgSet set) {
+			if (set == null) return this;
 			return new SearchQuery(this.parallelStream().filter(card -> card.getSet().equals(set)).collect(Collectors.toList()));
 		}
 
