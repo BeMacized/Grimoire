@@ -72,8 +72,7 @@ public class PriceRetrieveHandler extends ChatHandler {
 
 			// Retrieve card
 			Card card;
-			Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardname);
-			if (set != null) query = query.inSet(set);
+			Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardname).inSet(set);
 
 			// Find exact match
 			if (!query.hasExactName(cardname).isEmpty())
@@ -83,11 +82,20 @@ public class PriceRetrieveHandler extends ChatHandler {
 				card = query.distinctNames().get(0);
 				// No results then?
 			else if (query.isEmpty()) {
-				if (set == null)
+				Cards.SearchQuery foreignQuery = new Cards.SearchQuery().foreignAllowed().hasName(cardname).inSet(set);
+				// Check if there's an exact foreign match
+				if (!foreignQuery.hasExactName(cardname).isEmpty())
+					card = foreignQuery.hasExactName(cardname).get(0);
+					// Check if there's a single foreign match
+				else if (foreignQuery.distinctNames().size() == 1)
+					card = foreignQuery.distinctNames().get(0);
+				else if (set == null) {
 					loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname);
-				else
+					return;
+				} else {
 					loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardname, set.getName(), set.getCode());
-				return;
+					return;
+				}
 			}
 			// We got multiple results. Check if too many?
 			else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {

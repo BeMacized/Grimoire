@@ -10,6 +10,7 @@ import org.jongo.marshall.jackson.oid.MongoObjectId;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -27,11 +28,17 @@ public abstract class StoreAPI {
 
 	public abstract String getStoreId();
 
+	public abstract String[] supportedLanguages();
+
 	public abstract void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException;
 
 	protected abstract StoreCardPriceRecord getPriceFresh(Card card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException;
 
-	public StoreCardPriceRecord getPrice(Card card) throws StoreServerErrorException, StoreAuthException, UnknownStoreException, StoreSetUnknownException {
+	public StoreCardPriceRecord getPrice(Card card) throws StoreServerErrorException, StoreAuthException, UnknownStoreException, StoreSetUnknownException, LanguageUnsupportedException {
+		// Check language support
+		if (!Arrays.stream(supportedLanguages()).anyMatch(lang -> lang.equalsIgnoreCase(card.getLanguage())))
+			throw new LanguageUnsupportedException(card.getLanguage());
+
 		// Fetch record
 		MongoCollection collection = Grimoire.getInstance().getDBManager().getJongo().getCollection("StoreCardPrices");
 		StoreCardPriceRecord record = collection.findOne(String.format(
@@ -124,6 +131,19 @@ public abstract class StoreAPI {
 	}
 
 	public class StoreSetUnknownException extends Exception {
+	}
+
+	public class LanguageUnsupportedException extends Exception {
+
+		private String language;
+
+		LanguageUnsupportedException(String language) {
+			this.language = language;
+		}
+
+		public String getLanguage() {
+			return language;
+		}
 	}
 
 	protected Map<String, String> parseSetDictionary() {

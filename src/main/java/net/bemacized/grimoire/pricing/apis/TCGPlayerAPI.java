@@ -42,6 +42,11 @@ public class TCGPlayerAPI extends StoreAPI {
 	}
 
 	@Override
+	public String[] supportedLanguages() {
+		return new String[]{"English"};
+	}
+
+	@Override
 	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
 		Map<String, String> map = this.parseSetDictionary();
 		map.forEach((key, value) -> setDictionary.getItem(key).setStoreSetName(getStoreId(), value));

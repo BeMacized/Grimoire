@@ -42,6 +42,11 @@ public class MagicCardMarketAPI extends StoreAPI {
 		return "MCM";
 	}
 
+	@Override
+	public String[] supportedLanguages() {
+		return new String[]{"English"};
+	}
+
 	@SuppressWarnings("Duplicates")
 	@Override
 	public void updateSetDictionary(SetDictionary setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {

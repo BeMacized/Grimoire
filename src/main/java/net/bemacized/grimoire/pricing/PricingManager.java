@@ -50,7 +50,9 @@ public class PricingManager {
 			} catch (StoreAPI.UnknownStoreException e) {
 				return new StoreCardPrice(StoreCardPriceStatus.UNKNOWN_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 			} catch (StoreAPI.StoreSetUnknownException e) {
-				return new StoreCardPrice(StoreCardPriceStatus.SET_UNKNOWN, card, store.getStoreName(), store.getStoreId(), null);
+				return new StoreCardPrice(StoreCardPriceStatus.SET_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
+			} catch (StoreAPI.LanguageUnsupportedException e) {
+				return new StoreCardPrice(StoreCardPriceStatus.LANGUAGE_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
 			}
 		}).collect(Collectors.toList());
 	}
@@ -88,11 +90,14 @@ public class PricingManager {
 				case AUTH_ERROR:
 					priceText = "Could not authenticate.";
 					break;
-				case SET_UNKNOWN:
-					priceText = "Card set not supported.";
+				case SET_UNSUPPORTED:
+					priceText = "Set not supported.";
 					break;
 				case SERVER_ERROR:
 					priceText = "Store is having server problems.";
+					break;
+				case LANGUAGE_UNSUPPORTED:
+					priceText = "Language not supported.";
 					break;
 			}
 			priceEmbed.addField(storeprice.getStoreName(), priceText, true);
@@ -160,8 +165,9 @@ public class PricingManager {
 		SUCCESS,
 		SERVER_ERROR,
 		AUTH_ERROR,
-		SET_UNKNOWN,
+		SET_UNSUPPORTED,
 		UNKNOWN_ERROR,
-		CARD_UNKNOWN
+		CARD_UNKNOWN,
+		LANGUAGE_UNSUPPORTED
 	}
 }
