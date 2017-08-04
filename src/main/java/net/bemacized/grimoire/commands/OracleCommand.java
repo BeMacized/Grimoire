@@ -57,8 +57,17 @@ public class OracleCommand extends BaseCommand {
 			card = query.distinctNames().get(0);
 			// No results then?
 		else if (query.isEmpty()) {
-			e.getChannel().sendMessageFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname).submit();
-			return;
+			Cards.SearchQuery foreignQuery = new Cards.SearchQuery().foreignAllowed().hasName(cardname);
+			// Check if there's an exact foreign match
+			if (!foreignQuery.hasExactName(cardname).isEmpty())
+				card = foreignQuery.hasExactName(cardname).get(0);
+				// Check if there's a single foreign match
+			else if (foreignQuery.distinctNames().size() == 1)
+				card = foreignQuery.distinctNames().get(0);
+			else {
+				e.getChannel().sendMessageFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname).submit();
+				return;
+			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
