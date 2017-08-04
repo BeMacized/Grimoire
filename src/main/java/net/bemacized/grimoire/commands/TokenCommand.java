@@ -1,7 +1,6 @@
 package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.model.models.Token;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;

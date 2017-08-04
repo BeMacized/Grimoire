@@ -1,7 +1,6 @@
 package net.bemacized.grimoire.pricing;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.model.controllers.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;

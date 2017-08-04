@@ -116,8 +116,10 @@ public class MTGUtils {
 	}
 
 	public static String parseEmoji(Guild guild, String msg) {
-		// Return message if we don't have the necessary info
-		if (guild == null || msg == null || msg.isEmpty()) return "";
+		// Return message if the guild is null
+		if (guild == null) return msg;
+		// Return an empty string if we don't have the necessary info
+		if (msg == null || msg.isEmpty()) return "";
 		// Define emoji mapping
 		Map<String, String> emojiMap = new HashMap<String, String>() {{
 			put("W", "manaW");

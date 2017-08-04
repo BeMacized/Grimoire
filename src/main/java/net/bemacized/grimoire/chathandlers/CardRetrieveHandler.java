@@ -83,8 +83,10 @@ public class CardRetrieveHandler extends ChatHandler {
 
 		// Retrieve card
 		Card card;
-		Cards.SearchQuery query = new Cards.SearchQuery().hasName(cardReq.getCardName());
-		if (set != null) query = query.inSet(set);
+		Cards.SearchQuery baseQuery = new Cards.SearchQuery().foreignAllowed().hasName(cardReq.getCardName());
+		if (set != null) baseQuery = baseQuery.inSet(set);
+		Cards.SearchQuery foreignQuery = baseQuery;
+		Cards.SearchQuery query = baseQuery.foreignAllowed(false);
 
 		// Find exact match
 		if (!query.hasExactName(cardReq.getCardName()).isEmpty())
@@ -94,11 +96,19 @@ public class CardRetrieveHandler extends ChatHandler {
 			card = query.distinctNames().get(0);
 			// No results then?
 		else if (query.isEmpty()) {
-			if (set == null)
+			// Check if there's an exact foreign match
+			if (!foreignQuery.hasExactName(cardReq.getCardName()).isEmpty())
+				card = foreignQuery.hasExactName(cardReq.getCardName()).get(0);
+				// Check if there's a single foreign match
+			else if (foreignQuery.distinctNames().size() == 1)
+				card = foreignQuery.distinctNames().get(0);
+			else if (set == null) {
 				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardReq.getCardName());
-			else
+				return;
+			} else {
 				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardReq.getCardName(), set.getName(), set.getCode());
-			return;
+				return;
+			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
@@ -125,7 +135,8 @@ public class CardRetrieveHandler extends ChatHandler {
 				.map(Card.Legality::getFormat)
 				.collect(Collectors.toList()));
 		String rarities = String.join(", ", new Cards.SearchQuery().hasExactName(card.getName()).parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
-		String printings = String.join(", ", new String[]{"**" + card.getSet().getName() + " (" + card.getSet().getCode() + ")**", String.join(", ", Arrays.stream(card.getPrintings()).parallel().filter(setCode -> !card.getSet().getCode().equalsIgnoreCase(setCode)).collect(Collectors.toList()))});
+		String printings = String.join(", ", new String[]{"**" + card.getSet().getName() + " (" + card.getSet().getCode() + ")**", String.join(", ", Arrays.stream(card.getPrintings()).parallel().filter(setCode -> !card.getSet().getCode().equalsIgnoreCase(setCode)).collect(Collectors.toList()))}).trim();
+		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
 		String pat = MTGUtils.parsePowerAndToughness(card.getPower(), card.getToughness());
 
 		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---

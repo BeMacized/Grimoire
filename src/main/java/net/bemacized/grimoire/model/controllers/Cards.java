@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Cards {
 
@@ -82,6 +83,20 @@ public class Cards {
 
 		public SearchQuery distinctNames() {
 			return new SearchQuery(this.parallelStream().filter(distinctByKey(Card::getName)).collect(Collectors.toList()));
+		}
+
+		public SearchQuery foreignAllowed() {
+			return foreignAllowed(true);
+		}
+
+		public SearchQuery foreignAllowed(boolean value) {
+			return value
+					? new SearchQuery(this.parallelStream().map(card -> Stream.concat(Stream.of(card), Arrays.stream(card.getForeignVersions()))).flatMap(o -> o).collect(Collectors.toList()))
+					: new SearchQuery(this.parallelStream().filter(card -> card.getLanguage().equalsIgnoreCase("English")).collect(Collectors.toList()));
+		}
+
+		public SearchQuery hasMultiverseId(int multiverseId) {
+			return new SearchQuery(this.parallelStream().filter(card -> card.getMultiverseid() == multiverseId).collect(Collectors.toList()));
 		}
 
 		private <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

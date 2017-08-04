@@ -1,7 +1,5 @@
 package net.bemacized.grimoire.model.models;
 
-import java.util.Arrays;
-
 public class MtgSet {
 
 	private String name;
