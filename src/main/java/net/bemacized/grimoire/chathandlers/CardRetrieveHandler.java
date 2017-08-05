@@ -125,7 +125,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				//		}
 
 				String title = card.getName();
-				String separateCost = Grimoire.getInstance().getEmojiParser().parseEmoji(card.getManaCost(), e.getGuild()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
+				String separateCost = (card.getManaCost() == null || card.getManaCost().isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(card.getManaCost(), e.getGuild()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
 				//TODO: ---END
 
 				// Build the embed
