@@ -125,7 +125,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				//		}
 
 				String title = card.getName();
-				String separateCost = MTGUtils.parseEmoji(e.getGuild(), card.getManaCost()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
+				String separateCost = Grimoire.getInstance().getEmojiParser().parseEmoji(card.getManaCost(), e.getGuild()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
 				//TODO: ---END
 
 				// Build the embed
@@ -137,7 +137,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 				eb.appendDescription(card.getType());
 				eb.appendDescription("\n\n");
-				eb.appendDescription(MTGUtils.parseEmoji(e.getGuild(), card.getText()));
+				eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(card.getText(), e.getGuild()));
 				if (!formats.isEmpty()) eb.addField("Formats", formats, true);
 				if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
 				if (!printings.isEmpty()) eb.addField("Printings", printings, true);
@@ -146,7 +146,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				loadMsg.complete(eb.build());
 			}).start();
 		}
-		
+
 		next.handle(e);
 	}
 }

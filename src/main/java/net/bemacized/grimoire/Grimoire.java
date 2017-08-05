@@ -3,18 +3,21 @@ package net.bemacized.grimoire;
 import net.bemacized.grimoire.database.DBManager;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.model.controllers.*;
-import net.bemacized.grimoire.model.controllers.PricingManager;
-import net.bemacized.grimoire.model.models.imageproviders.ImageProvider;
-import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Grimoire {
 
@@ -39,6 +42,7 @@ public class Grimoire {
 	private TournamentRules tournamentRules;
 	private PricingManager pricingManager;
 	private ImageProviders imageProviders;
+	private EmojiParser emojiParser;
 
 	private JDA discord;
 	private DBManager dbManager;
@@ -120,6 +124,9 @@ public class Grimoire {
 
 		// Register EventHandlers
 		discord.addEventListener(new MainChatProcessor());
+
+		// Instantiate Emoji parser
+		this.emojiParser = new EmojiParser();
 	}
 
 	public JDA getDiscord() {
@@ -164,5 +171,9 @@ public class Grimoire {
 
 	public ImageProviders getImageProviders() {
 		return imageProviders;
+	}
+
+	public EmojiParser getEmojiParser() {
+		return emojiParser;
 	}
 }

@@ -37,7 +37,6 @@ public class HelpCommand extends BaseCommand {
 
 	@Override
 	public void exec(String[] args, MessageReceivedEvent e) {
-		//TODO: REVAMP
 		// Construct message
 		final StringBuilder sb = new StringBuilder();
 		// Add header

@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands;
 
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.controllers.Cards;
 import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -63,7 +64,7 @@ public class OracleCommand extends BaseCommand {
 				// Check if there's a single foreign match
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
-			else{
+			else {
 				sendEmbedFormat(e.getChannel(), "There are no results for a card named **'%s'**", cardname);
 				return;
 			}
@@ -85,7 +86,7 @@ public class OracleCommand extends BaseCommand {
 				new EmbedBuilder()
 						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
-						.addField("Oracle Text", MTGUtils.parseEmoji(e.getGuild(), card.getText()), false)
+						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getText(), e.getGuild()), false)
 						.build()
 		).submit();
 	}
