@@ -6,6 +6,8 @@ import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.stream.Collectors;
+
 public class NamesCommand extends BaseCommand {
 
 	private final static int MAX_CARD_ALTERNATIVES = 15;
@@ -38,10 +40,7 @@ public class NamesCommand extends BaseCommand {
 
 		// Quit and error out if none provided
 		if (cardname.isEmpty()) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, please provide a card name to check names for!",
-					e.getAuthor().getId()
-			).submit();
+			sendEmbed(e.getChannel(),"Please provide a card name to check names for.");
 			return;
 		}
 
@@ -64,34 +63,20 @@ public class NamesCommand extends BaseCommand {
 				// Check if there's a single foreign match
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
-			else {
-				e.getChannel().sendMessageFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname).submit();
+			else{
+				sendEmbedFormat(e.getChannel(), "There are no results for a card named **'%s'**", cardname);
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-			e.getChannel().sendMessageFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname).submit();
+			sendEmbedFormat(e.getChannel(), "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!
 		else {
-			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
-			for (Card c : query.distinctNames())
-				sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-			e.getChannel().sendMessageFormat(sb.toString()).submit();
-			return;
-		}
-
-		// We have found it. Let's check if there are any foreign names known
-		if (card.getForeignNames().length == 0) {
-			e.getChannel().sendMessage(
-					new EmbedBuilder()
-							.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-							.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
-							.setDescription("**Foreign Names**")
-							.addField("", "There are no known foreign names for this card.", false)
-							.build()).submit();
+			sendEmbedFormat(e.getChannel(), "There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n\n%s", cardname,
+					String.join("\n", query.distinctNames().parallelStream().map(c -> String.format(":small_orange_diamond: %s", c.getName())).collect(Collectors.toList())));
 			return;
 		}
 

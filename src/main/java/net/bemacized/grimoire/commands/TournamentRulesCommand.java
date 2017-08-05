@@ -2,7 +2,8 @@ package net.bemacized.grimoire.commands;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.TournamentRule;
-import net.bemacized.grimoire.utils.StringUtils;
+import net.bemacized.grimoire.utils.MessageUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.stream.Collectors;
@@ -32,11 +33,11 @@ public class TournamentRulesCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Please specify a chapter (ex. `1` or `1.1`). The following sections are available:\n%s",
-					e.getAuthor().getId(),
-					String.join("", Grimoire.getInstance().getTournamentRules().getRules().parallelStream().map(section -> "\n:small_orange_diamond: **" + section.getParagraphNr() + "** " + section.getTitle()).collect(Collectors.toList()))
-			).submit();
+			sendEmbedFormat(e.getChannel(), "Please specify a chapter (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",
+					Grimoire.getInstance().getTournamentRules().getRules().parallelStream()
+							.map(section -> ":small_orange_diamond: **" + section.getParagraphNr() + "** " + section.getTitle())
+							.collect(Collectors.toList())
+			));
 			return;
 		}
 
@@ -45,54 +46,49 @@ public class TournamentRulesCommand extends BaseCommand {
 			// Find section
 			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> args[0].startsWith(s.getParagraphNr())).findFirst().orElse(null);
 			if (section == null) {
-				e.getChannel().sendMessageFormat(
-						"<@%s>, The section you specified is unknown. Please choose one of the following:\n%s",
-						e.getAuthor().getId(),
-						String.join("", Grimoire.getInstance().getTournamentRules().getRules().parallelStream().map(s -> "\n:small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
-				).submit();
+				sendEmbedFormat(e.getChannel(), "The section you specified is unknown. Please choose one of the following:\n%s",
+						String.join("\n", Grimoire.getInstance().getTournamentRules().getRules().parallelStream()
+								.map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle())
+								.collect(Collectors.toList()))
+				);
 				return;
 			}
 			// Find subsection
 			TournamentRule.SubSection subsection = section.getSubsections().parallelStream().filter(s -> s.getParagraphNr().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 			if (subsection == null) {
-				e.getChannel().sendMessageFormat(
-						"<@%s>, The subsection you specified is unknown. \nThe following subsections are available in **%s %s**:\n%s",
-						e.getAuthor().getId(),
-						section.getParagraphNr(),
-						section.getTitle(),
-						String.join("", section.getSubsections().parallelStream().map(s -> "\n:small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))).submit();
+				sendEmbedFormat(e.getChannel(), "The subsection you specified is unknown. \nThe following subsections are available in **%s %s**:\n%s", section.getParagraphNr(), section.getTitle(),
+						String.join("\n", section.getSubsections().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
+				);
 				return;
 			}
 			// Show text
-			for (String s : StringUtils.splitMessage(String.format("<@%s>\n**Magic Tournament Rules** - _%s %s_ - **%s %s**\n\n%s",
-					e.getAuthor().getId(),
-					section.getParagraphNr(),
-					section.getTitle(),
-					subsection.getParagraphNr(),
-					subsection.getTitle(),
-					subsection.getContent()
-			)))
-				e.getChannel().sendMessage(s).submit();
-			// Handle sections
-		} else {
+			String[] splits = MessageUtils.splitMessage(subsection.getContent());
+			for (int i = 0; i < splits.length; i++) {
+				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
+				if (i == 0)
+					eb = eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s: %s", subsection.getParagraphNr(), section.getTitle(), subsection.getTitle()));
+				e.getChannel().sendMessage(eb.build()).submit();
+			}
+
+		}
+		// Handle sections
+		else {
 			// Find section
 			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> s.getParagraphNr().startsWith(args[0])).findFirst().orElse(null);
 			// Check if section was found
 			if (section == null) {
-				e.getChannel().sendMessageFormat(
-						"<@%s>, The section you specified is unknown. Please choose one of the following:\n",
-						e.getAuthor().getId(),
-						String.join("", Grimoire.getInstance().getTournamentRules().getRules().parallelStream().map(s -> "\n:small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
-				).submit();
+				sendEmbedFormat(e.getChannel(), "The section you specified is unknown. Please choose one of the following:\n",
+						String.join("\n", Grimoire.getInstance().getTournamentRules().getRules().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
+				);
 				return;
 			}
-			e.getChannel().sendMessageFormat(
-					"<@%s>\n**Magic Tournament Rules - %s %s**\nThe following subsections are available:\n%s",
-					e.getAuthor().getId(),
-					section.getParagraphNr(),
-					section.getTitle(),
-					String.join("", section.getSubsections().parallelStream().map(s -> "\n:small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
-			).submit();
+			String[] splits = MessageUtils.splitMessage("The following subsections are available:\n" + String.join("\n", section.getSubsections().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList())));
+			for (int i = 0; i < splits.length; i++) {
+				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
+				if (i == 0)
+					eb = eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s", section.getParagraphNr(), section.getTitle()));
+				e.getChannel().sendMessage(eb.build()).submit();
+			}
 		}
 	}
 }

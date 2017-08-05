@@ -17,10 +17,7 @@ public class Gatherer extends ImageProvider {
 			con.connect();
 			if (con.getResponseCode() != 200) return null;
 			// Check for cardback
-			String imageHash = DigestUtils.sha1Hex(con.getInputStream());
-			if (imageHash.equals("cbfa599596c820cdf9a12a07f35917ae1ec20573"))
-				return null;
-			return url;
+			return (DigestUtils.sha1Hex(con.getInputStream()).equals("cbfa599596c820cdf9a12a07f35917ae1ec20573")) ? null : url;
 		} catch (IOException ignored) {
 			return null;
 		}

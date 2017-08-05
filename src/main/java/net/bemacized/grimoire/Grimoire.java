@@ -5,12 +5,14 @@ import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.bemacized.grimoire.model.controllers.*;
 import net.bemacized.grimoire.model.controllers.PricingManager;
 import net.bemacized.grimoire.model.models.imageproviders.ImageProvider;
+import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

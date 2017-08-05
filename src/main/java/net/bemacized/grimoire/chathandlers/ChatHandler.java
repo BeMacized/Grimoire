@@ -1,10 +1,11 @@
 package net.bemacized.grimoire.chathandlers;
 
+import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.logging.Logger;
 
-public abstract class ChatHandler {
+public abstract class ChatHandler extends MessageUtils {
 
 	final Logger LOG;
 	private final ChatHandler next;

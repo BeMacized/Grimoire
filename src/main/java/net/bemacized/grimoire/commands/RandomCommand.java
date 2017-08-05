@@ -65,18 +65,18 @@ public class RandomCommand extends BaseCommand {
 				if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 			} else if (allRarities.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg)) || rarityAliases.containsKey(arg.toLowerCase())) {
 				if (rarity != null) {
-					loadMsg.finalizeFormat("<@%s>, please do not specify more than one rarity", e.getAuthor().getId(), arg);
+					sendEmbed(loadMsg, "Please do not specify more than one rarity.");
 					return;
 				}
 				rarity = rarityAliases.containsKey(arg.toLowerCase()) ? rarityAliases.get(arg.toLowerCase()) : arg.substring(0, 1).toUpperCase() + arg.substring(1).toLowerCase();
 			} else if (tmpSet != null) {
 				if (set != null) {
-					loadMsg.finalizeFormat("<@%s>, please do not specify more than one set", e.getAuthor().getId(), arg);
+					sendEmbed(loadMsg, "Please do not specify more than one set.");
 					return;
 				}
 				set = tmpSet;
 			} else {
-				loadMsg.finalizeFormat("<@%s>, **'%s'** is neither a rarity, set, setcode, type, supertype or subtype. Please only specify valid properties.", e.getAuthor().getId(), arg);
+				sendEmbedFormat(loadMsg, "**'%s'** is neither a rarity, set, setcode, type, supertype or subtype. Please only specify valid properties.", arg);
 				return;
 			}
 		}
@@ -92,7 +92,7 @@ public class RandomCommand extends BaseCommand {
 		if (joinedType != null && !joinedType.isEmpty()) properties.add(joinedType);
 		if (set != null) properties.add(String.format("from set '%s (%s)'", set.getName(), set.getCode()));
 		loadMsg.setLineFormat(
-				"Drawing random %s...",
+				"Drawing random **%s**...",
 				String.join(" ", properties)
 		);
 
@@ -106,7 +106,7 @@ public class RandomCommand extends BaseCommand {
 
 		//Stop if none found
 		if (query.isEmpty()) {
-			loadMsg.finalizeFormat("<@%s>, No cards have been found with the properties you've supplied.", e.getAuthor().getId());
+			sendEmbed(loadMsg, "No cards have been found with the properties you've supplied.");
 			return;
 		}
 
@@ -122,6 +122,6 @@ public class RandomCommand extends BaseCommand {
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		loadMsg.finalize(eb.build());
+		loadMsg.complete(eb.build());
 	}
 }

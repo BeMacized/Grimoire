@@ -3,7 +3,6 @@ package net.bemacized.grimoire.commands;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.ComprehensiveRule;
 import net.bemacized.grimoire.model.models.Definition;
-import net.bemacized.grimoire.utils.StringUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class CompRulesCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat("<@%s>, Please specify a paragraph number to display.\nYou can find the full comprehensive rules over here: <https://blogs.magicjudges.org/rules/cr/>", e.getAuthor().getId()).submit();
+			sendEmbed(e.getChannel(), "Please specify a paragraph number to display.\nYou can find the full comprehensive rules over here: <https://blogs.magicjudges.org/rules/cr/>");
 			return;
 		}
 
@@ -52,18 +51,13 @@ public class CompRulesCommand extends BaseCommand {
 
 		// If we couldn't find anything, tell the user
 		if (rulesToShow.isEmpty()) {
-			e.getChannel().sendMessageFormat("<@%s>, Unknown paragraph.\n**Comprehensive Rules:** <https://blogs.magicjudges.org/rules/cr/>", e.getAuthor().getId()).submit();
+			sendEmbed(e.getChannel(), "Unknown paragraph.\n**Comprehensive Rules:** <https://blogs.magicjudges.org/rules/cr/>");
 			return;
 		}
 
-		StringBuilder sb = new StringBuilder(String.format(
-				"<@%s>",
-				e.getAuthor().getId()
-		));
-		rulesToShow.parallelStream()
+		sendEmbed(e.getChannel(), String.join("\n", rulesToShow.parallelStream()
 				.sorted(Comparator.comparing(ComprehensiveRule::getParagraphId))
 				.map(rule -> {
-
 					// Underline keywords
 					String ruleText = String.join("\n", Arrays.stream(rule.getText().split("[\r\n]")).parallel().map(line ->
 							String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
@@ -73,9 +67,7 @@ public class CompRulesCommand extends BaseCommand {
 							).collect(Collectors.toList()))
 					).collect(Collectors.toList()));
 
-					return String.format("\n:small_orange_diamond: __**%s**__ %s\n", rule.getParagraphId(), ruleText);
-				})
-				.forEachOrdered(sb::append);
-		for (String s : StringUtils.splitMessage(sb.toString())) e.getChannel().sendMessage(s).submit();
+					return String.format(":small_orange_diamond: __**%s**__ %s\n", rule.getParagraphId(), ruleText);
+				}).collect(Collectors.toList())));
 	}
 }

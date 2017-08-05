@@ -42,7 +42,7 @@ public class ArtCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat("<@%s>, please provide a card name to fetch art for!", e.getAuthor().getId()).submit();
+			sendEmbed(e.getChannel(), "Please provide a card name to fetch art for.");
 			return;
 		}
 
@@ -58,23 +58,14 @@ public class ArtCommand extends BaseCommand {
 		MtgSet set;
 		try {
 			set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
-			if (set == null && setname != null) {
-				loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
-				return;
-			}
+			if (set == null && setname != null)
+				sendEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
 		} catch (Sets.MultipleResultsException ex) {
 			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
-				loadMsg.finalizeFormat(
-						"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
-						e.getAuthor().getId(),
-						cardname
-				);
+				sendEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
 			else
-				loadMsg.finalizeFormat("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n%s",
-						e.getAuthor().getId(), setname,
-						String.join("", ex.getSets().parallelStream().map(s -> String.format("\n:small_orange_diamond: %s _(%s)_",
-								s.getName(), s.getCode())).collect(Collectors.toList())
-						));
+				sendEmbedFormat(loadMsg, "There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n\n%s",
+						setname, String.join("\n", ex.getSets().parallelStream().map(s -> String.format(":small_orange_diamond: %s _(%s)_", s.getName(), s.getCode())).collect(Collectors.toList())));
 			return;
 		}
 
@@ -98,30 +89,28 @@ public class ArtCommand extends BaseCommand {
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
 			else if (set == null) {
-				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname);
+				sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'**", cardname);
 				return;
 			} else {
-				loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardname, set.getName(), set.getCode());
+				sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-			loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
+			sendEmbedFormat(loadMsg, "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!
 		else {
-			StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
-			for (Card c : query.distinctNames())
-				sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-			loadMsg.finalize(sb.toString());
+			sendEmbedFormat(loadMsg, "There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n\n%s", cardname,
+					String.join("\n", query.distinctNames().parallelStream().map(c -> String.format(":small_orange_diamond: %s", c.getName())).collect(Collectors.toList())));
 			return;
 		}
 
 		// Check if an image is available
 		if (card.getImageUrl() == null) {
-			loadMsg.finalizeFormat("<@%s>, There is no known art for **'%s'**.", e.getAuthor().getId(), cardname);
+			sendEmbedFormat(loadMsg, "There is no known art for **'%s'**.", cardname);
 			return;
 		}
 
@@ -134,6 +123,6 @@ public class ArtCommand extends BaseCommand {
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		loadMsg.finalize(eb.build());
+		loadMsg.complete(eb.build());
 	}
 }

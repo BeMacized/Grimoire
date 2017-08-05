@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TokenCommand extends BaseCommand {
 
@@ -40,10 +41,7 @@ public class TokenCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify token name presence
 		if (args.length == 0) {
-			e.getChannel().sendMessageFormat(
-					"<@%s>, Please provide a valid token name",
-					e.getAuthor().getId()
-			).submit();
+			sendEmbed(e.getChannel(), "Please provide a valid token name.");
 			return;
 		}
 
@@ -52,19 +50,22 @@ public class TokenCommand extends BaseCommand {
 
 		// Extract card name and optional choice id
 		int choice = -1;
-		String cardName;
+		String cardname;
 		if (args.length >= 2 && isNumber(args[args.length - 1])) {
 			choice = Integer.parseInt(args[args.length - 1]);
-			cardName = String.join(" ", Arrays.copyOf(args, args.length - 1));
+			cardname = String.join(" ", Arrays.copyOf(args, args.length - 1));
 		} else {
-			cardName = String.join(" ", args);
+			cardname = String.join(" ", args);
 		}
 
 		// Find token(s)
-		List<Token> matches = Grimoire.getInstance().getTokens().getTokens().parallelStream().filter(token -> token.getName().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().contains(cardName.toLowerCase())).collect(Collectors.toList());
+		final List<Token> matches = Grimoire.getInstance().getTokens().getTokens().parallelStream().filter(token -> token.getName().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().contains(cardname.toLowerCase())).collect(Collectors.toList());
 		// filter down to exact matches only if available
-		List<Token> exactMatches = matches.parallelStream().filter(token -> token.getName().trim().equalsIgnoreCase(cardName.toLowerCase())).collect(Collectors.toList());
-		if (!exactMatches.isEmpty()) matches = exactMatches;
+		List<Token> exactMatches = matches.parallelStream().filter(token -> token.getName().trim().equalsIgnoreCase(cardname.toLowerCase())).collect(Collectors.toList());
+		if (!exactMatches.isEmpty()) {
+			matches.clear();
+			matches.addAll(exactMatches);
+		}
 
 		// Sort matches
 		matches.sort((o1, o2) -> {
@@ -75,7 +76,7 @@ public class TokenCommand extends BaseCommand {
 
 		// Test for no matches
 		if (matches.isEmpty()) {
-			loadMsg.finalizeFormat("<@%s>, I couldn't find any tokens called **'%s'**", e.getAuthor().getId(), cardName);
+			sendEmbedFormat(loadMsg, "I couldn't find any tokens called **'%s'**", cardname);
 			return;
 		}
 
@@ -88,31 +89,30 @@ public class TokenCommand extends BaseCommand {
 			if (choice != -1) {
 				// Check if choice # is in range
 				if (choice < 1 || choice > matches.size()) {
-					loadMsg.finalizeFormat("<@%s>, The choice number you provided is not within range. Please only pick a valid option.", e.getAuthor().getId());
+					sendEmbed(loadMsg, "The choice number you provided is not within range. Please only pick a valid option.");
 					return;
 				}
 				// Replace match with choice
 				match = matches.get(choice - 1);
 			} else if (matches.size() > MAX_TOKEN_RESULTS) {
 				// List options
-				loadMsg.finalizeFormat("<@%s>, There are too many tokens matching your search. Please be more specific.", e.getAuthor().getId(), cardName);
+				sendEmbed(loadMsg, "There are too many tokens matching your search. Please be more specific.");
 				return;
 			} else {
 				// List options
-				StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple tokens matching your search. Please pick any of the following using `!token %s [#]`:\n", e.getAuthor().getId(), cardName));
-				for (int i = 0; i < matches.size(); i++) {
-					Token m = matches.get(i);
-					boolean hasArts = m.getSetArt().parallelStream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty());
-					sb.append(String.format(
-							"\n:small_orange_diamond: **%s.**%s%s%s%s",
-							i + 1,
-							(m.getColor() == null) ? "" : " " + m.getColor(),
-							(m.getPt() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPt()) + "_",
-							" " + m.getName(),
-							(hasArts) ? "" : " __[NO ART AVAILABLE]__"
-					));
-				}
-				loadMsg.finalize(sb.toString());
+				sendEmbedFormat(loadMsg, "There are multiple tokens matching your search. Please pick any of the following using `!token %s [#]`:\n", String.join("\n",
+						IntStream.range(0, matches.size()).parallel().mapToObj(i -> {
+							Token m = matches.get(i);
+							return String.format(
+									"\n:small_orange_diamond: **%s.**%s%s%s%s",
+									i + 1,
+									(m.getColor() == null) ? "" : " " + m.getColor(),
+									(m.getPt() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPt()) + "_",
+									" " + m.getName(),
+									(m.getSetArt().parallelStream().anyMatch(art -> art.getUrl() != null && !art.getUrl().isEmpty())) ? "" : " __[NO ART AVAILABLE]__"
+							);
+						}).collect(Collectors.toList())
+				));
 				return;
 			}
 		}
@@ -120,7 +120,7 @@ public class TokenCommand extends BaseCommand {
 		// Check if match has image
 		List<Token.SetArt> arts = match.getSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 		if (arts.isEmpty()) {
-			loadMsg.finalizeFormat("<@%s>, I sadly do not know of any art for this token. Please try a different one!", e.getAuthor().getId(), cardName);
+			sendEmbed(loadMsg, "I sadly do not know of any art for this token. Please try a different one!");
 			return;
 		}
 
@@ -135,7 +135,7 @@ public class TokenCommand extends BaseCommand {
 		eb.setTitle(match.getName());
 		eb.setImage(art.getUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getColor()}));
-		loadMsg.finalize(eb.build());
+		loadMsg.complete(eb.build());
 	}
 
 	private boolean isNumber(String str) {

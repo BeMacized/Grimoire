@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.utils;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -14,9 +15,12 @@ import java.util.stream.Collectors;
 public class LoadMessage {
 
 	private final static Logger LOG = Logger.getLogger(LoadMessage.class.getName());
-	private final static String SPINNER = "⣾⣽⣻⢿⡿⣟⣯⣷";
+	private final static String[] SPINNER = new String[]{
+			":small_blue_diamond:",
+			":large_orange_diamond:"
+	};
 	private final static long EXPIRE_TIME = 1000 * 90;
-	private final static int SPINNER_INTERVAL = 1500;
+	private final static int SPINNER_INTERVAL = 2000;
 
 	private List<Message> messages;
 	private List<String> lines;
@@ -34,7 +38,7 @@ public class LoadMessage {
 		this.lines = new ArrayList<>();
 		this.messages = new ArrayList<>();
 		this.finished = false;
-		this.spinnerStage = new Random().nextInt(SPINNER.length());
+		this.spinnerStage = new Random().nextInt(SPINNER.length);
 		this.taskQueue = new RunnableQueue(SPINNER_INTERVAL);
 		this.spinnerTimer = new Timer();
 		this.startTime = System.currentTimeMillis();
@@ -49,10 +53,14 @@ public class LoadMessage {
 			public void run() {
 				if (System.currentTimeMillis() - startTime >= EXPIRE_TIME) LoadMessage.this.finish();
 				spinnerStage++;
-				if (spinnerStage == SPINNER.length()) spinnerStage = 0;
+				if (spinnerStage == SPINNER.length) spinnerStage = 0;
 				if (taskQueue.isEmpty()) taskQueue.queue(LoadMessage.this::render);
 			}
 		}, 0, SPINNER_INTERVAL);
+	}
+
+	public MessageChannel getChannel() {
+		return channel;
 	}
 
 	public void setLineFormat(String template, Object... objs) {
@@ -83,9 +91,9 @@ public class LoadMessage {
 	private void render() {
 		try {
 			final StringBuilder sb = new StringBuilder();
-			if (showSpinner) sb.append(SPINNER.toCharArray()[spinnerStage]).append(" ");
+			if (showSpinner) sb.append(SPINNER[spinnerStage]).append(" ");
 			sb.append(String.join("\n", this.lines));
-			String[] messageTexts = StringUtils.splitMessage(sb.toString().trim(), true);
+			String[] messageTexts = MessageUtils.splitMessage(sb.toString().trim(), false);
 			for (int i = 0; i < messageTexts.length; i++) {
 				// Delete messages that exceed amount of messages required
 				for (int j = messages.size() - 1; j >= messageTexts.length; j--) {
@@ -95,12 +103,13 @@ public class LoadMessage {
 
 				// Update old messages if they exist, otherwise send new ones.
 				String newText = messageTexts[i];
+				MessageEmbed newEmbed = new EmbedBuilder().setDescription(newText).build();
 				Message oldMsg = (messages.size() > i) ? messages.get(i) : null;
 				if (oldMsg == null) {
-					oldMsg = channel.sendMessage(newText).submit().get();
+					oldMsg = channel.sendMessage(newEmbed).submit().get();
 					messages.add(oldMsg);
-				} else if (!oldMsg.getContent().equals(newText)) {
-					oldMsg = oldMsg.editMessage(newText).submit().get();
+				} else if (!oldMsg.getEmbeds().get(0).getDescription().equals(newText)) {
+					oldMsg = oldMsg.editMessage(newEmbed).submit().get();
 					messages.remove(i);
 					messages.add(i, oldMsg);
 				}
@@ -115,7 +124,7 @@ public class LoadMessage {
 		spinnerTimer.cancel();
 	}
 
-	public void finalize() {
+	public void complete() {
 		if (this.finished) throw new FinishedException();
 		taskQueue.queue(() -> {
 			messages.forEach(msg -> msg.delete().submit());
@@ -124,23 +133,23 @@ public class LoadMessage {
 		});
 	}
 
-	public void finalizeFormat(String template, Object... objs) {
-		finalize(String.format(template, objs));
+	public void completeFormat(String template, Object... objs) {
+		complete(String.format(template, objs));
 	}
 
-	public void finalize(String msg) {
-		this.finalize((Object) msg);
+	public void complete(String msg) {
+		this.complete((Object) msg);
 	}
 
-	public void finalize(Message msg) {
-		this.finalize((Object) msg);
+	public void complete(Message msg) {
+		this.complete((Object) msg);
 	}
 
-	public void finalize(MessageEmbed msg) {
-		this.finalize((Object) msg);
+	public void complete(MessageEmbed msg) {
+		this.complete((Object) msg);
 	}
 
-	private void finalize(Object msg) {
+	private void complete(Object msg) {
 		if (this.finished) throw new FinishedException();
 		taskQueue.queue(() -> {
 			for (int i = 0; i < messages.size(); i++) {
@@ -148,7 +157,7 @@ public class LoadMessage {
 					try {
 						messages.get(i).delete().submit();
 					} catch (Exception e) {
-						LOG.log(Level.SEVERE, "Could not remove message object", e);
+						LOG.log(Level.SEVERE, "Could not remove message object.", e);
 					}
 				else if (msg instanceof String)
 					try {
@@ -169,7 +178,7 @@ public class LoadMessage {
 						messages.get(i).getChannel().sendMessage((MessageEmbed) msg).submit();
 					}
 				else
-					throw new InvalidParameterException("msg parameter must be a String, Message, or MessageEmbed object");
+					throw new InvalidParameterException("Msg parameter must be a String, Message, or MessageEmbed object.");
 			}
 			finish();
 		});

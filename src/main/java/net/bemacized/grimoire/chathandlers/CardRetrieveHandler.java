@@ -50,26 +50,16 @@ public class CardRetrieveHandler extends ChatHandler {
 				MtgSet set;
 				try {
 					set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
-					if (set == null && setname != null) {
-						loadMsg.finalizeFormat("<@%s>, I could not find a set with **'%s' as its code or name**.", e.getAuthor().getId(), setname);
-						return;
-					}
+					if (set == null && setname != null)
+						sendEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
 				} catch (Sets.MultipleResultsException ex) {
 					if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
-						loadMsg.finalizeFormat(
-								"<@%s>, There are too many results for a set named **'%s'**. Please be more specific.",
-								e.getAuthor().getId(),
-								cardname
-						);
+						sendEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
 					else
-						loadMsg.finalizeFormat("<@%s>, There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n%s",
-								e.getAuthor().getId(), setname,
-								String.join("", ex.getSets().parallelStream().map(s -> String.format("\n:small_orange_diamond: %s _(%s)_",
-										s.getName(), s.getCode())).collect(Collectors.toList())
-								));
+						sendEmbedFormat(loadMsg, "There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n\n%s",
+								setname, String.join("\n", ex.getSets().parallelStream().map(s -> String.format(":small_orange_diamond: %s _(%s)_", s.getName(), s.getCode())).collect(Collectors.toList())));
 					return;
 				}
-
 
 				// Retrieve card
 				Card card;
@@ -91,27 +81,24 @@ public class CardRetrieveHandler extends ChatHandler {
 					else if (foreignQuery.distinctNames().size() == 1)
 						card = foreignQuery.distinctNames().get(0);
 					else if (set == null) {
-						loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'**", e.getAuthor().getId(), cardname);
+						sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'**", cardname);
 						return;
 					} else {
-						loadMsg.finalizeFormat("<@%s>, There are no results for a card named **'%s'** in set **'%s (%s)'**", e.getAuthor().getId(), cardname, set.getName(), set.getCode());
+						sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
 						return;
 					}
 				}
 				// We got multiple results. Check if too many?
 				else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-					loadMsg.finalizeFormat("<@%s>, There are too many results for a card named **'%s'**. Please be more specific.", e.getAuthor().getId(), cardname);
+					sendEmbedFormat(loadMsg, "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 					return;
 				}
 				// Nope, show the alternatives!
 				else {
-					StringBuilder sb = new StringBuilder(String.format("<@%s>, There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n", e.getAuthor().getId(), cardname));
-					for (Card c : query.distinctNames()) sb.append(String.format("\n:small_orange_diamond: %s", c.getName()));
-					loadMsg.finalize(sb.toString());
+					sendEmbedFormat(loadMsg, "There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n\n%s", cardname,
+							String.join("\n", query.distinctNames().parallelStream().map(c -> String.format(":small_orange_diamond: %s", c.getName())).collect(Collectors.toList())));
 					return;
 				}
-
-				//TODO: VERIFY ART EXISTENCE
 
 				// Update load text
 				loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
@@ -156,7 +143,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				if (!printings.isEmpty()) eb.addField("Printings", printings, true);
 
 				// Show message
-				loadMsg.finalize(eb.build());
+				loadMsg.complete(eb.build());
 			}).start();
 		}
 		

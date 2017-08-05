@@ -1,10 +1,11 @@
 package net.bemacized.grimoire.commands;
 
+import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.logging.Logger;
 
-public abstract class BaseCommand {
+public abstract class BaseCommand extends MessageUtils {
 
 	final Logger LOG;
 
@@ -21,4 +22,5 @@ public abstract class BaseCommand {
 	public abstract String paramUsage();
 
 	public abstract void exec(String[] args, MessageReceivedEvent e);
+
 }
