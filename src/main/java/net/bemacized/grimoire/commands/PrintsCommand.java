@@ -85,7 +85,7 @@ public class PrintsCommand extends BaseCommand {
 		String sets = String.join("\n", new Cards.SearchQuery().hasExactName(card.getName()).stream().map(Card::getSet).map(set -> String.format(":small_orange_diamond: %s (%s)", set.getName(), set.getCode())).collect(Collectors.toList()));
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+				.setTitle(card.getName(), card.getGathererUrl());
 		String[] splits = MessageUtils.splitMessage(sets, 1000);
 		for (int i = 0; i < splits.length; i++)
 			eb.addField((i == 0) ? "Sets" : "", splits[i], false);

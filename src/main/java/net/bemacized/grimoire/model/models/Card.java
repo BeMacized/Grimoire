@@ -209,6 +209,10 @@ public class Card implements Cloneable {
 		return Arrays.stream(getForeignNames()).parallel().map(this::foreignClone).collect(Collectors.toList()).toArray(new Card[0]);
 	}
 
+	public String getGathererUrl() {
+		return (multiverseid > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + multiverseid : null;
+	}
+
 	public static class Ruling {
 
 		private String date;
@@ -262,6 +266,10 @@ public class Card implements Cloneable {
 
 		public int getMultiverseid() {
 			return multiverseid;
+		}
+
+		public String getGathererUrl() {
+			return (multiverseid > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + multiverseid : null;
 		}
 	}
 

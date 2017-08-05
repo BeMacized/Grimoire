@@ -114,7 +114,7 @@ public class CardRetrieveHandler extends ChatHandler {
 				if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
 				String pat = MTGUtils.parsePowerAndToughness(card.getPower(), card.getToughness());
 
-				//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ---
+				//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ON MOBILE ---
 				//		String title = card.getName()
 				//				+ " "
 				//				+ CardUtils.parseEmoji(e.getGuild(), card.getManaCost());
@@ -126,13 +126,12 @@ public class CardRetrieveHandler extends ChatHandler {
 
 				String title = card.getName();
 				String separateCost = (card.getManaCost() == null || card.getManaCost().isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(card.getManaCost(), e.getGuild()) + " **(" + new DecimalFormat("##.###").format(card.getCmc()) + ")**";
-				//TODO: ---END
 
 				// Build the embed
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.setThumbnail(card.getImageUrl());
 				eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-				eb.setTitle(title, (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+				eb.setTitle(title, card.getGathererUrl());
 				if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
 				if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 				eb.appendDescription(card.getType());

@@ -83,10 +83,10 @@ public class NamesCommand extends BaseCommand {
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), (card.getMultiverseid() <= 0) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
+				.setTitle(card.getName(), card.getGathererUrl())
 				.setDescription("**Foreign Names**\n");
 		for (Card.ForeignName foreignName : card.getForeignNames())
-			eb.addField(foreignName.getLanguage(), foreignName.getMultiverseid() > 0 ? String.format("[%s](%s)", foreignName.getName(), "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + foreignName.getMultiverseid()) : foreignName.getName(), true);
+			eb.addField(foreignName.getLanguage(), foreignName.getMultiverseid() > 0 ? String.format("[%s](%s)", foreignName.getName(), foreignName.getGathererUrl()) : foreignName.getName(), true);
 		e.getChannel().sendMessage(eb.build()).submit();
 	}
 }

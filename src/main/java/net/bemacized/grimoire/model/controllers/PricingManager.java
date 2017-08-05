@@ -61,7 +61,7 @@ public class PricingManager {
 		List<StoreCardPrice> pricing = getPricing(card);
 		// Build embeds
 		EmbedBuilder priceEmbed = new EmbedBuilder();
-		priceEmbed.setTitle("Pricing: " + card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		priceEmbed.setTitle("Pricing: " + card.getName(), card.getGathererUrl());
 		priceEmbed.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		priceEmbed.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		pricing.forEach(storeprice -> {

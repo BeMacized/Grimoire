@@ -118,7 +118,7 @@ public class RandomCommand extends BaseCommand {
 		if (("Random " + String.join(" ", properties)).length() <= 128)
 			eb.setAuthor("Random " + String.join(" ", properties), null, null);
 		else eb.appendDescription("Random " + String.join(" ", properties) + "\n");
-		eb.setTitle(card.getName(), (card.getMultiverseid() == -1) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid());
+		eb.setTitle(card.getName(), card.getGathererUrl());
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));

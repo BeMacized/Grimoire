@@ -89,7 +89,7 @@ public class RulingsCommand extends BaseCommand {
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), (card.getMultiverseid() <= 0) ? null : "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + card.getMultiverseid())
+				.setTitle(card.getName(), card.getGathererUrl())
 				.setDescription("**Rulings**");
 		for (Card.Ruling ruling : card.getRulings())
 			eb.addField(ruling.getDate(), ruling.getText(), false);
