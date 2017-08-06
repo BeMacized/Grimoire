@@ -1,7 +1,6 @@
 package net.bemacized.grimoire.model.models.storeAPIs;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.model.controllers.Sets;
 import net.bemacized.grimoire.model.models.Card;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;

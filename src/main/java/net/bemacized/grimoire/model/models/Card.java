@@ -1,11 +1,7 @@
 package net.bemacized.grimoire.model.models;
 
 import net.bemacized.grimoire.Grimoire;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;

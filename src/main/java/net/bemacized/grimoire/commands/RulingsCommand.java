@@ -40,7 +40,7 @@ public class RulingsCommand extends BaseCommand {
 
 		// Quit and error out if none provided
 		if (cardname.isEmpty()) {
-			sendEmbed(e.getChannel(),"Please provide a card name to check rulings for.");
+			sendEmbed(e.getChannel(), "Please provide a card name to check rulings for.");
 			return;
 		}
 
@@ -63,7 +63,7 @@ public class RulingsCommand extends BaseCommand {
 				// Check if there's a single foreign match
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
-			else{
+			else {
 				sendEmbedFormat(e.getChannel(), "There are no results for a card named **'%s'**.", cardname);
 				return;
 			}

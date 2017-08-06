@@ -46,7 +46,7 @@ public class TournamentRulesCommand extends BaseCommand {
 			// Find section
 			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> args[0].startsWith(s.getParagraphNr())).findFirst().orElse(null);
 			if (section == null) {
-				sendEmbedFormat(e.getChannel(), "The section you specified is unknown. Please choose one of the following:\n%s",
+				sendEmbedFormat(e.getChannel(), ":no_entry_sign: The section you specified is unknown.\n\nPlease choose one of the following:\n%s",
 						String.join("\n", Grimoire.getInstance().getTournamentRules().getRules().parallelStream()
 								.map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle())
 								.collect(Collectors.toList()))
@@ -56,13 +56,13 @@ public class TournamentRulesCommand extends BaseCommand {
 			// Find subsection
 			TournamentRule.SubSection subsection = section.getSubsections().parallelStream().filter(s -> s.getParagraphNr().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 			if (subsection == null) {
-				sendEmbedFormat(e.getChannel(), "The subsection you specified is unknown. \nThe following subsections are available in **%s %s**:\n%s", section.getParagraphNr(), section.getTitle(),
+				sendEmbedFormat(e.getChannel(), ":no_entry_sign: The subsection you specified is unknown.\n\nThe following subsections are available in **%s %s**:\n%s", section.getParagraphNr(), section.getTitle(),
 						String.join("\n", section.getSubsections().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
 				);
 				return;
 			}
 			// Show text
-			String[] splits = MessageUtils.splitMessage(subsection.getContent());
+			String[] splits = MessageUtils.splitMessage(Grimoire.getInstance().getEmojiParser().parseEmoji(subsection.getContent(), e.getGuild()));
 			for (int i = 0; i < splits.length; i++) {
 				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 				if (i == 0)
@@ -77,7 +77,7 @@ public class TournamentRulesCommand extends BaseCommand {
 			TournamentRule section = Grimoire.getInstance().getTournamentRules().getRules().parallelStream().filter(s -> s.getParagraphNr().startsWith(args[0])).findFirst().orElse(null);
 			// Check if section was found
 			if (section == null) {
-				sendEmbedFormat(e.getChannel(), "The section you specified is unknown. Please choose one of the following:\n",
+				sendEmbedFormat(e.getChannel(), ":no_entry_sign: The section you specified is unknown.\n\nPlease choose one of the following:\n%s",
 						String.join("\n", Grimoire.getInstance().getTournamentRules().getRules().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList()))
 				);
 				return;

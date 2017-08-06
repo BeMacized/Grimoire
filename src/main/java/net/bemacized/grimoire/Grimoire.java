@@ -7,16 +7,10 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import sun.misc.IOUtils;
 
 import javax.security.auth.login.LoginException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 public class Grimoire {
 
@@ -126,24 +120,6 @@ public class Grimoire {
 
 		// Instantiate Emoji parser
 		this.emojiParser = new EmojiParser();
-
-		//TODO: REMOVE
-//		comprehensiveRules.getRules().stream().filter(r -> r.getParagraphId().matches("[0-9]{3}[.]")).forEach(r -> {
-//			System.out.println(r.getParagraphId() + " " + String.format("%1$" + 3 + "s", comprehensiveRules.getRules().stream().filter(_r -> _r.getParagraphId().matches(Pattern.quote(r.getParagraphId()) + "[0-9]+[.]")).count()) + " " + String.format("%1$" + 3 + "s", r.getText().split("\\s+").length));
-//		});
-
-//		comprehensiveRules.getRules().stream().filter(r -> r.getParagraphId().matches("[0-9]{3}[.]")).forEach(r -> {
-//			System.out.println(String.format("%s %s/%s",
-//					String.format("%1$" + 7 + "s", r.getParagraphId()),
-//					comprehensiveRules.getRules().stream()
-//							.filter(_r -> _r.getParagraphId().matches(Pattern.quote(r.getParagraphId()) + "[0-9]+[.]"))
-//							.filter(_r -> _r.getText().split("\\s+").length >= 7)
-//							.count(),
-//					comprehensiveRules.getRules().stream()
-//							.filter(_r -> _r.getParagraphId().matches(Pattern.quote(r.getParagraphId()) + "[0-9]+[.]"))
-//							.count()
-//			));
-//		});
 	}
 
 	public JDA getDiscord() {

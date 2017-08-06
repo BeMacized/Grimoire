@@ -16,8 +16,8 @@ public class ImageProviders {
 
 	public ImageProviders() {
 		this.imageProviders = Stream.of(
-			new Scryfall(),
-			new Gatherer()
+				new Scryfall(),
+				new Gatherer()
 		).collect(Collectors.toList());
 	}
 

@@ -6,7 +6,6 @@ import net.bemacized.grimoire.model.models.Definition;
 import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -193,7 +192,7 @@ public class CompRulesCommand extends BaseCommand {
 
 		// Add error line
 		if (errorline != null) description.insert(0, ":no_entry_sign: " + errorline + "\n\n");
-		// Add subtitle
+			// Add subtitle
 		else if (subtitle != null) description.insert(0, subtitle + "\n\n");
 
 		// Fix triple linebreaks

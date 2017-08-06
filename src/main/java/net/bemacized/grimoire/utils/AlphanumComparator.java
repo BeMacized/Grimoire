@@ -30,47 +30,39 @@ package net.bemacized.grimoire.utils;
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This is an updated version with enhancements made by Daniel Migowski,
  * Andre Bogus, and David Koelle. Updated by David Koelle in 2017.
- *
+ * <p>
  * To use this class:
- *   Use the static "sort" method from the java.util.Collections class:
- *   Collections.sort(your list, new AlphanumComparator());
+ * Use the static "sort" method from the java.util.Collections class:
+ * Collections.sort(your list, new AlphanumComparator());
  */
-public class AlphanumComparator implements Comparator<String>
-{
-	private final boolean isDigit(char ch)
-	{
+public class AlphanumComparator implements Comparator<String> {
+	private final boolean isDigit(char ch) {
 		return ((ch >= 48) && (ch <= 57));
 	}
 
-	/** Length of string is passed in for improved efficiency (only need to calculate it once) **/
-	private final String getChunk(String s, int slength, int marker)
-	{
+	/**
+	 * Length of string is passed in for improved efficiency (only need to calculate it once)
+	 **/
+	private final String getChunk(String s, int slength, int marker) {
 		StringBuilder chunk = new StringBuilder();
 		char c = s.charAt(marker);
 		chunk.append(c);
 		marker++;
-		if (isDigit(c))
-		{
-			while (marker < slength)
-			{
+		if (isDigit(c)) {
+			while (marker < slength) {
 				c = s.charAt(marker);
 				if (!isDigit(c))
 					break;
 				chunk.append(c);
 				marker++;
 			}
-		} else
-		{
-			while (marker < slength)
-			{
+		} else {
+			while (marker < slength) {
 				c = s.charAt(marker);
 				if (isDigit(c))
 					break;
@@ -81,10 +73,8 @@ public class AlphanumComparator implements Comparator<String>
 		return chunk.toString();
 	}
 
-	public int compare(String s1, String s2)
-	{
-		if ((s1 == null) || (s2 == null))
-		{
+	public int compare(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
 			return 0;
 		}
 
@@ -93,8 +83,7 @@ public class AlphanumComparator implements Comparator<String>
 		int s1Length = s1.length();
 		int s2Length = s2.length();
 
-		while (thisMarker < s1Length && thatMarker < s2Length)
-		{
+		while (thisMarker < s1Length && thatMarker < s2Length) {
 			String thisChunk = getChunk(s1, s1Length, thisMarker);
 			thisMarker += thisChunk.length();
 
@@ -103,26 +92,20 @@ public class AlphanumComparator implements Comparator<String>
 
 			// If both chunks contain numeric characters, sort them numerically
 			int result = 0;
-			if (isDigit(thisChunk.charAt(0)) && isDigit(thatChunk.charAt(0)))
-			{
+			if (isDigit(thisChunk.charAt(0)) && isDigit(thatChunk.charAt(0))) {
 				// Simple chunk comparison by length.
 				int thisChunkLength = thisChunk.length();
 				result = thisChunkLength - thatChunk.length();
 				// If equal, the first different number counts
-				if (result == 0)
-				{
-					for (int i = 0; i < thisChunkLength; i++)
-					{
+				if (result == 0) {
+					for (int i = 0; i < thisChunkLength; i++) {
 						result = thisChunk.charAt(i) - thatChunk.charAt(i);
-						if (result != 0)
-						{
+						if (result != 0) {
 							return result;
 						}
 					}
 				}
-			}
-			else
-			{
+			} else {
 				result = thisChunk.compareTo(thatChunk);
 			}
 

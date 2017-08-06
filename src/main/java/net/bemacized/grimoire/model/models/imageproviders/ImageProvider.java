@@ -5,7 +5,6 @@ import net.bemacized.grimoire.model.models.Card;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +15,7 @@ public abstract class ImageProvider {
 
 	public abstract String getUrl(Card card);
 
-	protected boolean imageAvailable(String url){
+	protected boolean imageAvailable(String url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 			con.connect();

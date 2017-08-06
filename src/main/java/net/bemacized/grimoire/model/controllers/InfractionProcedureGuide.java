@@ -73,7 +73,8 @@ public class InfractionProcedureGuide {
 				while (cursor != null && (cursor.tagName().equalsIgnoreCase("p") || cursor.tagName().equalsIgnoreCase("table"))) {
 					switch (cursor.tagName().toLowerCase()) {
 						case "p": {
-							if (cursor.children().size() > 0 && cursor.child(0).tagName().equalsIgnoreCase("b") && cursor.child(0).text().startsWith("APPENDIX")) break;
+							if (cursor.children().size() > 0 && cursor.child(0).tagName().equalsIgnoreCase("b") && cursor.child(0).text().startsWith("APPENDIX"))
+								break;
 							contentSb.append(cursor.text()).append("\n\n");
 							break;
 						}

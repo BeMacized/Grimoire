@@ -1,12 +1,7 @@
 package net.bemacized.grimoire.utils;
 
-import net.dv8tion.jda.core.entities.Emote;
-import net.dv8tion.jda.core.entities.Guild;
-
 import java.awt.*;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MTGUtils {
