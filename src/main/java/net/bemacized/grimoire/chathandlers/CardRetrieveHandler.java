@@ -51,10 +51,10 @@ public class CardRetrieveHandler extends ChatHandler {
 				try {
 					set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
 					if (set == null && setname != null)
-						sendEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
+						sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
 				} catch (Sets.MultipleResultsException ex) {
 					if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
-						sendEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
+						sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);
 					else
 						sendEmbedFormat(loadMsg, "There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n\n%s",
 								setname, String.join("\n", ex.getSets().parallelStream().map(s -> String.format(":small_orange_diamond: %s _(%s)_", s.getName(), s.getCode())).collect(Collectors.toList())));
@@ -81,16 +81,16 @@ public class CardRetrieveHandler extends ChatHandler {
 					else if (foreignQuery.distinctNames().size() == 1)
 						card = foreignQuery.distinctNames().get(0);
 					else if (set == null) {
-						sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'**", cardname);
+						sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'**", cardname);
 						return;
 					} else {
-						sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
+						sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
 						return;
 					}
 				}
 				// We got multiple results. Check if too many?
 				else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-					sendEmbedFormat(loadMsg, "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
+					sendEmbedFormat(loadMsg, ":anger: There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 					return;
 				}
 				// Nope, show the alternatives!

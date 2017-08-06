@@ -76,7 +76,7 @@ public class TokenCommand extends BaseCommand {
 
 		// Test for no matches
 		if (matches.isEmpty()) {
-			sendEmbedFormat(loadMsg, "I couldn't find any tokens called **'%s'**", cardname);
+			sendEmbedFormat(loadMsg, ":anger: I couldn't find any tokens called **'%s'**", cardname);
 			return;
 		}
 
@@ -89,14 +89,14 @@ public class TokenCommand extends BaseCommand {
 			if (choice != -1) {
 				// Check if choice # is in range
 				if (choice < 1 || choice > matches.size()) {
-					sendEmbed(loadMsg, "The choice number you provided is not within range. Please only pick a valid option.");
+					sendEmbed(loadMsg, ":anger: The choice number you provided is not within range. Please only pick a valid option.");
 					return;
 				}
 				// Replace match with choice
 				match = matches.get(choice - 1);
 			} else if (matches.size() > MAX_TOKEN_RESULTS) {
 				// List options
-				sendEmbed(loadMsg, "There are too many tokens matching your search. Please be more specific.");
+				sendEmbed(loadMsg, ":anger: There are too many tokens matching your search. Please be more specific.");
 				return;
 			} else {
 				// List options
@@ -120,7 +120,7 @@ public class TokenCommand extends BaseCommand {
 		// Check if match has image
 		List<Token.SetArt> arts = match.getSetArt().parallelStream().filter(art -> art.getUrl() != null && !art.getUrl().isEmpty()).collect(Collectors.toList());
 		if (arts.isEmpty()) {
-			sendEmbed(loadMsg, "I sadly do not know of any art for this token. Please try a different one!");
+			sendEmbed(loadMsg, ":anger: I do not know of any art for this token. Please try a different one!");
 			return;
 		}
 

@@ -54,7 +54,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			if (section == null) {
 				e.getChannel().sendMessage(new EmbedBuilder()
 						.setAuthor("Infraction Procedure Guide", null, null)
-						.setDescription(":no_entry_sign: The specified section could not be found.\n\nThe following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuide().getSections().parallelStream()
+						.setDescription(":anger: The specified section could not be found.\n\nThe following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuide().getSections().parallelStream()
 								.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
 								.collect(Collectors.toList()))).build()).submit();
 				return;
@@ -67,7 +67,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				if (subsection == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
 							.setAuthor("Infraction Procedure Guide", null, null)
-							.setDescription(String.format(":no_entry_sign: The specified subsection could not be found.\n\nWithin **'%s %s'**, the following sections are available:\n%s",
+							.setDescription(String.format(":anger: The specified subsection could not be found.\n\nWithin **'%s %s'**, the following sections are available:\n%s",
 									section.getSectionId(), section.getTitle(),
 									String.join("\n", section.getSubSections().parallelStream()
 											.map(s -> ":small_orange_diamond: **" + s.getSectionId() + "** " + s.getTitle())
@@ -85,7 +85,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				if (topic == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
 							.setAuthor("Infraction Procedure Guide", null, null)
-							.setDescription(String.format(":no_entry_sign: The specified topic could not be found.\n\nWithin **'%s %s'**, the following topics are available:\n%s", subsection.getSectionId(), subsection.getTitle(), String.join("\n",
+							.setDescription(String.format(":anger: The specified topic could not be found.\n\nWithin **'%s %s'**, the following topics are available:\n%s", subsection.getSectionId(), subsection.getTitle(), String.join("\n",
 									subsection.getSubSections().parallelStream()
 											.map(s -> ":small_orange_diamond: " + s.getTitle())
 											.collect(Collectors.toList())))).build()).submit();
@@ -123,7 +123,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				}
 			}
 		} else {
-			sendEmbedFormat(e.getChannel(), ":no_entry_sign: The specified section could not be found.\n\nThe following sections are available:\n%s", String.join("\n",
+			sendEmbedFormat(e.getChannel(), ":anger: The specified section could not be found.\n\nThe following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getInfractionProcedureGuide().getSections().parallelStream()
 							.map(section -> ":small_orange_diamond: **" + section.getSectionId() + "** " + section.getTitle())
 							.collect(Collectors.toList())

@@ -42,7 +42,7 @@ public class ArtCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), "Please provide a card name to fetch art for.");
+			sendEmbed(e.getChannel(), ":anger: Please provide a card name to fetch art for.");
 			return;
 		}
 
@@ -59,10 +59,10 @@ public class ArtCommand extends BaseCommand {
 		try {
 			set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
 			if (set == null && setname != null)
-				sendEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
+				sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
 		} catch (Sets.MultipleResultsException ex) {
 			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
-				sendEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
+				sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);
 			else
 				sendEmbedFormat(loadMsg, "There are multiple sets which match **'%s'**. Did you perhaps mean any of the following?\n\n%s",
 						setname, String.join("\n", ex.getSets().parallelStream().map(s -> String.format(":small_orange_diamond: %s _(%s)_", s.getName(), s.getCode())).collect(Collectors.toList())));
@@ -89,16 +89,16 @@ public class ArtCommand extends BaseCommand {
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
 			else if (set == null) {
-				sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'**", cardname);
+				sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'**", cardname);
 				return;
 			} else {
-				sendEmbedFormat(loadMsg, "There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
+				sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-			sendEmbedFormat(loadMsg, "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
+			sendEmbedFormat(loadMsg, ":anger: There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!
@@ -110,7 +110,7 @@ public class ArtCommand extends BaseCommand {
 
 		// Check if an image is available
 		if (card.getImageUrl() == null) {
-			sendEmbedFormat(loadMsg, "There is no known art for **'%s'**.", cardname);
+			sendEmbedFormat(loadMsg, ":anger: There is no known art for **'%s'**.", cardname);
 			return;
 		}
 

@@ -65,13 +65,13 @@ public class OracleCommand extends BaseCommand {
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
 			else {
-				sendEmbedFormat(e.getChannel(), "There are no results for a card named **'%s'**", cardname);
+				sendEmbedFormat(e.getChannel(), ":anger: There are no results for a card named **'%s'**", cardname);
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-			sendEmbedFormat(e.getChannel(), "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
+			sendEmbedFormat(e.getChannel(), ":anger: There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!

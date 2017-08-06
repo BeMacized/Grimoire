@@ -57,7 +57,7 @@ public class CompRulesCommand extends BaseCommand {
 		else if (args[0].matches("[0-9]{3}[.][0-9]+[.]?")) mode = 2;
 		else if (args[0].matches("[0-9]{3}[.][0-9]+[a-z][.]?")) mode = 3;
 		else {
-			sendEmbedFormat(e.getChannel(), ":no_entry_sign: Invalid section or paragraph provided.\n\nPlease specify a section or paragraph from the comprehensive rules (ex. `1` or `1.1`).\nThe following sections are available:\n%s", String.join("\n",
+			sendEmbedFormat(e.getChannel(), ":anger: Invalid section or paragraph provided.\n\nPlease specify a section or paragraph from the comprehensive rules (ex. `1` or `1.1`).\nThe following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getComprehensiveRules().getRules().parallelStream()
 							.filter(r -> r.getParagraphId().matches("[0-9][.]"))
 							.map(section -> ":small_orange_diamond: **" + section.getParagraphId() + "** " + section.getText())
@@ -74,7 +74,7 @@ public class CompRulesCommand extends BaseCommand {
 				.filter(c -> c.getParagraphId().matches(reqId.substring(0, 1) + "[.]"))
 				.findFirst().orElse(null);
 		if (section == null) {
-			sendEmbedFormat(e.getChannel(), ":no_entry_sign: The section specified is not a valid option.\n\nThe following sections are available:\n%s", String.join("\n",
+			sendEmbedFormat(e.getChannel(), ":anger: The section specified is not a valid option.\n\nThe following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getComprehensiveRules().getRules().parallelStream()
 							.filter(r -> r.getParagraphId().matches("[0-9][.]"))
 							.map(s -> ":small_orange_diamond: **" + s.getParagraphId() + "** " + s.getText())
@@ -191,7 +191,7 @@ public class CompRulesCommand extends BaseCommand {
 		}
 
 		// Add error line
-		if (errorline != null) description.insert(0, ":no_entry_sign: " + errorline + "\n\n");
+		if (errorline != null) description.insert(0, ":anger: " + errorline + "\n\n");
 			// Add subtitle
 		else if (subtitle != null) description.insert(0, subtitle + "\n\n");
 

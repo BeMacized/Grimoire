@@ -52,7 +52,7 @@ public class DefineCommand extends BaseCommand {
 					.sorted(Comparator.comparingInt(o -> StringUtils.getLevenshteinDistance(o.getKeyword(), String.join(" ", args))))
 					.map(Definition::getKeyword).collect(Collectors.toList());
 
-			sendEmbed(e.getChannel(), "Unknown keyword.\n\nDid you perhaps mean any of the following?\n" + String.join("\n", suggestions.subList(0, 3).parallelStream().map(k -> ":small_orange_diamond: " + k).collect(Collectors.toList())));
+			sendEmbed(e.getChannel(), ":anger: Unknown keyword.\n\nDid you perhaps mean any of the following?\n" + String.join("\n", suggestions.subList(0, 3).parallelStream().map(k -> ":small_orange_diamond: " + k).collect(Collectors.toList())));
 			return;
 		}
 

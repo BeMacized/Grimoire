@@ -64,13 +64,13 @@ public class RulingsCommand extends BaseCommand {
 			else if (foreignQuery.distinctNames().size() == 1)
 				card = foreignQuery.distinctNames().get(0);
 			else {
-				sendEmbedFormat(e.getChannel(), "There are no results for a card named **'%s'**.", cardname);
+				sendEmbedFormat(e.getChannel(), ":anger: There are no results for a card named **'%s'**.", cardname);
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctNames().size() > MAX_CARD_ALTERNATIVES) {
-			sendEmbedFormat(e.getChannel(), "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
+			sendEmbedFormat(e.getChannel(), ":anger: There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!
@@ -82,7 +82,7 @@ public class RulingsCommand extends BaseCommand {
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings().length == 0) {
-			sendEmbedFormat(e.getChannel(), "There are no rulings for **'%s'**.", cardname);
+			sendEmbedFormat(e.getChannel(), ":anger: There are no rulings for **'%s'**.", cardname);
 			return;
 		}
 
