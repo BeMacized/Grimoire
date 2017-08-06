@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,7 @@ public class ComprehensiveRules {
 		// Fetch text
 		String ruleText;
 		try {
-			// Sourced from http://media.wizards.com/2016/docs/MagicCompRules_20160930.txt
+			// Sourced from http://media.wizards.com/2017/downloads/MagicCompRules_20170707.txt
 			ruleText = IOUtils.toString(ComprehensiveRule.class.getResourceAsStream("/comprehensive_rules.txt"));
 		} catch (IOException e) {
 			LOG.log(Level.SEVERE, "Could not load comprehensive rules!", e);
@@ -55,6 +56,9 @@ public class ComprehensiveRules {
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "Could not parse comprehensive rules!", e);
 		}
+
+		// Sort rules
+		Collections.sort(rules);
 
 		LOG.info("Loaded " + rules.size() + " comprehensive rules");
 	}

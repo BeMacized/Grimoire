@@ -98,7 +98,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 					if (i == 0)
-						eb = eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(),subsection.getTitle()));
+						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(),subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
 				}
 			} else if (subsection != null) {
@@ -108,7 +108,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 					if (i == 0)
-						eb = eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
+						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
 				}
 			} else {
@@ -118,7 +118,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 					if (i == 0)
-						eb = eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", section.getSectionId(), section.getTitle()));
+						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", section.getSectionId(), section.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
 				}
 			}

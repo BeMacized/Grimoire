@@ -31,7 +31,7 @@ public class Definitions {
 		// Fetch text
 		String glossaryText;
 		try {
-			// Sourced from http://media.wizards.com/2016/docs/MagicCompRules_20160930.txt
+			// Sourced from http://media.wizards.com/2017/downloads/MagicCompRules_20170707.txt
 			glossaryText = IOUtils.toString(ComprehensiveRule.class.getResourceAsStream("/comprehensive_rules.txt"));
 		} catch (IOException e) {
 			LOG.log(Level.SEVERE, "Could not load definitions!", e);

@@ -33,7 +33,7 @@ public class TournamentRulesCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
-			sendEmbedFormat(e.getChannel(), "Please specify a chapter (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",
+			sendEmbedFormat(e.getChannel(), "Please specify a chapter from the tournament rules (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getTournamentRules().getRules().parallelStream()
 							.map(section -> ":small_orange_diamond: **" + section.getParagraphNr() + "** " + section.getTitle())
 							.collect(Collectors.toList())
@@ -66,7 +66,7 @@ public class TournamentRulesCommand extends BaseCommand {
 			for (int i = 0; i < splits.length; i++) {
 				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 				if (i == 0)
-					eb = eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s: %s", subsection.getParagraphNr(), section.getTitle(), subsection.getTitle()));
+					eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s: %s", subsection.getParagraphNr(), section.getTitle(), subsection.getTitle()));
 				e.getChannel().sendMessage(eb.build()).submit();
 			}
 
@@ -86,7 +86,7 @@ public class TournamentRulesCommand extends BaseCommand {
 			for (int i = 0; i < splits.length; i++) {
 				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 				if (i == 0)
-					eb = eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s", section.getParagraphNr(), section.getTitle()));
+					eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s", section.getParagraphNr(), section.getTitle()));
 				e.getChannel().sendMessage(eb.build()).submit();
 			}
 		}
