@@ -23,12 +23,12 @@ public class Dependency {
 	private byte[] data;
 	private String encoding;
 
-	public Dependency(String id, List<String> sources, Type type) {
+	public Dependency(String id, List<String> sources, Type type, String encoding) {
 		this.id = id;
 		this.sources = new ArrayList<>(sources);
 		this.type = type;
 		this.data = null;
-		this.encoding = null;
+		this.encoding = encoding;
 	}
 
 	public String getId() {
@@ -69,7 +69,6 @@ public class Dependency {
 				con.setRequestMethod("GET");
 				con.connect();
 				if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					encoding = con.getContentEncoding();
 					data = IOUtils.toByteArray(con.getInputStream());
 					break;
 				}
@@ -86,11 +85,10 @@ public class Dependency {
 
 	public void release() {
 		data = null;
-		encoding = null;
 	}
 
 	private File getFileReference() {
-		return new File(FILE_STORAGE + File.separator + getId() + "." + (encoding == null ? "none" : encoding));
+		return new File(FILE_STORAGE + File.separator + getId());
 	}
 
 	private boolean loadFromCache() {
@@ -100,8 +98,6 @@ public class Dependency {
 		// Load from cache
 		try {
 			this.data = FileUtils.readFileToByteArray(file);
-			this.encoding = file.getName().split("[.]")[1];
-			if (this.encoding.equalsIgnoreCase("none")) this.encoding = null;
 		} catch (IOException e) {
 			LOG.log(Level.SEVERE, getId() + ": Could not load from cache", e);
 			return false;
