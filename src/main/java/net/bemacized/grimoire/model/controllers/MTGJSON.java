@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.MtgSet;
 import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class MTGJSON {
 		// Load json string
 		String json;
 		try {
-			ZipInputStream zis = new ZipInputStream(new ByteInputStream(zipData, zipData.length));
+			ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zipData));
 			zis.getNextEntry();
 			json = IOUtils.toString(zis);
 		} catch (IOException e) {
