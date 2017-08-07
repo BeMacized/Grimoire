@@ -113,7 +113,7 @@ public class CompRulesCommand extends BaseCommand {
 		final ComprehensiveRule subparagraph;
 		if (mode > 2) {
 			subparagraph = Grimoire.getInstance().getComprehensiveRules().getRules().parallelStream()
-					.filter(c -> c.getParagraphId().equalsIgnoreCase(reqId + "."))
+					.filter(c -> c.getParagraphId().equalsIgnoreCase(reqId))
 					.findFirst().orElse(null);
 			if (subparagraph == null) {
 				errorline = "The subparagraph specified is not a valid option.";
