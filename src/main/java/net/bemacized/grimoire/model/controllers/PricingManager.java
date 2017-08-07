@@ -1,6 +1,10 @@
 package net.bemacized.grimoire.model.controllers;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
+import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.storeAPIs.MagicCardMarketAPI;
 import net.bemacized.grimoire.model.models.storeAPIs.StoreAPI;
 import net.bemacized.grimoire.model.models.storeAPIs.TCGPlayerAPI;
@@ -104,9 +108,22 @@ public class PricingManager {
 	}
 
 	public void init() {
+		// Retrieve set dictionary
+		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("SET_DICTIONARY");
+		d.retrieve();
+		if (!d.retrieve()) {
+			LOG.severe("Could not load set dictionary.");
+			return;
+		}
+		String json = d.getString();
+		d.release();
+
+		// Parse set dictionary
+		final JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+
 		this.stores.forEach(store -> {
 			try {
-				store.updateSets();
+				store.updateSets(obj);
 			} catch (StoreAPI.StoreAuthException e) {
 				LOG.log(Level.SEVERE, "Authentication error occurred with " + store.getStoreName() + " while updating set names", e);
 			} catch (StoreAPI.StoreServerErrorException e) {

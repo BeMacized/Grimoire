@@ -24,7 +24,7 @@ public class ArtCommand extends BaseCommand {
 
 	@Override
 	public String[] aliases() {
-		return new String[]{"card", "cardart"};
+		return new String[]{"cardart"};
 	}
 
 	@Override

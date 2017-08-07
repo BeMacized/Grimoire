@@ -1,15 +1,14 @@
 package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.TournamentRule;
-import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -32,14 +31,13 @@ public class TournamentRules {
 		LOG.info("Loading tournament rules...");
 
 		// Fetch text
-		String ruleText;
-		try {
-			// Sourced from https://sites.google.com/site/mtgfamiliar/rules/MagicTournamentRules-light.html
-			ruleText = IOUtils.toString(TournamentRule.class.getResourceAsStream("/tournament_rules.html"));
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not load tournament rules!", e);
+		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("TR_DOC");
+		if (!d.retrieve()) {
+			LOG.severe("Could not load tournament rules!");
 			return;
 		}
+		String ruleText = d.getString();
+		d.release();
 
 		// Parse HTML
 		Document document = Jsoup.parse(ruleText);

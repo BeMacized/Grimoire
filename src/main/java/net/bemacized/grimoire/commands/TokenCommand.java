@@ -100,11 +100,11 @@ public class TokenCommand extends BaseCommand {
 				return;
 			} else {
 				// List options
-				sendEmbedFormat(loadMsg, "There are multiple tokens matching your search. Please pick any of the following using `!token %s [#]`:\n", String.join("\n",
+				sendEmbedFormat(loadMsg, "There are multiple tokens matching your search. Please pick any of the following using `!token %s [#]`:\n%s", match.getName(), String.join("\n",
 						IntStream.range(0, matches.size()).parallel().mapToObj(i -> {
 							Token m = matches.get(i);
 							return String.format(
-									"\n:small_orange_diamond: **%s.**%s%s%s%s",
+									":small_orange_diamond: **%s.**%s%s%s%s",
 									i + 1,
 									(m.getColor() == null) ? "" : " " + m.getColor(),
 									(m.getPt() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPt()) + "_",

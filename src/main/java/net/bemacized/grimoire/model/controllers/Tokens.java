@@ -1,5 +1,7 @@
 package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.Token;
 import net.bemacized.grimoire.utils.MTGUtils;
 import org.w3c.dom.Document;
@@ -10,7 +12,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,10 +41,19 @@ public class Tokens {
 		try {
 			tokens = new ArrayList<>();
 
+			// Fetch xml
+			Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("TOKENS");
+			if (!d.retrieve()) {
+				LOG.severe("Could not load tokens!");
+				return;
+			}
+			String xml = d.getString();
+			d.release();
+
 			// Parse token.xml
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(Token.class.getResourceAsStream("/tokens.xml"));
+			Document doc = db.parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
 
 			// Extract card nodes
 			for (Element card : new ArrayList<Element>() {{

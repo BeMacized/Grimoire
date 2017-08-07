@@ -1,16 +1,15 @@
 package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.InfractionProcedureGuideSection;
-import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -33,14 +32,13 @@ public class InfractionProcedureGuide {
 		LOG.info("Loading infraction procedure guide...");
 
 		// Fetch text
-		String ruleText;
-		try {
-			// Sourced from https://sites.google.com/site/mtgfamiliar/rules/InfractionProcedureGuide-light.html
-			ruleText = IOUtils.toString(InfractionProcedureGuideSection.class.getResourceAsStream("/infraction_procedure_guide.html"));
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not load infraction procedure guide!", e);
+		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("IPG_DOC");
+		if (!d.retrieve()) {
+			LOG.severe("Could not load infraction procedure guide!");
 			return;
 		}
+		String ruleText = d.getString();
+		d.release();
 
 		// Parse HTML
 		Document document = Jsoup.parse(ruleText);

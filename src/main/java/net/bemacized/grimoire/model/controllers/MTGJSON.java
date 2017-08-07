@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
+import net.bemacized.grimoire.model.models.Dependency;
 import net.bemacized.grimoire.model.models.MtgSet;
 import org.apache.commons.io.IOUtils;
 
@@ -36,10 +39,18 @@ public class MTGJSON {
 		cardList.clear();
 		LOG.info("Loading Sets & Cards...");
 
+		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("MTGJSON");
+		if (!d.retrieve()) {
+			LOG.severe("Could not retrieve card data!");
+			return;
+		}
+		byte[] zipData = d.getBinary();
+		d.release();
+
 		// Load json string
 		String json;
 		try {
-			ZipInputStream zis = new ZipInputStream(getClass().getResourceAsStream("/mtgjson.zip"));
+			ZipInputStream zis = new ZipInputStream(new ByteInputStream(zipData, zipData.length));
 			zis.getNextEntry();
 			json = IOUtils.toString(zis);
 		} catch (IOException e) {

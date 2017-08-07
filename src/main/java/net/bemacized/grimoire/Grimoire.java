@@ -39,6 +39,7 @@ public class Grimoire {
 	private PricingManager pricingManager;
 	private ImageProviders imageProviders;
 	private EmojiParser emojiParser;
+	private DependencyManager dependencyManager;
 
 	private JDA discord;
 	private DBManager dbManager;
@@ -66,6 +67,9 @@ public class Grimoire {
 				System.getenv("MONGO_PASSWORD")
 		);
 
+		// Load dependencies
+		this.dependencyManager = new DependencyManager();
+
 		// Setup image providers
 		this.imageProviders = new ImageProviders();
 
@@ -81,7 +85,6 @@ public class Grimoire {
 
 		// Load definitions
 		this.definitions = new Definitions();
-		this.definitions.load();
 
 		// Load comprehensive rules
 		this.comprehensiveRules = new ComprehensiveRules();
@@ -176,5 +179,9 @@ public class Grimoire {
 
 	public EmojiParser getEmojiParser() {
 		return emojiParser;
+	}
+
+	public DependencyManager getDependencyManager() {
+		return dependencyManager;
 	}
 }

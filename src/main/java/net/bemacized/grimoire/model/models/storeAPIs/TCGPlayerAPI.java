@@ -1,5 +1,7 @@
 package net.bemacized.grimoire.model.models.storeAPIs;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.Card;
 import org.apache.commons.io.IOUtils;
@@ -17,7 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class TCGPlayerAPI extends StoreAPI {
@@ -37,7 +38,7 @@ public class TCGPlayerAPI extends StoreAPI {
 
 	@Override
 	public String getStoreId() {
-		return "TCGP";
+		return "tcgplayer";
 	}
 
 	@Override
@@ -46,10 +47,17 @@ public class TCGPlayerAPI extends StoreAPI {
 	}
 
 	@Override
-	public void updateSets() throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
-		Map<String, String> map = this.parseSetDictionary();
-		map.entrySet().stream().filter(e -> e.getValue() != null && !e.getValue().isEmpty()).forEach(e -> Grimoire.getInstance().getSets().getByCode(e.getKey()).setStoreSetName(getStoreId(), e.getValue()));
-		LOG.info(getStoreName() + ": Loaded " + map.entrySet().parallelStream().filter(e -> e.getValue() != null).count() + " sets.");
+	public void updateSets(JsonObject setDictionary) throws UnknownStoreException, StoreAuthException, StoreServerErrorException {
+		setDictionary.keySet().stream()
+				.map(setcode -> {
+					JsonObject obj = new JsonParser().parse(setDictionary.getAsJsonObject(setcode).toString()).getAsJsonObject();
+					obj.addProperty("code", setcode);
+					return obj;
+				})
+				.filter(obj -> obj.has(getStoreId()))
+				.filter(obj -> !obj.get(getStoreId()).getAsString().isEmpty())
+				.forEach(obj -> Grimoire.getInstance().getSets().getByCode(obj.get("code").getAsString()).setStoreSetName(getStoreId(), obj.get(getStoreId()).getAsString()));
+		LOG.info(getStoreName() + ": Loaded " + Grimoire.getInstance().getSets().getSets().parallelStream().filter(s -> s.getStoreSetName(getStoreId()) != null).count() + " sets.");
 	}
 
 	@Override
