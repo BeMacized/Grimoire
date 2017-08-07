@@ -24,3 +24,5 @@ docker-compose.yml
 
 ### Miscellaneous
 mongodata/
+execscripts/
+/src/main/java/Exec.java

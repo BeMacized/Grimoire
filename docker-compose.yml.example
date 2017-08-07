@@ -13,10 +13,10 @@ services:
         - mongo
       environment:
 #        - "BOT_TOKEN="
-#        - "MCM_HOST="
+#        - "MCM_HOST=www.mkmapi.eu"
 #        - "MCM_TOKEN="
 #        - "MCM_SECRET="
-#        - "TCG_HOST="
+#        - "TCG_HOST=partner.tcgplayer.com"
 #        - "TCG_KEY="
 #        - "MONGO_PORT="
 #        - "MONGO_HOST="
@@ -24,3 +24,4 @@ services:
 #        - "MONGO_USER="
 #        - "MONGO_PASSWORD="
 #        - "EMOJI_GUILD="
+#        - "ENABLE_EXEC_MODULE=0"

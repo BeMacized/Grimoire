@@ -125,7 +125,7 @@ public class LoadMessage {
 	}
 
 	public void complete() {
-		if (this.finished) throw new FinishedException();
+		if (this.finished) throw new IllegalStateException("Object exceeded its purpose");
 		taskQueue.queue(() -> {
 			messages.forEach(msg -> msg.delete().submit());
 			messages.clear();
@@ -150,7 +150,7 @@ public class LoadMessage {
 	}
 
 	private void complete(Object msg) {
-		if (this.finished) throw new FinishedException();
+		if (this.finished) throw new IllegalStateException("Object exceeded its purpose");
 		taskQueue.queue(() -> {
 			for (int i = 0; i < messages.size(); i++) {
 				if (i < messages.size() - 1)
@@ -182,16 +182,6 @@ public class LoadMessage {
 			}
 			finish();
 		});
-	}
-
-	private class FinishedException extends RuntimeException {
-		FinishedException() {
-			this("This object has already exceeded its purpose.");
-		}
-
-		private FinishedException(String message) {
-			super(message);
-		}
 	}
 
 }

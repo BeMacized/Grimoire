@@ -14,6 +14,9 @@ import java.util.logging.Logger;
 
 public class Grimoire {
 
+	public final static String DEV_ID = "87551321762172928";
+	private final static String BOT_NAME = "Mac's Grimoire";
+
 	private final static Logger LOG = Logger.getLogger(Grimoire.class.getName());
 	private static Grimoire instance;
 
@@ -120,6 +123,11 @@ public class Grimoire {
 
 		// Instantiate Emoji parser
 		this.emojiParser = new EmojiParser();
+
+		// Assert nickname
+		//TODO: Move to on guild join
+		if (!discord.getSelfUser().getName().equals(BOT_NAME))
+			discord.getSelfUser().getManager().setName(BOT_NAME).submit();
 	}
 
 	public JDA getDiscord() {
