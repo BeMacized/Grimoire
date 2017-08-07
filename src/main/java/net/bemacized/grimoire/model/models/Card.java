@@ -1,7 +1,13 @@
 package net.bemacized.grimoire.model.models;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.model.controllers.Cards;
+import net.bemacized.grimoire.utils.MTGUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -207,6 +213,48 @@ public class Card implements Cloneable {
 
 	public String getGathererUrl() {
 		return (multiverseid > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + multiverseid : null;
+	}
+	
+	public MessageEmbed getEmbed(Guild guild) {
+		String formats = (getLegalities() == null) ? "" : String.join(", ", Arrays.stream(getLegalities())
+				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
+				.map(Legality::getFormat)
+				.collect(Collectors.toList()));
+		String rarities = String.join(", ", new Cards.SearchQuery().hasExactName(getName()).parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));
+		String printings = String.join(", ", new String[]{"**" + getSet().getName() + " (" + getSet().getCode() + ")**", String.join(", ", Arrays.stream(getPrintings()).parallel().filter(setCode -> !getSet().getCode().equalsIgnoreCase(setCode)).collect(Collectors.toList()))}).trim();
+		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
+		String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
+
+		//TODO: ENABLE AGAIN WHEN DISCORD FIXES EMOJI IN EMBED TITLES ON MOBILE ---
+		//		String title = getName()
+		//				+ " "
+		//				+ CardUtils.parseEmoji(e.getGuild(), getManaCost());
+		//		String separateCost = "";
+		//		if (title.length() > 256) {
+		//			title = getName();
+		//			separateCost = CardUtils.parseEmoji(e.getGuild(), getManaCost());
+		//		}
+
+		String title = getName();
+		String separateCost = (getManaCost() == null || getManaCost().isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild) + " **(" + new DecimalFormat("##.###").format(getCmc()) + ")**";
+
+		// Build the embed
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setThumbnail(getImageUrl());
+		eb.setColor(MTGUtils.colorIdentitiesToColor(getColorIdentity()));
+		eb.setTitle(title, getGathererUrl());
+		if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
+		if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
+		eb.appendDescription(getType());
+		eb.appendDescription("\n\n");
+		eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild));
+		if (!formats.isEmpty()) eb.addField("Formats", formats, true);
+		if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
+		if (loyalty > 0) eb.addField("Loyalty", String.valueOf(loyalty), true);
+
+		// Return result
+		return eb.build();
 	}
 
 	public static class Ruling {
