@@ -6,12 +6,8 @@ import net.bemacized.grimoire.model.controllers.Sets;
 import net.bemacized.grimoire.model.models.Card;
 import net.bemacized.grimoire.model.models.MtgSet;
 import net.bemacized.grimoire.utils.LoadMessage;
-import net.bemacized.grimoire.utils.MTGUtils;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

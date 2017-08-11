@@ -5,12 +5,14 @@ import net.bemacized.grimoire.model.models.ComprehensiveRule;
 import net.bemacized.grimoire.model.models.Dependency;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ComprehensiveRules {
 
@@ -45,12 +47,15 @@ public class ComprehensiveRules {
 			ruleText = ruleText.substring(ruleText.indexOf("1. Game Concepts", ruleText.indexOf("Credits"))); //Cut off TOC, Intro
 			ruleText = ruleText.substring(0, ruleText.indexOf("Glossary")); //Cut off glossary
 
-			// Parse rule text
-			Pattern rulePattern = Pattern.compile("([0-9]+[.])+([0-9]*[a-z])?([^\\n\\r]+[\n]?)+");
-			Matcher matcher = rulePattern.matcher(ruleText);
-			while (matcher.find()) {
-				String p = matcher.group().split("\\s+")[0];
-				rules.add(new ComprehensiveRule(p, matcher.group().substring(p.length()).trim()));
+			// Split texts
+			String[] splitRules = Arrays.stream(ruleText.split("[\\r\\n]{3,}")).map(String::trim).collect(Collectors.toList()).toArray(new String[0]);
+
+			for (String rule : splitRules) {
+				Pattern idPattern = Pattern.compile("([0-9]+[.])+([0-9]+([a-z]|\\.))?");
+				Matcher matcher = idPattern.matcher(rule);
+				if (!matcher.find()) continue;
+				String id = matcher.group();
+				rules.add(new ComprehensiveRule(id, rule.substring(id.length()).trim()));
 			}
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "Could not parse comprehensive rules!", e);

@@ -19,7 +19,7 @@ public class LegalityCommand extends BaseCommand {
 
 	@Override
 	public String[] aliases() {
-		return new String[]{"legal", "illegal"};
+		return new String[]{"legal", "illegal", "format", "formats"};
 	}
 
 	@Override

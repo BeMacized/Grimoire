@@ -214,7 +214,7 @@ public class Card implements Cloneable {
 	public String getGathererUrl() {
 		return (multiverseid > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + multiverseid : null;
 	}
-	
+
 	public MessageEmbed getEmbed(Guild guild) {
 		String formats = (getLegalities() == null) ? "" : String.join(", ", Arrays.stream(getLegalities())
 				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
