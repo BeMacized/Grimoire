@@ -34,12 +34,12 @@ public class ComprehensiveRules {
 
 		// Fetch text
 		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("CR_DOC");
-		if (!d.retrieve()) {
+		String ruleText = d.getString();
+		if (ruleText == null) {
 			LOG.severe("Could not load comprehensive rules!");
 			return;
 		}
-		String ruleText = d.getString();
-		d.release();
+		d.release(); // Release dependency from memory after loading
 
 		// Parse text
 		try {

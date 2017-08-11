@@ -33,12 +33,12 @@ public class InfractionProcedureGuide {
 
 		// Fetch text
 		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("IPG_DOC");
-		if (!d.retrieve()) {
+		String ruleText = d.getString();
+		if (ruleText == null) {
 			LOG.severe("Could not load infraction procedure guide!");
 			return;
 		}
-		String ruleText = d.getString();
-		d.release();
+		d.release(); // Release dependency from memory after loading
 
 		// Parse HTML
 		Document document = Jsoup.parse(ruleText);

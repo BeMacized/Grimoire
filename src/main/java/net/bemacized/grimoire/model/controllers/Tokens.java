@@ -43,12 +43,12 @@ public class Tokens {
 
 			// Fetch xml
 			Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("TOKENS");
-			if (!d.retrieve()) {
+			String xml = d.getString();
+			if (xml == null) {
 				LOG.severe("Could not load tokens!");
 				return;
 			}
-			String xml = d.getString();
-			d.release();
+			d.release(); // Release dependency from memory after loading
 
 			// Parse token.xml
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

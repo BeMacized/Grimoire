@@ -44,6 +44,8 @@ public class Dependency {
 	}
 
 	public String getString() {
+		// Attempt retrieval if needed
+		if (data == null && !retrieve()) return null;
 		try {
 			return IOUtils.toString(data, encoding);
 		} catch (IOException e) {
@@ -53,6 +55,7 @@ public class Dependency {
 	}
 
 	public byte[] getBinary() {
+		if (data == null && !retrieve()) return null;
 		return data;
 	}
 

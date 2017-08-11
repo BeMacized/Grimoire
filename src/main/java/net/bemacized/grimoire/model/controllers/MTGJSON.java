@@ -42,12 +42,12 @@ public class MTGJSON {
 		LOG.info("Loading Sets & Cards...");
 
 		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("MTGJSON");
-		if (!d.retrieve()) {
+		byte[] zipData = d.getBinary();
+		if (zipData == null) {
 			LOG.severe("Could not retrieve card data!");
 			return;
 		}
-		byte[] zipData = d.getBinary();
-		d.release();
+		d.release(); // Release dependency from memory after loading
 
 		// Load json string
 		String json;

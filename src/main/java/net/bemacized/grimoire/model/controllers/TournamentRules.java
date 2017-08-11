@@ -32,12 +32,12 @@ public class TournamentRules {
 
 		// Fetch text
 		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("TR_DOC");
-		if (!d.retrieve()) {
+		String ruleText = d.getString();
+		if (ruleText == null) {
 			LOG.severe("Could not load tournament rules!");
 			return;
 		}
-		String ruleText = d.getString();
-		d.release();
+		d.release(); // Release dependency from memory after loading
 
 		// Parse HTML
 		Document document = Jsoup.parse(ruleText);

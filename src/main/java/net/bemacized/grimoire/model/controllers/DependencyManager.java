@@ -18,6 +18,7 @@ public class DependencyManager {
 			add(new Dependency("IPG_DOC", Collections.singletonList("https://sites.google.com/site/mtgfamiliar/rules/InfractionProcedureGuide-light.html"), Dependency.Type.TEXT, "UTF-8"));
 			add(new Dependency("TR_DOC", Collections.singletonList("https://sites.google.com/site/mtgfamiliar/rules/MagicTournamentRules-light.html"), Dependency.Type.TEXT, "UTF-8"));
 			add(new Dependency("TOKENS", Collections.singletonList("https://raw.githubusercontent.com/Cockatrice/Magic-Token/master/tokens.xml"), Dependency.Type.TEXT, "UTF-8"));
+			add(new Dependency("STANDARDSETS", Collections.singletonList("http://whatsinstandard.com/api/4/sets.json"), Dependency.Type.TEXT, "UTF-8"));
 		}};
 	}
 

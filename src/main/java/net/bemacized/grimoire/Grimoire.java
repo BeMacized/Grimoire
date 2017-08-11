@@ -40,6 +40,7 @@ public class Grimoire {
 	private ImageProviders imageProviders;
 	private EmojiParser emojiParser;
 	private DependencyManager dependencyManager;
+	private StandardRotation standardRotation;
 
 	private JDA discord;
 	private DBManager dbManager;
@@ -101,6 +102,10 @@ public class Grimoire {
 		// Instantiate pricing manager
 		this.pricingManager = new PricingManager();
 		this.pricingManager.init();
+
+		// Load standard sets
+		this.standardRotation = new StandardRotation();
+		this.standardRotation.load();
 
 		// Log in to Discord
 		try {
@@ -183,5 +188,9 @@ public class Grimoire {
 
 	public DependencyManager getDependencyManager() {
 		return dependencyManager;
+	}
+
+	public StandardRotation getStandardRotation() {
+		return standardRotation;
 	}
 }

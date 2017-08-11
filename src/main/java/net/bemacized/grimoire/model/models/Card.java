@@ -218,6 +218,7 @@ public class Card implements Cloneable {
 	public MessageEmbed getEmbed(Guild guild) {
 		String formats = (getLegalities() == null) ? "" : String.join(", ", Arrays.stream(getLegalities())
 				.filter(l -> l.getLegality().equalsIgnoreCase("Legal"))
+				.filter(l -> !l.getFormat().endsWith(" Block"))
 				.map(Legality::getFormat)
 				.collect(Collectors.toList()));
 		String rarities = String.join(", ", new Cards.SearchQuery().hasExactName(getName()).parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList()));

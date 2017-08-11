@@ -1,7 +1,9 @@
 package net.bemacized.grimoire.model.controllers;
 
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.model.models.ComprehensiveRule;
 import net.bemacized.grimoire.model.models.Definition;
+import net.bemacized.grimoire.model.models.Dependency;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -29,14 +31,13 @@ public class Definitions {
 		LOG.info("Loading definitions...");
 
 		// Fetch text
-		String glossaryText;
-		try {
-			// Sourced from http://media.wizards.com/2017/downloads/MagicCompRules_20170707.txt
-			glossaryText = IOUtils.toString(ComprehensiveRule.class.getResourceAsStream("/comprehensive_rules.txt"));
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Could not load definitions!", e);
+		Dependency d = Grimoire.getInstance().getDependencyManager().getDependency("CR_DOC");
+		String glossaryText = d.getString();
+		if (glossaryText == null) {
+			LOG.severe("Could not load definitions!");
 			return;
 		}
+		d.release(); // Release dependency from memory after loading
 
 		// Parse text
 		try {
