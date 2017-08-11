@@ -56,8 +56,10 @@ public class PricingCommand extends BaseCommand {
 		MtgSet set;
 		try {
 			set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
-			if (set == null && setname != null)
+			if (set == null && setname != null) {
 				sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
+				return;
+			}
 		} catch (Sets.MultipleResultsException ex) {
 			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
 				sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);

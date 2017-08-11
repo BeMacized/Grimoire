@@ -276,6 +276,14 @@ public class Card implements Cloneable {
 		private String format;
 		private String legality;
 
+		public Legality(String format, String legality) {
+			this.format = format;
+			this.legality = legality;
+		}
+
+		public Legality() {
+		}
+
 		public String getFormat() {
 			return format;
 		}

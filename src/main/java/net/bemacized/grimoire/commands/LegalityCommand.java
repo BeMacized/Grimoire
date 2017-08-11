@@ -85,8 +85,13 @@ public class LegalityCommand extends BaseCommand {
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), card.getGathererUrl())
 				.setDescription("**Legality**\n");
-		for (Card.Legality legality : card.getLegalities())
+
+		for (Card.Legality legality : card.getLegalities()) {
+			// Hide legal block status
+			if (legality.getFormat().endsWith(" Block") && legality.getLegality().equalsIgnoreCase("Legal")) continue;
+			// Add field
 			eb.addField(legality.getFormat(), legality.getLegality(), true);
+		}
 		e.getChannel().sendMessage(eb.build()).submit();
 	}
 }

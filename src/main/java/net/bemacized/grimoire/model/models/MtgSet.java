@@ -1,5 +1,9 @@
 package net.bemacized.grimoire.model.models;
 
+import net.bemacized.grimoire.Grimoire;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,4 +115,14 @@ public class MtgSet {
 		return result;
 	}
 
+	public MessageEmbed getEmbed() {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle(String.format("%s (%s)", getName(), getCode()), "https://scryfall.com/sets/" + getCode().toLowerCase());
+		eb.addField("Release Date", getReleaseDate(), true);
+		eb.addField("Type", getType().substring(0, 1).toUpperCase() + getType().substring(1), true);
+		if (getBlock() != null && !getBlock().isEmpty()) eb.addField("Block", getBlock(), true);
+		eb.addField("MTG Online Only", isOnlineOnly() ? "Yes" : "No", true);
+		eb.addField("Cards", String.valueOf(Grimoire.getInstance().getCards().getCards().parallelStream().filter(c -> c.getSet().getCode().equals(getCode())).count()), true);
+		return eb.build();
+	}
 }

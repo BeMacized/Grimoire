@@ -14,11 +14,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import java.util.zip.ZipInputStream;
 
@@ -86,6 +88,25 @@ public class MTGJSON {
 		// Sort lists by recency
 		setList.sort(Comparator.comparing(MtgSet::getReleaseDate).reversed());
 		cardList.sort((o1, o2) -> o2.getSet().getReleaseDate().compareTo(o1.getSet().getReleaseDate()));
+
+		// Inject additional data
+		for (Card card : cardList) {
+			// Additional format(s)
+			try {
+				//Pauper
+				Card.Legality pauper = new Card.Legality("Pauper",
+						(cardList.parallelStream().anyMatch(c -> c.getName().equalsIgnoreCase(card.getName()) && c.getRarity().equalsIgnoreCase("common")))
+								? "Legal"
+								: "Banned"
+				);
+				Field field = Card.class.getDeclaredField("legalities");
+				field.setAccessible(true);
+				field.set(card, Stream.concat(Arrays.stream(card.getLegalities()), Stream.of(pauper)).collect(Collectors.toList()).toArray(new Card.Legality[0]));
+				field.setAccessible(false);
+			} catch (NoSuchFieldException | IllegalAccessException e) {
+				LOG.log(Level.SEVERE, "Could not inject set into card model", e);
+			}
+		}
 
 		LOG.info("Loaded " + setList.size() + " sets");
 		LOG.info("Loaded " + cardList.size() + " cards");

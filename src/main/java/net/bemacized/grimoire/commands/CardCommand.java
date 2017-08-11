@@ -40,7 +40,7 @@ public class CardCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), ":anger: Please provide a card name to info for.");
+			sendEmbed(e.getChannel(), ":anger: Please provide a card name to look up.");
 			return;
 		}
 
@@ -56,8 +56,10 @@ public class CardCommand extends BaseCommand {
 		MtgSet set;
 		try {
 			set = setname != null ? Grimoire.getInstance().getSets().getSingleByNameOrCode(setname) : null;
-			if (set == null && setname != null)
+			if (set == null && setname != null) {
 				sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
+				return;
+			}
 		} catch (Sets.MultipleResultsException ex) {
 			if (ex.getSets().size() > MAX_SET_ALTERNATIVES)
 				sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);

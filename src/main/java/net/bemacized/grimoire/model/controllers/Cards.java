@@ -39,6 +39,14 @@ public class Cards {
 		return getCards().parallelStream().map(Card::getRarity).distinct().collect(Collectors.toList());
 	}
 
+	public List<String> getAllLegalities() {
+		return getCards().parallelStream().map(c -> Arrays.stream(c.getLegalities()).map(Card.Legality::getLegality)).flatMap(o -> o).distinct().collect(Collectors.toList());
+	}
+
+	public List<String> getAllFormats() {
+		return getCards().parallelStream().map(c -> Arrays.stream(c.getLegalities()).map(Card.Legality::getFormat)).flatMap(o -> o).distinct().collect(Collectors.toList());
+	}
+
 	public static class SearchQuery extends ArrayList<Card> {
 
 		public SearchQuery() {
