@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.StreamSupport;
@@ -130,19 +131,19 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 		// Return null if we didn't find anything
 		if (product == null) return null;
 
+		DecimalFormat formatter = new DecimalFormat("#.00");
 		// Return the found data
 		return new StoreCardPriceRecord(
 				card.getName(),
 				card.getSet().getCode(),
 				"https://www.magiccardmarket.eu" + product.getString("website"),
-				"€",
 				System.currentTimeMillis(),
 				this.getStoreId(),
-				new HashMap<String, Double>() {{
-					put("Low", product.getJSONObject("priceGuide").getDouble("LOW"));
-					put("Avg. Sell Price", product.getJSONObject("priceGuide").getDouble("SELL"));
-					put("Low Foil", product.getJSONObject("priceGuide").getDouble("LOWFOIL"));
-					put("Average", product.getJSONObject("priceGuide").getDouble("AVG"));
+				new HashMap<String, String>() {{
+					put("Low", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("LOW"))));
+					put("Avg. Sell Price", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("SELL"))));
+					put("Low Foil", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("LOWFOIL"))));
+					put("Average", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("AVG"))));
 				}}
 		);
 	}
@@ -187,6 +188,17 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 			LOG.log(Level.SEVERE, "Could not construct authorization header for price fetching", e);
 			return null;
 		}
+	}
+
+	private String formatPrice(String price) {
+		if (price == null || price.isEmpty()) price = "0";
+		try {
+			if (Double.parseDouble(price) <= 0) price = "N/A";
+			else price = "€" + price;
+		} catch (Exception e) {
+			price = "N/A";
+		}
+		return price;
 	}
 
 	private static String generateRandomString(int length) {

@@ -5,6 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jongo.marshall.jackson.oid.MongoId;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,23 +42,21 @@ public abstract class StoreRetriever {
 		private String cardName;
 		private String setCode;
 		private String url;
-		private String currency;
 		private long timestamp;
 		private String storeId;
-		private Map<String, Double> prices;
+		private Map<String, String> prices;
 
 		public StoreCardPriceRecord() {
 		}
 
-		public StoreCardPriceRecord(String cardName, String setCode, String url, String currency, long timestamp, String storeId, Map<String, Double> prices) {
+		public StoreCardPriceRecord(String cardName, String setCode, @Nullable String url, long timestamp, String storeId, Map<String, String> prices) {
 			this.cardName = cardName;
 			this.setCode = setCode;
 			this.url = url;
-			this.currency = currency;
 			this.timestamp = timestamp;
 			this.storeId = storeId;
-			this.prices = new HashMap<String, Double>() {{
-				for (Entry<String, Double> entry : prices.entrySet())
+			this.prices = new HashMap<String, String>() {{
+				for (Entry<String, String> entry : prices.entrySet())
 					put(entry.getKey().replaceAll("[^a-zA-Z0-9_ ]", ""), entry.getValue());
 			}};
 			this._id = generateId();
@@ -79,10 +78,6 @@ public abstract class StoreRetriever {
 			return url;
 		}
 
-		public String getCurrency() {
-			return currency;
-		}
-
 		public long getTimestamp() {
 			return timestamp;
 		}
@@ -91,7 +86,7 @@ public abstract class StoreRetriever {
 			return storeId;
 		}
 
-		public Map<String, Double> getPrices() {
+		public Map<String, String> getPrices() {
 			return prices;
 		}
 
@@ -102,7 +97,6 @@ public abstract class StoreRetriever {
 					.append("cardName", cardName)
 					.append("setCode", setCode)
 					.append("url", url)
-					.append("currency", currency)
 					.append("timestamp", timestamp)
 					.append("storeId", storeId)
 					.append("prices", String.join(", ", prices.entrySet().parallelStream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.toList())))

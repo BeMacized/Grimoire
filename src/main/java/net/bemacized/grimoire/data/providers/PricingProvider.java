@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.MtgCard;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.MagicCardMarketRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.ScryfallRetriever;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.StoreRetriever;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.TCGPlayerRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -16,7 +17,6 @@ import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -51,6 +51,7 @@ public class PricingProvider {
 					System.getenv("TCG_KEY"),
 					setDictionary
 			));
+			add(new ScryfallRetriever());
 		}};
 	}
 
@@ -101,18 +102,17 @@ public class PricingProvider {
 		priceEmbed.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		priceEmbed.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		pricing.forEach(storeprice -> {
-			DecimalFormat formatter = new DecimalFormat("#.00");
 			String priceText = "N/A";
 			switch (storeprice.getStatus()) {
 				case SUCCESS:
 					priceText = String.join("\n", storeprice.getRecord().getPrices().entrySet().parallelStream().sorted(Comparator.comparing(Map.Entry::getKey)).map(price -> String.format(
-							"%s: **%s%s**",
+							"%s: **%s**",
 							price.getKey(),
-							(price.getValue() > 0) ? storeprice.getRecord().getCurrency() : "",
-							(price.getValue() > 0) ? formatter.format(price.getValue()) : "N/A"
+							price.getValue()
 					)).collect(Collectors.toList()));
 					priceText += "\n**Last updated: **" + sdf.format(new Date(storeprice.getRecord().getTimestamp()));
-					priceText += String.format("\n[`[%s]`](%s)", "Store Page", storeprice.getRecord().getUrl());
+					if (storeprice.getRecord().getUrl() != null)
+						priceText += String.format("\n[`[%s]`](%s)", "Store Page", storeprice.getRecord().getUrl());
 					break;
 				case UNKNOWN_ERROR:
 					priceText = "An unknown error occurred.";

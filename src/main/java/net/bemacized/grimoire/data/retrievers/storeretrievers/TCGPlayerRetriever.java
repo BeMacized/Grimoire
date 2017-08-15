@@ -143,16 +143,26 @@ public class TCGPlayerRetriever extends StoreRetriever {
 				card.getName(),
 				card.getSet().getCode(),
 				doc.getDocumentElement().getElementsByTagName("link").item(0).getTextContent(),
-				"$",
 				System.currentTimeMillis(),
 				this.getStoreId(),
-				new HashMap<String, Double>() {{
-					put("Low", Double.valueOf(doc.getDocumentElement().getElementsByTagName("lowprice").item(0).getTextContent()));
-					put("Average", Double.valueOf(doc.getDocumentElement().getElementsByTagName("avgprice").item(0).getTextContent()));
-					put("High", Double.valueOf(doc.getDocumentElement().getElementsByTagName("hiprice").item(0).getTextContent()));
-					put("Average Foil", Double.valueOf(doc.getDocumentElement().getElementsByTagName("foilavgprice").item(0).getTextContent()));
+				new HashMap<String, String>() {{
+					put("Low", formatPrice(doc.getDocumentElement().getElementsByTagName("lowprice").item(0).getTextContent()));
+					put("Average", formatPrice(doc.getDocumentElement().getElementsByTagName("avgprice").item(0).getTextContent()));
+					put("High", formatPrice(doc.getDocumentElement().getElementsByTagName("hiprice").item(0).getTextContent()));
+					put("Average Foil", formatPrice(doc.getDocumentElement().getElementsByTagName("foilavgprice").item(0).getTextContent()));
 				}}
 		);
+	}
+
+	private String formatPrice(String price) {
+		if (price == null || price.isEmpty()) price = "0";
+		try {
+			if (Double.parseDouble(price) <= 0) price = "N/A";
+			else price = "$" + price;
+		} catch (Exception e) {
+			price = "N/A";
+		}
+		return price;
 	}
 
 }

@@ -109,14 +109,14 @@ public class CardProvider extends Provider {
 
 	@Override
 	public void loadFromSource() {
-		// Load data from Scryfall
+		// Load data from ScryfallRetriever
 		List<ScryfallCard> scryfallCards;
 		List<ScryfallSet> scryfallSets;
 		try {
 			scryfallCards = ScryfallRetriever.retrieveCards();
 			scryfallSets = ScryfallRetriever.retrieveSets();
 		} catch (IOException | InterruptedException e) {
-			LOG.log(Level.SEVERE, "Could not fetch data from Scryfall", e);
+			LOG.log(Level.SEVERE, "Could not fetch data from ScryfallRetriever", e);
 			return;
 		}
 

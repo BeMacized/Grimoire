@@ -2,6 +2,7 @@ package net.bemacized.grimoire.data.models;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.providers.CardProvider;
+import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
@@ -293,6 +294,19 @@ public class MtgCard {
 
 	public void save() {
 		Grimoire.getInstance().getDBManager().getJongo().getCollection(COLLECTION).save(this);
+	}
+
+	@Nonnull
+	public ScryfallCard getScryfallCard() {
+		return scryfallCard;
+	}
+
+	public void updateScryfall() {
+		ScryfallCard c = ScryfallRetriever.retrieveCard(this.scryfallCard.getId());
+		if (c != null) {
+			this.scryfallCard = c;
+			this.save();
+		}
 	}
 
 	public enum Layout {

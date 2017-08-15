@@ -34,7 +34,7 @@ public class ScryfallRetriever {
 	private final static Logger LOG = Logger.getLogger(ScryfallRetriever.class.getName());
 
 	public static List<ScryfallSet> retrieveSets() throws IOException, InterruptedException {
-		LOG.info("Starting retrieval of sets from Scryfall");
+		LOG.info("Starting retrieval of sets from ScryfallRetriever");
 		Gson gson = new Gson();
 		List<JsonElement> items = getAllContents(HOST + "/sets", null);
 		LOG.info("Parsing sets...");
@@ -45,7 +45,7 @@ public class ScryfallRetriever {
 	}
 
 	public static List<ScryfallCard> retrieveCards() throws IOException, InterruptedException {
-		LOG.info("Starting retrieval of cards from Scryfall");
+		LOG.info("Starting retrieval of cards from ScryfallRetriever");
 		Gson gson = new Gson();
 		List<JsonElement> items = getAllContents(HOST + "/cards", new ListProgressCallback() {
 
@@ -109,6 +109,25 @@ public class ScryfallRetriever {
 			cb.done();
 		}
 		return objects;
+	}
+
+	@Nullable
+	public static ScryfallCard retrieveCard(String scryfallId) {
+		String json;
+		try {
+			json = IOUtils.toString(new URL(HOST + "/cards/" + scryfallId), "UTF-8");
+		} catch (IOException e) {
+			LOG.log(Level.SEVERE, "Could retrieve specific card from ScryfallRetriever.", e);
+			return null;
+		}
+		try {
+			JsonObject card = new JsonParser().parse(json).getAsJsonObject();
+			Gson gson = new Gson();
+			return gson.fromJson(card, ScryfallCard.class);
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Could parse specific card from ScryfallRetriever.", e);
+			return null;
+		}
 	}
 
 	private interface ListProgressCallback {
