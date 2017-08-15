@@ -1,8 +1,9 @@
 package net.bemacized.grimoire;
 
-import net.bemacized.grimoire.database.DBManager;
+import net.bemacized.grimoire.data.controllers.DBManager;
+import net.bemacized.grimoire.data.controllers.EmojiParser;
+import net.bemacized.grimoire.data.providers.*;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
-import net.bemacized.grimoire.model.controllers.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -28,19 +29,16 @@ public class Grimoire {
 		new Grimoire(System.getenv("BOT_TOKEN"));
 	}
 
-	// Model Controllers
-	private Cards cards;
-	private Sets sets;
-	private Tokens tokens;
-	private ComprehensiveRules comprehensiveRules;
-	private Definitions definitions;
-	private InfractionProcedureGuide infractionProcedureGuide;
-	private TournamentRules tournamentRules;
-	private PricingManager pricingManager;
-	private ImageProviders imageProviders;
+	// Controllers
 	private EmojiParser emojiParser;
-	private DependencyManager dependencyManager;
-	private StandardRotation standardRotation;
+
+	// Providers
+	private CardProvider cardProvider;
+	private ComprehensiveRuleProvider comprehensiveRuleProvider;
+	private TournamentRuleProvider tournamentRuleProvider;
+	private InfractionProcedureGuideProvider infractionProcedureGuideProvider;
+	private StandardRotationProvider standardRotationProvider;
+	private PricingProvider pricingProvider;
 
 	private JDA discord;
 	private DBManager dbManager;
@@ -68,44 +66,28 @@ public class Grimoire {
 				System.getenv("MONGO_PASSWORD")
 		);
 
-		// Load dependencies
-		this.dependencyManager = new DependencyManager();
+		// Load cards and sets
+		this.cardProvider = new CardProvider();
+		this.cardProvider.load();
 
-		// Setup image providers
-		this.imageProviders = new ImageProviders();
-
-		// Load sets and cards
-		MTGJSON mtgjson = new MTGJSON();
-		this.cards = new Cards(mtgjson);
-		this.sets = new Sets(mtgjson);
-		mtgjson.load();
-
-		// Load tokens
-		this.tokens = new Tokens();
-		this.tokens.load();
-
-		// Load definitions
-		this.definitions = new Definitions();
-
-		// Load comprehensive rules
-		this.comprehensiveRules = new ComprehensiveRules();
-		this.comprehensiveRules.load();
+		// Load comprehensive rules and definitions
+		this.comprehensiveRuleProvider = new ComprehensiveRuleProvider();
+		this.comprehensiveRuleProvider.load();
 
 		// Load tournament rules
-		this.tournamentRules = new TournamentRules();
-		this.tournamentRules.load();
+		this.tournamentRuleProvider = new TournamentRuleProvider();
+		this.tournamentRuleProvider.load();
 
 		// Load infraction procedure guide
-		this.infractionProcedureGuide = new InfractionProcedureGuide();
-		this.infractionProcedureGuide.load();
+		this.infractionProcedureGuideProvider = new InfractionProcedureGuideProvider();
+		this.infractionProcedureGuideProvider.load();
 
-		// Instantiate pricing manager
-		this.pricingManager = new PricingManager();
-		this.pricingManager.init();
+		// Load standard rotation
+		this.standardRotationProvider = new StandardRotationProvider();
+		this.standardRotationProvider.load();
 
-		// Load standard sets
-		this.standardRotation = new StandardRotation();
-		this.standardRotation.load();
+		// Instantiate pricing provider
+		this.pricingProvider = new PricingProvider();
 
 		// Log in to Discord
 		try {
@@ -126,11 +108,11 @@ public class Grimoire {
 			System.exit(1);
 		}
 
+		// Load emoji references
+		this.emojiParser = new EmojiParser();
+
 		// Register EventHandlers
 		discord.addEventListener(new MainChatProcessor());
-
-		// Instantiate Emoji parser
-		this.emojiParser = new EmojiParser();
 
 		// Assert nickname
 		//TODO: Move to on guild join
@@ -146,51 +128,31 @@ public class Grimoire {
 		return dbManager;
 	}
 
-	public PricingManager getPricingManager() {
-		return pricingManager;
-	}
-
-	public Tokens getTokens() {
-		return tokens;
-	}
-
-	public ComprehensiveRules getComprehensiveRules() {
-		return comprehensiveRules;
-	}
-
-	public Definitions getDefinitions() {
-		return definitions;
-	}
-
-	public InfractionProcedureGuide getInfractionProcedureGuide() {
-		return infractionProcedureGuide;
-	}
-
-	public TournamentRules getTournamentRules() {
-		return tournamentRules;
-	}
-
-	public Cards getCards() {
-		return cards;
-	}
-
-	public Sets getSets() {
-		return sets;
-	}
-
-	public ImageProviders getImageProviders() {
-		return imageProviders;
-	}
-
 	public EmojiParser getEmojiParser() {
 		return emojiParser;
 	}
 
-	public DependencyManager getDependencyManager() {
-		return dependencyManager;
+	public CardProvider getCardProvider() {
+		return cardProvider;
 	}
 
-	public StandardRotation getStandardRotation() {
-		return standardRotation;
+	public ComprehensiveRuleProvider getComprehensiveRuleProvider() {
+		return comprehensiveRuleProvider;
+	}
+
+	public TournamentRuleProvider getTournamentRuleProvider() {
+		return tournamentRuleProvider;
+	}
+
+	public InfractionProcedureGuideProvider getInfractionProcedureGuideProvider() {
+		return infractionProcedureGuideProvider;
+	}
+
+	public StandardRotationProvider getStandardRotationProvider() {
+		return standardRotationProvider;
+	}
+
+	public PricingProvider getPricingProvider() {
+		return pricingProvider;
 	}
 }

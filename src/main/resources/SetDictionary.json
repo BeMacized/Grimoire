@@ -1,0 +1,1012 @@
+{
+  "VIS": {
+    "gatherer": "Visions",
+    "magiccardmarket": "Visions",
+    "tcgplayer": "Visions"
+  },
+  "KTK": {
+    "gatherer": "Khans of Tarkir",
+    "magiccardmarket": "Khans of Tarkir",
+    "tcgplayer": "Khans of Tarkir"
+  },
+  "10E": {
+    "gatherer": "Tenth Edition",
+    "magiccardmarket": "Tenth Edition",
+    "tcgplayer": "Tenth Edition"
+  },
+  "RAV": {
+    "gatherer": "Ravnica: City of Guilds",
+    "magiccardmarket": "Ravnica: City of Guilds",
+    "tcgplayer": "Ravnica"
+  },
+  "STH": {
+    "gatherer": "Stronghold",
+    "magiccardmarket": "Stronghold",
+    "tcgplayer": "Stronghold"
+  },
+  "pWPN": {
+    "gatherer": "Wizards Play Network",
+    "tcgplayer": "WPN & Gateway Promos"
+  },
+  "PO2": {
+    "gatherer": "Portal Second Age",
+    "magiccardmarket": "Portal Second Age",
+    "tcgplayer": "Portal Second Age"
+  },
+  "3ED": {
+    "gatherer": "Revised Edition",
+    "magiccardmarket": "Revised",
+    "tcgplayer": "Revised Edition"
+  },
+  "p15A": {
+    "gatherer": "15th Anniversary"
+  },
+  "CED": {
+    "gatherer": "Collector's Edition",
+    "magiccardmarket": "Collectors' Edition",
+    "tcgplayer": "Collector's Edition"
+  },
+  "pFNM": {
+    "gatherer": "Friday Night Magic",
+    "magiccardmarket": "Friday Night Magic Promos",
+    "tcgplayer": "FNM Promos"
+  },
+  "CEI": {
+    "gatherer": "International Collector's Edition",
+    "magiccardmarket": "International Edition",
+    "tcgplayer": "International Edition"
+  },
+  "pPRE": {
+    "gatherer": "Prerelease Events",
+    "magiccardmarket": "Prerelease Promos",
+    "tcgplayer": "Prerelease Cards"
+  },
+  "HOP": {
+    "gatherer": "Planechase",
+    "magiccardmarket": "Planechase",
+    "tcgplayer": "Planechase"
+  },
+  "pPRO": {
+    "gatherer": "Pro Tour",
+    "magiccardmarket": "Pro Tour Promos",
+    "tcgplayer": "Pro Tour Promos"
+  },
+  "pELP": {
+    "gatherer": "European Land Program",
+    "magiccardmarket": "Euro Lands"
+  },
+  "DGM": {
+    "gatherer": "Dragon's Maze",
+    "magiccardmarket": "Dragon's Maze",
+    "tcgplayer": "Dragon's Maze"
+  },
+  "pGPX": {
+    "gatherer": "Grand Prix",
+    "magiccardmarket": "Grand Prix Promos",
+    "tcgplayer": "Grand Prix Promos"
+  },
+  "HOU": {
+    "gatherer": "Hour of Devastation",
+    "magiccardmarket": "Hour of Devastation",
+    "tcgplayer": "Hour of Devastation"
+  },
+  "ARB": {
+    "gatherer": "Alara Reborn",
+    "magiccardmarket": "Alara Reborn",
+    "tcgplayer": "Alara Reborn"
+  },
+  "ARC": {
+    "gatherer": "Archenemy",
+    "magiccardmarket": "Archenemy",
+    "tcgplayer": "Archenemy"
+  },
+  "LGN": {
+    "gatherer": "Legions",
+    "magiccardmarket": "Legions",
+    "tcgplayer": "Legions"
+  },
+  "POR": {
+    "gatherer": "Portal",
+    "magiccardmarket": "Portal",
+    "tcgplayer": "Portal"
+  },
+  "BTD": {
+    "gatherer": "Beatdown Box Set",
+    "magiccardmarket": "Beatdown",
+    "tcgplayer": "Beatdown Box Set"
+  },
+  "MIR": {
+    "gatherer": "Mirage",
+    "magiccardmarket": "Mirage",
+    "tcgplayer": "Mirage"
+  },
+  "pREL": {
+    "gatherer": "Release Events",
+    "magiccardmarket": "Release Promos",
+    "tcgplayer": "Launch Party & Release Event Cards"
+  },
+  "ARN": {
+    "gatherer": "Arabian Nights",
+    "magiccardmarket": "Arabian Nights",
+    "tcgplayer": "Arabian Nights"
+  },
+  "pWOR": {
+    "gatherer": "Worlds"
+  },
+  "pWOS": {
+    "gatherer": "Wizards of the Coast Online Store"
+  },
+  "H09": {
+    "gatherer": "Premium Deck Series: Slivers",
+    "magiccardmarket": "Premium Deck Series: Slivers",
+    "tcgplayer": "PDS: Slivers"
+  },
+  "RTR": {
+    "gatherer": "Return to Ravnica",
+    "magiccardmarket": "Return to Ravnica",
+    "tcgplayer": "Return to Ravnica"
+  },
+  "2ED": {
+    "gatherer": "Unlimited Edition",
+    "magiccardmarket": "Unlimited",
+    "tcgplayer": "Unlimited Edition"
+  },
+  "ONS": {
+    "gatherer": "Onslaught",
+    "magiccardmarket": "Onslaught",
+    "tcgplayer": "Onslaught"
+  },
+  "JUD": {
+    "gatherer": "Judgment",
+    "magiccardmarket": "Judgment",
+    "tcgplayer": "Judgment"
+  },
+  "ISD": {
+    "gatherer": "Innistrad",
+    "magiccardmarket": "Innistrad",
+    "tcgplayer": "Innistrad"
+  },
+  "THS": {
+    "gatherer": "Theros",
+    "magiccardmarket": "Theros",
+    "tcgplayer": "Theros"
+  },
+  "pGRU": {
+    "gatherer": "Guru",
+    "magiccardmarket": "Guru Lands",
+    "tcgplayer": "Guru Lands"
+  },
+  "ICE": {
+    "gatherer": "Ice Age",
+    "magiccardmarket": "Ice Age",
+    "tcgplayer": "Ice Age"
+  },
+  "VMA": {
+    "gatherer": "Vintage Masters"
+  },
+  "DIS": {
+    "gatherer": "Dissension",
+    "magiccardmarket": "Dissension",
+    "tcgplayer": "Dissension"
+  },
+  "p2HG": {
+    "gatherer": "Two-Headed Giant Tournament"
+  },
+  "NMS": {
+    "gatherer": "Nemesis",
+    "magiccardmarket": "Nemesis",
+    "tcgplayer": "Nemesis"
+  },
+  "ATH": {
+    "gatherer": "Anthologies",
+    "magiccardmarket": "Anthologies",
+    "tcgplayer": "Anthologies"
+  },
+  "pJGP": {
+    "gatherer": "Judge Gift Program",
+    "magiccardmarket": "Judge Rewards Promos",
+    "tcgplayer": "Judge Promos"
+  },
+  "ATQ": {
+    "gatherer": "Antiquities",
+    "magiccardmarket": "Antiquities",
+    "tcgplayer": "Antiquities"
+  },
+  "ZEN": {
+    "gatherer": "Zendikar",
+    "magiccardmarket": "Zendikar",
+    "tcgplayer": "Zendikar"
+  },
+  "ITP": {
+    "gatherer": "Introductory Two-Player Set",
+    "magiccardmarket": "Introductory Two-Player Set"
+  },
+  "pCMP": {
+    "gatherer": "Champs and States",
+    "magiccardmarket": "Champs & States Promos",
+    "tcgplayer": "Champs Promos"
+  },
+  "CHK": {
+    "gatherer": "Champions of Kamigawa",
+    "magiccardmarket": "Champions of Kamigawa",
+    "tcgplayer": "Champions of Kamigawa"
+  },
+  "GPT": {
+    "gatherer": "Guildpact",
+    "magiccardmarket": "Guildpact",
+    "tcgplayer": "Guildpact"
+  },
+  "CHR": {
+    "gatherer": "Chronicles",
+    "magiccardmarket": "Chronicles",
+    "tcgplayer": "Chronicles"
+  },
+  "ULG": {
+    "gatherer": "Urza's Legacy",
+    "magiccardmarket": "Urza's Legacy",
+    "tcgplayer": "Urza's Legacy"
+  },
+  "MM3": {
+    "gatherer": "Modern Masters 2017 Edition",
+    "magiccardmarket": "Modern Masters 2017",
+    "tcgplayer": "Modern Masters 2017"
+  },
+  "MM2": {
+    "gatherer": "Modern Masters 2015 Edition",
+    "magiccardmarket": "Modern Masters 2015",
+    "tcgplayer": "Modern Masters 2015"
+  },
+  "BFZ": {
+    "gatherer": "Battle for Zendikar",
+    "magiccardmarket": "Battle for Zendikar",
+    "tcgplayer": "Battle for Zendikar"
+  },
+  "EMA": {
+    "gatherer": "Eternal Masters",
+    "magiccardmarket": "Eternal Masters",
+    "tcgplayer": "Eternal Masters"
+  },
+  "9ED": {
+    "gatherer": "Ninth Edition",
+    "magiccardmarket": "Ninth Edition",
+    "tcgplayer": "Ninth Edition"
+  },
+  "SHM": {
+    "gatherer": "Shadowmoor",
+    "magiccardmarket": "Shadowmoor",
+    "tcgplayer": "Shadowmoor"
+  },
+  "DKA": {
+    "gatherer": "Dark Ascension",
+    "magiccardmarket": "Dark Ascension",
+    "tcgplayer": "Dark Ascension"
+  },
+  "DD3_GVL": {
+    "gatherer": "Duel Decks Anthology, Garruk vs. Liliana",
+    "magiccardmarket": "Duel Decks: Garruk vs. Liliana",
+    "tcgplayer": "Duel Decks: Anthology"
+  },
+  "PC2": {
+    "gatherer": "Planechase 2012 Edition",
+    "magiccardmarket": "Planechase 2012",
+    "tcgplayer": "Planechase 2012"
+  },
+  "MMA": {
+    "gatherer": "Modern Masters",
+    "magiccardmarket": "Modern Masters",
+    "tcgplayer": "Modern Masters"
+  },
+  "pWCQ": {
+    "gatherer": "World Magic Cup Qualifiers"
+  },
+  "EMN": {
+    "gatherer": "Eldritch Moon",
+    "magiccardmarket": "Eldritch Moon",
+    "tcgplayer": "Eldritch Moon"
+  },
+  "DKM": {
+    "gatherer": "Deckmasters",
+    "magiccardmarket": "Deckmasters"
+  },
+  "pGTW": {
+    "gatherer": "Gateway",
+    "magiccardmarket": "Gateway Promos",
+    "tcgplayer": "WPN & Gateway Promos"
+  },
+  "pMPR": {
+    "gatherer": "Magic Player Rewards",
+    "magiccardmarket": "Player Rewards Promos",
+    "tcgplayer": "Magic Player Rewards"
+  },
+  "AER": {
+    "gatherer": "Aether Revolt",
+    "magiccardmarket": "Aether Revolt",
+    "tcgplayer": "Aether Revolt"
+  },
+  "PCA": {
+    "gatherer": "Planechase Anthology",
+    "magiccardmarket": "Planechase Anthology",
+    "tcgplayer": "Planechase Anthology"
+  },
+  "MMQ": {
+    "gatherer": "Mercadian Masques",
+    "magiccardmarket": "Mercadian Masques",
+    "tcgplayer": "Mercadian Masques"
+  },
+  "S99": {
+    "gatherer": "Starter 1999",
+    "magiccardmarket": "Starter 1999",
+    "tcgplayer": "Starter 1999"
+  },
+  "W17": {
+    "gatherer": "Welcome Deck 2017",
+    "magiccardmarket": "Welcome Deck 2017"
+  },
+  "W16": {
+    "gatherer": "Welcome Deck 2016",
+    "magiccardmarket": "Welcome Deck 2016"
+  },
+  "AVR": {
+    "gatherer": "Avacyn Restored",
+    "magiccardmarket": "Avacyn Restored",
+    "tcgplayer": "Avacyn Restored"
+  },
+  "PD3": {
+    "gatherer": "Premium Deck Series: Graveborn",
+    "magiccardmarket": "Premium Deck Series: Graveborn",
+    "tcgplayer": "PDS: Graveborn"
+  },
+  "PD2": {
+    "gatherer": "Premium Deck Series: Fire and Lightning",
+    "magiccardmarket": "Premium Deck Series: Fire & Lightning",
+    "tcgplayer": "PDS: Fire and Lightning"
+  },
+  "PTK": {
+    "gatherer": "Portal Three Kingdoms",
+    "magiccardmarket": "Portal Three Kingdoms",
+    "tcgplayer": "Portal Three Kingdoms"
+  },
+  "ORI": {
+    "gatherer": "Magic Origins",
+    "magiccardmarket": "Magic Origins",
+    "tcgplayer": "Magic Origins"
+  },
+  "NPH": {
+    "gatherer": "New Phyrexia",
+    "magiccardmarket": "New Phyrexia",
+    "tcgplayer": "New Phyrexia"
+  },
+  "PCY": {
+    "gatherer": "Prophecy",
+    "magiccardmarket": "Prophecy",
+    "tcgplayer": "Prophecy"
+  },
+  "UNH": {
+    "gatherer": "Unhinged",
+    "magiccardmarket": "Unhinged",
+    "tcgplayer": "Unhinged"
+  },
+  "8ED": {
+    "gatherer": "Eighth Edition",
+    "magiccardmarket": "Eighth Edition",
+    "tcgplayer": "Eighth Edition"
+  },
+  "V09": {
+    "gatherer": "From the Vault: Exiled",
+    "magiccardmarket": "From the Vault: Exiled",
+    "tcgplayer": "From the Vault: Exiled"
+  },
+  "pHHO": {
+    "gatherer": "Happy Holidays",
+    "magiccardmarket": "Happy Holidays Promos",
+    "tcgplayer": "Special Occasion"
+  },
+  "MOR": {
+    "gatherer": "Morningtide",
+    "magiccardmarket": "Morningtide",
+    "tcgplayer": "Morningtide"
+  },
+  "V10": {
+    "gatherer": "From the Vault: Relics",
+    "magiccardmarket": "From the Vault: Relics",
+    "tcgplayer": "From the Vault: Relics"
+  },
+  "V12": {
+    "gatherer": "From the Vault: Realms",
+    "magiccardmarket": "From the Vault: Realms",
+    "tcgplayer": "From the Vault: Realms"
+  },
+  "TMP": {
+    "gatherer": "Tempest",
+    "magiccardmarket": "Tempest",
+    "tcgplayer": "Tempest"
+  },
+  "GTC": {
+    "gatherer": "Gatecrash",
+    "magiccardmarket": "Gatecrash",
+    "tcgplayer": "Gatecrash"
+  },
+  "V11": {
+    "gatherer": "From the Vault: Legends",
+    "magiccardmarket": "From the Vault: Legends",
+    "tcgplayer": "From the Vault: Legends"
+  },
+  "V14": {
+    "gatherer": "From the Vault: Annihilation (2014)",
+    "magiccardmarket": "From the Vault: Annihilation",
+    "tcgplayer": "From the Vault: Annihilation"
+  },
+  "V13": {
+    "gatherer": "From the Vault: Twenty",
+    "magiccardmarket": "From the Vault: Twenty",
+    "tcgplayer": "From the Vault: Twenty"
+  },
+  "pLPA": {
+    "gatherer": "Launch Parties",
+    "tcgplayer": "Launch Party & Release Event Cards"
+  },
+  "V16": {
+    "gatherer": "From the Vault: Lore",
+    "magiccardmarket": "From the Vault: Lore",
+    "tcgplayer": "From the Vault: Lore"
+  },
+  "V15": {
+    "gatherer": "From the Vault: Angels",
+    "magiccardmarket": "From the Vault: Angels",
+    "tcgplayer": "From the Vault: Angels"
+  },
+  "FRF": {
+    "gatherer": "Fate Reforged",
+    "magiccardmarket": "Fate Reforged",
+    "tcgplayer": "Fate Reforged"
+  },
+  "KLD": {
+    "gatherer": "Kaladesh",
+    "magiccardmarket": "Kaladesh",
+    "tcgplayer": "Kaladesh"
+  },
+  "VAN": {
+    "gatherer": "Vanguard",
+    "magiccardmarket": "Vanguard",
+    "tcgplayer": "Vanguard"
+  },
+  "DD3_EVG": {
+    "gatherer": "Duel Decks Anthology, Elves vs. Goblins",
+    "magiccardmarket": "Duel Decks: Elves vs. Goblins",
+    "tcgplayer": "Duel Decks: Anthology"
+  },
+  "CM1": {
+    "gatherer": "Commander's Arsenal",
+    "magiccardmarket": "Commander's Arsenal",
+    "tcgplayer": "Commander's Arsenal"
+  },
+  "E01": {
+    "gatherer": "Archenemy: Nicol Bolas",
+    "magiccardmarket": "Archenemy: Nicol Bolas",
+    "tcgplayer": "Archenemy: Nicol Bolas"
+  },
+  "WTH": {
+    "gatherer": "Weatherlight",
+    "magiccardmarket": "Weatherlight",
+    "tcgplayer": "Weatherlight"
+  },
+  "MPS": {
+    "gatherer": "Masterpiece Series: Kaladesh Inventions",
+    "magiccardmarket": "Kaladesh Inventions",
+    "tcgplayer": "Kaladesh Inventions"
+  },
+  "CMA": {
+    "gatherer": "Commander Anthology",
+    "magiccardmarket": "Commander Anthology"
+  },
+  "7ED": {
+    "gatherer": "Seventh Edition",
+    "magiccardmarket": "Seventh Edition",
+    "tcgplayer": "Seventh Edition"
+  },
+  "CMD": {
+    "gatherer": "Magic: The Gathering-Commander",
+    "magiccardmarket": "Commander",
+    "tcgplayer": "Commander"
+  },
+  "ODY": {
+    "gatherer": "Odyssey",
+    "magiccardmarket": "Odyssey",
+    "tcgplayer": "Odyssey"
+  },
+  "CN2": {
+    "gatherer": "Conspiracy: Take the Crown",
+    "magiccardmarket": "Conspiracy: Take the Crown",
+    "tcgplayer": "Conspiracy: Take the Crown"
+  },
+  "pALP": {
+    "gatherer": "Asia Pacific Land Program",
+    "magiccardmarket": "APAC Lands"
+  },
+  "M11": {
+    "gatherer": "Magic 2011",
+    "magiccardmarket": "Magic 2011",
+    "tcgplayer": "Magic 2011 (M11)"
+  },
+  "M10": {
+    "gatherer": "Magic 2010",
+    "magiccardmarket": "Magic 2010",
+    "tcgplayer": "Magic 2010 (M10)"
+  },
+  "MPS_AKH": {
+    "gatherer": "Masterpiece Series: Amonkhet Invocations",
+    "magiccardmarket": "Amonkhet Invocations",
+    "tcgplayer": "Amonkhet Invocations"
+  },
+  "M13": {
+    "gatherer": "Magic 2013",
+    "magiccardmarket": "Magic 2013",
+    "tcgplayer": "Magic 2013 (M13)"
+  },
+  "M12": {
+    "gatherer": "Magic 2012",
+    "magiccardmarket": "Magic 2012",
+    "tcgplayer": "Magic 2012 (M12)"
+  },
+  "M15": {
+    "gatherer": "Magic 2015 Core Set",
+    "magiccardmarket": "Magic 2015",
+    "tcgplayer": "Magic 2015 (M15)"
+  },
+  "M14": {
+    "gatherer": "Magic 2014 Core Set",
+    "magiccardmarket": "Magic 2014",
+    "tcgplayer": "Magic 2014 (M14)"
+  },
+  "DPA": {
+    "gatherer": "Duels of the Planeswalkers",
+    "magiccardmarket": "Duels of the Planeswalkers Decks",
+    "tcgplayer": "Duels of the Planeswalkers"
+  },
+  "TOR": {
+    "gatherer": "Torment",
+    "magiccardmarket": "Torment",
+    "tcgplayer": "Torment"
+  },
+  "pDRC": {
+    "gatherer": "Dragon Con"
+  },
+  "MRD": {
+    "gatherer": "Mirrodin",
+    "magiccardmarket": "Mirrodin",
+    "tcgplayer": "Mirrodin"
+  },
+  "CNS": {
+    "gatherer": "Magic: The Gathering\\u2014Conspiracy",
+    "magiccardmarket": "Conspiracy",
+    "tcgplayer": "Conspiracy"
+  },
+  "DD3_DVD": {
+    "gatherer": "Duel Decks Anthology, Divine vs. Demonic",
+    "magiccardmarket": "Duel Decks: Divine vs. Demonic",
+    "tcgplayer": "Duel Decks: Anthology"
+  },
+  "pMGD": {
+    "gatherer": "Magic Game Day",
+    "magiccardmarket": "Game Day Promos",
+    "tcgplayer": "Game Day Promos"
+  },
+  "6ED": {
+    "gatherer": "Classic Sixth Edition",
+    "magiccardmarket": "Sixth Edition",
+    "tcgplayer": "Sixth Edition"
+  },
+  "TPR": {
+    "gatherer": "Tempest Remastered"
+  },
+  "AKH": {
+    "gatherer": "Amonkhet",
+    "magiccardmarket": "Amonkhet",
+    "tcgplayer": "Amonkhet"
+  },
+  "MBS": {
+    "gatherer": "Mirrodin Besieged",
+    "magiccardmarket": "Mirrodin Besieged",
+    "tcgplayer": "Mirrodin Besieged"
+  },
+  "CON": {
+    "gatherer": "Conflux",
+    "magiccardmarket": "Conflux",
+    "tcgplayer": "Conflux"
+  },
+  "CP2": {
+    "gatherer": "Fate Reforged Clash Pack"
+  },
+  "FUT": {
+    "gatherer": "Future Sight",
+    "magiccardmarket": "Future Sight",
+    "tcgplayer": "Future Sight"
+  },
+  "CP1": {
+    "gatherer": "Magic 2015 Clash Pack"
+  },
+  "CP3": {
+    "gatherer": "Magic Origins Clash Pack"
+  },
+  "USG": {
+    "gatherer": "Urza's Saga",
+    "magiccardmarket": "Urza's Saga",
+    "tcgplayer": "Urza's Saga"
+  },
+  "WWK": {
+    "gatherer": "Worldwake",
+    "magiccardmarket": "Worldwake",
+    "tcgplayer": "Worldwake"
+  },
+  "SOI": {
+    "gatherer": "Shadows over Innistrad",
+    "magiccardmarket": "Shadows over Innistrad",
+    "tcgplayer": "Shadows Over Innistrad"
+  },
+  "SOK": {
+    "gatherer": "Saviors of Kamigawa",
+    "magiccardmarket": "Saviors of Kamigawa",
+    "tcgplayer": "Saviors of Kamigawa"
+  },
+  "FEM": {
+    "gatherer": "Fallen Empires",
+    "magiccardmarket": "Fallen Empires",
+    "tcgplayer": "Fallen Empires"
+  },
+  "SOM": {
+    "gatherer": "Scars of Mirrodin",
+    "magiccardmarket": "Scars of Mirrodin",
+    "tcgplayer": "Scars of Mirrodin"
+  },
+  "DRB": {
+    "gatherer": "From the Vault: Dragons",
+    "magiccardmarket": "From the Vault: Dragons",
+    "tcgplayer": "From the Vault: Dragons"
+  },
+  "pMEI": {
+    "gatherer": "Media Inserts",
+    "tcgplayer": "Media Promos"
+  },
+  "ALA": {
+    "gatherer": "Shards of Alara",
+    "magiccardmarket": "Shards of Alara",
+    "tcgplayer": "Shards of Alara"
+  },
+  "FRF_UGIN": {
+    "gatherer": "Ugin's Fate promos",
+    "magiccardmarket": "Ugin's Fate Promos",
+    "tcgplayer": "Ugin's Fate Promos"
+  },
+  "BNG": {
+    "gatherer": "Born of the Gods",
+    "magiccardmarket": "Born of the Gods",
+    "tcgplayer": "Born of the Gods"
+  },
+  "MD1": {
+    "gatherer": "Modern Event Deck 2014",
+    "magiccardmarket": "Modern Event Deck 2014",
+    "tcgplayer": "Modern Event Deck"
+  },
+  "DRK": {
+    "gatherer": "The Dark",
+    "magiccardmarket": "The Dark",
+    "tcgplayer": "The Dark"
+  },
+  "OGW": {
+    "gatherer": "Oath of the Gatewatch",
+    "magiccardmarket": "Oath of the Gatewatch",
+    "tcgplayer": "Oath of the Gatewatch"
+  },
+  "5DN": {
+    "gatherer": "Fifth Dawn",
+    "magiccardmarket": "Fifth Dawn",
+    "tcgplayer": "Fifth Dawn"
+  },
+  "pPOD": {
+    "gatherer": "Portal Demo Game"
+  },
+  "ALL": {
+    "gatherer": "Alliances",
+    "magiccardmarket": "Alliances",
+    "tcgplayer": "Alliances"
+  },
+  "pCEL": {
+    "gatherer": "Celebration",
+    "tcgplayer": "Special Occasion"
+  },
+  "pSUM": {
+    "gatherer": "Summer of Magic",
+    "magiccardmarket": "Summer Magic"
+  },
+  "LRW": {
+    "gatherer": "Lorwyn",
+    "magiccardmarket": "Lorwyn",
+    "tcgplayer": "Lorwyn"
+  },
+  "S00": {
+    "gatherer": "Starter 2000",
+    "magiccardmarket": "Starter 2000",
+    "tcgplayer": "Starter 2000"
+  },
+  "5ED": {
+    "gatherer": "Fifth Edition",
+    "magiccardmarket": "Fifth Edition",
+    "tcgplayer": "Fifth Edition"
+  },
+  "ME3": {
+    "gatherer": "Masters Edition III"
+  },
+  "ME2": {
+    "gatherer": "Masters Edition II"
+  },
+  "ME4": {
+    "gatherer": "Masters Edition IV"
+  },
+  "BOK": {
+    "gatherer": "Betrayers of Kamigawa",
+    "magiccardmarket": "Betrayers of Kamigawa",
+    "tcgplayer": "Betrayers of Kamigawa"
+  },
+  "TSB": {
+    "gatherer": "Time Spiral \"Timeshifted\"",
+    "magiccardmarket": "Time Spiral",
+    "tcgplayer": "Timeshifted"
+  },
+  "C13": {
+    "gatherer": "Commander 2013 Edition",
+    "magiccardmarket": "Commander 2013",
+    "tcgplayer": "Commander 2013"
+  },
+  "DST": {
+    "gatherer": "Darksteel",
+    "magiccardmarket": "Darksteel",
+    "tcgplayer": "Darksteel"
+  },
+  "UDS": {
+    "gatherer": "Urza's Destiny",
+    "magiccardmarket": "Urza's Destiny",
+    "tcgplayer": "Urza's Destiny"
+  },
+  "C15": {
+    "gatherer": "Commander 2015",
+    "magiccardmarket": "Commander 2015",
+    "tcgplayer": "Commander 2015"
+  },
+  "C14": {
+    "gatherer": "Commander 2014",
+    "magiccardmarket": "Commander 2014",
+    "tcgplayer": "Commander 2014"
+  },
+  "C16": {
+    "gatherer": "Commander 2016",
+    "magiccardmarket": "Commander 2016",
+    "tcgplayer": "Commander 2016"
+  },
+  "ROE": {
+    "gatherer": "Rise of the Eldrazi",
+    "magiccardmarket": "Rise of the Eldrazi",
+    "tcgplayer": "Rise of the Eldrazi"
+  },
+  "MED": {
+    "gatherer": "Masters Edition"
+  },
+  "TSP": {
+    "gatherer": "Time Spiral",
+    "magiccardmarket": "Time Spiral",
+    "tcgplayer": "Time Spiral"
+  },
+  "JOU": {
+    "gatherer": "Journey into Nyx",
+    "magiccardmarket": "Journey into Nyx",
+    "tcgplayer": "Journey Into Nyx"
+  },
+  "DD2": {
+    "gatherer": "Duel Decks: Jace vs. Chandra",
+    "magiccardmarket": "Duel Decks: Jace vs. Chandra",
+    "tcgplayer": "Jace vs. Chandra"
+  },
+  "EVE": {
+    "gatherer": "Eventide",
+    "magiccardmarket": "Eventide",
+    "tcgplayer": "Eventide"
+  },
+  "EVG": {
+    "gatherer": "Duel Decks: Elves vs. Goblins",
+    "magiccardmarket": "Duel Decks: Elves vs. Goblins",
+    "tcgplayer": "Elves vs. Goblins"
+  },
+  "DTK": {
+    "gatherer": "Dragons of Tarkir",
+    "magiccardmarket": "Dragons of Tarkir",
+    "tcgplayer": "Dragons of Tarkir"
+  },
+  "DDC": {
+    "gatherer": "Duel Decks: Divine vs. Demonic",
+    "magiccardmarket": "Duel Decks: Divine vs. Demonic",
+    "tcgplayer": "Divine vs. Demonic"
+  },
+  "DDE": {
+    "gatherer": "Duel Decks: Phyrexia vs. the Coalition",
+    "magiccardmarket": "Duel Decks: Phyrexia vs. The Coalition",
+    "tcgplayer": "Phyrexia vs. The Coalition"
+  },
+  "DDD": {
+    "gatherer": "Duel Decks: Garruk vs. Liliana",
+    "magiccardmarket": "Duel Decks: Garruk vs. Liliana",
+    "tcgplayer": "Garruk vs. Liliana"
+  },
+  "DDG": {
+    "gatherer": "Duel Decks: Knights vs. Dragons",
+    "magiccardmarket": "Duel Decks: Knights vs. Dragons",
+    "tcgplayer": "Knights vs. Dragons"
+  },
+  "PLC": {
+    "gatherer": "Planar Chaos",
+    "magiccardmarket": "Planar Chaos",
+    "tcgplayer": "Planar Chaos"
+  },
+  "DD3_JVC": {
+    "gatherer": "Duel Decks Anthology, Jace vs. Chandra",
+    "magiccardmarket": "Duel Decks: Jace vs. Chandra",
+    "tcgplayer": "Duel Decks: Anthology"
+  },
+  "DDF": {
+    "gatherer": "Duel Decks: Elspeth vs. Tezzeret",
+    "magiccardmarket": "Duel Decks: Elspeth vs. Tezzeret",
+    "tcgplayer": "Elspeth vs. Tezzeret"
+  },
+  "DDI": {
+    "gatherer": "Duel Decks: Venser vs. Koth",
+    "magiccardmarket": "Duel Decks: Venser vs. Koth",
+    "tcgplayer": "Venser vs. Koth"
+  },
+  "DDH": {
+    "gatherer": "Duel Decks: Ajani vs. Nicol Bolas",
+    "magiccardmarket": "Duel Decks: Ajani vs. Nicol Bolas",
+    "tcgplayer": "Ajani vs. Nicol Bolas"
+  },
+  "DDK": {
+    "gatherer": "Duel Decks: Sorin vs. Tibalt",
+    "magiccardmarket": "Duel Decks: Sorin vs. Tibalt",
+    "tcgplayer": "Sorin vs. Tibalt"
+  },
+  "DDJ": {
+    "gatherer": "Duel Decks: Izzet vs. Golgari",
+    "magiccardmarket": "Duel Decks: Izzet vs. Golgari",
+    "tcgplayer": "Izzet vs. Golgari"
+  },
+  "DDM": {
+    "gatherer": "Duel Decks: Jace vs. Vraska",
+    "magiccardmarket": "Duel Decks: Jace vs. Vraska",
+    "tcgplayer": "Jace vs. Vraska"
+  },
+  "DDL": {
+    "gatherer": "Duel Decks: Heroes vs. Monsters",
+    "magiccardmarket": "Duel Decks: Heroes vs. Monsters",
+    "tcgplayer": "Heroes vs. Monsters"
+  },
+  "DDO": {
+    "gatherer": "Duel Decks: Elspeth vs. Kiora",
+    "magiccardmarket": "Duel Decks: Elspeth vs. Kiora",
+    "tcgplayer": "Duel Decks: Elspeth vs. Kiora"
+  },
+  "DDN": {
+    "gatherer": "Duel Decks: Speed vs. Cunning",
+    "magiccardmarket": "Duel Decks: Speed vs. Cunning",
+    "tcgplayer": "Speed vs. Cunning"
+  },
+  "DDQ": {
+    "gatherer": "Duel Decks: Blessed vs. Cursed",
+    "magiccardmarket": "Duel Decks: Blessed vs. Cursed",
+    "tcgplayer": "Duel Decks: Blessed vs. Cursed"
+  },
+  "INV": {
+    "gatherer": "Invasion",
+    "magiccardmarket": "Invasion",
+    "tcgplayer": "Invasion"
+  },
+  "DDP": {
+    "gatherer": "Duel Decks: Zendikar vs. Eldrazi",
+    "magiccardmarket": "Duel Decks: Zendikar vs. Eldrazi",
+    "tcgplayer": "Duel Decks: Zendikar vs. Eldrazi"
+  },
+  "DDS": {
+    "gatherer": "Duel Decks: Mind vs. Might",
+    "magiccardmarket": "Duel Decks: Mind vs. Might",
+    "tcgplayer": "Duel Decks: Mind vs. Might"
+  },
+  "DDR": {
+    "gatherer": "Duel Decks: Nissa vs. Ob Nixilis",
+    "magiccardmarket": "Duel Decks: Nissa vs. Ob Nixilis",
+    "tcgplayer": "Duel Decks: Nissa vs. Ob Nixilis"
+  },
+  "4ED": {
+    "gatherer": "Fourth Edition",
+    "magiccardmarket": "Fourth Edition",
+    "tcgplayer": "Fourth Edition"
+  },
+  "PLS": {
+    "gatherer": "Planeshift",
+    "magiccardmarket": "Planeshift",
+    "tcgplayer": "Planeshift"
+  },
+  "CSP": {
+    "gatherer": "Coldsnap",
+    "magiccardmarket": "Coldsnap",
+    "tcgplayer": "Coldsnap"
+  },
+  "CST": {
+    "gatherer": "Coldsnap Theme Decks",
+    "magiccardmarket": "Coldsnap Theme Decks"
+  },
+  "HML": {
+    "gatherer": "Homelands",
+    "magiccardmarket": "Homelands",
+    "tcgplayer": "Homelands"
+  },
+  "LEB": {
+    "gatherer": "Limited Edition Beta",
+    "magiccardmarket": "Beta",
+    "tcgplayer": "Beta Edition"
+  },
+  "MGB": {
+    "gatherer": "Multiverse Gift Box",
+    "magiccardmarket": "Multiverse Gift Box"
+  },
+  "LEA": {
+    "gatherer": "Limited Edition Alpha",
+    "magiccardmarket": "Alpha",
+    "tcgplayer": "Alpha Edition"
+  },
+  "LEG": {
+    "gatherer": "Legends",
+    "magiccardmarket": "Legends",
+    "tcgplayer": "Legends"
+  },
+  "BRB": {
+    "gatherer": "Battle Royale Box Set",
+    "magiccardmarket": "Battle Royale",
+    "tcgplayer": "Battle Royale Box Set"
+  },
+  "APC": {
+    "gatherer": "Apocalypse",
+    "magiccardmarket": "Apocalypse",
+    "tcgplayer": "Apocalypse"
+  },
+  "pSUS": {
+    "gatherer": "Super Series",
+    "magiccardmarket": "Junior Super Series Promos",
+    "tcgplayer": "JSS/MSS Promos"
+  },
+  "RQS": {
+    "gatherer": "Rivals Quick Start Set"
+  },
+  "SCG": {
+    "gatherer": "Scourge",
+    "magiccardmarket": "Scourge",
+    "tcgplayer": "Scourge"
+  },
+  "pLGM": {
+    "gatherer": "Legend Membership"
+  },
+  "pARL": {
+    "gatherer": "Arena League",
+    "magiccardmarket": "Arena League Promos",
+    "tcgplayer": "Arena Promos"
+  },
+  "UGL": {
+    "gatherer": "Unglued",
+    "magiccardmarket": "Unglued",
+    "tcgplayer": "Unglued"
+  },
+  "EXP": {
+    "gatherer": "Zendikar Expeditions",
+    "magiccardmarket": "Zendikar Expeditions",
+    "tcgplayer": "Zendikar Expeditions"
+  },
+  "EXO": {
+    "gatherer": "Exodus",
+    "magiccardmarket": "Exodus",
+    "tcgplayer": "Exodus"
+  }
+}

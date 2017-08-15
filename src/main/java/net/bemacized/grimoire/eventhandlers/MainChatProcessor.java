@@ -20,8 +20,8 @@ public class MainChatProcessor extends ListenerAdapter {
 		// Register handlers
 		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
 				CommandHandler.class,
-				PriceRetrieveHandler.class,
-				CardRetrieveHandler.class,
+				InlineCardHandler.class,
+				InlinePriceHandler.class,
 				ExecHandler.class
 		);
 		Collections.reverse(handlerClasses);

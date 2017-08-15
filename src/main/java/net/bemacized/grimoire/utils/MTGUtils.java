@@ -1,13 +1,15 @@
 package net.bemacized.grimoire.utils;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class MTGUtils {
 
-	public static String colourIdToName(String id) {
-		switch (id.toUpperCase()) {
+	@SuppressWarnings("ConstantConditions")
+	public static String colourIdToName(@Nullable String id) {
+		switch (id == null ? null : id.toUpperCase()) {
 			case "R":
 				return "Red";
 			case "B":
@@ -44,7 +46,7 @@ public class MTGUtils {
 		}
 	}
 
-	public static String parsePowerAndToughness(String power, String toughness) {
+	public static String parsePowerAndToughness(@Nullable String power, @Nullable String toughness) {
 		if (power == null || toughness == null || power.isEmpty() || toughness.isEmpty()) return "";
 		return parsePowerOrToughness(power) + "/" + parsePowerOrToughness(toughness);
 	}

@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.chathandlers;
 
-import net.bemacized.grimoire.commands.*;
+import net.bemacized.grimoire.commands.BaseCommand;
+import net.bemacized.grimoire.commands.all.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -19,22 +20,22 @@ public class CommandHandler extends ChatHandler {
 		super(next);
 		commands = Stream.of(
 				new HelpCommand(),
-				new RulingsCommand(),
-				new PrintsCommand(),
-				new OracleCommand(),
-				new RandomCommand(),
-				new PricingCommand(),
-				new TokenCommand(),
 				new ArtCommand(),
-				new CompRulesCommand(),
-				new DefineCommand(),
-				new TournamentRulesCommand(),
-				new InfractionProcedureGuideCommand(),
-				new NamesCommand(),
 				new CardCommand(),
+				new OracleCommand(),
+				new PrintsCommand(),
 				new LegalityCommand(),
+				new NamesCommand(),
+				new RulingsCommand(),
+				new ComprehensiveRulesCommand(),
+				new DefineCommand(),
+				new InfractionProcedureGuideCommand(),
+				new TournamentRulesCommand(),
 				new SetCommand(),
-				new StandardCommand()
+				new TokenCommand(),
+				new StandardCommand(),
+				new RandomCommand(),
+				new PricingCommand()
 		).collect(Collectors.toList());
 	}
 

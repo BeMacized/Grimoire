@@ -9,7 +9,7 @@ public abstract class BaseCommand extends MessageUtils {
 
 	final Logger LOG;
 
-	BaseCommand() {
+	protected BaseCommand() {
 		LOG = Logger.getLogger(this.getClass().getName());
 	}
 
