@@ -222,13 +222,6 @@ public class MtgJsonSet {
 		assert !name.equals("UNKNOWN");
 	}
 
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	@Override
-	public Object clone() {
-		Gson gson = new Gson();
-		return gson.fromJson(gson.toJson(this), MtgJsonSet.class);
-	}
-
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)

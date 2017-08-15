@@ -81,30 +81,38 @@ public class CardProvider extends Provider {
 
 	@Override
 	boolean loadFromDB() {
-		Log.info("Attempting to load card data from database...");
+		LOG.info("Attempting to load card data from database...");
 		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgSet.COLLECTION).find().as(MtgSet.class).forEach(set -> this.sets.add(set));
 		if (sets.isEmpty()) {
 			Log.info("Could not find any sets in database. Fetching from web instead.");
 			return false;
 		}
-		Log.info("Loaded sets from database.");
+		LOG.info("Loaded sets from database.");
 		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgCard.COLLECTION).find().as(MtgCard.class).forEach(card -> this.cards.add(card));
 		if (cards.isEmpty()) {
 			Log.info("Could not find any cards in database. Fetching from web instead.");
 			return false;
 		}
 
+		// Add foreign cards
+		this.cards.addAll(this.cards.parallelStream()
+				.map(c -> Arrays.stream(c.getForeignNames()).parallel().map(fv -> new MtgCard(c, fv)))
+				.flatMap(o -> o)
+				.collect(Collectors.toList()));
+		LOG.info("Loaded cards from database.");
+
 		// Sort the data
 		sortData();
-
-		Log.info("Loaded cards from database.");
 		return true;
 	}
 
 	@Override
 	void saveToDB() {
-		this.sets.parallelStream().forEach(MtgSet::save);
-		this.cards.parallelStream().forEach(MtgCard::save);
+		LOG.info("Saving sets to database...");
+		this.sets.stream().forEach(MtgSet::save);
+		LOG.info("Saving cards to database...");
+		this.cards.stream().forEach(MtgCard::save);
+		LOG.info("Saved sets and cards to database.");
 	}
 
 	@Override
@@ -133,6 +141,8 @@ public class CardProvider extends Provider {
 			return;
 		}
 
+		LOG.info("Merging set models...");
+
 		// Merge set models
 		this.sets = scryfallSets.parallelStream()
 				.map(scryfallSet -> new MtgSet(
@@ -143,6 +153,8 @@ public class CardProvider extends Provider {
 				))
 				.collect(Collectors.toList());
 
+		LOG.info("Merging card models...");
+
 		// Merge card models
 		this.cards = scryfallCards.parallelStream()
 				.map(scryfallCard -> new MtgCard(
@@ -151,22 +163,23 @@ public class CardProvider extends Provider {
 				))
 				.collect(Collectors.toList());
 
-		// Add foreign cards
-		this.cards.addAll(this.cards.parallelStream()
-				.map(c -> Arrays.stream(c.getForeignNames()).parallel().map(fv -> new MtgCard(c, fv)))
-				.flatMap(o -> o)
-				.collect(Collectors.toList()));
-
 		// Validate models
 		this.sets.parallelStream().forEach(MtgSet::assertValidity);
 		this.cards.parallelStream().forEach(MtgCard::assertValidity);
 		assertValidity();
 
-		// Sort the data
-		sortData();
-
 		// Save models to database
 		saveToDB();
+
+		// Add foreign cards
+		LOG.info("Adding foreign cards...");
+		this.cards.addAll(this.cards.parallelStream()
+				.map(c -> Arrays.stream(c.getForeignNames()).parallel().map(fv -> new MtgCard(c, fv)))
+				.flatMap(o -> o)
+				.collect(Collectors.toList()));
+
+		// Sort the data
+		sortData();
 	}
 
 	private void sortData() {

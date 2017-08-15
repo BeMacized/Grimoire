@@ -25,8 +25,8 @@ public class MtgSet {
 	}
 
 	public MtgSet(@Nonnull ScryfallSet scryfallSet, @Nullable MtgJsonSet mtgJsonSet) {
-		this.mtgJsonSet = (mtgJsonSet == null) ? null : (MtgJsonSet) mtgJsonSet.clone();
-		this.scryfallSet = (ScryfallSet) scryfallSet.clone();
+		this.mtgJsonSet = mtgJsonSet;
+		this.scryfallSet = scryfallSet;
 		this._id = generateId();
 	}
 

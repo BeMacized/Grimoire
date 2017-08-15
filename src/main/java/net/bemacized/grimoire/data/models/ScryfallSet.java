@@ -154,13 +154,6 @@ public class ScryfallSet {
 		assert !set_type.equals(Type.UNKNOWN);
 	}
 
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	@Override
-	public Object clone() {
-		Gson gson = new Gson();
-		return gson.fromJson(gson.toJson(this), ScryfallSet.class);
-	}
-
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)

@@ -8,7 +8,6 @@ import net.bemacized.grimoire.data.models.ScryfallCard;
 import net.bemacized.grimoire.data.models.ScryfallSet;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.python.jline.internal.Log;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -62,13 +61,13 @@ public class ScryfallRetriever {
 				loaded += newRecordsPulled;
 				if (total >= 0) {
 					int percentage = (int) Math.round(((double) loaded) / ((double) total) * 100d);
-					Log.info(String.format("(%s%%) Downloaded %s/%s...", percentage, loaded, total));
+					LOG.info(String.format("(%s%%) Downloaded %s/%s...", percentage, loaded, total));
 				}
 			}
 
 			@Override
 			public void done() {
-				Log.info("Downloaded card data");
+				LOG.info("Downloaded card data");
 			}
 		});
 		LOG.info("Parsing card data...");

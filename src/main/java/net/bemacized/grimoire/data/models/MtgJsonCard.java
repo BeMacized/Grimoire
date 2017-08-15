@@ -436,13 +436,6 @@ public class MtgJsonCard {
 		}
 	}
 
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	@Override
-	public Object clone() {
-		Gson gson = new Gson();
-		return gson.fromJson(gson.toJson(this), MtgJsonCard.class);
-	}
-
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)

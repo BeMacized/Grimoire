@@ -188,7 +188,7 @@ public class ExecHandler extends ChatHandler {
 		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("net.bemacized.grimoire").toArray(new String[0]));
 		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("net.dv8tion.jda").toArray(new String[0]));
 		// Check if full class was provided, if not wrap it
-		if (!Arrays.stream(code.split("[\\r\\n]")).anyMatch(l -> l.matches("((public|private|protected)\\s)class\\s[^\\s\\n\\r]+\\simplements.*[\\n]")))
+		if (Arrays.stream(code.split("[\\r\\n]")).noneMatch(l -> l.matches("((public|private|protected)\\s)class\\s[^\\s\\n\\r]+\\simplements.*[\\n]")))
 			code = String.format("public class Exec implements ExecHandler.Debugger { @Override public void exec(Grimoire grimoire) throws Exception { %s } }", code);
 		// Attach standard imports
 		for (String i : standardImports)

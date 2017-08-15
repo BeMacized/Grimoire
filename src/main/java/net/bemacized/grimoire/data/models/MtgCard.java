@@ -54,8 +54,8 @@ public class MtgCard {
 	}
 
 	public MtgCard(@Nonnull ScryfallCard scryfallCard, @Nullable MtgJsonCard mtgJsonCard) {
-		this.scryfallCard = (ScryfallCard) scryfallCard.clone();
-		this.mtgJsonCard = (mtgJsonCard == null) ? null : (MtgJsonCard) mtgJsonCard.clone();
+		this.scryfallCard = scryfallCard;
+		this.mtgJsonCard = mtgJsonCard;
 		this.language = "English";
 		this._id = generateId();
 	}
@@ -293,7 +293,8 @@ public class MtgCard {
 	}
 
 	public void save() {
-		Grimoire.getInstance().getDBManager().getJongo().getCollection(COLLECTION).save(this);
+		if (language.equalsIgnoreCase("English"))
+			Grimoire.getInstance().getDBManager().getJongo().getCollection(COLLECTION).save(this);
 	}
 
 	@Nonnull
