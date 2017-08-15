@@ -6,4 +6,4 @@ COPY . .
 RUN ./gradlew clean build uberjar
 
 # Run Grimoire
-CMD java -jar build/libs/Grimoire-2.0.jar
+CMD java -Xmx3G -Xms3G -jar build/libs/Grimoire-2.0.jar
