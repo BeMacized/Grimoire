@@ -30,16 +30,18 @@ public class ScryfallRetriever extends StoreRetriever {
 	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
 		card.updateScryfall();
 		return new StoreCardPriceRecord(card.getName(), card.getSet().getCode(), null, System.currentTimeMillis(), getStoreId(), new HashMap<String, String>() {{
-			put("MTGO", formatPrice(card.getScryfallCard().getTix()) + " TIX");
-			put("EUR", "€" + formatPrice(card.getScryfallCard().getEur()));
-			put("USD", "$" + formatPrice(card.getScryfallCard().getUsd()));
+			put("TIX", formatPrice(card.getScryfallCard().getTix(), "TIX", false));
+			put("EUR", formatPrice(card.getScryfallCard().getEur(), "€", true));
+			put("USD", formatPrice(card.getScryfallCard().getUsd(), "$", true));
 		}});
 	}
 
-	private String formatPrice(@Nullable String price) {
+	private String formatPrice(@Nullable String price, String currency, boolean before) {
 		if (price == null || price.isEmpty()) price = "0";
 		try {
 			if (Double.parseDouble(price) <= 0) price = "N/A";
+			else if (before) price = currency + price;
+			else price += currency;
 		} catch (Exception e) {
 			price = "N/A";
 		}

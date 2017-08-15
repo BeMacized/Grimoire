@@ -782,6 +782,11 @@
     "magiccardmarket": "Commander 2016",
     "tcgplayer": "Commander 2016"
   },
+  "C17": {
+    "gatherer": "Commander 2017",
+    "magiccardmarket": "Commander 2017",
+    "tcgplayer": "Commander 2017"
+  },
   "ROE": {
     "gatherer": "Rise of the Eldrazi",
     "magiccardmarket": "Rise of the Eldrazi",
