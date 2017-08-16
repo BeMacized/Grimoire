@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.data.models;
 
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -89,6 +90,7 @@ public class MtgSet {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setTitle(String.format("%s (%s)", getName(), getCode()), "https://scryfall.com/sets/" + getCode().toLowerCase());
 		if (getReleaseDate() != null) eb.addField("Release Date", getReleaseDate(), true);
 		eb.addField("Type", getType().getDisplayName().substring(0, 1).toUpperCase() + getType().getDisplayName().substring(1), true);

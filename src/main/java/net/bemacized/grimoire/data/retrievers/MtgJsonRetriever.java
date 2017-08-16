@@ -46,7 +46,7 @@ public class MtgJsonRetriever {
 		Gson gson = new GsonBuilder().registerTypeAdapter(MtgJsonSet.Booster.class, new MtgJsonSet.BoosterDeserializer()).create();
 		List<MtgJsonSet> sets = jsonsets.parallelStream().map(e -> gson.fromJson(e, MtgJsonSet.class)).collect(Collectors.toList());
 
-		Log.info("Retrieved " + sets.size() + " sets. Extracting cards...");
+		LOG.info("Retrieved " + sets.size() + " sets. Extracting cards...");
 
 		Map<MtgJsonSet, List<MtgJsonCard>> results = new HashMap<>();
 

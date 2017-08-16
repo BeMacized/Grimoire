@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands.all;
 
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.Definition;
@@ -58,6 +59,6 @@ public class DefineCommand extends BaseCommand {
 		}
 
 		// Show definition
-		e.getChannel().sendMessage(new EmbedBuilder().addField(definition.getKeyword(), definition.getExplanation(), false).build()).submit();
+		e.getChannel().sendMessage(new EmbedBuilder().setColor(Globals.EMBED_COLOR_PRIMARY).addField(definition.getKeyword(), definition.getExplanation(), false).build()).submit();
 	}
 }

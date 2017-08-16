@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.utils;
 
+import net.bemacized.grimoire.Globals;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class MessageUtils {
 
 	public static List<MessageEmbed> simpleEmbed(String text) {
-		return Arrays.stream(splitMessage(text)).map(t -> new EmbedBuilder().setDescription(t).build()).collect(Collectors.toList());
+		return Arrays.stream(splitMessage(text)).map(t -> new EmbedBuilder().setColor(Globals.EMBED_COLOR_PRIMARY).setDescription(t).build()).collect(Collectors.toList());
 	}
 
 	public static List<MessageEmbed> simpleEmbedFormat(String template, Object... inserts) {

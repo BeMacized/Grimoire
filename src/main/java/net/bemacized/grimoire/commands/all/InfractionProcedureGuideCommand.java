@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands.all;
 
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.InfractionProcedureGuideSection;
@@ -36,6 +37,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
 			e.getChannel().sendMessage(new EmbedBuilder()
+					.setColor(Globals.EMBED_COLOR_PRIMARY)
 					.setAuthor("Infraction Procedure Guide", null, null)
 					.setDescription("The following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 							.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
@@ -54,6 +56,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			// Verify that section exists
 			if (section == null) {
 				e.getChannel().sendMessage(new EmbedBuilder()
+						.setColor(Globals.EMBED_COLOR_PRIMARY)
 						.setAuthor("Infraction Procedure Guide", null, null)
 						.setDescription(":anger: The specified section could not be found.\n\nThe following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 								.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
@@ -67,6 +70,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				subsection = section.getSubSections().parallelStream().filter(s -> s.getSectionId().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 				if (subsection == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
+							.setColor(Globals.EMBED_COLOR_PRIMARY)
 							.setAuthor("Infraction Procedure Guide", null, null)
 							.setDescription(String.format(":anger: The specified subsection could not be found.\n\nWithin **'%s %s'**, the following sections are available:\n%s",
 									section.getSectionId(), section.getTitle(),
@@ -85,6 +89,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				topic = subsection.getSubSections().parallelStream().filter(s -> s.getTitle().equalsIgnoreCase(topicname)).findFirst().orElse(null);
 				if (topic == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
+							.setColor(Globals.EMBED_COLOR_PRIMARY)
 							.setAuthor("Infraction Procedure Guide", null, null)
 							.setDescription(String.format(":anger: The specified topic could not be found.\n\nWithin **'%s %s'**, the following topics are available:\n%s", subsection.getSectionId(), subsection.getTitle(), String.join("\n",
 									subsection.getSubSections().parallelStream()
@@ -97,7 +102,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			if (topic != null) {
 				String[] splits = MessageUtils.splitMessage(String.format("**%s**\n%s", topic.getTitle(), topic.getContent()));
 				for (int i = 0; i < splits.length; i++) {
-					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
+					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
@@ -107,7 +112,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				String subsections = (subsection.getSubSections().isEmpty()) ? "" : String.join("\n\n", subsection.getSubSections().parallelStream().map(t -> String.format("**%s**\n%s", t.getTitle(), t.getContent())).collect(Collectors.toList()));
 				String[] splits = MessageUtils.splitMessage(content + subsections);
 				for (int i = 0; i < splits.length; i++) {
-					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
+					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
@@ -117,7 +122,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				String subsections = (section.getSubSections().isEmpty()) ? "" : "\n\n**The following subsections are available:**\n" + String.join("\n", section.getSubSections().parallelStream().map(t -> ":small_orange_diamond: **" + t.getSectionId() + "** " + t.getTitle()).collect(Collectors.toList()));
 				String[] splits = MessageUtils.splitMessage(content + subsections);
 				for (int i = 0; i < splits.length; i++) {
-					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
+					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", section.getSectionId(), section.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();

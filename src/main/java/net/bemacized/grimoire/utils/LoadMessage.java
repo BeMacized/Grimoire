@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.utils;
 
+import net.bemacized.grimoire.Globals;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -103,7 +104,7 @@ public class LoadMessage {
 
 				// Update old messages if they exist, otherwise send new ones.
 				String newText = messageTexts[i];
-				MessageEmbed newEmbed = new EmbedBuilder().setDescription(newText).build();
+				MessageEmbed newEmbed = new EmbedBuilder().setDescription(newText).setColor(Globals.EMBED_COLOR_PRIMARY).build();
 				Message oldMsg = (messages.size() > i) ? messages.get(i) : null;
 				if (oldMsg == null) {
 					oldMsg = channel.sendMessage(newEmbed).submit().get();

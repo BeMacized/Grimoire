@@ -1,14 +1,13 @@
 package net.bemacized.grimoire.data.models;
 
-
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings("unused")
 public class ScryfallSet {
 
 	@Nonnull
@@ -17,31 +16,33 @@ public class ScryfallSet {
 	private String name = "UNKNOWN";
 	@Nonnull
 	private String icon_svg_uri = "UNKNOWN";
-	@Nonnull
-	private String search_uri = "UNKNOWN";
+	//	@Nonnull
+//	private String search_uri = "UNKNOWN";
 	@Nonnull
 	private Type set_type = Type.UNKNOWN;
 
-	@Nullable
-	private String block_code;
+	//	@Nullable
+//	private String block_code;
 	@Nullable
 	private String block;
-	@Nullable
-	private String parent_set_code;
+	//	@Nullable
+//	private String parent_set_code;
 	@Nullable
 	private String released_at;
 
 	private int card_count = 0;
 	private boolean digital;
-	private boolean foil;
+//	private boolean foil;
 
 	private long timestamp = System.currentTimeMillis();
 
+	
 	@Nonnull
 	public String getCode() {
 		return code;
 	}
 
+	
 	@Nonnull
 	public String getName() {
 		return name;
@@ -52,48 +53,62 @@ public class ScryfallSet {
 		return icon_svg_uri;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String getSearchUri() {
-		return search_uri;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return search_uri;
 	}
 
+	
 	@Nonnull
 	public Type getSetType() {
 		return set_type;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getBlockCode() {
-		return block_code;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return block_code;
 	}
 
+	
 	@Nullable
 	public String getBlock() {
 		return block;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getParentSetCode() {
-		return parent_set_code;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return parent_set_code;
 	}
 
+	
 	@Nullable
 	public String getReleasedAt() {
 		return released_at;
 	}
 
+	
 	public int getCardCount() {
 		return card_count;
 	}
 
+	
 	public boolean isDigital() {
 		return digital;
 	}
 
+	@JsonIgnore
 	public boolean isFoil() {
-		return foil;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return foil;
 	}
 
+	
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -150,7 +165,7 @@ public class ScryfallSet {
 		assert !code.equals("UNKNOWN");
 		assert !name.equals("UNKNOWN");
 		assert !icon_svg_uri.equals("UNKNOWN");
-		assert !search_uri.equals("UNKNOWN");
+//		assert !search_uri.equals("UNKNOWN");
 		assert !set_type.equals(Type.UNKNOWN);
 	}
 
@@ -160,15 +175,15 @@ public class ScryfallSet {
 				.append("code", code)
 				.append("name", name)
 				.append("icon_svg_uri", icon_svg_uri)
-				.append("search_uri", search_uri)
+//				.append("search_uri", search_uri)
 				.append("set_type", set_type)
-				.append("block_code", block_code)
+//				.append("block_code", block_code)
 				.append("block", block)
-				.append("parent_set_code", parent_set_code)
+//				.append("parent_set_code", parent_set_code)
 				.append("released_at", released_at)
 				.append("card_count", card_count)
 				.append("digital", digital)
-				.append("foil", foil)
+//				.append("foil", foil)
 				.append("timestamp", timestamp)
 				.toString();
 	}

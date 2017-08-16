@@ -1,13 +1,14 @@
 package net.bemacized.grimoire.data.models;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
+@SuppressWarnings({"SpellCheckingInspection", "unused", "WeakerAccess"})
 public class MtgJsonCard {
 
 	@Nonnull
@@ -16,16 +17,16 @@ public class MtgJsonCard {
 	private Layout layout = Layout.UNKNOWN;
 	@Nonnull
 	private String name = "UNKNOWN";
-	@Nonnull
-	private String[] names = new String[0];
-	@Nonnull
-	private String manaCost = "";
-	@Nonnull
-	private String[] colors = new String[0];
+	//	@Nonnull
+//	private String[] names = new String[0];
+//	@Nonnull
+//	private String manaCost = "";
+//	@Nonnull
+//	private String[] colors = new String[0];
 	@Nonnull
 	private String[] colorIdentity = new String[0];
-	@Nonnull
-	private String type = "UNKNOWN";
+	//	@Nonnull
+//	private String type = "UNKNOWN";
 	@Nonnull
 	private String[] supertypes = new String[0];
 	@Nonnull
@@ -34,221 +35,278 @@ public class MtgJsonCard {
 	private String[] subtypes = new String[0];
 	@Nonnull
 	private Rarity rarity = Rarity.UNKNOWN;
-	@Nonnull
-	private String artist = "UNKNOWN";
-	@Nonnull
-	private int[] variations = new int[0];
+	//	@Nonnull
+//	private String artist = "UNKNOWN";
+//	@Nonnull
+//	private int[] variations = new int[0];
 	@Nonnull
 	private Ruling[] rulings = new Ruling[0];
 	@Nonnull
 	private ForeignName[] foreignNames = new ForeignName[0];
-	@Nonnull
-	private String[] printings = new String[0];
-	@Nonnull
-	private Legality[] legalities = new Legality[0];
+	//	@Nonnull
+//	private String[] printings = new String[0];
+//	@Nonnull
+//	private Legality[] legalities = new Legality[0];
 	@Nonnull
 	private String setCode = "UNKNOWN";
 
+	//	@Nullable
+//	private String border;
 	@Nullable
-	private String border; //TODO: IF NULL INHERIT FROM SET
-	@Nullable
-	private String releaseDate; //TODO: INHERIT FROM SET IF NULL
-	@Nullable
-	private String originalText;
-	@Nullable
-	private String originalType;
-	@Nullable
-	private String source;
-	@Nullable
-	private String mciNumber;
-	@Nullable
-	private String power;
-	@Nullable
-	private String toughness;
-	@Nullable
-	private String flavor;
+	private String releaseDate;
+	//	@Nullable
+//	private String originalText;
+//	@Nullable
+//	private String originalType;
+//	@Nullable
+//	private String source;
+//	@Nullable
+//	private String mciNumber;
+//	@Nullable
+//	private String power;
+//	@Nullable
+//	private String toughness;
+//	@Nullable
+//	private String flavor;
 	@Nullable
 	private String text;
-	@Nullable
-	private String number;
+//	@Nullable
+//	private String number;
 
-	private int cmc = 0;
-	private int loyalty = 0;
+	//	private int cmc = 0;
+//	private int loyalty = 0;
 	private int multiverseid = -1;
-	private boolean reserved;
-	private boolean starter;
+//	private boolean reserved;
+//	private boolean starter;
 
 	private long timestamp = System.currentTimeMillis();
+
 
 	@Nonnull
 	public String getId() {
 		return id;
 	}
 
+
 	@Nonnull
 	public Layout getLayout() {
 		return layout;
 	}
+
 
 	@Nonnull
 	public String getName() {
 		return name;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String[] getNames() {
-		return names;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return names;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String getManaCost() {
-		return manaCost;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return manaCost;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String[] getColors() {
-		return colors;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return colors;
 	}
+
 
 	@Nonnull
 	public String[] getColorIdentity() {
 		return colorIdentity;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String getType() {
-		return type;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return type;
 	}
+
 
 	@Nonnull
 	public String[] getSupertypes() {
 		return supertypes;
 	}
 
+
 	@Nonnull
 	public String[] getTypes() {
 		return types;
 	}
+
 
 	@Nonnull
 	public String[] getSubtypes() {
 		return subtypes;
 	}
 
+
 	@Nonnull
 	public Rarity getRarity() {
 		return rarity;
 	}
+
 
 	@Nullable
 	public String getText() {
 		return text;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getFlavor() {
-		return flavor;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return flavor;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String getArtist() {
-		return artist;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return artist;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getNumber() {
-		return number;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return number;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getPower() {
-		return power;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return power;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getToughness() {
-		return toughness;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return toughness;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public int[] getVariations() {
-		return variations;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return variations;
 	}
+
 
 	@Nullable
 	public String getReleaseDate() {
 		return releaseDate;
 	}
 
+
 	@Nonnull
 	public Ruling[] getRulings() {
 		return rulings;
 	}
+
 
 	@Nonnull
 	public ForeignName[] getForeignNames() {
 		return foreignNames;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public String[] getPrintings() {
-		return printings;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return printings;
 	}
 
+	@JsonIgnore
 	@Nonnull
 	public Legality[] getLegalities() {
-		return legalities;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return legalities;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getBorder() {
-		return border;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return border;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getOriginalText() {
-		return originalText;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return originalText;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getOriginalType() {
-		return originalType;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return originalType;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getSource() {
-		return source;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return source;
 	}
 
+	@JsonIgnore
 	@Nullable
 	public String getMciNumber() {
-		return mciNumber;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return mciNumber;
 	}
+
 
 	@Nonnull
 	public String getSetCode() {
 		return setCode;
 	}
 
+	@JsonIgnore
 	public int getCmc() {
-		return cmc;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return cmc;
 	}
 
+	@JsonIgnore
 	public int getLoyalty() {
-		return loyalty;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return loyalty;
 	}
+
 
 	public int getMultiverseid() {
 		return multiverseid;
 	}
 
+	@JsonIgnore
 	public boolean isReserved() {
-		return reserved;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return reserved;
 	}
 
+	@JsonIgnore
 	public boolean isStarter() {
-		return starter;
+		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
+//		return starter;
 	}
+
 
 	public long getTimestamp() {
 		return timestamp;
@@ -409,9 +467,9 @@ public class MtgJsonCard {
 	}
 
 	public void assertValidity() {
-		assert !artist.equals("UNKNOWN");
+//		assert !artist.equals("UNKNOWN");
 		assert !rarity.equals(Rarity.UNKNOWN);
-		assert !type.equals("UNKNOWN");
+//		assert !type.equals("UNKNOWN");
 		assert !name.equals("UNKNOWN");
 		assert !id.equals("UNKNOWN");
 		assert !layout.equals(Layout.UNKNOWN);
@@ -428,12 +486,12 @@ public class MtgJsonCard {
 				assert !foreignName.name.equals("UNKNOWN");
 			}
 		}
-		if (legalities.length > 0) {
-			for (Legality legality : legalities) {
-				assert !legality.legality.equals("UNKNOWN");
-				assert !legality.format.equals("UNKNOWN");
-			}
-		}
+//		if (legalities.length > 0) {
+//			for (Legality legality : legalities) {
+//				assert !legality.legality.equals("UNKNOWN");
+//				assert !legality.format.equals("UNKNOWN");
+//			}
+//		}
 	}
 
 	@Override
@@ -442,37 +500,37 @@ public class MtgJsonCard {
 				.append("id", id)
 				.append("layout", layout)
 				.append("name", name)
-				.append("names", names)
-				.append("manaCost", manaCost)
-				.append("colors", colors)
+//				.append("names", names)
+//				.append("manaCost", manaCost)
+//				.append("colors", colors)
 				.append("colorIdentity", colorIdentity)
-				.append("type", type)
+//				.append("type", type)
 				.append("supertypes", supertypes)
 				.append("types", types)
 				.append("subtypes", subtypes)
 				.append("rarity", rarity)
-				.append("artist", artist)
-				.append("variations", variations)
+//				.append("artist", artist)
+//				.append("variations", variations)
 				.append("rulings", rulings)
 				.append("foreignNames", foreignNames)
-				.append("printings", printings)
-				.append("legalities", legalities)
-				.append("border", border)
+//				.append("printings", printings)
+//				.append("legalities", legalities)
+//				.append("border", border)
 				.append("releaseDate", releaseDate)
-				.append("originalText", originalText)
-				.append("originalType", originalType)
-				.append("source", source)
-				.append("mciNumber", mciNumber)
-				.append("power", power)
-				.append("toughness", toughness)
-				.append("flavor", flavor)
+//				.append("originalText", originalText)
+//				.append("originalType", originalType)
+//				.append("source", source)
+//				.append("mciNumber", mciNumber)
+//				.append("power", power)
+//				.append("toughness", toughness)
+//				.append("flavor", flavor)
 				.append("text", text)
-				.append("number", number)
-				.append("cmc", cmc)
-				.append("loyalty", loyalty)
+//				.append("number", number)
+//				.append("cmc", cmc)
+//				.append("loyalty", loyalty)
 				.append("multiverseid", multiverseid)
-				.append("reserved", reserved)
-				.append("starter", starter)
+//				.append("reserved", reserved)
+//				.append("starter", starter)
 				.append("timestamp", timestamp)
 				.append("setCode", setCode)
 				.toString();

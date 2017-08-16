@@ -43,7 +43,7 @@ public class SetCommand extends SetBaseCommand {
 		try {
 			// Attempt sending with set symbol
 			ByteArrayOutputStream resultByteStream = new ByteArrayOutputStream();
-			TranscoderInput transcoderInput = new TranscoderInput("https://assets.scryfall.com/assets/sets/" + set.getCode().toLowerCase() + ".svg");
+			TranscoderInput transcoderInput = new TranscoderInput(set.getScryfallSet().getIconSvgUri());
 			TranscoderOutput transcoderOutput = new TranscoderOutput(resultByteStream);
 			PNGTranscoder pngTranscoder = new PNGTranscoder();
 			pngTranscoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, 64f);

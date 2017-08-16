@@ -84,13 +84,13 @@ public class CardProvider extends Provider {
 		LOG.info("Attempting to load card data from database...");
 		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgSet.COLLECTION).find().as(MtgSet.class).forEach(set -> this.sets.add(set));
 		if (sets.isEmpty()) {
-			Log.info("Could not find any sets in database. Fetching from web instead.");
+			LOG.info("Could not find any sets in database. Fetching from web instead.");
 			return false;
 		}
 		LOG.info("Loaded sets from database.");
 		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgCard.COLLECTION).find().as(MtgCard.class).forEach(card -> this.cards.add(card));
 		if (cards.isEmpty()) {
-			Log.info("Could not find any cards in database. Fetching from web instead.");
+			LOG.info("Could not find any cards in database. Fetching from web instead.");
 			return false;
 		}
 
@@ -197,7 +197,7 @@ public class CardProvider extends Provider {
 			if (o2.getReleaseDate() == null) return -1;
 			return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
 		});
-		Log.info("Set & Card sorting complete");
+		LOG.info("Set & Card sorting complete");
 	}
 
 	private void assertValidity() {

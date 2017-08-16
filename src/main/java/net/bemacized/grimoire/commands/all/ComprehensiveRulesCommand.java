@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands.all;
 
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.ComprehensiveRule;
@@ -205,6 +206,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 			if (i == 0)
 				eb.setAuthor("Comprehensive Rules", null, null).setTitle(errorline == null ? title : null);
+			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 			e.getChannel().sendMessage(eb.build()).submit();
 		}
 	}

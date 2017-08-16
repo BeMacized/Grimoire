@@ -2,6 +2,7 @@ package net.bemacized.grimoire.data.providers;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.MtgCard;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.MagicCardMarketRetriever;
@@ -98,6 +99,7 @@ public class PricingProvider {
 		List<StoreCardPrice> pricing = getPricing(card);
 		// Build embeds
 		EmbedBuilder priceEmbed = new EmbedBuilder();
+		priceEmbed.setColor(Globals.EMBED_COLOR_PRIMARY);
 		priceEmbed.setTitle("Pricing: " + card.getName(), card.getGathererUrl());
 		priceEmbed.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		priceEmbed.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));

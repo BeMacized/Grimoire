@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands.all;
 
+import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.providers.StandardRotationProvider;
@@ -36,6 +37,7 @@ public class StandardCommand extends BaseCommand {
 	@Override
 	public void exec(String[] args, MessageReceivedEvent e) {
 		final EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setTitle("What's in Standard?", "http://whatsinstandard.com");
 		// Group by blocks & add them to the embed
 		Grimoire.getInstance().getStandardRotationProvider().getSets()
