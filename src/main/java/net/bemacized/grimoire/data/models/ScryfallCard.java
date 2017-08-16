@@ -18,7 +18,7 @@ public class ScryfallCard {
 	@Nonnull
 	private String name = "UNKNOWN";
 	@Nonnull
-	private String converted_mana_cost = "0";
+	private String cmc = "0";
 	@Nonnull
 	private String[] colors = new String[0];
 	@Nonnull
@@ -105,8 +105,8 @@ public class ScryfallCard {
 	}
 
 	@Nonnull
-	public String getConvertedManaCost() {
-		return converted_mana_cost;
+	public String getCMC() {
+		return cmc;
 	}
 
 	@Nonnull
@@ -504,7 +504,7 @@ public class ScryfallCard {
 		return new ToStringBuilder(this)
 				.append("id", id)
 				.append("name", name)
-				.append("converted_mana_cost", converted_mana_cost)
+				.append("cmc", cmc)
 				.append("colors", colors)
 				.append("color_identity", color_identity)
 				.append("layout", layout)

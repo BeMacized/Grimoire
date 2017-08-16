@@ -176,7 +176,7 @@ public class MtgCard {
 		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
 		String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
 		String title = getName();
-		String separateCost = (getManaCost() == null || getManaCost().isEmpty()) ? "" :
+		String cost = (getManaCost() == null || getManaCost().isEmpty()) ? "" :
 				Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild) + " **(" + getCmc() + ")**";
 
 		// Build the embed
@@ -184,7 +184,7 @@ public class MtgCard {
 		eb.setThumbnail(getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(getColorIdentity()));
 		eb.setTitle(title, getGathererUrl());
-		if (!separateCost.isEmpty()) eb.appendDescription(separateCost + "\n");
+		if (!cost.isEmpty()) eb.appendDescription(cost + "\n");
 		if (getType() != null) {
 			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 			eb.appendDescription(getType());
@@ -225,7 +225,7 @@ public class MtgCard {
 	}
 
 	public String getCmc() {
-		return scryfallCard.getConvertedManaCost();
+		return scryfallCard.getCMC();
 	}
 
 	@Nullable
