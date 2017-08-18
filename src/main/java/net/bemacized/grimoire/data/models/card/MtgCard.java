@@ -15,12 +15,14 @@ import org.jongo.marshall.jackson.oid.MongoId;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings({"SpellCheckingInspection", "WeakerAccess"})
 public class MtgCard {
 
 	public static final String COLLECTION = "MtgCards";
@@ -178,8 +180,13 @@ public class MtgCard {
 		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
 		String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
 		String title = getName();
+		String cmc = getCmc();
+		try {
+			cmc = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
+		} catch (NumberFormatException e) {
+		}
 		String cost = (getManaCost() == null || getManaCost().isEmpty()) ? "" :
-				Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild) + " **(" + getCmc() + ")**";
+				Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild) + " **(" + cmc + ")**";
 
 		// Build the embed
 		EmbedBuilder eb = new EmbedBuilder();
@@ -275,6 +282,7 @@ public class MtgCard {
 	public String[] getSubtypes() {
 		if (mtgJsonCard != null) return mtgJsonCard.getSubtypes();
 		if (subtypes != null) return subtypes;
+		if (getType() == null || getType().isEmpty()) return new String[0];
 		subtypes = Grimoire.getInstance().getCardProvider().getAllSubtypes().parallelStream()
 				.filter(type -> getType().toLowerCase().contains(type))
 				.collect(Collectors.toList())
@@ -286,6 +294,7 @@ public class MtgCard {
 	public String[] getTypes() {
 		if (mtgJsonCard != null) return mtgJsonCard.getTypes();
 		if (types != null) return types;
+		if (getType() == null || getType().isEmpty()) return new String[0];
 		types = Grimoire.getInstance().getCardProvider().getAllTypes().parallelStream()
 				.filter(type -> getType().toLowerCase().contains(type))
 				.collect(Collectors.toList())
@@ -312,6 +321,7 @@ public class MtgCard {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public enum Layout {
 		UNKNOWN(MtgJsonCard.Layout.UNKNOWN, ScryfallCard.Layout.UNKNOWN),
 		NORMAL(MtgJsonCard.Layout.NORMAL, ScryfallCard.Layout.NORMAL),

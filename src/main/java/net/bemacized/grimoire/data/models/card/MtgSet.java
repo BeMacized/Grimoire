@@ -12,6 +12,7 @@ import org.jongo.marshall.jackson.oid.MongoId;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings({"SpellCheckingInspection", "unused", "WeakerAccess"})
 public class MtgSet {
 
 	public static final String COLLECTION = "MtgSets";
