@@ -1,8 +1,12 @@
 package net.bemacized.grimoire.chathandlers;
 
 import net.bemacized.grimoire.commands.BaseCommand;
+import net.bemacized.grimoire.commands.CardBaseCommand;
+import net.bemacized.grimoire.commands.SetBaseCommand;
 import net.bemacized.grimoire.commands.all.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;

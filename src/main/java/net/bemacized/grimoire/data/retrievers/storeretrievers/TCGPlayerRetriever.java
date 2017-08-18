@@ -32,15 +32,19 @@ public class TCGPlayerRetriever extends StoreRetriever {
 		this.TCG_KEY = TCG_KEY;
 		this.TCG_HOST = TCG_HOST;
 		setDictionary = new HashMap<>();
-		rawSetDictionary.keySet().stream()
-				.map(setcode -> {
-					JsonObject obj = new JsonParser().parse(rawSetDictionary.getAsJsonObject(setcode).toString()).getAsJsonObject();
-					obj.addProperty("code", setcode);
-					return obj;
-				})
-				.filter(obj -> obj.has(getStoreId()))
-				.filter(obj -> !obj.get(getStoreId()).getAsString().isEmpty())
-				.forEach(obj -> setDictionary.put(obj.get("code").getAsString(), obj.get(getStoreId()).getAsString()));
+		rawSetDictionary.getAsJsonArray("data").forEach(setMap -> {
+			// Check if we know the store set name
+			if (!setMap.getAsJsonObject().has(getStoreId())) return;
+			// Get the set code
+			String setCode;
+			if (setMap.getAsJsonObject().has("scryfall")) setCode = setMap.getAsJsonObject().get("scryfall").getAsJsonObject().get("code").getAsString();
+			else if (setMap.getAsJsonObject().has("mtgjson"))  setCode = setMap.getAsJsonObject().get("mtgjson").getAsJsonObject().get("code").getAsString();
+			else return;
+			// Get the store set name
+			String setName = setMap.getAsJsonObject().get(getStoreId()).getAsJsonObject().get("name").getAsString();
+			// Store it in local dictionary
+			setDictionary.put(setCode, setName);
+		});
 	}
 
 	@Override

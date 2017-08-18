@@ -14,7 +14,7 @@ public abstract class SetBaseCommand extends BaseCommand {
 
 	@Override
 	public String paramUsage() {
-		return "<set name>";
+		return "<set>";
 	}
 
 	@Override

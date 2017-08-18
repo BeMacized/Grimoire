@@ -16,7 +16,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 
 	@Override
 	public String paramUsage() {
-		return "<card name> [| <set name>]";
+		return "<card>\n<card|set>";
 	}
 
 	@Override

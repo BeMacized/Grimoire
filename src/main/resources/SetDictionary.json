@@ -1,1017 +1,5349 @@
 {
-  "VIS": {
-    "gatherer": "Visions",
-    "magiccardmarket": "Visions",
-    "tcgplayer": "Visions"
-  },
-  "KTK": {
-    "gatherer": "Khans of Tarkir",
-    "magiccardmarket": "Khans of Tarkir",
-    "tcgplayer": "Khans of Tarkir"
-  },
-  "10E": {
-    "gatherer": "Tenth Edition",
-    "magiccardmarket": "Tenth Edition",
-    "tcgplayer": "Tenth Edition"
-  },
-  "RAV": {
-    "gatherer": "Ravnica: City of Guilds",
-    "magiccardmarket": "Ravnica: City of Guilds",
-    "tcgplayer": "Ravnica"
-  },
-  "STH": {
-    "gatherer": "Stronghold",
-    "magiccardmarket": "Stronghold",
-    "tcgplayer": "Stronghold"
-  },
-  "pWPN": {
-    "gatherer": "Wizards Play Network",
-    "tcgplayer": "WPN & Gateway Promos"
-  },
-  "PO2": {
-    "gatherer": "Portal Second Age",
-    "magiccardmarket": "Portal Second Age",
-    "tcgplayer": "Portal Second Age"
-  },
-  "3ED": {
-    "gatherer": "Revised Edition",
-    "magiccardmarket": "Revised",
-    "tcgplayer": "Revised Edition"
-  },
-  "p15A": {
-    "gatherer": "15th Anniversary"
-  },
-  "CED": {
-    "gatherer": "Collector's Edition",
-    "magiccardmarket": "Collectors' Edition",
-    "tcgplayer": "Collector's Edition"
-  },
-  "pFNM": {
-    "gatherer": "Friday Night Magic",
-    "magiccardmarket": "Friday Night Magic Promos",
-    "tcgplayer": "FNM Promos"
-  },
-  "CEI": {
-    "gatherer": "International Collector's Edition",
-    "magiccardmarket": "International Edition",
-    "tcgplayer": "International Edition"
-  },
-  "pPRE": {
-    "gatherer": "Prerelease Events",
-    "magiccardmarket": "Prerelease Promos",
-    "tcgplayer": "Prerelease Cards"
-  },
-  "HOP": {
-    "gatherer": "Planechase",
-    "magiccardmarket": "Planechase",
-    "tcgplayer": "Planechase"
-  },
-  "pPRO": {
-    "gatherer": "Pro Tour",
-    "magiccardmarket": "Pro Tour Promos",
-    "tcgplayer": "Pro Tour Promos"
-  },
-  "pELP": {
-    "gatherer": "European Land Program",
-    "magiccardmarket": "Euro Lands"
-  },
-  "DGM": {
-    "gatherer": "Dragon's Maze",
-    "magiccardmarket": "Dragon's Maze",
-    "tcgplayer": "Dragon's Maze"
-  },
-  "pGPX": {
-    "gatherer": "Grand Prix",
-    "magiccardmarket": "Grand Prix Promos",
-    "tcgplayer": "Grand Prix Promos"
-  },
-  "HOU": {
-    "gatherer": "Hour of Devastation",
-    "magiccardmarket": "Hour of Devastation",
-    "tcgplayer": "Hour of Devastation"
-  },
-  "ARB": {
-    "gatherer": "Alara Reborn",
-    "magiccardmarket": "Alara Reborn",
-    "tcgplayer": "Alara Reborn"
-  },
-  "ARC": {
-    "gatherer": "Archenemy",
-    "magiccardmarket": "Archenemy",
-    "tcgplayer": "Archenemy"
-  },
-  "LGN": {
-    "gatherer": "Legions",
-    "magiccardmarket": "Legions",
-    "tcgplayer": "Legions"
-  },
-  "POR": {
-    "gatherer": "Portal",
-    "magiccardmarket": "Portal",
-    "tcgplayer": "Portal"
-  },
-  "BTD": {
-    "gatherer": "Beatdown Box Set",
-    "magiccardmarket": "Beatdown",
-    "tcgplayer": "Beatdown Box Set"
-  },
-  "MIR": {
-    "gatherer": "Mirage",
-    "magiccardmarket": "Mirage",
-    "tcgplayer": "Mirage"
-  },
-  "pREL": {
-    "gatherer": "Release Events",
-    "magiccardmarket": "Release Promos",
-    "tcgplayer": "Launch Party & Release Event Cards"
-  },
-  "ARN": {
-    "gatherer": "Arabian Nights",
-    "magiccardmarket": "Arabian Nights",
-    "tcgplayer": "Arabian Nights"
-  },
-  "pWOR": {
-    "gatherer": "Worlds"
-  },
-  "pWOS": {
-    "gatherer": "Wizards of the Coast Online Store"
-  },
-  "H09": {
-    "gatherer": "Premium Deck Series: Slivers",
-    "magiccardmarket": "Premium Deck Series: Slivers",
-    "tcgplayer": "PDS: Slivers"
-  },
-  "RTR": {
-    "gatherer": "Return to Ravnica",
-    "magiccardmarket": "Return to Ravnica",
-    "tcgplayer": "Return to Ravnica"
-  },
-  "2ED": {
-    "gatherer": "Unlimited Edition",
-    "magiccardmarket": "Unlimited",
-    "tcgplayer": "Unlimited Edition"
-  },
-  "ONS": {
-    "gatherer": "Onslaught",
-    "magiccardmarket": "Onslaught",
-    "tcgplayer": "Onslaught"
-  },
-  "JUD": {
-    "gatherer": "Judgment",
-    "magiccardmarket": "Judgment",
-    "tcgplayer": "Judgment"
-  },
-  "ISD": {
-    "gatherer": "Innistrad",
-    "magiccardmarket": "Innistrad",
-    "tcgplayer": "Innistrad"
-  },
-  "THS": {
-    "gatherer": "Theros",
-    "magiccardmarket": "Theros",
-    "tcgplayer": "Theros"
-  },
-  "pGRU": {
-    "gatherer": "Guru",
-    "magiccardmarket": "Guru Lands",
-    "tcgplayer": "Guru Lands"
-  },
-  "ICE": {
-    "gatherer": "Ice Age",
-    "magiccardmarket": "Ice Age",
-    "tcgplayer": "Ice Age"
-  },
-  "VMA": {
-    "gatherer": "Vintage Masters"
-  },
-  "DIS": {
-    "gatherer": "Dissension",
-    "magiccardmarket": "Dissension",
-    "tcgplayer": "Dissension"
-  },
-  "p2HG": {
-    "gatherer": "Two-Headed Giant Tournament"
-  },
-  "NMS": {
-    "gatherer": "Nemesis",
-    "magiccardmarket": "Nemesis",
-    "tcgplayer": "Nemesis"
-  },
-  "ATH": {
-    "gatherer": "Anthologies",
-    "magiccardmarket": "Anthologies",
-    "tcgplayer": "Anthologies"
-  },
-  "pJGP": {
-    "gatherer": "Judge Gift Program",
-    "magiccardmarket": "Judge Rewards Promos",
-    "tcgplayer": "Judge Promos"
-  },
-  "ATQ": {
-    "gatherer": "Antiquities",
-    "magiccardmarket": "Antiquities",
-    "tcgplayer": "Antiquities"
-  },
-  "ZEN": {
-    "gatherer": "Zendikar",
-    "magiccardmarket": "Zendikar",
-    "tcgplayer": "Zendikar"
-  },
-  "ITP": {
-    "gatherer": "Introductory Two-Player Set",
-    "magiccardmarket": "Introductory Two-Player Set"
-  },
-  "pCMP": {
-    "gatherer": "Champs and States",
-    "magiccardmarket": "Champs & States Promos",
-    "tcgplayer": "Champs Promos"
-  },
-  "CHK": {
-    "gatherer": "Champions of Kamigawa",
-    "magiccardmarket": "Champions of Kamigawa",
-    "tcgplayer": "Champions of Kamigawa"
-  },
-  "GPT": {
-    "gatherer": "Guildpact",
-    "magiccardmarket": "Guildpact",
-    "tcgplayer": "Guildpact"
-  },
-  "CHR": {
-    "gatherer": "Chronicles",
-    "magiccardmarket": "Chronicles",
-    "tcgplayer": "Chronicles"
-  },
-  "ULG": {
-    "gatherer": "Urza's Legacy",
-    "magiccardmarket": "Urza's Legacy",
-    "tcgplayer": "Urza's Legacy"
-  },
-  "MM3": {
-    "gatherer": "Modern Masters 2017 Edition",
-    "magiccardmarket": "Modern Masters 2017",
-    "tcgplayer": "Modern Masters 2017"
-  },
-  "MM2": {
-    "gatherer": "Modern Masters 2015 Edition",
-    "magiccardmarket": "Modern Masters 2015",
-    "tcgplayer": "Modern Masters 2015"
-  },
-  "BFZ": {
-    "gatherer": "Battle for Zendikar",
-    "magiccardmarket": "Battle for Zendikar",
-    "tcgplayer": "Battle for Zendikar"
-  },
-  "EMA": {
-    "gatherer": "Eternal Masters",
-    "magiccardmarket": "Eternal Masters",
-    "tcgplayer": "Eternal Masters"
-  },
-  "9ED": {
-    "gatherer": "Ninth Edition",
-    "magiccardmarket": "Ninth Edition",
-    "tcgplayer": "Ninth Edition"
-  },
-  "SHM": {
-    "gatherer": "Shadowmoor",
-    "magiccardmarket": "Shadowmoor",
-    "tcgplayer": "Shadowmoor"
-  },
-  "DKA": {
-    "gatherer": "Dark Ascension",
-    "magiccardmarket": "Dark Ascension",
-    "tcgplayer": "Dark Ascension"
-  },
-  "DD3_GVL": {
-    "gatherer": "Duel Decks Anthology, Garruk vs. Liliana",
-    "magiccardmarket": "Duel Decks: Garruk vs. Liliana",
-    "tcgplayer": "Duel Decks: Anthology"
-  },
-  "PC2": {
-    "gatherer": "Planechase 2012 Edition",
-    "magiccardmarket": "Planechase 2012",
-    "tcgplayer": "Planechase 2012"
-  },
-  "MMA": {
-    "gatherer": "Modern Masters",
-    "magiccardmarket": "Modern Masters",
-    "tcgplayer": "Modern Masters"
-  },
-  "pWCQ": {
-    "gatherer": "World Magic Cup Qualifiers"
-  },
-  "EMN": {
-    "gatherer": "Eldritch Moon",
-    "magiccardmarket": "Eldritch Moon",
-    "tcgplayer": "Eldritch Moon"
-  },
-  "DKM": {
-    "gatherer": "Deckmasters",
-    "magiccardmarket": "Deckmasters"
-  },
-  "pGTW": {
-    "gatherer": "Gateway",
-    "magiccardmarket": "Gateway Promos",
-    "tcgplayer": "WPN & Gateway Promos"
-  },
-  "pMPR": {
-    "gatherer": "Magic Player Rewards",
-    "magiccardmarket": "Player Rewards Promos",
-    "tcgplayer": "Magic Player Rewards"
-  },
-  "AER": {
-    "gatherer": "Aether Revolt",
-    "magiccardmarket": "Aether Revolt",
-    "tcgplayer": "Aether Revolt"
-  },
-  "PCA": {
-    "gatherer": "Planechase Anthology",
-    "magiccardmarket": "Planechase Anthology",
-    "tcgplayer": "Planechase Anthology"
-  },
-  "MMQ": {
-    "gatherer": "Mercadian Masques",
-    "magiccardmarket": "Mercadian Masques",
-    "tcgplayer": "Mercadian Masques"
-  },
-  "S99": {
-    "gatherer": "Starter 1999",
-    "magiccardmarket": "Starter 1999",
-    "tcgplayer": "Starter 1999"
-  },
-  "W17": {
-    "gatherer": "Welcome Deck 2017",
-    "magiccardmarket": "Welcome Deck 2017"
-  },
-  "W16": {
-    "gatherer": "Welcome Deck 2016",
-    "magiccardmarket": "Welcome Deck 2016"
-  },
-  "AVR": {
-    "gatherer": "Avacyn Restored",
-    "magiccardmarket": "Avacyn Restored",
-    "tcgplayer": "Avacyn Restored"
-  },
-  "PD3": {
-    "gatherer": "Premium Deck Series: Graveborn",
-    "magiccardmarket": "Premium Deck Series: Graveborn",
-    "tcgplayer": "PDS: Graveborn"
-  },
-  "PD2": {
-    "gatherer": "Premium Deck Series: Fire and Lightning",
-    "magiccardmarket": "Premium Deck Series: Fire & Lightning",
-    "tcgplayer": "PDS: Fire and Lightning"
-  },
-  "PTK": {
-    "gatherer": "Portal Three Kingdoms",
-    "magiccardmarket": "Portal Three Kingdoms",
-    "tcgplayer": "Portal Three Kingdoms"
-  },
-  "ORI": {
-    "gatherer": "Magic Origins",
-    "magiccardmarket": "Magic Origins",
-    "tcgplayer": "Magic Origins"
-  },
-  "NPH": {
-    "gatherer": "New Phyrexia",
-    "magiccardmarket": "New Phyrexia",
-    "tcgplayer": "New Phyrexia"
-  },
-  "PCY": {
-    "gatherer": "Prophecy",
-    "magiccardmarket": "Prophecy",
-    "tcgplayer": "Prophecy"
-  },
-  "UNH": {
-    "gatherer": "Unhinged",
-    "magiccardmarket": "Unhinged",
-    "tcgplayer": "Unhinged"
-  },
-  "8ED": {
-    "gatherer": "Eighth Edition",
-    "magiccardmarket": "Eighth Edition",
-    "tcgplayer": "Eighth Edition"
-  },
-  "V09": {
-    "gatherer": "From the Vault: Exiled",
-    "magiccardmarket": "From the Vault: Exiled",
-    "tcgplayer": "From the Vault: Exiled"
-  },
-  "pHHO": {
-    "gatherer": "Happy Holidays",
-    "magiccardmarket": "Happy Holidays Promos",
-    "tcgplayer": "Special Occasion"
-  },
-  "MOR": {
-    "gatherer": "Morningtide",
-    "magiccardmarket": "Morningtide",
-    "tcgplayer": "Morningtide"
-  },
-  "V10": {
-    "gatherer": "From the Vault: Relics",
-    "magiccardmarket": "From the Vault: Relics",
-    "tcgplayer": "From the Vault: Relics"
-  },
-  "V12": {
-    "gatherer": "From the Vault: Realms",
-    "magiccardmarket": "From the Vault: Realms",
-    "tcgplayer": "From the Vault: Realms"
-  },
-  "TMP": {
-    "gatherer": "Tempest",
-    "magiccardmarket": "Tempest",
-    "tcgplayer": "Tempest"
-  },
-  "GTC": {
-    "gatherer": "Gatecrash",
-    "magiccardmarket": "Gatecrash",
-    "tcgplayer": "Gatecrash"
-  },
-  "V11": {
-    "gatherer": "From the Vault: Legends",
-    "magiccardmarket": "From the Vault: Legends",
-    "tcgplayer": "From the Vault: Legends"
-  },
-  "V14": {
-    "gatherer": "From the Vault: Annihilation (2014)",
-    "magiccardmarket": "From the Vault: Annihilation",
-    "tcgplayer": "From the Vault: Annihilation"
-  },
-  "V13": {
-    "gatherer": "From the Vault: Twenty",
-    "magiccardmarket": "From the Vault: Twenty",
-    "tcgplayer": "From the Vault: Twenty"
-  },
-  "pLPA": {
-    "gatherer": "Launch Parties",
-    "tcgplayer": "Launch Party & Release Event Cards"
-  },
-  "V16": {
-    "gatherer": "From the Vault: Lore",
-    "magiccardmarket": "From the Vault: Lore",
-    "tcgplayer": "From the Vault: Lore"
-  },
-  "V15": {
-    "gatherer": "From the Vault: Angels",
-    "magiccardmarket": "From the Vault: Angels",
-    "tcgplayer": "From the Vault: Angels"
-  },
-  "FRF": {
-    "gatherer": "Fate Reforged",
-    "magiccardmarket": "Fate Reforged",
-    "tcgplayer": "Fate Reforged"
-  },
-  "KLD": {
-    "gatherer": "Kaladesh",
-    "magiccardmarket": "Kaladesh",
-    "tcgplayer": "Kaladesh"
-  },
-  "VAN": {
-    "gatherer": "Vanguard",
-    "magiccardmarket": "Vanguard",
-    "tcgplayer": "Vanguard"
-  },
-  "DD3_EVG": {
-    "gatherer": "Duel Decks Anthology, Elves vs. Goblins",
-    "magiccardmarket": "Duel Decks: Elves vs. Goblins",
-    "tcgplayer": "Duel Decks: Anthology"
-  },
-  "CM1": {
-    "gatherer": "Commander's Arsenal",
-    "magiccardmarket": "Commander's Arsenal",
-    "tcgplayer": "Commander's Arsenal"
-  },
-  "E01": {
-    "gatherer": "Archenemy: Nicol Bolas",
-    "magiccardmarket": "Archenemy: Nicol Bolas",
-    "tcgplayer": "Archenemy: Nicol Bolas"
-  },
-  "WTH": {
-    "gatherer": "Weatherlight",
-    "magiccardmarket": "Weatherlight",
-    "tcgplayer": "Weatherlight"
-  },
-  "MPS": {
-    "gatherer": "Masterpiece Series: Kaladesh Inventions",
-    "magiccardmarket": "Kaladesh Inventions",
-    "tcgplayer": "Kaladesh Inventions"
-  },
-  "CMA": {
-    "gatherer": "Commander Anthology",
-    "magiccardmarket": "Commander Anthology"
-  },
-  "7ED": {
-    "gatherer": "Seventh Edition",
-    "magiccardmarket": "Seventh Edition",
-    "tcgplayer": "Seventh Edition"
-  },
-  "CMD": {
-    "gatherer": "Magic: The Gathering-Commander",
-    "magiccardmarket": "Commander",
-    "tcgplayer": "Commander"
-  },
-  "ODY": {
-    "gatherer": "Odyssey",
-    "magiccardmarket": "Odyssey",
-    "tcgplayer": "Odyssey"
-  },
-  "CN2": {
-    "gatherer": "Conspiracy: Take the Crown",
-    "magiccardmarket": "Conspiracy: Take the Crown",
-    "tcgplayer": "Conspiracy: Take the Crown"
-  },
-  "pALP": {
-    "gatherer": "Asia Pacific Land Program",
-    "magiccardmarket": "APAC Lands"
-  },
-  "M11": {
-    "gatherer": "Magic 2011",
-    "magiccardmarket": "Magic 2011",
-    "tcgplayer": "Magic 2011 (M11)"
-  },
-  "M10": {
-    "gatherer": "Magic 2010",
-    "magiccardmarket": "Magic 2010",
-    "tcgplayer": "Magic 2010 (M10)"
-  },
-  "MPS_AKH": {
-    "gatherer": "Masterpiece Series: Amonkhet Invocations",
-    "magiccardmarket": "Amonkhet Invocations",
-    "tcgplayer": "Amonkhet Invocations"
-  },
-  "M13": {
-    "gatherer": "Magic 2013",
-    "magiccardmarket": "Magic 2013",
-    "tcgplayer": "Magic 2013 (M13)"
-  },
-  "M12": {
-    "gatherer": "Magic 2012",
-    "magiccardmarket": "Magic 2012",
-    "tcgplayer": "Magic 2012 (M12)"
-  },
-  "M15": {
-    "gatherer": "Magic 2015 Core Set",
-    "magiccardmarket": "Magic 2015",
-    "tcgplayer": "Magic 2015 (M15)"
-  },
-  "M14": {
-    "gatherer": "Magic 2014 Core Set",
-    "magiccardmarket": "Magic 2014",
-    "tcgplayer": "Magic 2014 (M14)"
-  },
-  "DPA": {
-    "gatherer": "Duels of the Planeswalkers",
-    "magiccardmarket": "Duels of the Planeswalkers Decks",
-    "tcgplayer": "Duels of the Planeswalkers"
-  },
-  "TOR": {
-    "gatherer": "Torment",
-    "magiccardmarket": "Torment",
-    "tcgplayer": "Torment"
-  },
-  "pDRC": {
-    "gatherer": "Dragon Con"
-  },
-  "MRD": {
-    "gatherer": "Mirrodin",
-    "magiccardmarket": "Mirrodin",
-    "tcgplayer": "Mirrodin"
-  },
-  "CNS": {
-    "gatherer": "Magic: The Gathering\\u2014Conspiracy",
-    "magiccardmarket": "Conspiracy",
-    "tcgplayer": "Conspiracy"
-  },
-  "DD3_DVD": {
-    "gatherer": "Duel Decks Anthology, Divine vs. Demonic",
-    "magiccardmarket": "Duel Decks: Divine vs. Demonic",
-    "tcgplayer": "Duel Decks: Anthology"
-  },
-  "pMGD": {
-    "gatherer": "Magic Game Day",
-    "magiccardmarket": "Game Day Promos",
-    "tcgplayer": "Game Day Promos"
-  },
-  "6ED": {
-    "gatherer": "Classic Sixth Edition",
-    "magiccardmarket": "Sixth Edition",
-    "tcgplayer": "Sixth Edition"
-  },
-  "TPR": {
-    "gatherer": "Tempest Remastered"
-  },
-  "AKH": {
-    "gatherer": "Amonkhet",
-    "magiccardmarket": "Amonkhet",
-    "tcgplayer": "Amonkhet"
-  },
-  "MBS": {
-    "gatherer": "Mirrodin Besieged",
-    "magiccardmarket": "Mirrodin Besieged",
-    "tcgplayer": "Mirrodin Besieged"
-  },
-  "CON": {
-    "gatherer": "Conflux",
-    "magiccardmarket": "Conflux",
-    "tcgplayer": "Conflux"
-  },
-  "CP2": {
-    "gatherer": "Fate Reforged Clash Pack"
-  },
-  "FUT": {
-    "gatherer": "Future Sight",
-    "magiccardmarket": "Future Sight",
-    "tcgplayer": "Future Sight"
-  },
-  "CP1": {
-    "gatherer": "Magic 2015 Clash Pack"
-  },
-  "CP3": {
-    "gatherer": "Magic Origins Clash Pack"
-  },
-  "USG": {
-    "gatherer": "Urza's Saga",
-    "magiccardmarket": "Urza's Saga",
-    "tcgplayer": "Urza's Saga"
-  },
-  "WWK": {
-    "gatherer": "Worldwake",
-    "magiccardmarket": "Worldwake",
-    "tcgplayer": "Worldwake"
-  },
-  "SOI": {
-    "gatherer": "Shadows over Innistrad",
-    "magiccardmarket": "Shadows over Innistrad",
-    "tcgplayer": "Shadows Over Innistrad"
-  },
-  "SOK": {
-    "gatherer": "Saviors of Kamigawa",
-    "magiccardmarket": "Saviors of Kamigawa",
-    "tcgplayer": "Saviors of Kamigawa"
-  },
-  "FEM": {
-    "gatherer": "Fallen Empires",
-    "magiccardmarket": "Fallen Empires",
-    "tcgplayer": "Fallen Empires"
-  },
-  "SOM": {
-    "gatherer": "Scars of Mirrodin",
-    "magiccardmarket": "Scars of Mirrodin",
-    "tcgplayer": "Scars of Mirrodin"
-  },
-  "DRB": {
-    "gatherer": "From the Vault: Dragons",
-    "magiccardmarket": "From the Vault: Dragons",
-    "tcgplayer": "From the Vault: Dragons"
-  },
-  "pMEI": {
-    "gatherer": "Media Inserts",
-    "tcgplayer": "Media Promos"
-  },
-  "ALA": {
-    "gatherer": "Shards of Alara",
-    "magiccardmarket": "Shards of Alara",
-    "tcgplayer": "Shards of Alara"
-  },
-  "FRF_UGIN": {
-    "gatherer": "Ugin's Fate promos",
-    "magiccardmarket": "Ugin's Fate Promos",
-    "tcgplayer": "Ugin's Fate Promos"
-  },
-  "BNG": {
-    "gatherer": "Born of the Gods",
-    "magiccardmarket": "Born of the Gods",
-    "tcgplayer": "Born of the Gods"
-  },
-  "MD1": {
-    "gatherer": "Modern Event Deck 2014",
-    "magiccardmarket": "Modern Event Deck 2014",
-    "tcgplayer": "Modern Event Deck"
-  },
-  "DRK": {
-    "gatherer": "The Dark",
-    "magiccardmarket": "The Dark",
-    "tcgplayer": "The Dark"
-  },
-  "OGW": {
-    "gatherer": "Oath of the Gatewatch",
-    "magiccardmarket": "Oath of the Gatewatch",
-    "tcgplayer": "Oath of the Gatewatch"
-  },
-  "5DN": {
-    "gatherer": "Fifth Dawn",
-    "magiccardmarket": "Fifth Dawn",
-    "tcgplayer": "Fifth Dawn"
-  },
-  "pPOD": {
-    "gatherer": "Portal Demo Game"
-  },
-  "ALL": {
-    "gatherer": "Alliances",
-    "magiccardmarket": "Alliances",
-    "tcgplayer": "Alliances"
-  },
-  "pCEL": {
-    "gatherer": "Celebration",
-    "tcgplayer": "Special Occasion"
-  },
-  "pSUM": {
-    "gatherer": "Summer of Magic",
-    "magiccardmarket": "Summer Magic"
-  },
-  "LRW": {
-    "gatherer": "Lorwyn",
-    "magiccardmarket": "Lorwyn",
-    "tcgplayer": "Lorwyn"
-  },
-  "S00": {
-    "gatherer": "Starter 2000",
-    "magiccardmarket": "Starter 2000",
-    "tcgplayer": "Starter 2000"
-  },
-  "5ED": {
-    "gatherer": "Fifth Edition",
-    "magiccardmarket": "Fifth Edition",
-    "tcgplayer": "Fifth Edition"
-  },
-  "ME3": {
-    "gatherer": "Masters Edition III"
-  },
-  "ME2": {
-    "gatherer": "Masters Edition II"
-  },
-  "ME4": {
-    "gatherer": "Masters Edition IV"
-  },
-  "BOK": {
-    "gatherer": "Betrayers of Kamigawa",
-    "magiccardmarket": "Betrayers of Kamigawa",
-    "tcgplayer": "Betrayers of Kamigawa"
-  },
-  "TSB": {
-    "gatherer": "Time Spiral \"Timeshifted\"",
-    "magiccardmarket": "Time Spiral",
-    "tcgplayer": "Timeshifted"
-  },
-  "C13": {
-    "gatherer": "Commander 2013 Edition",
-    "magiccardmarket": "Commander 2013",
-    "tcgplayer": "Commander 2013"
-  },
-  "DST": {
-    "gatherer": "Darksteel",
-    "magiccardmarket": "Darksteel",
-    "tcgplayer": "Darksteel"
-  },
-  "UDS": {
-    "gatherer": "Urza's Destiny",
-    "magiccardmarket": "Urza's Destiny",
-    "tcgplayer": "Urza's Destiny"
-  },
-  "C15": {
-    "gatherer": "Commander 2015",
-    "magiccardmarket": "Commander 2015",
-    "tcgplayer": "Commander 2015"
-  },
-  "C14": {
-    "gatherer": "Commander 2014",
-    "magiccardmarket": "Commander 2014",
-    "tcgplayer": "Commander 2014"
-  },
-  "C16": {
-    "gatherer": "Commander 2016",
-    "magiccardmarket": "Commander 2016",
-    "tcgplayer": "Commander 2016"
-  },
-  "C17": {
-    "gatherer": "Commander 2017",
-    "magiccardmarket": "Commander 2017",
-    "tcgplayer": "Commander 2017"
-  },
-  "ROE": {
-    "gatherer": "Rise of the Eldrazi",
-    "magiccardmarket": "Rise of the Eldrazi",
-    "tcgplayer": "Rise of the Eldrazi"
-  },
-  "MED": {
-    "gatherer": "Masters Edition"
-  },
-  "TSP": {
-    "gatherer": "Time Spiral",
-    "magiccardmarket": "Time Spiral",
-    "tcgplayer": "Time Spiral"
-  },
-  "JOU": {
-    "gatherer": "Journey into Nyx",
-    "magiccardmarket": "Journey into Nyx",
-    "tcgplayer": "Journey Into Nyx"
-  },
-  "DD2": {
-    "gatherer": "Duel Decks: Jace vs. Chandra",
-    "magiccardmarket": "Duel Decks: Jace vs. Chandra",
-    "tcgplayer": "Jace vs. Chandra"
-  },
-  "EVE": {
-    "gatherer": "Eventide",
-    "magiccardmarket": "Eventide",
-    "tcgplayer": "Eventide"
-  },
-  "EVG": {
-    "gatherer": "Duel Decks: Elves vs. Goblins",
-    "magiccardmarket": "Duel Decks: Elves vs. Goblins",
-    "tcgplayer": "Elves vs. Goblins"
-  },
-  "DTK": {
-    "gatherer": "Dragons of Tarkir",
-    "magiccardmarket": "Dragons of Tarkir",
-    "tcgplayer": "Dragons of Tarkir"
-  },
-  "DDC": {
-    "gatherer": "Duel Decks: Divine vs. Demonic",
-    "magiccardmarket": "Duel Decks: Divine vs. Demonic",
-    "tcgplayer": "Divine vs. Demonic"
-  },
-  "DDE": {
-    "gatherer": "Duel Decks: Phyrexia vs. the Coalition",
-    "magiccardmarket": "Duel Decks: Phyrexia vs. The Coalition",
-    "tcgplayer": "Phyrexia vs. The Coalition"
-  },
-  "DDD": {
-    "gatherer": "Duel Decks: Garruk vs. Liliana",
-    "magiccardmarket": "Duel Decks: Garruk vs. Liliana",
-    "tcgplayer": "Garruk vs. Liliana"
-  },
-  "DDG": {
-    "gatherer": "Duel Decks: Knights vs. Dragons",
-    "magiccardmarket": "Duel Decks: Knights vs. Dragons",
-    "tcgplayer": "Knights vs. Dragons"
-  },
-  "PLC": {
-    "gatherer": "Planar Chaos",
-    "magiccardmarket": "Planar Chaos",
-    "tcgplayer": "Planar Chaos"
-  },
-  "DD3_JVC": {
-    "gatherer": "Duel Decks Anthology, Jace vs. Chandra",
-    "magiccardmarket": "Duel Decks: Jace vs. Chandra",
-    "tcgplayer": "Duel Decks: Anthology"
-  },
-  "DDF": {
-    "gatherer": "Duel Decks: Elspeth vs. Tezzeret",
-    "magiccardmarket": "Duel Decks: Elspeth vs. Tezzeret",
-    "tcgplayer": "Elspeth vs. Tezzeret"
-  },
-  "DDI": {
-    "gatherer": "Duel Decks: Venser vs. Koth",
-    "magiccardmarket": "Duel Decks: Venser vs. Koth",
-    "tcgplayer": "Venser vs. Koth"
-  },
-  "DDH": {
-    "gatherer": "Duel Decks: Ajani vs. Nicol Bolas",
-    "magiccardmarket": "Duel Decks: Ajani vs. Nicol Bolas",
-    "tcgplayer": "Ajani vs. Nicol Bolas"
-  },
-  "DDK": {
-    "gatherer": "Duel Decks: Sorin vs. Tibalt",
-    "magiccardmarket": "Duel Decks: Sorin vs. Tibalt",
-    "tcgplayer": "Sorin vs. Tibalt"
-  },
-  "DDJ": {
-    "gatherer": "Duel Decks: Izzet vs. Golgari",
-    "magiccardmarket": "Duel Decks: Izzet vs. Golgari",
-    "tcgplayer": "Izzet vs. Golgari"
-  },
-  "DDM": {
-    "gatherer": "Duel Decks: Jace vs. Vraska",
-    "magiccardmarket": "Duel Decks: Jace vs. Vraska",
-    "tcgplayer": "Jace vs. Vraska"
-  },
-  "DDL": {
-    "gatherer": "Duel Decks: Heroes vs. Monsters",
-    "magiccardmarket": "Duel Decks: Heroes vs. Monsters",
-    "tcgplayer": "Heroes vs. Monsters"
-  },
-  "DDO": {
-    "gatherer": "Duel Decks: Elspeth vs. Kiora",
-    "magiccardmarket": "Duel Decks: Elspeth vs. Kiora",
-    "tcgplayer": "Duel Decks: Elspeth vs. Kiora"
-  },
-  "DDN": {
-    "gatherer": "Duel Decks: Speed vs. Cunning",
-    "magiccardmarket": "Duel Decks: Speed vs. Cunning",
-    "tcgplayer": "Speed vs. Cunning"
-  },
-  "DDQ": {
-    "gatherer": "Duel Decks: Blessed vs. Cursed",
-    "magiccardmarket": "Duel Decks: Blessed vs. Cursed",
-    "tcgplayer": "Duel Decks: Blessed vs. Cursed"
-  },
-  "INV": {
-    "gatherer": "Invasion",
-    "magiccardmarket": "Invasion",
-    "tcgplayer": "Invasion"
-  },
-  "DDP": {
-    "gatherer": "Duel Decks: Zendikar vs. Eldrazi",
-    "magiccardmarket": "Duel Decks: Zendikar vs. Eldrazi",
-    "tcgplayer": "Duel Decks: Zendikar vs. Eldrazi"
-  },
-  "DDS": {
-    "gatherer": "Duel Decks: Mind vs. Might",
-    "magiccardmarket": "Duel Decks: Mind vs. Might",
-    "tcgplayer": "Duel Decks: Mind vs. Might"
-  },
-  "DDR": {
-    "gatherer": "Duel Decks: Nissa vs. Ob Nixilis",
-    "magiccardmarket": "Duel Decks: Nissa vs. Ob Nixilis",
-    "tcgplayer": "Duel Decks: Nissa vs. Ob Nixilis"
-  },
-  "4ED": {
-    "gatherer": "Fourth Edition",
-    "magiccardmarket": "Fourth Edition",
-    "tcgplayer": "Fourth Edition"
-  },
-  "PLS": {
-    "gatherer": "Planeshift",
-    "magiccardmarket": "Planeshift",
-    "tcgplayer": "Planeshift"
-  },
-  "CSP": {
-    "gatherer": "Coldsnap",
-    "magiccardmarket": "Coldsnap",
-    "tcgplayer": "Coldsnap"
-  },
-  "CST": {
-    "gatherer": "Coldsnap Theme Decks",
-    "magiccardmarket": "Coldsnap Theme Decks"
-  },
-  "HML": {
-    "gatherer": "Homelands",
-    "magiccardmarket": "Homelands",
-    "tcgplayer": "Homelands"
-  },
-  "LEB": {
-    "gatherer": "Limited Edition Beta",
-    "magiccardmarket": "Beta",
-    "tcgplayer": "Beta Edition"
-  },
-  "MGB": {
-    "gatherer": "Multiverse Gift Box",
-    "magiccardmarket": "Multiverse Gift Box"
-  },
-  "LEA": {
-    "gatherer": "Limited Edition Alpha",
-    "magiccardmarket": "Alpha",
-    "tcgplayer": "Alpha Edition"
-  },
-  "LEG": {
-    "gatherer": "Legends",
-    "magiccardmarket": "Legends",
-    "tcgplayer": "Legends"
-  },
-  "BRB": {
-    "gatherer": "Battle Royale Box Set",
-    "magiccardmarket": "Battle Royale",
-    "tcgplayer": "Battle Royale Box Set"
-  },
-  "APC": {
-    "gatherer": "Apocalypse",
-    "magiccardmarket": "Apocalypse",
-    "tcgplayer": "Apocalypse"
-  },
-  "pSUS": {
-    "gatherer": "Super Series",
-    "magiccardmarket": "Junior Super Series Promos",
-    "tcgplayer": "JSS/MSS Promos"
-  },
-  "RQS": {
-    "gatherer": "Rivals Quick Start Set"
-  },
-  "SCG": {
-    "gatherer": "Scourge",
-    "magiccardmarket": "Scourge",
-    "tcgplayer": "Scourge"
-  },
-  "pLGM": {
-    "gatherer": "Legend Membership"
-  },
-  "pARL": {
-    "gatherer": "Arena League",
-    "magiccardmarket": "Arena League Promos",
-    "tcgplayer": "Arena Promos"
-  },
-  "UGL": {
-    "gatherer": "Unglued",
-    "magiccardmarket": "Unglued",
-    "tcgplayer": "Unglued"
-  },
-  "EXP": {
-    "gatherer": "Zendikar Expeditions",
-    "magiccardmarket": "Zendikar Expeditions",
-    "tcgplayer": "Zendikar Expeditions"
-  },
-  "EXO": {
-    "gatherer": "Exodus",
-    "magiccardmarket": "Exodus",
-    "tcgplayer": "Exodus"
-  }
+  "data": [
+    {
+      "magiccardmarket": {
+        "name": "Visions",
+        "id": 17
+      },
+      "tcgplayer": {
+        "name": "Visions"
+      },
+      "mtgjson": {
+        "name": "Visions",
+        "code": "VIS"
+      },
+      "gatherer": {
+        "name": "Visions",
+        "code": "VI"
+      },
+      "scryfall": {
+        "name": "Visions",
+        "code": "vis"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Khans of Tarkir",
+        "id": 1495
+      },
+      "tcgplayer": {
+        "name": "Khans of Tarkir"
+      },
+      "mtgjson": {
+        "name": "Khans of Tarkir",
+        "code": "KTK"
+      },
+      "gatherer": {
+        "name": "Khans of Tarkir",
+        "code": "KTK"
+      },
+      "scryfall": {
+        "name": "Khans of Tarkir",
+        "code": "ktk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Tenth Edition",
+        "id": 74
+      },
+      "tcgplayer": {
+        "name": "Tenth Edition"
+      },
+      "mtgjson": {
+        "name": "Tenth Edition",
+        "code": "10E"
+      },
+      "gatherer": {
+        "name": "Tenth Edition",
+        "code": "10E"
+      },
+      "scryfall": {
+        "name": "Tenth Edition",
+        "code": "10e"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Ravnica: City of Guilds",
+        "id": 55
+      },
+      "tcgplayer": {
+        "name": "Ravnica"
+      },
+      "mtgjson": {
+        "name": "Ravnica: City of Guilds",
+        "code": "RAV"
+      },
+      "gatherer": {
+        "name": "Ravnica: City of Guilds",
+        "code": "RAV"
+      },
+      "scryfall": {
+        "name": "Ravnica: City of Guilds",
+        "code": "rav"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Stronghold",
+        "id": 20
+      },
+      "tcgplayer": {
+        "name": "Stronghold"
+      },
+      "mtgjson": {
+        "name": "Stronghold",
+        "code": "STH"
+      },
+      "gatherer": {
+        "name": "Stronghold",
+        "code": "ST"
+      },
+      "scryfall": {
+        "name": "Stronghold",
+        "code": "sth"
+      }
+    },
+    {
+      "tcgplayer": {
+        "name": "WPN & Gateway Promos"
+      },
+      "mtgjson": {
+        "name": "Wizards Play Network",
+        "code": "pWPN"
+      },
+      "gatherer": {
+        "name": "Wizards Play Network",
+        "code": "pWPN"
+      },
+      "scryfall": {
+        "name": "Wizards Play Network",
+        "code": "pwpn"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Portal Second Age",
+        "id": 24
+      },
+      "tcgplayer": {
+        "name": "Portal Second Age"
+      },
+      "mtgjson": {
+        "name": "Portal Second Age",
+        "code": "PO2"
+      },
+      "gatherer": {
+        "name": "Portal Second Age",
+        "code": "P2"
+      },
+      "scryfall": {
+        "name": "Portal: Second Age",
+        "code": "p02"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Revised",
+        "id": 6
+      },
+      "tcgplayer": {
+        "name": "Revised Edition"
+      },
+      "mtgjson": {
+        "name": "Revised Edition",
+        "code": "3ED"
+      },
+      "gatherer": {
+        "name": "Revised Edition",
+        "code": "3E"
+      },
+      "scryfall": {
+        "name": "Revised Edition",
+        "code": "3ed"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "15th Anniversary",
+        "code": "p15A"
+      },
+      "gatherer": {
+        "name": "15th Anniversary",
+        "code": "p15A"
+      },
+      "scryfall": {
+        "name": "15th Anniversary Cards",
+        "code": "p15a"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Collectors' Edition",
+        "id": 61
+      },
+      "tcgplayer": {
+        "name": "Collector's Edition"
+      },
+      "mtgjson": {
+        "name": "Collector's Edition",
+        "code": "CED"
+      },
+      "gatherer": {
+        "name": "Collector's Edition",
+        "code": "CED"
+      },
+      "scryfall": {
+        "name": "Collector’s Edition",
+        "code": "ced"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Friday Night Magic Promos",
+        "id": 72
+      },
+      "tcgplayer": {
+        "name": "FNM Promos"
+      },
+      "mtgjson": {
+        "name": "Friday Night Magic",
+        "code": "pFNM"
+      },
+      "gatherer": {
+        "name": "Friday Night Magic",
+        "code": "pFNM"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "International Edition",
+        "id": 77
+      },
+      "tcgplayer": {
+        "name": "International Edition"
+      },
+      "mtgjson": {
+        "name": "International Collector's Edition",
+        "code": "CEI"
+      },
+      "gatherer": {
+        "name": "International Collector's Edition",
+        "code": "CEI"
+      },
+      "scryfall": {
+        "name": "Intl. Collector’s Edition",
+        "code": "cei"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Prerelease Promos"
+      },
+      "tcgplayer": {
+        "name": "Prerelease Cards"
+      },
+      "mtgjson": {
+        "name": "Prerelease Events",
+        "code": "pPRE"
+      },
+      "gatherer": {
+        "name": "Prerelease Events",
+        "code": "pPRE"
+      },
+      "scryfall": {
+        "name": "Prerelease Events",
+        "code": "ppre"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Planechase",
+        "id": 113
+      },
+      "tcgplayer": {
+        "name": "Planechase"
+      },
+      "mtgjson": {
+        "name": "Planechase",
+        "code": "HOP"
+      },
+      "gatherer": {
+        "name": "Planechase",
+        "code": "HOP"
+      },
+      "scryfall": {
+        "name": "Planechase",
+        "code": "hop"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Pro Tour Promos"
+      },
+      "tcgplayer": {
+        "name": "Pro Tour Promos"
+      },
+      "mtgjson": {
+        "name": "Pro Tour",
+        "code": "pPRO"
+      },
+      "gatherer": {
+        "name": "Pro Tour",
+        "code": "pPRO"
+      },
+      "scryfall": {
+        "name": "Pro Tour Promos",
+        "code": "ppro"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Euro Lands"
+      },
+      "mtgjson": {
+        "name": "European Land Program",
+        "code": "pELP"
+      },
+      "gatherer": {
+        "name": "European Land Program",
+        "code": "pELP"
+      },
+      "scryfall": {
+        "name": "European Land Program",
+        "code": "pelp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Dragon's Maze",
+        "id": 1435
+      },
+      "tcgplayer": {
+        "name": "Dragon's Maze"
+      },
+      "mtgjson": {
+        "name": "Dragon's Maze",
+        "code": "DGM"
+      },
+      "gatherer": {
+        "name": "Dragon's Maze",
+        "code": "DGM"
+      },
+      "scryfall": {
+        "name": "Dragon's Maze",
+        "code": "dgm"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Grand Prix Promos"
+      },
+      "tcgplayer": {
+        "name": "Grand Prix Promos"
+      },
+      "mtgjson": {
+        "name": "Grand Prix",
+        "code": "pGPX"
+      },
+      "gatherer": {
+        "name": "Grand Prix",
+        "code": "pGPX"
+      },
+      "scryfall": {
+        "name": "Grand Prix Promos",
+        "code": "pgpx"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Hour of Devastation"
+      },
+      "tcgplayer": {
+        "name": "Hour of Devastation"
+      },
+      "mtgjson": {
+        "name": "Hour of Devastation",
+        "code": "HOU"
+      },
+      "gatherer": {
+        "name": "Hour of Devastation",
+        "code": "HOU"
+      },
+      "scryfall": {
+        "name": "Hour of Devastation",
+        "code": "hou"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Alara Reborn",
+        "id": 108
+      },
+      "tcgplayer": {
+        "name": "Alara Reborn"
+      },
+      "mtgjson": {
+        "name": "Alara Reborn",
+        "code": "ARB"
+      },
+      "gatherer": {
+        "name": "Alara Reborn",
+        "code": "ARB"
+      },
+      "scryfall": {
+        "name": "Alara Reborn",
+        "code": "arb"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Archenemy",
+        "id": 1194
+      },
+      "tcgplayer": {
+        "name": "Archenemy"
+      },
+      "mtgjson": {
+        "name": "Archenemy",
+        "code": "ARC"
+      },
+      "gatherer": {
+        "name": "Archenemy",
+        "code": "ARC"
+      },
+      "scryfall": {
+        "name": "Archenemy",
+        "code": "arc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Legions",
+        "id": 42
+      },
+      "tcgplayer": {
+        "name": "Legions"
+      },
+      "mtgjson": {
+        "name": "Legions",
+        "code": "LGN"
+      },
+      "gatherer": {
+        "name": "Legions",
+        "code": "LGN"
+      },
+      "scryfall": {
+        "name": "Legions",
+        "code": "lgn"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Portal",
+        "id": 25
+      },
+      "tcgplayer": {
+        "name": "Portal"
+      },
+      "mtgjson": {
+        "name": "Portal",
+        "code": "POR"
+      },
+      "gatherer": {
+        "name": "Portal",
+        "code": "PO"
+      },
+      "scryfall": {
+        "name": "Portal",
+        "code": "por"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Beatdown",
+        "id": 62
+      },
+      "tcgplayer": {
+        "name": "Beatdown Box Set"
+      },
+      "mtgjson": {
+        "name": "Beatdown Box Set",
+        "code": "BTD"
+      },
+      "gatherer": {
+        "name": "Beatdown Box Set",
+        "code": "BD"
+      },
+      "scryfall": {
+        "name": "Beatdown Box Set",
+        "code": "btd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Mirage",
+        "id": 16
+      },
+      "tcgplayer": {
+        "name": "Mirage"
+      },
+      "mtgjson": {
+        "name": "Mirage",
+        "code": "MIR"
+      },
+      "gatherer": {
+        "name": "Mirage",
+        "code": "MI"
+      },
+      "scryfall": {
+        "name": "Mirage",
+        "code": "mir"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Release Promos"
+      },
+      "tcgplayer": {
+        "name": "Launch Party & Release Event Cards"
+      },
+      "mtgjson": {
+        "name": "Release Events",
+        "code": "pREL"
+      },
+      "gatherer": {
+        "name": "Release Events",
+        "code": "pREL"
+      },
+      "scryfall": {
+        "name": "Release Events",
+        "code": "prel"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Arabian Nights",
+        "id": 4
+      },
+      "tcgplayer": {
+        "name": "Arabian Nights"
+      },
+      "mtgjson": {
+        "name": "Arabian Nights",
+        "code": "ARN"
+      },
+      "gatherer": {
+        "name": "Arabian Nights",
+        "code": "AN"
+      },
+      "scryfall": {
+        "name": "Arabian Nights",
+        "code": "arn"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Worlds",
+        "code": "pWOR"
+      },
+      "gatherer": {
+        "name": "Worlds",
+        "code": "pWOR"
+      },
+      "scryfall": {
+        "name": "Worlds",
+        "code": "pwor"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Wizards of the Coast Online Store",
+        "code": "pWOS"
+      },
+      "gatherer": {
+        "name": "Wizards of the Coast Online Store",
+        "code": "pWOS"
+      },
+      "scryfall": {
+        "name": "Wizards of the Coast Online Store",
+        "code": "pwos"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Premium Deck Series: Slivers",
+        "id": 116
+      },
+      "tcgplayer": {
+        "name": "PDS: Slivers"
+      },
+      "mtgjson": {
+        "name": "Premium Deck Series: Slivers",
+        "code": "H09"
+      },
+      "gatherer": {
+        "name": "Premium Deck Series: Slivers",
+        "code": "H09"
+      },
+      "scryfall": {
+        "name": "Premium Deck Series: Slivers",
+        "code": "h09"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Return to Ravnica",
+        "id": 1389
+      },
+      "tcgplayer": {
+        "name": "Return to Ravnica"
+      },
+      "mtgjson": {
+        "name": "Return to Ravnica",
+        "code": "RTR"
+      },
+      "gatherer": {
+        "name": "Return to Ravnica",
+        "code": "RTR"
+      },
+      "scryfall": {
+        "name": "Return to Ravnica",
+        "code": "rtr"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Unlimited",
+        "id": 3
+      },
+      "tcgplayer": {
+        "name": "Unlimited Edition"
+      },
+      "mtgjson": {
+        "name": "Unlimited Edition",
+        "code": "2ED"
+      },
+      "gatherer": {
+        "name": "Unlimited Edition",
+        "code": "2U"
+      },
+      "scryfall": {
+        "name": "Unlimited Edition",
+        "code": "2ed"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Onslaught",
+        "id": 41
+      },
+      "tcgplayer": {
+        "name": "Onslaught"
+      },
+      "mtgjson": {
+        "name": "Onslaught",
+        "code": "ONS"
+      },
+      "gatherer": {
+        "name": "Onslaught",
+        "code": "ONS"
+      },
+      "scryfall": {
+        "name": "Onslaught",
+        "code": "ons"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Judgment",
+        "id": 40
+      },
+      "tcgplayer": {
+        "name": "Judgment"
+      },
+      "mtgjson": {
+        "name": "Judgment",
+        "code": "JUD"
+      },
+      "gatherer": {
+        "name": "Judgment",
+        "code": "JUD"
+      },
+      "scryfall": {
+        "name": "Judgment",
+        "code": "jud"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Innistrad",
+        "id": 1327
+      },
+      "tcgplayer": {
+        "name": "Innistrad"
+      },
+      "mtgjson": {
+        "name": "Innistrad",
+        "code": "ISD"
+      },
+      "gatherer": {
+        "name": "Innistrad",
+        "code": "ISD"
+      },
+      "scryfall": {
+        "name": "Innistrad",
+        "code": "isd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Theros",
+        "id": 1457
+      },
+      "tcgplayer": {
+        "name": "Theros"
+      },
+      "mtgjson": {
+        "name": "Theros",
+        "code": "THS"
+      },
+      "gatherer": {
+        "name": "Theros",
+        "code": "THS"
+      },
+      "scryfall": {
+        "name": "Theros",
+        "code": "ths"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Guru Lands",
+        "id": 88
+      },
+      "tcgplayer": {
+        "name": "Guru Lands"
+      },
+      "mtgjson": {
+        "name": "Guru",
+        "code": "pGRU"
+      },
+      "gatherer": {
+        "name": "Guru",
+        "code": "pGRU"
+      },
+      "scryfall": {
+        "name": "Guru",
+        "code": "pgru"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Ice Age",
+        "id": 11
+      },
+      "tcgplayer": {
+        "name": "Ice Age"
+      },
+      "mtgjson": {
+        "name": "Ice Age",
+        "code": "ICE"
+      },
+      "gatherer": {
+        "name": "Ice Age",
+        "code": "IA"
+      },
+      "scryfall": {
+        "name": "Ice Age",
+        "code": "ice"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Vintage Masters",
+        "code": "VMA"
+      },
+      "gatherer": {
+        "name": "Vintage Masters",
+        "code": "VMA"
+      },
+      "scryfall": {
+        "name": "Vintage Masters",
+        "code": "vma"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Dissension",
+        "id": 53
+      },
+      "tcgplayer": {
+        "name": "Dissension"
+      },
+      "mtgjson": {
+        "name": "Dissension",
+        "code": "DIS"
+      },
+      "gatherer": {
+        "name": "Dissension",
+        "code": "DIS"
+      },
+      "scryfall": {
+        "name": "Dissension",
+        "code": "dis"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Two-Headed Giant Tournament",
+        "code": "p2HG"
+      },
+      "gatherer": {
+        "name": "Two-Headed Giant Tournament",
+        "code": "p2HG"
+      },
+      "scryfall": {
+        "name": "Two-Headed Giant Tournament",
+        "code": "p2hg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Nemesis",
+        "id": 32
+      },
+      "tcgplayer": {
+        "name": "Nemesis"
+      },
+      "mtgjson": {
+        "name": "Nemesis",
+        "code": "NMS"
+      },
+      "gatherer": {
+        "name": "Nemesis",
+        "code": "NE"
+      },
+      "scryfall": {
+        "name": "Nemesis",
+        "code": "nem"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Anthologies"
+      },
+      "tcgplayer": {
+        "name": "Anthologies"
+      },
+      "mtgjson": {
+        "name": "Anthologies",
+        "code": "ATH"
+      },
+      "gatherer": {
+        "name": "Anthologies",
+        "code": "ATH"
+      },
+      "scryfall": {
+        "name": "Anthologies",
+        "code": "ath"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Judge Rewards Promos",
+        "id": 80
+      },
+      "tcgplayer": {
+        "name": "Judge Promos"
+      },
+      "mtgjson": {
+        "name": "Judge Gift Program",
+        "code": "pJGP"
+      },
+      "gatherer": {
+        "name": "Judge Gift Program",
+        "code": "pJGP"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Antiquities",
+        "id": 5
+      },
+      "tcgplayer": {
+        "name": "Antiquities"
+      },
+      "mtgjson": {
+        "name": "Antiquities",
+        "code": "ATQ"
+      },
+      "gatherer": {
+        "name": "Antiquities",
+        "code": "AQ"
+      },
+      "scryfall": {
+        "name": "Antiquities",
+        "code": "atq"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Zendikar",
+        "id": 114
+      },
+      "tcgplayer": {
+        "name": "Zendikar"
+      },
+      "mtgjson": {
+        "name": "Zendikar",
+        "code": "ZEN"
+      },
+      "gatherer": {
+        "name": "Zendikar",
+        "code": "ZEN"
+      },
+      "scryfall": {
+        "name": "Zendikar",
+        "code": "zen"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Introductory Two-Player Set"
+      },
+      "mtgjson": {
+        "name": "Introductory Two-Player Set",
+        "code": "ITP"
+      },
+      "gatherer": {
+        "name": "Introductory Two-Player Set",
+        "code": "ITP"
+      },
+      "scryfall": {
+        "name": "Introductory Two-Player Set",
+        "code": "itp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Champs & States Promos"
+      },
+      "tcgplayer": {
+        "name": "Champs Promos"
+      },
+      "mtgjson": {
+        "name": "Champs and States",
+        "code": "pCMP"
+      },
+      "gatherer": {
+        "name": "Champs and States",
+        "code": "pCMP"
+      },
+      "scryfall": {
+        "name": "Champs and States",
+        "code": "pcmp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Champions of Kamigawa",
+        "id": 48
+      },
+      "tcgplayer": {
+        "name": "Champions of Kamigawa"
+      },
+      "mtgjson": {
+        "name": "Champions of Kamigawa",
+        "code": "CHK"
+      },
+      "gatherer": {
+        "name": "Champions of Kamigawa",
+        "code": "CHK"
+      },
+      "scryfall": {
+        "name": "Champions of Kamigawa",
+        "code": "chk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Guildpact",
+        "id": 54
+      },
+      "tcgplayer": {
+        "name": "Guildpact"
+      },
+      "mtgjson": {
+        "name": "Guildpact",
+        "code": "GPT"
+      },
+      "gatherer": {
+        "name": "Guildpact",
+        "code": "GPT"
+      },
+      "scryfall": {
+        "name": "Guildpact",
+        "code": "gpt"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Chronicles",
+        "id": 12
+      },
+      "tcgplayer": {
+        "name": "Chronicles"
+      },
+      "mtgjson": {
+        "name": "Chronicles",
+        "code": "CHR"
+      },
+      "gatherer": {
+        "name": "Chronicles",
+        "code": "CH"
+      },
+      "scryfall": {
+        "name": "Chronicles",
+        "code": "chr"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Urza's Legacy",
+        "id": 27
+      },
+      "tcgplayer": {
+        "name": "Urza's Legacy"
+      },
+      "mtgjson": {
+        "name": "Urza's Legacy",
+        "code": "ULG"
+      },
+      "gatherer": {
+        "name": "Urza's Legacy",
+        "code": "GU"
+      },
+      "scryfall": {
+        "name": "Urza's Legacy",
+        "code": "ulg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Modern Masters 2017"
+      },
+      "tcgplayer": {
+        "name": "Modern Masters 2017"
+      },
+      "mtgjson": {
+        "name": "Modern Masters 2017 Edition",
+        "code": "MM3"
+      },
+      "gatherer": {
+        "name": "Modern Masters 2017 Edition",
+        "code": "MM3"
+      },
+      "scryfall": {
+        "name": "Modern Masters 2017",
+        "code": "mm3"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Modern Masters 2015",
+        "id": 1641
+      },
+      "tcgplayer": {
+        "name": "Modern Masters 2015"
+      },
+      "mtgjson": {
+        "name": "Modern Masters 2015 Edition",
+        "code": "MM2"
+      },
+      "gatherer": {
+        "name": "Modern Masters 2015 Edition",
+        "code": "MM2"
+      },
+      "scryfall": {
+        "name": "Modern Masters 2015",
+        "code": "mm2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Battle for Zendikar",
+        "id": 1668
+      },
+      "tcgplayer": {
+        "name": "Battle for Zendikar"
+      },
+      "mtgjson": {
+        "name": "Battle for Zendikar",
+        "code": "BFZ"
+      },
+      "gatherer": {
+        "name": "Battle for Zendikar",
+        "code": "BFZ"
+      },
+      "scryfall": {
+        "name": "Battle for Zendikar",
+        "code": "bfz"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Eternal Masters"
+      },
+      "tcgplayer": {
+        "name": "Eternal Masters"
+      },
+      "mtgjson": {
+        "name": "Eternal Masters",
+        "code": "EMA"
+      },
+      "gatherer": {
+        "name": "Eternal Masters",
+        "code": "EMA"
+      },
+      "scryfall": {
+        "name": "Eternal Masters",
+        "code": "ema"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Ninth Edition",
+        "id": 49
+      },
+      "tcgplayer": {
+        "name": "Ninth Edition"
+      },
+      "mtgjson": {
+        "name": "Ninth Edition",
+        "code": "9ED"
+      },
+      "gatherer": {
+        "name": "Ninth Edition",
+        "code": "9ED"
+      },
+      "scryfall": {
+        "name": "Ninth Edition",
+        "code": "9ed"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Shadowmoor",
+        "id": 95
+      },
+      "tcgplayer": {
+        "name": "Shadowmoor"
+      },
+      "mtgjson": {
+        "name": "Shadowmoor",
+        "code": "SHM"
+      },
+      "gatherer": {
+        "name": "Shadowmoor",
+        "code": "SHM"
+      },
+      "scryfall": {
+        "name": "Shadowmoor",
+        "code": "shm"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Dark Ascension",
+        "id": 1345
+      },
+      "tcgplayer": {
+        "name": "Dark Ascension"
+      },
+      "mtgjson": {
+        "name": "Dark Ascension",
+        "code": "DKA"
+      },
+      "gatherer": {
+        "name": "Dark Ascension",
+        "code": "DKA"
+      },
+      "scryfall": {
+        "name": "Dark Ascension",
+        "code": "dka"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "id": 115
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Anthology"
+      },
+      "mtgjson": {
+        "name": "Duel Decks Anthology, Garruk vs. Liliana",
+        "code": "DD3_GVL"
+      },
+      "gatherer": {
+        "name": "Duel Decks Anthology, Garruk vs. Liliana",
+        "code": "DD3_GVL"
+      },
+      "scryfall": {
+        "name": "Duel Decks Anthology: Garruk vs. Liliana",
+        "code": "gvl"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Planechase 2012",
+        "id": 1369
+      },
+      "tcgplayer": {
+        "name": "Planechase 2012"
+      },
+      "mtgjson": {
+        "name": "Planechase 2012 Edition",
+        "code": "PC2"
+      },
+      "gatherer": {
+        "name": "Planechase 2012 Edition",
+        "code": "PC2"
+      },
+      "scryfall": {
+        "name": "Planechase 2012",
+        "code": "pc2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Modern Masters",
+        "id": 1444
+      },
+      "tcgplayer": {
+        "name": "Modern Masters"
+      },
+      "mtgjson": {
+        "name": "Modern Masters",
+        "code": "MMA"
+      },
+      "gatherer": {
+        "name": "Modern Masters",
+        "code": "MMA"
+      },
+      "scryfall": {
+        "name": "Modern Masters",
+        "code": "mma"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "World Magic Cup Qualifiers",
+        "code": "pWCQ"
+      },
+      "gatherer": {
+        "name": "World Magic Cup Qualifiers",
+        "code": "pWCQ"
+      },
+      "scryfall": {
+        "name": "World Magic Cup Qualifiers",
+        "code": "pwcq"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Eldritch Moon"
+      },
+      "tcgplayer": {
+        "name": "Eldritch Moon"
+      },
+      "mtgjson": {
+        "name": "Eldritch Moon",
+        "code": "EMN"
+      },
+      "gatherer": {
+        "name": "Eldritch Moon",
+        "code": "EMN"
+      },
+      "scryfall": {
+        "name": "Eldritch Moon",
+        "code": "emn"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Deckmasters"
+      },
+      "mtgjson": {
+        "name": "Deckmasters",
+        "code": "DKM"
+      },
+      "gatherer": {
+        "name": "Deckmasters",
+        "code": "DKM"
+      },
+      "scryfall": {
+        "name": "Deckmasters",
+        "code": "dkm"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Gateway Promos"
+      },
+      "tcgplayer": {
+        "name": "WPN & Gateway Promos"
+      },
+      "mtgjson": {
+        "name": "Gateway",
+        "code": "pGTW"
+      },
+      "gatherer": {
+        "name": "Gateway",
+        "code": "pGTW"
+      },
+      "scryfall": {
+        "name": "Gateway",
+        "code": "pgtw"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Player Rewards Promos"
+      },
+      "tcgplayer": {
+        "name": "Magic Player Rewards"
+      },
+      "mtgjson": {
+        "name": "Magic Player Rewards",
+        "code": "pMPR"
+      },
+      "gatherer": {
+        "name": "Magic Player Rewards",
+        "code": "pMPR"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Aether Revolt"
+      },
+      "tcgplayer": {
+        "name": "Aether Revolt"
+      },
+      "mtgjson": {
+        "name": "Aether Revolt",
+        "code": "AER"
+      },
+      "gatherer": {
+        "name": "Aether Revolt",
+        "code": "AER"
+      },
+      "scryfall": {
+        "name": "Aether Revolt",
+        "code": "aer"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Planechase Anthology"
+      },
+      "tcgplayer": {
+        "name": "Planechase Anthology"
+      },
+      "mtgjson": {
+        "name": "Planechase Anthology",
+        "code": "PCA"
+      },
+      "gatherer": {
+        "name": "Planechase Anthology",
+        "code": "PCA"
+      },
+      "scryfall": {
+        "name": "Planechase Anthology",
+        "code": "pca"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Mercadian Masques",
+        "id": 31
+      },
+      "tcgplayer": {
+        "name": "Mercadian Masques"
+      },
+      "mtgjson": {
+        "name": "Mercadian Masques",
+        "code": "MMQ"
+      },
+      "gatherer": {
+        "name": "Mercadian Masques",
+        "code": "MM"
+      },
+      "scryfall": {
+        "name": "Mercadian Masques",
+        "code": "mmq"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Starter 1999",
+        "id": 63
+      },
+      "tcgplayer": {
+        "name": "Starter 1999"
+      },
+      "mtgjson": {
+        "name": "Starter 1999",
+        "code": "S99"
+      },
+      "gatherer": {
+        "name": "Starter 1999",
+        "code": "P3"
+      },
+      "scryfall": {
+        "name": "Starter 1999",
+        "code": "s99"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Welcome Deck 2017"
+      },
+      "mtgjson": {
+        "name": "Welcome Deck 2017",
+        "code": "W17"
+      },
+      "gatherer": {
+        "name": "Welcome Deck 2017",
+        "code": "W17"
+      },
+      "scryfall": {
+        "name": "Welcome Deck 2017",
+        "code": "w17"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Welcome Deck 2016"
+      },
+      "mtgjson": {
+        "name": "Welcome Deck 2016",
+        "code": "W16"
+      },
+      "gatherer": {
+        "name": "Welcome Deck 2016",
+        "code": "W16"
+      },
+      "scryfall": {
+        "name": "Welcome Deck 2016",
+        "code": "w16"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Avacyn Restored",
+        "id": 1358
+      },
+      "tcgplayer": {
+        "name": "Avacyn Restored"
+      },
+      "mtgjson": {
+        "name": "Avacyn Restored",
+        "code": "AVR"
+      },
+      "gatherer": {
+        "name": "Avacyn Restored",
+        "code": "AVR"
+      },
+      "scryfall": {
+        "name": "Avacyn Restored",
+        "code": "avr"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Premium Deck Series: Graveborn",
+        "id": 1337
+      },
+      "tcgplayer": {
+        "name": "PDS: Graveborn"
+      },
+      "mtgjson": {
+        "name": "Premium Deck Series: Graveborn",
+        "code": "PD3"
+      },
+      "gatherer": {
+        "name": "Premium Deck Series: Graveborn",
+        "code": "PD3"
+      },
+      "scryfall": {
+        "name": "Premium Deck Series: Graveborn",
+        "code": "pd3"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Premium Deck Series: Fire & Lightning",
+        "id": 1218
+      },
+      "tcgplayer": {
+        "name": "PDS: Fire and Lightning"
+      },
+      "mtgjson": {
+        "name": "Premium Deck Series: Fire and Lightning",
+        "code": "PD2"
+      },
+      "gatherer": {
+        "name": "Premium Deck Series: Fire and Lightning",
+        "code": "PD2"
+      },
+      "scryfall": {
+        "name": "Premium Deck Series: Fire and Lightning",
+        "code": "pd2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Portal Three Kingdoms",
+        "id": 30
+      },
+      "tcgplayer": {
+        "name": "Portal Three Kingdoms"
+      },
+      "mtgjson": {
+        "name": "Portal Three Kingdoms",
+        "code": "PTK"
+      },
+      "gatherer": {
+        "name": "Portal Three Kingdoms",
+        "code": "PK"
+      },
+      "scryfall": {
+        "name": "Portal: Three Kingdoms",
+        "code": "ptk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic Origins",
+        "id": 1652
+      },
+      "tcgplayer": {
+        "name": "Magic Origins"
+      },
+      "mtgjson": {
+        "name": "Magic Origins",
+        "code": "ORI"
+      },
+      "gatherer": {
+        "name": "Magic Origins",
+        "code": "ORI"
+      },
+      "scryfall": {
+        "name": "Magic Origins",
+        "code": "ori"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "New Phyrexia",
+        "id": 1262
+      },
+      "tcgplayer": {
+        "name": "New Phyrexia"
+      },
+      "mtgjson": {
+        "name": "New Phyrexia",
+        "code": "NPH"
+      },
+      "gatherer": {
+        "name": "New Phyrexia",
+        "code": "NPH"
+      },
+      "scryfall": {
+        "name": "New Phyrexia",
+        "code": "nph"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Prophecy",
+        "id": 33
+      },
+      "tcgplayer": {
+        "name": "Prophecy"
+      },
+      "mtgjson": {
+        "name": "Prophecy",
+        "code": "PCY"
+      },
+      "gatherer": {
+        "name": "Prophecy",
+        "code": "PR"
+      },
+      "scryfall": {
+        "name": "Prophecy",
+        "code": "pcy"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Unhinged",
+        "id": 59
+      },
+      "tcgplayer": {
+        "name": "Unhinged"
+      },
+      "mtgjson": {
+        "name": "Unhinged",
+        "code": "UNH"
+      },
+      "gatherer": {
+        "name": "Unhinged",
+        "code": "UNH"
+      },
+      "scryfall": {
+        "name": "Unhinged",
+        "code": "unh"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Eighth Edition",
+        "id": 44
+      },
+      "tcgplayer": {
+        "name": "Eighth Edition"
+      },
+      "mtgjson": {
+        "name": "Eighth Edition",
+        "code": "8ED"
+      },
+      "gatherer": {
+        "name": "Eighth Edition",
+        "code": "8ED"
+      },
+      "scryfall": {
+        "name": "Eighth Edition",
+        "code": "8ed"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Exiled",
+        "id": 112
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Exiled"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Exiled",
+        "code": "V09"
+      },
+      "gatherer": {
+        "name": "From the Vault: Exiled",
+        "code": "V09"
+      },
+      "scryfall": {
+        "name": "From the Vault: Exiled",
+        "code": "v09"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Happy Holidays Promos",
+        "id": 1247
+      },
+      "tcgplayer": {
+        "name": "Special Occasion"
+      },
+      "mtgjson": {
+        "name": "Happy Holidays",
+        "code": "pHHO"
+      },
+      "gatherer": {
+        "name": "Happy Holidays",
+        "code": "pHHO"
+      },
+      "scryfall": {
+        "name": "Happy Holidays",
+        "code": "hho"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Morningtide",
+        "id": 92
+      },
+      "tcgplayer": {
+        "name": "Morningtide"
+      },
+      "mtgjson": {
+        "name": "Morningtide",
+        "code": "MOR"
+      },
+      "gatherer": {
+        "name": "Morningtide",
+        "code": "MOR"
+      },
+      "scryfall": {
+        "name": "Morningtide",
+        "code": "mor"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Relics",
+        "id": 1202
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Relics"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Relics",
+        "code": "V10"
+      },
+      "gatherer": {
+        "name": "From the Vault: Relics",
+        "code": "V10"
+      },
+      "scryfall": {
+        "name": "From the Vault: Relics",
+        "code": "v10"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Realms",
+        "id": 1397
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Realms"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Realms",
+        "code": "V12"
+      },
+      "gatherer": {
+        "name": "From the Vault: Realms",
+        "code": "V12"
+      },
+      "scryfall": {
+        "name": "From the Vault: Realms",
+        "code": "v12"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Tempest",
+        "id": 19
+      },
+      "tcgplayer": {
+        "name": "Tempest"
+      },
+      "mtgjson": {
+        "name": "Tempest",
+        "code": "TMP"
+      },
+      "gatherer": {
+        "name": "Tempest",
+        "code": "TE"
+      },
+      "scryfall": {
+        "name": "Tempest",
+        "code": "tmp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Gatecrash",
+        "id": 1424
+      },
+      "tcgplayer": {
+        "name": "Gatecrash"
+      },
+      "mtgjson": {
+        "name": "Gatecrash",
+        "code": "GTC"
+      },
+      "gatherer": {
+        "name": "Gatecrash",
+        "code": "GTC"
+      },
+      "scryfall": {
+        "name": "Gatecrash",
+        "code": "gtc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Legends",
+        "id": 1286
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Legends"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Legends",
+        "code": "V11"
+      },
+      "gatherer": {
+        "name": "From the Vault: Legends",
+        "code": "V11"
+      },
+      "scryfall": {
+        "name": "From the Vault: Legends",
+        "code": "v11"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Annihilation",
+        "id": 1494
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Annihilation"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Annihilation (2014)",
+        "code": "V14"
+      },
+      "gatherer": {
+        "name": "From the Vault: Annihilation (2014)",
+        "code": "V14"
+      },
+      "scryfall": {
+        "name": "From the Vault: Annihilation",
+        "code": "v14"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Twenty",
+        "id": 1455
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Twenty"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Twenty",
+        "code": "V13"
+      },
+      "gatherer": {
+        "name": "From the Vault: Twenty",
+        "code": "V13"
+      },
+      "scryfall": {
+        "name": "From the Vault: Twenty",
+        "code": "v13"
+      }
+    },
+    {
+      "tcgplayer": {
+        "name": "Launch Party & Release Event Cards"
+      },
+      "mtgjson": {
+        "name": "Launch Parties",
+        "code": "pLPA"
+      },
+      "gatherer": {
+        "name": "Launch Parties",
+        "code": "pLPA"
+      },
+      "scryfall": {
+        "name": "Launch Parties",
+        "code": "plpa"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Lore"
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Lore"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Lore",
+        "code": "V16"
+      },
+      "gatherer": {
+        "name": "From the Vault: Lore",
+        "code": "V16"
+      },
+      "scryfall": {
+        "name": "From the Vault: Lore",
+        "code": "v16"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Angels",
+        "id": 1661
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Angels"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Angels",
+        "code": "V15"
+      },
+      "gatherer": {
+        "name": "From the Vault: Angels",
+        "code": "V15"
+      },
+      "scryfall": {
+        "name": "From the Vault: Angels",
+        "code": "v15"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Fate Reforged",
+        "id": 1522
+      },
+      "tcgplayer": {
+        "name": "Fate Reforged"
+      },
+      "mtgjson": {
+        "name": "Fate Reforged",
+        "code": "FRF"
+      },
+      "gatherer": {
+        "name": "Fate Reforged",
+        "code": "FRF"
+      },
+      "scryfall": {
+        "name": "Fate Reforged",
+        "code": "frf"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Kaladesh"
+      },
+      "tcgplayer": {
+        "name": "Kaladesh"
+      },
+      "mtgjson": {
+        "name": "Kaladesh",
+        "code": "KLD"
+      },
+      "gatherer": {
+        "name": "Kaladesh",
+        "code": "KLD"
+      },
+      "scryfall": {
+        "name": "Kaladesh",
+        "code": "kld"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Vanguard",
+        "id": 69
+      },
+      "tcgplayer": {
+        "name": "Vanguard"
+      },
+      "mtgjson": {
+        "name": "Vanguard",
+        "code": "VAN"
+      },
+      "gatherer": {
+        "name": "Vanguard",
+        "code": "VAN"
+      },
+      "scryfall": {
+        "name": "Vanguard Series",
+        "code": "pvan"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Elves vs. Goblins",
+        "id": 91
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Anthology"
+      },
+      "mtgjson": {
+        "name": "Duel Decks Anthology, Elves vs. Goblins",
+        "code": "DD3_EVG"
+      },
+      "gatherer": {
+        "name": "Duel Decks Anthology, Elves vs. Goblins",
+        "code": "DD3_EVG"
+      },
+      "scryfall": {
+        "name": "Duel Decks Anthology: Elves vs. Goblins",
+        "code": "evg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander's Arsenal",
+        "id": 1418
+      },
+      "tcgplayer": {
+        "name": "Commander's Arsenal"
+      },
+      "mtgjson": {
+        "name": "Commander's Arsenal",
+        "code": "CM1"
+      },
+      "gatherer": {
+        "name": "Commander's Arsenal",
+        "code": "CM1"
+      },
+      "scryfall": {
+        "name": "Commander's Arsenal",
+        "code": "cm1"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Archenemy: Nicol Bolas"
+      },
+      "tcgplayer": {
+        "name": "Archenemy: Nicol Bolas"
+      },
+      "mtgjson": {
+        "name": "Archenemy: Nicol Bolas",
+        "code": "E01"
+      },
+      "gatherer": {
+        "name": "Archenemy: Nicol Bolas",
+        "code": "E01"
+      },
+      "scryfall": {
+        "name": "Archenemy: Nicol Bolas",
+        "code": "e01"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Weatherlight",
+        "id": 18
+      },
+      "tcgplayer": {
+        "name": "Weatherlight"
+      },
+      "mtgjson": {
+        "name": "Weatherlight",
+        "code": "WTH"
+      },
+      "gatherer": {
+        "name": "Weatherlight",
+        "code": "WL"
+      },
+      "scryfall": {
+        "name": "Weatherlight",
+        "code": "wth"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Kaladesh Inventions"
+      },
+      "tcgplayer": {
+        "name": "Kaladesh Inventions"
+      },
+      "mtgjson": {
+        "name": "Masterpiece Series: Kaladesh Inventions",
+        "code": "MPS"
+      },
+      "gatherer": {
+        "name": "Masterpiece Series: Kaladesh Inventions",
+        "code": "MPS_KLD"
+      },
+      "scryfall": {
+        "name": "Kaladesh Inventions",
+        "code": "mps"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander Anthology"
+      },
+      "mtgjson": {
+        "name": "Commander Anthology",
+        "code": "CMA"
+      },
+      "gatherer": {
+        "name": "Commander Anthology",
+        "code": "CMA"
+      },
+      "scryfall": {
+        "name": "Commander Anthology",
+        "code": "cma"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Seventh Edition",
+        "id": 37
+      },
+      "tcgplayer": {
+        "name": "Seventh Edition"
+      },
+      "mtgjson": {
+        "name": "Seventh Edition",
+        "code": "7ED"
+      },
+      "gatherer": {
+        "name": "Seventh Edition",
+        "code": "7E"
+      },
+      "scryfall": {
+        "name": "Seventh Edition",
+        "code": "7ed"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander",
+        "id": 1273
+      },
+      "tcgplayer": {
+        "name": "Commander"
+      },
+      "mtgjson": {
+        "name": "Magic: The Gathering-Commander",
+        "code": "CMD"
+      },
+      "gatherer": {
+        "name": "Magic: The Gathering-Commander",
+        "code": "CMD"
+      },
+      "scryfall": {
+        "name": "Commander 2011",
+        "code": "cmd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Odyssey",
+        "id": 38
+      },
+      "tcgplayer": {
+        "name": "Odyssey"
+      },
+      "mtgjson": {
+        "name": "Odyssey",
+        "code": "ODY"
+      },
+      "gatherer": {
+        "name": "Odyssey",
+        "code": "OD"
+      },
+      "scryfall": {
+        "name": "Odyssey",
+        "code": "ody"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Conspiracy: Take the Crown"
+      },
+      "tcgplayer": {
+        "name": "Conspiracy: Take the Crown"
+      },
+      "mtgjson": {
+        "name": "Conspiracy: Take the Crown",
+        "code": "CN2"
+      },
+      "gatherer": {
+        "name": "Conspiracy: Take the Crown",
+        "code": "CN2"
+      },
+      "scryfall": {
+        "name": "Conspiracy: Take the Crown",
+        "code": "cn2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "APAC Lands",
+        "id": 97
+      },
+      "mtgjson": {
+        "name": "Asia Pacific Land Program",
+        "code": "pALP"
+      },
+      "gatherer": {
+        "name": "Asia Pacific Land Program",
+        "code": "pALP"
+      },
+      "scryfall": {
+        "name": "Asia Pacific Land Program",
+        "code": "palp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2011",
+        "id": 1197
+      },
+      "tcgplayer": {
+        "name": "Magic 2011 (M11)"
+      },
+      "mtgjson": {
+        "name": "Magic 2011",
+        "code": "M11"
+      },
+      "gatherer": {
+        "name": "Magic 2011",
+        "code": "M11"
+      },
+      "scryfall": {
+        "name": "Magic 2011",
+        "code": "m11"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2010",
+        "id": 109
+      },
+      "tcgplayer": {
+        "name": "Magic 2010 (M10)"
+      },
+      "mtgjson": {
+        "name": "Magic 2010",
+        "code": "M10"
+      },
+      "gatherer": {
+        "name": "Magic 2010",
+        "code": "M10"
+      },
+      "scryfall": {
+        "name": "Magic 2010",
+        "code": "m10"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Amonkhet Invocations"
+      },
+      "tcgplayer": {
+        "name": "Amonkhet Invocations"
+      },
+      "mtgjson": {
+        "name": "Masterpiece Series: Amonkhet Invocations",
+        "code": "MPS_AKH"
+      },
+      "gatherer": {
+        "name": "Masterpiece Series: Amonkhet Invocations",
+        "code": "MPS_AKH"
+      },
+      "scryfall": {
+        "name": "Amonkhet Invocations",
+        "code": "mp2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2013",
+        "id": 1388
+      },
+      "tcgplayer": {
+        "name": "Magic 2013 (M13)"
+      },
+      "mtgjson": {
+        "name": "Magic 2013",
+        "code": "M13"
+      },
+      "gatherer": {
+        "name": "Magic 2013",
+        "code": "M13"
+      },
+      "scryfall": {
+        "name": "Magic 2013",
+        "code": "m13"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2012",
+        "id": 1280
+      },
+      "tcgplayer": {
+        "name": "Magic 2012 (M12)"
+      },
+      "mtgjson": {
+        "name": "Magic 2012",
+        "code": "M12"
+      },
+      "gatherer": {
+        "name": "Magic 2012",
+        "code": "M12"
+      },
+      "scryfall": {
+        "name": "Magic 2012",
+        "code": "m12"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2015",
+        "id": 1485
+      },
+      "tcgplayer": {
+        "name": "Magic 2015 (M15)"
+      },
+      "mtgjson": {
+        "name": "Magic 2015 Core Set",
+        "code": "M15"
+      },
+      "gatherer": {
+        "name": "Magic 2015 Core Set",
+        "code": "M15"
+      },
+      "scryfall": {
+        "name": "Magic 2015",
+        "code": "m15"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Magic 2014",
+        "id": 1449
+      },
+      "tcgplayer": {
+        "name": "Magic 2014 (M14)"
+      },
+      "mtgjson": {
+        "name": "Magic 2014 Core Set",
+        "code": "M14"
+      },
+      "gatherer": {
+        "name": "Magic 2014 Core Set",
+        "code": "M14"
+      },
+      "scryfall": {
+        "name": "Magic 2014",
+        "code": "m14"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duels of the Planeswalkers Decks"
+      },
+      "tcgplayer": {
+        "name": "Duels of the Planeswalkers"
+      },
+      "mtgjson": {
+        "name": "Duels of the Planeswalkers",
+        "code": "DPA"
+      },
+      "gatherer": {
+        "name": "Duels of the Planeswalkers",
+        "code": "DPA"
+      },
+      "scryfall": {
+        "name": "Duels of the Planeswalkers",
+        "code": "dpa"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Torment",
+        "id": 39
+      },
+      "tcgplayer": {
+        "name": "Torment"
+      },
+      "mtgjson": {
+        "name": "Torment",
+        "code": "TOR"
+      },
+      "gatherer": {
+        "name": "Torment",
+        "code": "TOR"
+      },
+      "scryfall": {
+        "name": "Torment",
+        "code": "tor"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Dragon Con",
+        "code": "pDRC"
+      },
+      "gatherer": {
+        "name": "Dragon Con",
+        "code": "pDRC"
+      },
+      "scryfall": {
+        "name": "Dragon Con",
+        "code": "pdrc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Mirrodin",
+        "id": 45
+      },
+      "tcgplayer": {
+        "name": "Mirrodin"
+      },
+      "mtgjson": {
+        "name": "Mirrodin",
+        "code": "MRD"
+      },
+      "gatherer": {
+        "name": "Mirrodin",
+        "code": "MRD"
+      },
+      "scryfall": {
+        "name": "Mirrodin",
+        "code": "mrd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Conspiracy",
+        "id": 1483
+      },
+      "tcgplayer": {
+        "name": "Conspiracy"
+      },
+      "mtgjson": {
+        "name": "Magic: The Gathering—Conspiracy",
+        "code": "CNS"
+      },
+      "gatherer": {
+        "name": "Magic: The Gathering—Conspiracy",
+        "code": "CNS"
+      },
+      "scryfall": {
+        "name": "Conspiracy",
+        "code": "cns"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Divine vs. Demonic",
+        "id": 107
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Anthology"
+      },
+      "mtgjson": {
+        "name": "Duel Decks Anthology, Divine vs. Demonic",
+        "code": "DD3_DVD"
+      },
+      "gatherer": {
+        "name": "Duel Decks Anthology, Divine vs. Demonic",
+        "code": "DD3_DVD"
+      },
+      "scryfall": {
+        "name": "Duel Decks Anthology: Divine vs. Demonic",
+        "code": "dvd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Game Day Promos"
+      },
+      "tcgplayer": {
+        "name": "Game Day Promos"
+      },
+      "mtgjson": {
+        "name": "Magic Game Day",
+        "code": "pMGD"
+      },
+      "gatherer": {
+        "name": "Magic Game Day",
+        "code": "pMGD"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Sixth Edition",
+        "id": 29
+      },
+      "tcgplayer": {
+        "name": "Sixth Edition"
+      },
+      "mtgjson": {
+        "name": "Classic Sixth Edition",
+        "code": "6ED"
+      },
+      "gatherer": {
+        "name": "Classic Sixth Edition",
+        "code": "6E"
+      },
+      "scryfall": {
+        "name": "Classic Sixth Edition",
+        "code": "6ed"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Tempest Remastered",
+        "code": "TPR"
+      },
+      "gatherer": {
+        "name": "Tempest Remastered",
+        "code": "TPR"
+      },
+      "scryfall": {
+        "name": "Tempest Remastered",
+        "code": "tpr"
+      },
+      "magiccardmarket": {
+        "name": "Tempest",
+        "id": 19
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Amonkhet"
+      },
+      "tcgplayer": {
+        "name": "Amonkhet"
+      },
+      "mtgjson": {
+        "name": "Amonkhet",
+        "code": "AKH"
+      },
+      "gatherer": {
+        "name": "Amonkhet",
+        "code": "AKH"
+      },
+      "scryfall": {
+        "name": "Amonkhet",
+        "code": "akh"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Mirrodin Besieged",
+        "id": 1253
+      },
+      "tcgplayer": {
+        "name": "Mirrodin Besieged"
+      },
+      "mtgjson": {
+        "name": "Mirrodin Besieged",
+        "code": "MBS"
+      },
+      "gatherer": {
+        "name": "Mirrodin Besieged",
+        "code": "MBS"
+      },
+      "scryfall": {
+        "name": "Mirrodin Besieged",
+        "code": "mbs"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Conflux",
+        "id": 106
+      },
+      "tcgplayer": {
+        "name": "Conflux"
+      },
+      "mtgjson": {
+        "name": "Conflux",
+        "code": "CON"
+      },
+      "gatherer": {
+        "name": "Conflux",
+        "code": "CON"
+      },
+      "scryfall": {
+        "name": "Conflux",
+        "code": "con"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Fate Reforged Clash Pack",
+        "code": "CP2"
+      },
+      "gatherer": {
+        "name": "Fate Reforged Clash Pack",
+        "code": "CP2"
+      },
+      "scryfall": {
+        "name": "Fate Reforged Clash Pack",
+        "code": "cp2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Future Sight",
+        "id": 70
+      },
+      "tcgplayer": {
+        "name": "Future Sight"
+      },
+      "mtgjson": {
+        "name": "Future Sight",
+        "code": "FUT"
+      },
+      "gatherer": {
+        "name": "Future Sight",
+        "code": "FUT"
+      },
+      "scryfall": {
+        "name": "Future Sight",
+        "code": "fut"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Magic 2015 Clash Pack",
+        "code": "CP1"
+      },
+      "gatherer": {
+        "name": "Magic 2015 Clash Pack",
+        "code": "CP1"
+      },
+      "scryfall": {
+        "name": "Magic 2015 Clash Pack",
+        "code": "cp1"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Magic Origins Clash Pack",
+        "code": "CP3"
+      },
+      "gatherer": {
+        "name": "Magic Origins Clash Pack",
+        "code": "CP3"
+      },
+      "scryfall": {
+        "name": "Magic Origins Clash Pack",
+        "code": "cp3"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Urza's Saga",
+        "id": 26
+      },
+      "tcgplayer": {
+        "name": "Urza's Saga"
+      },
+      "mtgjson": {
+        "name": "Urza's Saga",
+        "code": "USG"
+      },
+      "gatherer": {
+        "name": "Urza's Saga",
+        "code": "UZ"
+      },
+      "scryfall": {
+        "name": "Urza's Saga",
+        "code": "usg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Worldwake",
+        "id": 118
+      },
+      "tcgplayer": {
+        "name": "Worldwake"
+      },
+      "mtgjson": {
+        "name": "Worldwake",
+        "code": "WWK"
+      },
+      "gatherer": {
+        "name": "Worldwake",
+        "code": "WWK"
+      },
+      "scryfall": {
+        "name": "Worldwake",
+        "code": "wwk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Shadows over Innistrad"
+      },
+      "tcgplayer": {
+        "name": "Shadows Over Innistrad"
+      },
+      "mtgjson": {
+        "name": "Shadows over Innistrad",
+        "code": "SOI"
+      },
+      "gatherer": {
+        "name": "Shadows over Innistrad",
+        "code": "SOI"
+      },
+      "scryfall": {
+        "name": "Shadows over Innistrad",
+        "code": "soi"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Saviors of Kamigawa",
+        "id": 50
+      },
+      "tcgplayer": {
+        "name": "Saviors of Kamigawa"
+      },
+      "mtgjson": {
+        "name": "Saviors of Kamigawa",
+        "code": "SOK"
+      },
+      "gatherer": {
+        "name": "Saviors of Kamigawa",
+        "code": "SOK"
+      },
+      "scryfall": {
+        "name": "Saviors of Kamigawa",
+        "code": "sok"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Fallen Empires",
+        "id": 9
+      },
+      "tcgplayer": {
+        "name": "Fallen Empires"
+      },
+      "mtgjson": {
+        "name": "Fallen Empires",
+        "code": "FEM"
+      },
+      "gatherer": {
+        "name": "Fallen Empires",
+        "code": "FE"
+      },
+      "scryfall": {
+        "name": "Fallen Empires",
+        "code": "fem"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Scars of Mirrodin",
+        "id": 1206
+      },
+      "tcgplayer": {
+        "name": "Scars of Mirrodin"
+      },
+      "mtgjson": {
+        "name": "Scars of Mirrodin",
+        "code": "SOM"
+      },
+      "gatherer": {
+        "name": "Scars of Mirrodin",
+        "code": "SOM"
+      },
+      "scryfall": {
+        "name": "Scars of Mirrodin",
+        "code": "som"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "From the Vault: Dragons",
+        "id": 100
+      },
+      "tcgplayer": {
+        "name": "From the Vault: Dragons"
+      },
+      "mtgjson": {
+        "name": "From the Vault: Dragons",
+        "code": "DRB"
+      },
+      "gatherer": {
+        "name": "From the Vault: Dragons",
+        "code": "DRB"
+      },
+      "scryfall": {
+        "name": "From the Vault: Dragons",
+        "code": "drb"
+      }
+    },
+    {
+      "tcgplayer": {
+        "name": "Media Promos"
+      },
+      "mtgjson": {
+        "name": "Media Inserts",
+        "code": "pMEI"
+      },
+      "gatherer": {
+        "name": "Media Inserts",
+        "code": "pMEI"
+      },
+      "scryfall": {
+        "name": "HarperPrism Book Promos",
+        "code": "phpr"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Shards of Alara",
+        "id": 102
+      },
+      "tcgplayer": {
+        "name": "Shards of Alara"
+      },
+      "mtgjson": {
+        "name": "Shards of Alara",
+        "code": "ALA"
+      },
+      "gatherer": {
+        "name": "Shards of Alara",
+        "code": "ALA"
+      },
+      "scryfall": {
+        "name": "Shards of Alara",
+        "code": "ala"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Ugin's Fate Promos",
+        "id": 1587
+      },
+      "tcgplayer": {
+        "name": "Ugin's Fate Promos"
+      },
+      "mtgjson": {
+        "name": "Ugin's Fate promos",
+        "code": "FRF_UGIN"
+      },
+      "gatherer": {
+        "name": "Ugin's Fate promos",
+        "code": "FRF_UGIN"
+      },
+      "scryfall": {
+        "name": "Ugin's Fate",
+        "code": "ugin"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Born of the Gods",
+        "id": 1469
+      },
+      "tcgplayer": {
+        "name": "Born of the Gods"
+      },
+      "mtgjson": {
+        "name": "Born of the Gods",
+        "code": "BNG"
+      },
+      "gatherer": {
+        "name": "Born of the Gods",
+        "code": "BNG"
+      },
+      "scryfall": {
+        "name": "Born of the Gods",
+        "code": "bng"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Modern Event Deck 2014",
+        "id": 1484
+      },
+      "tcgplayer": {
+        "name": "Modern Event Deck"
+      },
+      "mtgjson": {
+        "name": "Modern Event Deck 2014",
+        "code": "MD1"
+      },
+      "gatherer": {
+        "name": "Modern Event Deck 2014",
+        "code": "MD1"
+      },
+      "scryfall": {
+        "name": "Modern Event Deck 2014",
+        "code": "md1"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "The Dark",
+        "id": 8
+      },
+      "tcgplayer": {
+        "name": "The Dark"
+      },
+      "mtgjson": {
+        "name": "The Dark",
+        "code": "DRK"
+      },
+      "gatherer": {
+        "name": "The Dark",
+        "code": "DK"
+      },
+      "scryfall": {
+        "name": "The Dark",
+        "code": "drk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Oath of the Gatewatch"
+      },
+      "tcgplayer": {
+        "name": "Oath of the Gatewatch"
+      },
+      "mtgjson": {
+        "name": "Oath of the Gatewatch",
+        "code": "OGW"
+      },
+      "gatherer": {
+        "name": "Oath of the Gatewatch",
+        "code": "OGW"
+      },
+      "scryfall": {
+        "name": "Oath of the Gatewatch",
+        "code": "ogw"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Fifth Dawn",
+        "id": 47
+      },
+      "tcgplayer": {
+        "name": "Fifth Dawn"
+      },
+      "mtgjson": {
+        "name": "Fifth Dawn",
+        "code": "5DN"
+      },
+      "gatherer": {
+        "name": "Fifth Dawn",
+        "code": "5DN"
+      },
+      "scryfall": {
+        "name": "Fifth Dawn",
+        "code": "5dn"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Portal Demo Game",
+        "code": "pPOD"
+      },
+      "gatherer": {
+        "name": "Portal Demo Game",
+        "code": "pPOD"
+      },
+      "scryfall": {
+        "name": "Portal Demo Game",
+        "code": "ppod"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Alliances",
+        "id": 15
+      },
+      "tcgplayer": {
+        "name": "Alliances"
+      },
+      "mtgjson": {
+        "name": "Alliances",
+        "code": "ALL"
+      },
+      "gatherer": {
+        "name": "Alliances",
+        "code": "AL"
+      },
+      "scryfall": {
+        "name": "Alliances",
+        "code": "all"
+      }
+    },
+    {
+      "tcgplayer": {
+        "name": "Special Occasion"
+      },
+      "mtgjson": {
+        "name": "Celebration",
+        "code": "pCEL"
+      },
+      "gatherer": {
+        "name": "Celebration",
+        "code": "pCEL"
+      },
+      "scryfall": {
+        "name": "Celebration Cards",
+        "code": "pcel"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Summer Magic",
+        "id": 76
+      },
+      "mtgjson": {
+        "name": "Summer of Magic",
+        "code": "pSUM"
+      },
+      "gatherer": {
+        "name": "Summer of Magic",
+        "code": "pSUM"
+      },
+      "scryfall": {
+        "name": "Summer of Magic",
+        "code": "psum"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Lorwyn",
+        "id": 84
+      },
+      "tcgplayer": {
+        "name": "Lorwyn"
+      },
+      "mtgjson": {
+        "name": "Lorwyn",
+        "code": "LRW"
+      },
+      "gatherer": {
+        "name": "Lorwyn",
+        "code": "LRW"
+      },
+      "scryfall": {
+        "name": "Lorwyn",
+        "code": "lrw"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Starter 2000",
+        "id": 65
+      },
+      "tcgplayer": {
+        "name": "Starter 2000"
+      },
+      "mtgjson": {
+        "name": "Starter 2000",
+        "code": "S00"
+      },
+      "gatherer": {
+        "name": "Starter 2000",
+        "code": "P4"
+      },
+      "scryfall": {
+        "name": "Starter 2000",
+        "code": "s00"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Fifth Edition",
+        "id": 23
+      },
+      "tcgplayer": {
+        "name": "Fifth Edition"
+      },
+      "mtgjson": {
+        "name": "Fifth Edition",
+        "code": "5ED"
+      },
+      "gatherer": {
+        "name": "Fifth Edition",
+        "code": "5E"
+      },
+      "scryfall": {
+        "name": "Fifth Edition",
+        "code": "5ed"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Masters Edition III",
+        "code": "ME3"
+      },
+      "gatherer": {
+        "name": "Masters Edition III",
+        "code": "ME3"
+      },
+      "scryfall": {
+        "name": "Masters Edition III",
+        "code": "me3"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Masters Edition II",
+        "code": "ME2"
+      },
+      "gatherer": {
+        "name": "Masters Edition II",
+        "code": "ME2"
+      },
+      "scryfall": {
+        "name": "Masters Edition II",
+        "code": "me2"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Masters Edition IV",
+        "code": "ME4"
+      },
+      "gatherer": {
+        "name": "Masters Edition IV",
+        "code": "ME4"
+      },
+      "scryfall": {
+        "name": "Masters Edition IV",
+        "code": "me4"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Betrayers of Kamigawa",
+        "id": 51
+      },
+      "tcgplayer": {
+        "name": "Betrayers of Kamigawa"
+      },
+      "mtgjson": {
+        "name": "Betrayers of Kamigawa",
+        "code": "BOK"
+      },
+      "gatherer": {
+        "name": "Betrayers of Kamigawa",
+        "code": "BOK"
+      },
+      "scryfall": {
+        "name": "Betrayers of Kamigawa",
+        "code": "bok"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Time Spiral",
+        "id": 56
+      },
+      "tcgplayer": {
+        "name": "Timeshifted"
+      },
+      "mtgjson": {
+        "name": "Time Spiral \"Timeshifted\"",
+        "code": "TSB"
+      },
+      "gatherer": {
+        "name": "Time Spiral \"Timeshifted\"",
+        "code": "TSB"
+      },
+      "scryfall": {
+        "name": "Time Spiral Timeshifted",
+        "code": "tsb"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2013",
+        "id": 1464
+      },
+      "tcgplayer": {
+        "name": "Commander 2013"
+      },
+      "mtgjson": {
+        "name": "Commander 2013 Edition",
+        "code": "C13"
+      },
+      "gatherer": {
+        "name": "Commander 2013 Edition",
+        "code": "C13"
+      },
+      "scryfall": {
+        "name": "Commander 2013",
+        "code": "c13"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Darksteel",
+        "id": 46
+      },
+      "tcgplayer": {
+        "name": "Darksteel"
+      },
+      "mtgjson": {
+        "name": "Darksteel",
+        "code": "DST"
+      },
+      "gatherer": {
+        "name": "Darksteel",
+        "code": "DST"
+      },
+      "scryfall": {
+        "name": "Darksteel",
+        "code": "dst"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Urza's Destiny",
+        "id": 28
+      },
+      "tcgplayer": {
+        "name": "Urza's Destiny"
+      },
+      "mtgjson": {
+        "name": "Urza's Destiny",
+        "code": "UDS"
+      },
+      "gatherer": {
+        "name": "Urza's Destiny",
+        "code": "CG"
+      },
+      "scryfall": {
+        "name": "Urza's Destiny",
+        "code": "uds"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2015",
+        "id": 1679
+      },
+      "tcgplayer": {
+        "name": "Commander 2015"
+      },
+      "mtgjson": {
+        "name": "Commander 2015",
+        "code": "C15"
+      },
+      "gatherer": {
+        "name": "Commander 2015",
+        "code": "C15"
+      },
+      "scryfall": {
+        "name": "Commander 2015",
+        "code": "c15"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2014",
+        "id": 1513
+      },
+      "tcgplayer": {
+        "name": "Commander 2014"
+      },
+      "mtgjson": {
+        "name": "Commander 2014",
+        "code": "C14"
+      },
+      "gatherer": {
+        "name": "Commander 2014",
+        "code": "C14"
+      },
+      "scryfall": {
+        "name": "Commander 2014",
+        "code": "c14"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2016"
+      },
+      "tcgplayer": {
+        "name": "Commander 2016"
+      },
+      "mtgjson": {
+        "name": "Commander 2016",
+        "code": "C16"
+      },
+      "gatherer": {
+        "name": "Commander 2016",
+        "code": "C16"
+      },
+      "scryfall": {
+        "name": "Commander 2016",
+        "code": "c16"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2017"
+      },
+      "tcgplayer": {
+        "name": "Commander 2017"
+      },
+      "mtgjson": {
+        "name": "Commander 2017",
+        "code": "C17"
+      },
+      "gatherer": {
+        "name": "Commander 2017",
+        "code": "C17"
+      },
+      "scryfall": {
+        "name": "Commander 2017",
+        "code": "c17"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Commander 2017"
+      },
+      "tcgplayer": {
+        "name": "Commander 2017"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Rise of the Eldrazi",
+        "id": 120
+      },
+      "tcgplayer": {
+        "name": "Rise of the Eldrazi"
+      },
+      "mtgjson": {
+        "name": "Rise of the Eldrazi",
+        "code": "ROE"
+      },
+      "gatherer": {
+        "name": "Rise of the Eldrazi",
+        "code": "ROE"
+      },
+      "scryfall": {
+        "name": "Rise of the Eldrazi",
+        "code": "roe"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Masters Edition",
+        "code": "MED"
+      },
+      "gatherer": {
+        "name": "Masters Edition",
+        "code": "MED"
+      },
+      "scryfall": {
+        "name": "Masters Edition",
+        "code": "med"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Time Spiral",
+        "id": 56
+      },
+      "tcgplayer": {
+        "name": "Time Spiral"
+      },
+      "mtgjson": {
+        "name": "Time Spiral",
+        "code": "TSP"
+      },
+      "gatherer": {
+        "name": "Time Spiral",
+        "code": "TSP"
+      },
+      "scryfall": {
+        "name": "Time Spiral",
+        "code": "tsp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Journey into Nyx",
+        "id": 1481
+      },
+      "tcgplayer": {
+        "name": "Journey Into Nyx"
+      },
+      "mtgjson": {
+        "name": "Journey into Nyx",
+        "code": "JOU"
+      },
+      "gatherer": {
+        "name": "Journey into Nyx",
+        "code": "JOU"
+      },
+      "scryfall": {
+        "name": "Journey into Nyx",
+        "code": "jou"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Jace vs. Chandra",
+        "id": 104
+      },
+      "tcgplayer": {
+        "name": "Jace vs. Chandra"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Jace vs. Chandra",
+        "code": "DD2"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Jace vs. Chandra",
+        "code": "DD2"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Jace vs. Chandra",
+        "code": "dd2"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Eventide",
+        "id": 99
+      },
+      "tcgplayer": {
+        "name": "Eventide"
+      },
+      "mtgjson": {
+        "name": "Eventide",
+        "code": "EVE"
+      },
+      "gatherer": {
+        "name": "Eventide",
+        "code": "EVE"
+      },
+      "scryfall": {
+        "name": "Eventide",
+        "code": "eve"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Elves vs. Goblins",
+        "id": 91
+      },
+      "tcgplayer": {
+        "name": "Elves vs. Goblins"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Elves vs. Goblins",
+        "code": "EVG"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Elves vs. Goblins",
+        "code": "EVG"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Elves vs. Goblins",
+        "code": "dd1"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Dragons of Tarkir",
+        "id": 1601
+      },
+      "tcgplayer": {
+        "name": "Dragons of Tarkir"
+      },
+      "mtgjson": {
+        "name": "Dragons of Tarkir",
+        "code": "DTK"
+      },
+      "gatherer": {
+        "name": "Dragons of Tarkir",
+        "code": "DTK"
+      },
+      "scryfall": {
+        "name": "Dragons of Tarkir",
+        "code": "dtk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Divine vs. Demonic",
+        "id": 107
+      },
+      "tcgplayer": {
+        "name": "Divine vs. Demonic"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Divine vs. Demonic",
+        "code": "DDC"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Divine vs. Demonic",
+        "code": "DDC"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Divine vs. Demonic",
+        "code": "ddc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Phyrexia vs. The Coalition",
+        "id": 119
+      },
+      "tcgplayer": {
+        "name": "Phyrexia vs. The Coalition"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Phyrexia vs. the Coalition",
+        "code": "DDE"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Phyrexia vs. the Coalition",
+        "code": "DDE"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Phyrexia vs. the Coalition",
+        "code": "dde"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "id": 115
+      },
+      "tcgplayer": {
+        "name": "Garruk vs. Liliana"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "code": "DDD"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "code": "DDD"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "code": "ddd"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Knights vs. Dragons",
+        "id": 1261
+      },
+      "tcgplayer": {
+        "name": "Knights vs. Dragons"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Knights vs. Dragons",
+        "code": "DDG"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Knights vs. Dragons",
+        "code": "DDG"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Knights vs. Dragons",
+        "code": "ddg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Planar Chaos",
+        "id": 58
+      },
+      "tcgplayer": {
+        "name": "Planar Chaos"
+      },
+      "mtgjson": {
+        "name": "Planar Chaos",
+        "code": "PLC"
+      },
+      "gatherer": {
+        "name": "Planar Chaos",
+        "code": "PLC"
+      },
+      "scryfall": {
+        "name": "Planar Chaos",
+        "code": "plc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Jace vs. Chandra",
+        "id": 104
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Anthology"
+      },
+      "mtgjson": {
+        "name": "Duel Decks Anthology, Jace vs. Chandra",
+        "code": "DD3_JVC"
+      },
+      "gatherer": {
+        "name": "Duel Decks Anthology, Jace vs. Chandra",
+        "code": "DD3_JVC"
+      },
+      "scryfall": {
+        "name": "Duel Decks Anthology: Jace vs. Chandra",
+        "code": "jvc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Elspeth vs. Tezzeret",
+        "id": 1203
+      },
+      "tcgplayer": {
+        "name": "Elspeth vs. Tezzeret"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Elspeth vs. Tezzeret",
+        "code": "DDF"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Elspeth vs. Tezzeret",
+        "code": "DDF"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Elspeth vs. Tezzeret",
+        "code": "ddf"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Venser vs. Koth",
+        "id": 1350
+      },
+      "tcgplayer": {
+        "name": "Venser vs. Koth"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Venser vs. Koth",
+        "code": "DDI"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Venser vs. Koth",
+        "code": "DDI"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Venser vs. Koth",
+        "code": "ddi"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Ajani vs. Nicol Bolas",
+        "id": 1288
+      },
+      "tcgplayer": {
+        "name": "Ajani vs. Nicol Bolas"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Ajani vs. Nicol Bolas",
+        "code": "DDH"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Ajani vs. Nicol Bolas",
+        "code": "DDH"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Ajani vs. Nicol Bolas",
+        "code": "ddh"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Sorin vs. Tibalt",
+        "id": 1430
+      },
+      "tcgplayer": {
+        "name": "Sorin vs. Tibalt"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Sorin vs. Tibalt",
+        "code": "DDK"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Sorin vs. Tibalt",
+        "code": "DDK"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Sorin vs. Tibalt",
+        "code": "ddk"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Izzet vs. Golgari",
+        "id": 1398
+      },
+      "tcgplayer": {
+        "name": "Izzet vs. Golgari"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Izzet vs. Golgari",
+        "code": "DDJ"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Izzet vs. Golgari",
+        "code": "DDJ"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Izzet vs. Golgari",
+        "code": "ddj"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Jace vs. Vraska",
+        "id": 1477
+      },
+      "tcgplayer": {
+        "name": "Jace vs. Vraska"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Jace vs. Vraska",
+        "code": "DDM"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Jace vs. Vraska",
+        "code": "DDM"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Jace vs. Vraska",
+        "code": "ddm"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Heroes vs. Monsters",
+        "id": 1456
+      },
+      "tcgplayer": {
+        "name": "Heroes vs. Monsters"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Heroes vs. Monsters",
+        "code": "DDL"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Heroes vs. Monsters",
+        "code": "DDL"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Heroes vs. Monsters",
+        "code": "ddl"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Elspeth vs. Kiora",
+        "id": 1593
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Elspeth vs. Kiora"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Elspeth vs. Kiora",
+        "code": "DDO"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Elspeth vs. Kiora",
+        "code": "DDO"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Elspeth vs. Kiora",
+        "code": "ddo"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Speed vs. Cunning",
+        "id": 1496
+      },
+      "tcgplayer": {
+        "name": "Speed vs. Cunning"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Speed vs. Cunning",
+        "code": "DDN"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Speed vs. Cunning",
+        "code": "DDN"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Speed vs. Cunning",
+        "code": "ddn"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Blessed vs. Cursed"
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Blessed vs. Cursed"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Blessed vs. Cursed",
+        "code": "DDQ"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Blessed vs. Cursed",
+        "code": "DDQ"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Blessed vs. Cursed",
+        "code": "ddq"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Invasion",
+        "id": 34
+      },
+      "tcgplayer": {
+        "name": "Invasion"
+      },
+      "mtgjson": {
+        "name": "Invasion",
+        "code": "INV"
+      },
+      "gatherer": {
+        "name": "Invasion",
+        "code": "IN"
+      },
+      "scryfall": {
+        "name": "Invasion",
+        "code": "inv"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Zendikar vs. Eldrazi",
+        "id": 1663
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Zendikar vs. Eldrazi"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Zendikar vs. Eldrazi",
+        "code": "DDP"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Zendikar vs. Eldrazi",
+        "code": "DDP"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Zendikar vs. Eldrazi",
+        "code": "ddp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Mind vs. Might"
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Mind vs. Might"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Mind vs. Might",
+        "code": "DDS"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Mind vs. Might",
+        "code": "DDS"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Mind vs. Might",
+        "code": "dds"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Duel Decks: Nissa vs. Ob Nixilis"
+      },
+      "tcgplayer": {
+        "name": "Duel Decks: Nissa vs. Ob Nixilis"
+      },
+      "mtgjson": {
+        "name": "Duel Decks: Nissa vs. Ob Nixilis",
+        "code": "DDR"
+      },
+      "gatherer": {
+        "name": "Duel Decks: Nissa vs. Ob Nixilis",
+        "code": "DDR"
+      },
+      "scryfall": {
+        "name": "Duel Decks: Nissa vs. Ob Nixilis",
+        "code": "ddr"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Fourth Edition",
+        "id": 10
+      },
+      "tcgplayer": {
+        "name": "Fourth Edition"
+      },
+      "mtgjson": {
+        "name": "Fourth Edition",
+        "code": "4ED"
+      },
+      "gatherer": {
+        "name": "Fourth Edition",
+        "code": "4E"
+      },
+      "scryfall": {
+        "name": "Fourth Edition",
+        "code": "4ed"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Planeshift",
+        "id": 35
+      },
+      "tcgplayer": {
+        "name": "Planeshift"
+      },
+      "mtgjson": {
+        "name": "Planeshift",
+        "code": "PLS"
+      },
+      "gatherer": {
+        "name": "Planeshift",
+        "code": "PS"
+      },
+      "scryfall": {
+        "name": "Planeshift",
+        "code": "pls"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Coldsnap",
+        "id": 52
+      },
+      "tcgplayer": {
+        "name": "Coldsnap"
+      },
+      "mtgjson": {
+        "name": "Coldsnap",
+        "code": "CSP"
+      },
+      "gatherer": {
+        "name": "Coldsnap",
+        "code": "CSP"
+      },
+      "scryfall": {
+        "name": "Coldsnap",
+        "code": "csp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Coldsnap Theme Decks",
+        "id": 82
+      },
+      "mtgjson": {
+        "name": "Coldsnap Theme Decks",
+        "code": "CST"
+      },
+      "gatherer": {
+        "name": "Coldsnap Theme Decks",
+        "code": "CST"
+      },
+      "scryfall": {
+        "name": "Coldsnap Theme Decks",
+        "code": "cst"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Homelands",
+        "id": 14
+      },
+      "tcgplayer": {
+        "name": "Homelands"
+      },
+      "mtgjson": {
+        "name": "Homelands",
+        "code": "HML"
+      },
+      "gatherer": {
+        "name": "Homelands",
+        "code": "HM"
+      },
+      "scryfall": {
+        "name": "Homelands",
+        "code": "hml"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Beta",
+        "id": 2
+      },
+      "tcgplayer": {
+        "name": "Beta Edition"
+      },
+      "mtgjson": {
+        "name": "Limited Edition Beta",
+        "code": "LEB"
+      },
+      "gatherer": {
+        "name": "Limited Edition Beta",
+        "code": "2E"
+      },
+      "scryfall": {
+        "name": "Limited Edition Beta",
+        "code": "leb"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Multiverse Gift Box",
+        "id": 1519
+      },
+      "mtgjson": {
+        "name": "Multiverse Gift Box",
+        "code": "MGB"
+      },
+      "gatherer": {
+        "name": "Multiverse Gift Box",
+        "code": "MGB"
+      },
+      "scryfall": {
+        "name": "Multiverse Gift Box",
+        "code": "mgb"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Alpha",
+        "id": 1
+      },
+      "tcgplayer": {
+        "name": "Alpha Edition"
+      },
+      "mtgjson": {
+        "name": "Limited Edition Alpha",
+        "code": "LEA"
+      },
+      "gatherer": {
+        "name": "Limited Edition Alpha",
+        "code": "1E"
+      },
+      "scryfall": {
+        "name": "Limited Edition Alpha",
+        "code": "lea"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Legends",
+        "id": 7
+      },
+      "tcgplayer": {
+        "name": "Legends"
+      },
+      "mtgjson": {
+        "name": "Legends",
+        "code": "LEG"
+      },
+      "gatherer": {
+        "name": "Legends",
+        "code": "LE"
+      },
+      "scryfall": {
+        "name": "Legends",
+        "code": "leg"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Battle Royale",
+        "id": 64
+      },
+      "tcgplayer": {
+        "name": "Battle Royale Box Set"
+      },
+      "mtgjson": {
+        "name": "Battle Royale Box Set",
+        "code": "BRB"
+      },
+      "gatherer": {
+        "name": "Battle Royale Box Set",
+        "code": "BR"
+      },
+      "scryfall": {
+        "name": "Battle Royale Box Set",
+        "code": "brb"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Apocalypse",
+        "id": 36
+      },
+      "tcgplayer": {
+        "name": "Apocalypse"
+      },
+      "mtgjson": {
+        "name": "Apocalypse",
+        "code": "APC"
+      },
+      "gatherer": {
+        "name": "Apocalypse",
+        "code": "AP"
+      },
+      "scryfall": {
+        "name": "Apocalypse",
+        "code": "apc"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Junior Super Series Promos"
+      },
+      "tcgplayer": {
+        "name": "JSS/MSS Promos"
+      },
+      "mtgjson": {
+        "name": "Super Series",
+        "code": "pSUS"
+      },
+      "gatherer": {
+        "name": "Super Series",
+        "code": "pSUS"
+      },
+      "scryfall": {
+        "name": "Super Series",
+        "code": "psus"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Rivals Quick Start Set",
+        "code": "RQS"
+      },
+      "gatherer": {
+        "name": "Rivals Quick Start Set",
+        "code": "RQS"
+      },
+      "scryfall": {
+        "name": "Rivals Quick Start Set",
+        "code": "rqs"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Scourge",
+        "id": 43
+      },
+      "tcgplayer": {
+        "name": "Scourge"
+      },
+      "mtgjson": {
+        "name": "Scourge",
+        "code": "SCG"
+      },
+      "gatherer": {
+        "name": "Scourge",
+        "code": "SCG"
+      },
+      "scryfall": {
+        "name": "Scourge",
+        "code": "scg"
+      }
+    },
+    {
+      "mtgjson": {
+        "name": "Legend Membership",
+        "code": "pLGM"
+      },
+      "gatherer": {
+        "name": "Legend Membership",
+        "code": "pLGM"
+      },
+      "scryfall": {
+        "name": "DCI Legend Membership",
+        "code": "plgm"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Arena League Promos"
+      },
+      "tcgplayer": {
+        "name": "Arena Promos"
+      },
+      "mtgjson": {
+        "name": "Arena League",
+        "code": "pARL"
+      },
+      "gatherer": {
+        "name": "Arena League",
+        "code": "pARL"
+      },
+      "scryfall": {
+        "name": "Arena League",
+        "code": "parl"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Unglued",
+        "id": 22
+      },
+      "tcgplayer": {
+        "name": "Unglued"
+      },
+      "mtgjson": {
+        "name": "Unglued",
+        "code": "UGL"
+      },
+      "gatherer": {
+        "name": "Unglued",
+        "code": "UG"
+      },
+      "scryfall": {
+        "name": "Unglued",
+        "code": "ugl"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Zendikar Expeditions",
+        "id": 1669
+      },
+      "tcgplayer": {
+        "name": "Zendikar Expeditions"
+      },
+      "mtgjson": {
+        "name": "Zendikar Expeditions",
+        "code": "EXP"
+      },
+      "gatherer": {
+        "name": "Zendikar Expeditions",
+        "code": "EXP"
+      },
+      "scryfall": {
+        "name": "Zendikar Expeditions",
+        "code": "exp"
+      }
+    },
+    {
+      "magiccardmarket": {
+        "name": "Exodus",
+        "id": 21
+      },
+      "tcgplayer": {
+        "name": "Exodus"
+      },
+      "mtgjson": {
+        "name": "Exodus",
+        "code": "EXO"
+      },
+      "gatherer": {
+        "name": "Exodus",
+        "code": "EX"
+      },
+      "scryfall": {
+        "name": "Exodus",
+        "code": "exo"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Unstable",
+        "code": "ust"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "XLN Standard Showdown",
+        "code": "pss2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Commander 2017 Tokens",
+        "code": "tc17"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "San Diego Comic-Con 2017",
+        "code": "ps17"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Hour of Devastation Tokens",
+        "code": "thou"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Hour of Devastation Promos",
+        "code": "phou"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Amonkhet Promos",
+        "code": "pakh"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Amonkhet Tokens",
+        "code": "takh"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Mind vs. Might Tokens",
+        "code": "tdds"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Modern Masters 2017 Tokens",
+        "code": "tmm3"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Aether Revolt Tokens",
+        "code": "taer"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Aether Revolt Promos",
+        "code": "paer"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2017",
+        "code": "l17"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2017",
+        "code": "j17"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2017",
+        "code": "f17"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Planechase Anthology Tokens",
+        "code": "tpca"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "You Make the Cube",
+        "code": "pz2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Commander 2016 Tokens",
+        "code": "tc16"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "San Diego Comic-Con 2016",
+        "code": "ps16"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Kaladesh Tokens",
+        "code": "tkld"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Kaladesh Promos",
+        "code": "pkld"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Conspiracy: Take the Crown Tokens",
+        "code": "tcn2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Eldritch Moon Tokens",
+        "code": "temn"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Eldritch Moon Promos",
+        "code": "pemn"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Eternal Masters Tokens",
+        "code": "tema"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Shadows over Innistrad Tokens",
+        "code": "tsoi"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Shadows over Innistrad Promos",
+        "code": "psoi"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Oath of the Gatewatch Tokens",
+        "code": "togw"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Oath of the Gatewatch Promos",
+        "code": "pogw"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2016",
+        "code": "l16"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2016",
+        "code": "f16"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2016",
+        "code": "j16"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Legendary Cube",
+        "code": "pz1"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Commander 2015 Tokens",
+        "code": "tc15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Battle for Zendikar Tokens",
+        "code": "tbfz"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "BFZ Standard Series",
+        "code": "pss1"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Battle for Zendikar Promos",
+        "code": "pbfz"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Origins Promos",
+        "code": "pori"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Origins Tokens",
+        "code": "tori"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "San Diego Comic-Con 2015",
+        "code": "ps15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Modern Masters 2015 Tokens",
+        "code": "tmm2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dragons of Tarkir Tokens",
+        "code": "tdtk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dragons of Tarkir Promos",
+        "code": "pdtk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Fate Reforged Tokens",
+        "code": "tfrf"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Fate Reforged Promos",
+        "code": "pfrf"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2015",
+        "code": "l15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2015",
+        "code": "j15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2015",
+        "code": "f15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks Anthology: Elves vs. Goblins Tokens",
+        "code": "tevg"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Commander 2014 Tokens",
+        "code": "tc14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Khans of Tarkir Tokens",
+        "code": "tktk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Khans of Tarkir Promos",
+        "code": "pktk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Speed vs. Cunning Tokens",
+        "code": "tddn"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2015 Tokens",
+        "code": "tm15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2015 Promos",
+        "code": "pm15"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "San Diego Comic-Con 2014",
+        "code": "ps14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Vintage Masters Tokens",
+        "code": "tvma"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Conspiracy Tokens",
+        "code": "tcns"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Modern Event Deck 2014 Tokens",
+        "code": "tmd1"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Defeat a God",
+        "code": "tdag"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Journey into Nyx Tokens",
+        "code": "tjou"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Journey into Nyx Hero's Path",
+        "code": "thp3"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Journey into Nyx Promos",
+        "code": "pjou"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Jace vs. Vraska Tokens",
+        "code": "tddm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Born of the Gods Tokens",
+        "code": "tbng"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Born of the Gods Hero's Path",
+        "code": "thp2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Born of the Gods Promos",
+        "code": "pbng"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2014",
+        "code": "l14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2014",
+        "code": "j14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2014",
+        "code": "f14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Commander 2013 Tokens",
+        "code": "tc13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Theros Hero's Path",
+        "code": "thp1"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Theros Tokens",
+        "code": "tths"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Theros Promos",
+        "code": "pths"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Heroes vs. Monsters Tokens",
+        "code": "tddl"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2014 Tokens",
+        "code": "tm14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2014 Promos",
+        "code": "pm14"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "San Diego Comic-Con 2013",
+        "code": "psdc"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Modern Masters Tokens",
+        "code": "tmma"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dragon's Maze Tokens",
+        "code": "tdgm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dragon's Maze Promos",
+        "code": "pdgm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Sorin vs. Tibalt Tokens",
+        "code": "tddk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Gatecrash Tokens",
+        "code": "tgtc"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Gatecrash Promos",
+        "code": "pgtc"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2013",
+        "code": "l13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2013",
+        "code": "j13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2013",
+        "code": "f13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Return to Ravnica Promos",
+        "code": "prtr"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Return to Ravnica Tokens",
+        "code": "trtr"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Izzet vs. Golgari Tokens",
+        "code": "tddj"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2013 Tokens",
+        "code": "tm13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2013 Promos",
+        "code": "pm13"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Avacyn Restored Tokens",
+        "code": "tavr"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Avacyn Restored Promos",
+        "code": "pavr"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Venser vs. Koth Tokens",
+        "code": "tddi"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dark Ascension Tokens",
+        "code": "tdka"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Dark Ascension Promos",
+        "code": "pdka"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens 2012",
+        "code": "l12"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "League Tokens",
+        "code": "ltk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2012",
+        "code": "j12"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2012",
+        "code": "f12"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Online Promos",
+        "code": "prm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Innistrad Tokens",
+        "code": "tisd"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Innistrad Promos",
+        "code": "pisd"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Ajani vs. Nicol Bolas Tokens",
+        "code": "tddh"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2012 Tokens",
+        "code": "tm12"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2012 Promos",
+        "code": "pm12"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Mirrodin Pure vs. New Phyrexia",
+        "code": "td2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "New Phyrexia Tokens",
+        "code": "tnph"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "New Phyrexia Promos",
+        "code": "pnph"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Knights vs. Dragons Tokens",
+        "code": "tddg"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Mirrodin Besieged Tokens",
+        "code": "tmbs"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Mirrodin Besieged Promos",
+        "code": "pmbs"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2011",
+        "code": "p11"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2011",
+        "code": "g11"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2011",
+        "code": "f11"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Online Theme Decks",
+        "code": "td0"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Scars of Mirrodin Tokens",
+        "code": "tsom"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Scars of Mirrodin Promos",
+        "code": "psom"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Elspeth vs. Tezzeret Tokens",
+        "code": "tddf"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2011 Tokens",
+        "code": "tm11"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2011 Promos",
+        "code": "pm11"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Promotional Schemes",
+        "code": "parc"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Rise of the Eldrazi Tokens",
+        "code": "troe"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Phyrexia vs. the Coalition Tokens",
+        "code": "tdde"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Worldwake Tokens",
+        "code": "twwk"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2010",
+        "code": "f10"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2010",
+        "code": "g10"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2010",
+        "code": "p10"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Garruk vs. Liliana Tokens",
+        "code": "tddd"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Zendikar Tokens",
+        "code": "tzen"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Promotional Planes",
+        "code": "phop"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2010 Tokens",
+        "code": "tm10"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic 2010 Promos",
+        "code": "pm10"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Alara Reborn Tokens",
+        "code": "tarb"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Divine vs. Demonic Tokens",
+        "code": "tddc"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Conflux Tokens",
+        "code": "tcon"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2009",
+        "code": "g09"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2009",
+        "code": "f09"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2009",
+        "code": "p09"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Gleemax Project",
+        "code": "pgmx"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Jace vs. Chandra Tokens",
+        "code": "tdd2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Duel Decks: Jace vs. Chandra Japanese Promos",
+        "code": "pdd2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Shards of Alara Tokens",
+        "code": "tala"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Eventide Tokens",
+        "code": "teve"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Shadowmoor Tokens",
+        "code": "tshm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Morningtide Tokens",
+        "code": "tmor"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2008",
+        "code": "g08"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2008",
+        "code": "f08"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2008",
+        "code": "p08"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Lorwyn Tokens",
+        "code": "tlrw"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Tenth Edition Tokens",
+        "code": "t10e"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2007",
+        "code": "f07"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2007",
+        "code": "g07"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2007",
+        "code": "p07"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Coldsnap Tokens",
+        "code": "tcsp"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2006",
+        "code": "f06"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2006",
+        "code": "p06"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2006",
+        "code": "g06"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2005",
+        "code": "g05"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2005",
+        "code": "f05"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2005",
+        "code": "p05"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2004",
+        "code": "f04"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2004",
+        "code": "g04"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2004",
+        "code": "p04"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2003",
+        "code": "g03"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2003",
+        "code": "f03"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2003",
+        "code": "p03"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2002",
+        "code": "pr2"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2002",
+        "code": "g02"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2002",
+        "code": "f02"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2001",
+        "code": "f01"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2001",
+        "code": "g01"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Magic Player Rewards 2001",
+        "code": "mpr"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Friday Night Magic 2000",
+        "code": "fnm"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 2000",
+        "code": "g00"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 1999",
+        "code": "g99"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Unglued Tokens",
+        "code": "tugl"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Judge Gift Cards 1998",
+        "code": "jgp"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Media Inserts",
+        "code": "pmei"
+      }
+    },
+    {
+      "scryfall": {
+        "name": "Summer Magic / Edgar",
+        "code": "sum"
+      }
+    }
+  ]
 }

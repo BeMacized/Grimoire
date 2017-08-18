@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.io.IOUtils;
 import org.jongo.MongoCollection;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.annotation.Nullable;
@@ -23,6 +24,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class PricingProvider {
 
@@ -40,6 +42,7 @@ public class PricingProvider {
 			this.stores = new ArrayList<>();
 			return;
 		}
+
 		this.stores = new ArrayList<StoreRetriever>() {{
 			add(new MagicCardMarketRetriever(
 					System.getenv("MCM_HOST"),
