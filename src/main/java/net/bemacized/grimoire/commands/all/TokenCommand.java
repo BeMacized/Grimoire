@@ -118,7 +118,7 @@ public class TokenCommand extends BaseCommand {
 									(m.getTokenColor() == null) ? "" : " " + m.getTokenColor(),
 									(m.getPower() == null || m.getToughness() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPower(), m.getToughness()) + "_",
 									" " + m.getName(),
-									" _(" + m.getSet().getCode() + ")_",
+									" _(" + ((m.getSet().getParentSet() != null) ? m.getSet().getParentSet().getCode() : m.getSet().getCode()) + ")_",
 									(m.getImageUrl() == null) ? " __[NO ART AVAILABLE]__" : "");
 						}).collect(Collectors.toList())
 				));

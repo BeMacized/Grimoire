@@ -16,8 +16,6 @@ public abstract class StoreRetriever {
 
 	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
 
-	private static final long PRICE_TIMEOUT = 21600 * 1000;
-
 	public abstract String getStoreName();
 
 	public abstract String getStoreId();
@@ -26,9 +24,9 @@ public abstract class StoreRetriever {
 
 	public abstract long timeout();
 
-	protected abstract StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException;
+	protected abstract StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException;
 
-	public StoreCardPriceRecord retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException, LanguageUnsupportedException {
+	public StoreCardPriceRecord retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException,  LanguageUnsupportedException {
 		if (Arrays.stream(supportedLanguages()).parallel().noneMatch(l -> l.equalsIgnoreCase(card.getLanguage())))
 			throw new LanguageUnsupportedException(card.getLanguage());
 		return _retrievePrice(card);
@@ -111,9 +109,6 @@ public abstract class StoreRetriever {
 	}
 
 	public class UnknownStoreException extends Exception {
-	}
-
-	public class StoreSetUnknownException extends Exception {
 	}
 
 	public class LanguageUnsupportedException extends Exception {

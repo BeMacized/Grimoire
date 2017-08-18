@@ -87,8 +87,6 @@ public class PricingProvider {
 				return new StoreCardPrice(StoreCardPriceStatus.AUTH_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 			} catch (StoreRetriever.UnknownStoreException e) {
 				return new StoreCardPrice(StoreCardPriceStatus.UNKNOWN_ERROR, card, store.getStoreName(), store.getStoreId(), null);
-			} catch (StoreRetriever.StoreSetUnknownException e) {
-				return new StoreCardPrice(StoreCardPriceStatus.SET_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
 			} catch (StoreRetriever.LanguageUnsupportedException e) {
 				return new StoreCardPrice(StoreCardPriceStatus.LANGUAGE_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
 			}
@@ -127,9 +125,6 @@ public class PricingProvider {
 					break;
 				case AUTH_ERROR:
 					priceText = "Could not authenticate.";
-					break;
-				case SET_UNSUPPORTED:
-					priceText = "Set not supported.";
 					break;
 				case SERVER_ERROR:
 					priceText = "Store is having server problems.";
@@ -184,7 +179,6 @@ public class PricingProvider {
 		SUCCESS,
 		SERVER_ERROR,
 		AUTH_ERROR,
-		SET_UNSUPPORTED,
 		UNKNOWN_ERROR,
 		CARD_UNKNOWN,
 		LANGUAGE_UNSUPPORTED

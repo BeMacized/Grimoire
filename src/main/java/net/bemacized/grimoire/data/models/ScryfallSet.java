@@ -25,8 +25,8 @@ public class ScryfallSet {
 //	private String block_code;
 	@Nullable
 	private String block;
-	//	@Nullable
-//	private String parent_set_code;
+	@Nullable
+	private String parent_set_code;
 	@Nullable
 	private String released_at;
 
@@ -79,11 +79,9 @@ public class ScryfallSet {
 		return block;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getParentSetCode() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return parent_set_code;
+		return parent_set_code;
 	}
 
 	
@@ -179,7 +177,7 @@ public class ScryfallSet {
 				.append("set_type", set_type)
 //				.append("block_code", block_code)
 				.append("block", block)
-//				.append("parent_set_code", parent_set_code)
+				.append("parent_set_code", parent_set_code)
 				.append("released_at", released_at)
 				.append("card_count", card_count)
 				.append("digital", digital)

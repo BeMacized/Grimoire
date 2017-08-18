@@ -100,4 +100,9 @@ public class MtgSet {
 		return eb.build();
 	}
 
+	@Nullable
+	public MtgSet getParentSet() {
+		if (scryfallSet.getParentSetCode() == null) return null;
+		return Grimoire.getInstance().getCardProvider().getSetByCode(scryfallSet.getParentSetCode());
+	}
 }

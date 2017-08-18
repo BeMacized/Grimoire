@@ -70,11 +70,11 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 	}
 
 	@Override
-	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
+	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 		// First fetch MCM set name
-		final String storeSetName = setDictionary.get(card.getSet().getCode());
+		String storeSetName = setDictionary.get(card.getSet().getCode());
 		if (storeSetName == null)
-			throw new StoreSetUnknownException();
+			storeSetName = card.getSet().getName();
 
 		// Construct endpoint URL
 		String endpoint;
@@ -126,12 +126,13 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 		// Parse response
 		JSONObject response = new JSONObject(responseBody);
 		// Find matching product
+		String finalStoreSetName = storeSetName;
 		JSONObject product = (JSONObject) StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(
 						response.getJSONArray("product").iterator(),
 						Spliterator.ORDERED),
 				false
-		).parallel().filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(storeSetName))).findFirst().orElse(null);
+		).parallel().filter(p -> (((JSONObject) p).getString("expansion").equalsIgnoreCase(finalStoreSetName))).findFirst().orElse(null);
 		// Return null if we didn't find anything
 		if (product == null) return null;
 

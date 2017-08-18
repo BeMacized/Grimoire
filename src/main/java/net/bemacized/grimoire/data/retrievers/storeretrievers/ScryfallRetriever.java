@@ -27,7 +27,7 @@ public class ScryfallRetriever extends StoreRetriever {
 	}
 
 	@Override
-	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
+	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 		card.updateScryfall();
 		return new StoreCardPriceRecord(card.getName(), card.getSet().getCode(), null, System.currentTimeMillis(), getStoreId(), new HashMap<String, String>() {{
 			put("TIX", formatPrice(card.getScryfallCard().getTix(), "TIX", false));

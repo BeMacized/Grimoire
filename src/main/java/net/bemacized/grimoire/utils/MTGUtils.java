@@ -9,7 +9,8 @@ public class MTGUtils {
 
 	@SuppressWarnings("ConstantConditions")
 	public static String colourIdToName(@Nullable String id) {
-		switch (id == null ? null : id.toUpperCase()) {
+		if (id == null) return "Colourless";
+		switch (id.toUpperCase()) {
 			case "R":
 				return "Red";
 			case "B":

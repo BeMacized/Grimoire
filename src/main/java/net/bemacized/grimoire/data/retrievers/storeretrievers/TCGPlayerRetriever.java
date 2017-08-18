@@ -68,11 +68,11 @@ public class TCGPlayerRetriever extends StoreRetriever {
 	}
 
 	@Override
-	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreSetUnknownException {
+	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 		// First fetch TCG set name
-		final String storeSetName = setDictionary.get(card.getSet().getCode());
+		String storeSetName = setDictionary.get(card.getSet().getCode());
 		if (storeSetName == null)
-			throw new StoreSetUnknownException();
+			storeSetName = card.getSet().getName();
 
 		// Construct endpoint URL
 		String endpoint;
