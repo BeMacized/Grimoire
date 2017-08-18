@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.rules;
 
 import net.bemacized.grimoire.utils.AlphanumComparator;
 import org.apache.commons.codec.digest.DigestUtils;

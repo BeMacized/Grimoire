@@ -1,7 +1,9 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.card;
 
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonSet;
+import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.codec.digest.DigestUtils;

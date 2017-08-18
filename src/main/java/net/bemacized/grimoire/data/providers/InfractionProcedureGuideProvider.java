@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.InfractionProcedureGuideSection;
+import net.bemacized.grimoire.data.models.rules.InfractionProcedureGuideSection;
 import net.bemacized.grimoire.data.retrievers.InfractionProcedureGuideRetriever;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers;
 
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.retrievers.imageproviders.Gatherer;
 import net.bemacized.grimoire.data.retrievers.imageproviders.ImageService;
 import net.bemacized.grimoire.data.retrievers.imageproviders.Scryfall;

@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.commands.SetBaseCommand;
-import net.bemacized.grimoire.data.models.MtgSet;
+import net.bemacized.grimoire.data.models.card.MtgSet;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

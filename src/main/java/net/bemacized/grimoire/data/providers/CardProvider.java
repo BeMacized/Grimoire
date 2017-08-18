@@ -1,12 +1,16 @@
 package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.*;
+import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgSet;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonSet;
+import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
+import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.bemacized.grimoire.data.retrievers.CardImageRetriever;
 import net.bemacized.grimoire.data.retrievers.MtgJsonRetriever;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.StreamUtils;
-import org.python.jline.internal.Log;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

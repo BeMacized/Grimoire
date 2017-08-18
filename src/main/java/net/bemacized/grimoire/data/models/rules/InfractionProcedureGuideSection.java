@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.rules;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jongo.marshall.jackson.oid.MongoId;

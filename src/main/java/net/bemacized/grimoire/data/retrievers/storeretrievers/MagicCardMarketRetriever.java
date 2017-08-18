@@ -1,8 +1,7 @@
 package net.bemacized.grimoire.data.retrievers.storeretrievers;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 

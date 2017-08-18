@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers.storeretrievers;
 
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jongo.marshall.jackson.oid.MongoId;

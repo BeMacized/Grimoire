@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.mtgjson;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
@@ -359,7 +359,7 @@ public class MtgJsonCard {
 		public ForeignName() {
 		}
 
-		ForeignName(@Nonnull String language, @Nonnull String name, int multiverseid) {
+		public ForeignName(@Nonnull String language, @Nonnull String name, int multiverseid) {
 			this.language = language;
 			this.name = name;
 			this.multiverseid = multiverseid;
@@ -422,7 +422,7 @@ public class MtgJsonCard {
 		}
 	}
 
-	enum Rarity {
+	public enum Rarity {
 		UNKNOWN,
 		@SerializedName("Common")
 		COMMON,
@@ -438,7 +438,7 @@ public class MtgJsonCard {
 		BASIC_LAND
 	}
 
-	enum Layout {
+	public enum Layout {
 		UNKNOWN,
 		@SerializedName("normal")
 		NORMAL,

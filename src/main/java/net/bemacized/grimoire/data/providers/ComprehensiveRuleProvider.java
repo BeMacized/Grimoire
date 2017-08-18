@@ -1,8 +1,8 @@
 package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.ComprehensiveRule;
-import net.bemacized.grimoire.data.models.Definition;
+import net.bemacized.grimoire.data.models.rules.ComprehensiveRule;
+import net.bemacized.grimoire.data.models.rules.Definition;
 import net.bemacized.grimoire.data.retrievers.ComprehensiveRuleRetriever;
 
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.card;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;

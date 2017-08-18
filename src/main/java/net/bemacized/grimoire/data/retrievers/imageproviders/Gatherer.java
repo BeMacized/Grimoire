@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers.imageproviders;
 
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.annotation.Nullable;

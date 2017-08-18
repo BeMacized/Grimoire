@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.TournamentRule;
+import net.bemacized.grimoire.data.models.rules.TournamentRule;
 import net.bemacized.grimoire.data.retrievers.TournamentRuleRetriever;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.MagicCardMarketRetriever;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.ScryfallRetriever;
 import net.bemacized.grimoire.data.retrievers.storeretrievers.StoreRetriever;
@@ -14,7 +14,6 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.io.IOUtils;
 import org.jongo.MongoCollection;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.annotation.Nullable;
@@ -24,7 +23,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class PricingProvider {
 

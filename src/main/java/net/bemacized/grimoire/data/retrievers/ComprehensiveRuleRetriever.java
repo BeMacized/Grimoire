@@ -1,7 +1,7 @@
 package net.bemacized.grimoire.data.retrievers;
 
-import net.bemacized.grimoire.data.models.ComprehensiveRule;
-import net.bemacized.grimoire.data.models.Definition;
+import net.bemacized.grimoire.data.models.rules.ComprehensiveRule;
+import net.bemacized.grimoire.data.models.rules.Definition;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

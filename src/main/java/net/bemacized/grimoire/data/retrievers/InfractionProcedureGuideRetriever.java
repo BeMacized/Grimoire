@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers;
 
-import net.bemacized.grimoire.data.models.InfractionProcedureGuideSection;
+import net.bemacized.grimoire.data.models.rules.InfractionProcedureGuideSection;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

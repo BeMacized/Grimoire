@@ -2,8 +2,8 @@ package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
-import net.bemacized.grimoire.data.models.MtgCard;
-import net.bemacized.grimoire.data.models.MtgSet;
+import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgSet;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;

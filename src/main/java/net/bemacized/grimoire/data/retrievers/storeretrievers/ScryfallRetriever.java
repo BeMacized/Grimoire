@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers.storeretrievers;
 
-import net.bemacized.grimoire.data.models.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCard;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.mtgjson;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.*;

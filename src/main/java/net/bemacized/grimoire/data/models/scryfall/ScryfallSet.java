@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.scryfall;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
@@ -112,7 +112,7 @@ public class ScryfallSet {
 	}
 
 	@SuppressWarnings("SpellCheckingInspection")
-	enum Type {
+	public enum Type {
 		UNKNOWN,
 		@SerializedName("core")
 		CORE,

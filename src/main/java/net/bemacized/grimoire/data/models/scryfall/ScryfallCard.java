@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.models;
+package net.bemacized.grimoire.data.models.scryfall;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
@@ -386,7 +386,7 @@ public class ScryfallCard {
 		FUTURE
 	}
 
-	enum Rarity {
+	public enum Rarity {
 		UNKNOWN,
 		@SerializedName("common")
 		COMMON,

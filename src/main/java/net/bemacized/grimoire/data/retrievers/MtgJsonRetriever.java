@@ -4,10 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.bemacized.grimoire.data.models.MtgJsonCard;
-import net.bemacized.grimoire.data.models.MtgJsonSet;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonSet;
 import org.apache.commons.io.IOUtils;
-import org.python.jline.internal.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

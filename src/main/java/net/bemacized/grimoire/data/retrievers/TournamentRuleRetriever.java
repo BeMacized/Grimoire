@@ -1,6 +1,6 @@
 package net.bemacized.grimoire.data.retrievers;
 
-import net.bemacized.grimoire.data.models.TournamentRule;
+import net.bemacized.grimoire.data.models.rules.TournamentRule;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
