@@ -4,8 +4,6 @@ import net.bemacized.grimoire.controllers.DBManager;
 import net.bemacized.grimoire.controllers.EmojiParser;
 import net.bemacized.grimoire.controllers.PlaystatusHandler;
 import net.bemacized.grimoire.data.providers.*;
-import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
-import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -116,7 +114,7 @@ public class Grimoire {
 		this.emojiParser = new EmojiParser();
 
 		// Register EventHandlers
-		discord.addEventListener(new MainChatProcessor());
+		discord.addEventListener(new MainEventHandler());
 
 		// Random Playstatuses
 		this.playstatusHandler = new PlaystatusHandler();

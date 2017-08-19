@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.eventhandlers;
+package net.bemacized.grimoire;
 
 import net.bemacized.grimoire.chathandlers.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -10,11 +10,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MainChatProcessor extends ListenerAdapter {
+public class MainEventHandler extends ListenerAdapter {
 
 	private List<ChatHandler> chatHandlers;
 
-	public MainChatProcessor() {
+	public MainEventHandler() {
 		// Make sure chatHandlers is initialized
 		if (chatHandlers == null) chatHandlers = new ArrayList<>();
 		// Register handlers
