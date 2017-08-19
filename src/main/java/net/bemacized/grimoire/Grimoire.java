@@ -1,7 +1,8 @@
 package net.bemacized.grimoire;
 
-import net.bemacized.grimoire.data.controllers.DBManager;
-import net.bemacized.grimoire.data.controllers.EmojiParser;
+import net.bemacized.grimoire.controllers.DBManager;
+import net.bemacized.grimoire.controllers.EmojiParser;
+import net.bemacized.grimoire.controllers.PlaystatusHandler;
 import net.bemacized.grimoire.data.providers.*;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
 import net.dv8tion.jda.core.AccountType;
@@ -39,6 +40,7 @@ public class Grimoire {
 	private InfractionProcedureGuideProvider infractionProcedureGuideProvider;
 	private StandardRotationProvider standardRotationProvider;
 	private PricingProvider pricingProvider;
+	private PlaystatusHandler playstatusHandler;
 
 	private JDA discord;
 	private DBManager dbManager;
@@ -114,6 +116,9 @@ public class Grimoire {
 		// Register EventHandlers
 		discord.addEventListener(new MainChatProcessor());
 
+		// Random Playstatuses
+		this.playstatusHandler = new PlaystatusHandler();
+
 		// Assert nickname
 		//TODO: Move to on guild join
 		if (!discord.getSelfUser().getName().equals(BOT_NAME))
@@ -154,5 +159,9 @@ public class Grimoire {
 
 	public PricingProvider getPricingProvider() {
 		return pricingProvider;
+	}
+
+	public PlaystatusHandler getPlaystatusHandler() {
+		return playstatusHandler;
 	}
 }

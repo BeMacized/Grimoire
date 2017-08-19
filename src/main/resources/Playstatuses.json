@@ -1,0 +1,71 @@
+{
+  "data": [
+    {
+      "rarity": 100,
+      "texts": [
+        "Standard",
+        "Modern",
+        "Legacy",
+        "Vintage",
+        "Commander",
+        "Pauper",
+        "Control",
+        "Aggro",
+        "Combo"
+      ]
+    },
+    {
+      "rarity": 75,
+      "texts": [
+        "Grixis Shadow",
+        "Affinity",
+        "Draw-Go",
+        "Storm",
+        "Hatebears",
+        "Death & Taxes",
+        "Merfolk",
+        "Jund",
+        "Abzan",
+        "U-Tron",
+        "Eldrazi Tron",
+        "Scapeshift",
+        "Dredge",
+        "Ad Nauseum",
+        "Faeries",
+        "Burn",
+        "UR Delver",
+        "Show & Tell",
+        "Reanimator",
+        "Elfball"
+      ]
+    },
+    {
+      "rarity": 50,
+      "texts": [
+        "Splinter Twin",
+        "Miracles",
+        "Infect",
+        "Cawblade",
+        "Tinker",
+        "Sunny Side Up",
+        "Cloudpost",
+        "Lands",
+        "Cephalid Breakfast",
+        "Tezzerator",
+        "Fish"
+      ]
+    },
+    {
+      "rarity": 25,
+      "texts": [
+        "12-Copter",
+        "36 Chambers of Jeskai",
+        "Fourgoyf",
+        "No Land Scoop",
+        "Eldrazi Eldrazi (Eldrazi Variant)",
+        "Liquid Swords",
+        "Poker!"
+      ]
+    }
+  ]
+}

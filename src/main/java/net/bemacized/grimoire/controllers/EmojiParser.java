@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.controllers;
+package net.bemacized.grimoire.controllers;
 
 import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.Permission;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class EmojiParser {
 
-	private static Logger LOG = Logger.getLogger(EmojiParser.class.getName());
+	private static final Logger LOG = Logger.getLogger(EmojiParser.class.getName());
 
 	private Map<String, Emote> emojiMap;
 

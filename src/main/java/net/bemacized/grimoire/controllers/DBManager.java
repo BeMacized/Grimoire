@@ -1,4 +1,4 @@
-package net.bemacized.grimoire.data.controllers;
+package net.bemacized.grimoire.controllers;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
