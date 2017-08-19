@@ -1,12 +1,17 @@
 package net.bemacized.grimoire.chathandlers;
 
+import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
+import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
+import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,6 +20,8 @@ import java.util.stream.Stream;
 public class CommandHandler extends ChatHandler {
 
 	private List<BaseCommand> commands;
+	private RequestRateLimiter rateLimiter;
+	private RequestRateLimiter rateLimitLimiter;
 
 	public CommandHandler(ChatHandler next) {
 		super(next);
@@ -37,6 +44,13 @@ public class CommandHandler extends ChatHandler {
 				new RandomCommand(),
 				new PricingCommand()
 		).collect(Collectors.toList());
+		rateLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
+				RequestLimitRule.of(20, TimeUnit.SECONDS, 6),
+				RequestLimitRule.of(5, TimeUnit.MINUTES, 20)
+		).collect(Collectors.toSet()));
+		rateLimitLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
+				RequestLimitRule.of(2, TimeUnit.MINUTES, 1)
+		).collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -74,6 +88,13 @@ public class CommandHandler extends ChatHandler {
 		// Quit here if command was not found
 		if (command == null) {
 			next.handle(e);
+			return;
+		}
+
+		// Check rate limits
+		if (rateLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
+			if (!rateLimitLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId()))
+				sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam my commands!");
 			return;
 		}
 

@@ -26,6 +26,7 @@ dependencies {
     compile group: 'org.apache.xmlgraphics', name: 'batik-transcoder', version: '1.9.1'
     compile 'org.apache.xmlgraphics:batik-codec:1.7'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+    compile group: 'es.moki.ratelimitj', name: 'ratelimitj-inmemory', version: '0.4.0.M2'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 }
 
