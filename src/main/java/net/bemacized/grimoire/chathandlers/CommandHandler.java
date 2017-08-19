@@ -5,12 +5,13 @@ import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.*;
+import net.bemacized.grimoire.eventlogger.EventLogger;
+import net.bemacized.grimoire.eventlogger.events.LogEntry;
+import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
+import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +65,8 @@ public class CommandHandler extends ChatHandler {
 		// Extract command and arguments
 		String[] data = e.getMessage().getContent().substring(1).split("\\s+");
 		String cmd = data[0];
-		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(String.join(" ", Arrays.copyOfRange(data, 1, data.length)));
+		String rawArgs = String.join(" ", Arrays.copyOfRange(data, 1, data.length));
+		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(rawArgs);
 		List<String> args = new ArrayList<>();
 		while (argsMatcher.find()) {
 			String arg = argsMatcher.group();
@@ -93,10 +95,36 @@ public class CommandHandler extends ChatHandler {
 
 		// Check rate limits
 		if (rateLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
+			// Save log
+			EventLogger.saveLog(new UserRateLimited(
+					new LogEntry.User(e.getAuthor().getName(), e.getAuthor().getIdLong()),
+					(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
+					new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
+					command.name(),
+					args.toArray(new String[0]),
+					rawArgs,
+					cmd.toLowerCase(),
+					new Date(System.currentTimeMillis()),
+					false
+			));
+			// Send warning
 			if (!rateLimitLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId()))
 				sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam my commands!");
 			return;
 		}
+
+		// Save log
+		EventLogger.saveLog(new UserCommandInvocation(
+				new LogEntry.User(e.getAuthor().getName(), e.getAuthor().getIdLong()),
+				(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
+				new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
+				command.name(),
+				args.toArray(new String[0]),
+				rawArgs,
+				cmd.toLowerCase(),
+				new Date(System.currentTimeMillis()),
+				false
+		));
 
 		// Execute command otherwise
 		new Thread(() -> command.exec(args.toArray(new String[0]), e)).start();

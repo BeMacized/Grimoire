@@ -5,9 +5,16 @@ import com.google.common.collect.Multimap;
 import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
 import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
+import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.CardCommand;
+import net.bemacized.grimoire.eventlogger.EventLogger;
+import net.bemacized.grimoire.eventlogger.events.LogEntry;
+import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
+import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,18 +55,50 @@ public class InlineCardHandler extends ChatHandler {
 			references.put(cardname, setname);
 		}
 
-		// Check rate limits
-		if (!references.isEmpty() && rateLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
-			if (!rateLimitLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId()))
-				sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam inline card references!");
-			return;
-		}
+		BaseCommand command = new CardCommand();
 
-		references.entries().forEach(entry -> {
+		// Execute inline references as commands
+		for (Map.Entry<String, String> entry : references.entries()) {
 			String cardname = entry.getKey();
 			String setname = entry.getValue();
-			new Thread(() -> new CardCommand().exec((cardname + (setname == null ? "" : " | " + setname)).split("\\s+"), e)).start();
-		});
+			String rawArgs = cardname + (setname == null ? "" : " | " + setname);
+			String[] args = rawArgs.split("\\s+");
+
+			// Check rate limits
+			if (!references.isEmpty() && rateLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
+				// Send & log Warning
+				if (!rateLimitLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
+					sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam inline card references!");
+					EventLogger.saveLog(new UserRateLimited(
+							new LogEntry.User(e.getAuthor().getName(), e.getAuthor().getIdLong()),
+							(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
+							new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
+							command.name(),
+							args,
+							rawArgs,
+							command.name(),
+							new Date(System.currentTimeMillis()),
+							false
+					));
+				}
+				return;
+			}
+
+			// Save command log
+			EventLogger.saveLog(new UserCommandInvocation(
+					new LogEntry.User(e.getAuthor().getName(), e.getAuthor().getIdLong()),
+					(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
+					new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
+					command.name(),
+					args,
+					rawArgs,
+					command.name(),
+					new Date(System.currentTimeMillis()),
+					true
+			));
+
+			new Thread(() -> command.exec(args, e)).start();
+		}
 
 		next.handle(e);
 	}

@@ -5,6 +5,7 @@ import net.bemacized.grimoire.controllers.EmojiParser;
 import net.bemacized.grimoire.controllers.PlaystatusHandler;
 import net.bemacized.grimoire.data.providers.*;
 import net.bemacized.grimoire.eventhandlers.MainChatProcessor;
+import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -32,6 +33,9 @@ public class Grimoire {
 
 	// Controllers
 	private EmojiParser emojiParser;
+	private JDA discord;
+	private DBManager dbManager;
+	private PlaystatusHandler playstatusHandler;
 
 	// Providers
 	private CardProvider cardProvider;
@@ -40,10 +44,8 @@ public class Grimoire {
 	private InfractionProcedureGuideProvider infractionProcedureGuideProvider;
 	private StandardRotationProvider standardRotationProvider;
 	private PricingProvider pricingProvider;
-	private PlaystatusHandler playstatusHandler;
 
-	private JDA discord;
-	private DBManager dbManager;
+
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -164,4 +166,5 @@ public class Grimoire {
 	public PlaystatusHandler getPlaystatusHandler() {
 		return playstatusHandler;
 	}
+
 }
