@@ -87,6 +87,8 @@ public class PricingProvider {
 				return new StoreCardPrice(StoreCardPriceStatus.UNKNOWN_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 			} catch (StoreRetriever.LanguageUnsupportedException e) {
 				return new StoreCardPrice(StoreCardPriceStatus.LANGUAGE_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
+			} catch (StoreRetriever.StoreDisabledException e) {
+				return new StoreCardPrice(StoreCardPriceStatus.STORE_DISABLED, card, store.getStoreName(), store.getStoreId(), null);
 			}
 		}).collect(Collectors.toList());
 	}
@@ -129,6 +131,9 @@ public class PricingProvider {
 					break;
 				case LANGUAGE_UNSUPPORTED:
 					priceText = "Language not supported.";
+					break;
+				case STORE_DISABLED:
+					priceText = "Store not enabled";
 					break;
 			}
 			priceEmbed.addField(storeprice.getStoreName(), priceText, true);
@@ -179,6 +184,7 @@ public class PricingProvider {
 		AUTH_ERROR,
 		UNKNOWN_ERROR,
 		CARD_UNKNOWN,
-		LANGUAGE_UNSUPPORTED
+		LANGUAGE_UNSUPPORTED,
+		STORE_DISABLED
 	}
 }
