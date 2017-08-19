@@ -98,7 +98,7 @@ public class RandomCommand extends BaseCommand {
 		);
 
 		//Find cards
-		CardProvider.SearchQuery query = new CardProvider.SearchQuery().noTokens().inLanguage("English");
+		CardProvider.SearchQuery query = new CardProvider.SearchQuery().noTokens().noEmblems().inLanguage("English");
 		for (String supertype : supertypes) query = query.hasSupertype(supertype);
 		for (String type : types) query = query.hasType(type);
 		for (String subtype : subtypes) query = query.hasSubtype(subtype);

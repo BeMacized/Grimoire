@@ -129,6 +129,8 @@ public class ScryfallCard {
 
 	@Nonnull
 	public Layout getLayout() {
+		// EMBLEM FIX
+		if (getTypeLine() != null && getTypeLine().contains("Emblem")) return Layout.EMBLEM;
 		return layout;
 	}
 

@@ -1,8 +1,10 @@
 package net.bemacized.grimoire.commands.all;
 
+import com.google.gson.Gson;
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.utils.LoadMessage;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class CardCommand extends CardBaseCommand {

@@ -1,10 +1,12 @@
 package net.bemacized.grimoire.commands;
 
+import com.google.gson.Gson;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.card.MtgSet;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.LoadMessage;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.stream.Collectors;
@@ -58,7 +60,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 
 		// Retrieve card
 		MtgCard card;
-		CardProvider.SearchQuery query = new CardProvider.SearchQuery().noTokens().inLanguage("English").containsName(cardname).inSet(set);
+		CardProvider.SearchQuery query = new CardProvider.SearchQuery().noTokens().noEmblems().inLanguage("English").containsName(cardname).inSet(set);
 
 		// Find exact match
 		if (!query.hasName(cardname).isEmpty())
@@ -68,7 +70,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 			card = query.distinctCards().get(0);
 			// No results then?
 		else if (query.isEmpty()) {
-			CardProvider.SearchQuery foreignQuery = new CardProvider.SearchQuery().noTokens().containsName(cardname).inSet(set);
+			CardProvider.SearchQuery foreignQuery = new CardProvider.SearchQuery().noTokens().noEmblems().containsName(cardname).inSet(set);
 			// Check if there's an exact foreign match
 			if (!foreignQuery.hasName(cardname).isEmpty())
 				card = foreignQuery.hasName(cardname).get(0);
@@ -90,6 +92,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 		// Nope, show the alternatives!
 		else {
+			query.distinctCards().parallelStream().forEach(c -> new MessageBuilder().appendCodeBlock(new Gson().toJson(c), "javascript").buildAll(MessageBuilder.SplitPolicy.NEWLINE).forEach(m -> e.getChannel().sendMessage(m).queue()));
 			sendEmbedFormat(loadMsg, "There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n\n%s", cardname,
 					String.join("\n", query.distinctCards().parallelStream().map(c -> String.format(":small_orange_diamond: %s", c.getName())).collect(Collectors.toList())));
 			return;

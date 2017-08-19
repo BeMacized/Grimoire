@@ -262,7 +262,11 @@ public class CardProvider extends Provider {
 		}
 
 		public SearchQuery containsName(String name) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList()));
+			return new SearchQuery(this.parallelStream().filter(card -> {
+				String reducedCard = card.getName().toLowerCase().replaceAll("[^a-z0-9- ]", "");
+				String reducedInput = name.toLowerCase().replaceAll("[^a-z0-9- ]", "");
+				return reducedCard.contains(reducedInput) || reducedCard.replaceAll("-", "").contains(reducedInput.replaceAll("-", "")) || reducedCard.replaceAll("-", " ").contains(reducedInput.replaceAll("-", " "));
+			}).collect(Collectors.toList()));
 		}
 
 		public SearchQuery hasName(String name) {
@@ -298,8 +302,8 @@ public class CardProvider extends Provider {
 			return new SearchQuery(this.parallelStream().filter(card -> card.getMultiverseid() == multiverseId).collect(Collectors.toList()));
 		}
 
-		public SearchQuery noTokens() {
-			return new SearchQuery(this.parallelStream().filter(card -> !card.getLayout().equals(MtgCard.Layout.TOKEN)).collect(Collectors.toList()));
+		public SearchQuery notLayout(MtgCard.Layout layout) {
+			return new SearchQuery(this.parallelStream().filter(card -> !card.getLayout().equals(layout)).collect(Collectors.toList()));
 		}
 
 		public SearchQuery hasLayout(MtgCard.Layout layout) {
@@ -310,6 +314,13 @@ public class CardProvider extends Provider {
 			return new SearchQuery(this.parallelStream().filter(card -> card.getLanguage().equalsIgnoreCase(language)).collect(Collectors.toList()));
 		}
 
+		public SearchQuery noTokens() {
+			return notLayout(MtgCard.Layout.TOKEN);
+		}
+
+		public SearchQuery noEmblems() {
+			return notLayout(MtgCard.Layout.EMBLEM);
+		}
 
 	}
 }

@@ -1,7 +1,12 @@
 package net.bemacized.grimoire.chathandlers;
 
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.providers.CardProvider;
+import net.bemacized.grimoire.utils.MessageUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.commons.lang3.ArrayUtils;
@@ -13,6 +18,8 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
@@ -31,11 +38,9 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ExecHandler extends ChatHandler {
+public class EvalHandler extends ChatHandler {
 
-	private static final String SCRIPT_DIR = "execscripts";
-
-	public ExecHandler(ChatHandler next) {
+	public EvalHandler(ChatHandler next) {
 		super(next);
 	}
 
@@ -44,8 +49,8 @@ public class ExecHandler extends ChatHandler {
 		String code = e.getMessage().getRawContent();
 
 		// Only allow dev to execute code, and only when enabled with an env variable
-		boolean moduleEnabled = System.getenv("ENABLE_EXEC_MODULE") != null && (System.getenv("ENABLE_EXEC_MODULE").equalsIgnoreCase("true") || System.getenv("ENABLE_EXEC_MODULE").equalsIgnoreCase("1"));
-		if (!e.getMessage().getAuthor().getId().equalsIgnoreCase(Grimoire.DEV_ID) || !moduleEnabled || !code.matches("^[`]{3}(java|JAVA)[\\r\\n]([^\\r\\n]*[\\r\\n])+[`]{3}[\\r\\n]?$")) {
+		boolean moduleEnabled = System.getenv("ENABLE_EVAL_MODULE") != null && (System.getenv("ENABLE_EVAL_MODULE").equalsIgnoreCase("true") || System.getenv("ENABLE_EVAL_MODULE").equalsIgnoreCase("1"));
+		if (!e.getMessage().getAuthor().getId().equalsIgnoreCase(Grimoire.DEV_ID) || !moduleEnabled || (!code.matches("^[`]{3}(javascript|javascript)[\\r\\n]([^\\r\\n]*[\\r\\n])+[`]{3}[\\r\\n]?$") && !code.matches("!eval .*"))) {
 			next.handle(e);
 			return;
 		}
@@ -53,167 +58,41 @@ public class ExecHandler extends ChatHandler {
 		e.getMessage().addReaction("\uD83D\uDD04").submit();
 
 		//Extract from code block
-		code = code.substring(7, code.length() - 3).trim();
+		code = (code.startsWith("!eval ")) ? code.substring(6).trim() : code.substring(13, code.length() - 3).trim();
 
-		// Write script to disk
-		File scriptFile;
-		try {
-			scriptFile = writeScriptToDisk(code);
-		} catch (IOException ex) {
-			LOG.log(Level.WARNING, "Could not write script to disk", ex);
-			e.getMessage().getReactions().parallelStream().filter(MessageReaction::isSelf).forEach(r -> r.removeReaction().submit());
-			e.getMessage().addReaction("❌").submit();
-			return;
-		}
+		//Wrap for imports
+		code = String.format(String.join("\n",new String[]{
+				"load(\"nashorn:mozilla_compat.js\");",
+				"importPackage(Packages.net.bemacized.grimoire.data.models.card);",
+				"importPackage(Packages.net.bemacized.grimoire.data.models.mtgjson);",
+				"importPackage(Packages.net.bemacized.grimoire.data.models.rules);",
+				"importPackage(Packages.net.bemacized.grimoire.data.models.scryfall);",
+				"importPackage(java.util.stream);",
+				"importClass(java.lang.String);",
+				"%s"
+		}), code);
 
-		// Compile into classfile
-		File classFile;
+		ScriptEngine se = new ScriptEngineManager().getEngineByName("Nashorn");
+		se.put("event", e);
+		se.put("jda", e.getJDA());
+		se.put("guild", e.getGuild());
+		se.put("channel", e.getChannel());
+		se.put("query", new CardProvider.SearchQuery());
+//		se.put("_", new UtilMethods());
 		try {
-			classFile = compileScript(scriptFile);
+			String result = se.eval(code).toString();
+			new MessageBuilder().appendCodeBlock(result, "javascript");
+			for (String s : MessageUtils.splitMessage(result))
+				e.getChannel().sendMessage(new MessageBuilder().appendCodeBlock(s, "javascript").build()).queue();
+			e.getMessage().addReaction("✅").queue();
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "Could not compile script", ex);
-			e.getMessage().getReactions().parallelStream().filter(MessageReaction::isSelf).forEach(r -> r.removeReaction().submit());
-			e.getMessage().addReaction("❌").submit();
-			return;
+			ex.printStackTrace();
+			new MessageBuilder().appendCodeBlock(ex.toString(), "javascript").buildAll(MessageBuilder.SplitPolicy.ANYWHERE).forEach(msg -> e.getChannel().sendMessage(msg).queue());
+			e.getMessage().addReaction("❌").queue();
 		}
-
-		//Load classfile
-		Debugger d;
-		try {
-			d = (Debugger) new URLClassLoader(
-					new URL[]{new File(classFile.getAbsolutePath().substring(0, classFile.getAbsolutePath().length() - classFile.getName().length())).toURI().toURL()},
-					this.getClass().getClassLoader())
-					.loadClass(classFile.getName().substring(0, classFile.getName().length() - 6))
-					.newInstance();
-		} catch (InstantiationException | IllegalAccessException | MalformedURLException | ClassNotFoundException ex) {
-			LOG.log(Level.WARNING, "Could not load classfile", ex);
-			e.getMessage().getReactions().parallelStream().filter(MessageReaction::isSelf).forEach(r -> r.removeReaction().submit());
-			e.getMessage().addReaction("❌").submit();
-			return;
-		}
-
-		try {
-			d.exec(Grimoire.getInstance());
-		} catch (Exception ex) {
-			e.getMessage().getReactions().parallelStream().filter(MessageReaction::isSelf).forEach(r -> r.removeReaction().submit());
-			e.getMessage().addReaction("❌").submit();
-			sendEmbed(e.getChannel(), ":x: \n```\n" + ex.toString() + "\n```\n");
-			return;
-		}
-
-		e.getMessage().addReaction("✅").submit();
-
-		scriptFile.delete();
-		classFile.delete();
 	}
 
-
-	private File compileScript(File scriptFile) throws Exception {
-		// Get compiler
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		// Build classpath
-		String classpath = String.join("", Stream.of(
-				Grimoire.class,
-				JDA.class
-		).map(c -> {
-			try {
-				return new File(c.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
-			} catch (URISyntaxException e) {
-				LOG.log(Level.WARNING, "Could not parse URI", e);
-			}
-			return null;
-		}).map(path -> {
-			String base = (!path.endsWith("*")) ? path + System.getProperty("path.separator") : "";
-			path = path.substring(0, path.length() - 1);
-			File pathf = new File(path);
-			String finalPath = path;
-			return base + String.join("", Arrays.stream(((pathf.listFiles() == null) ? new File[0] : pathf.listFiles()))
-					.filter(f -> f.isFile() && f.getName().endsWith(".jar"))
-					.map(f -> finalPath + f.getName() + System.getProperty("path.separator"))
-					.collect(Collectors.toList()));
-		}).collect(Collectors.toList()));
-		// Refer compiler to script file
-		StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-		JavaCompiler.CompilationTask task = compiler.getTask(
-				null,
-				fileManager,
-				null,
-				Arrays.asList("-classpath", classpath),
-				null,
-				fileManager.getJavaFileObjectsFromFiles(Collections.singletonList(scriptFile))
-		);
-		// Execute compilation
-		if (!task.call()) throw new Exception("Could not compile file");
-		return new File(scriptFile.getAbsolutePath().substring(0, scriptFile.getAbsolutePath().length() - 5) + ".class");
-	}
-
-	private String getClasspath(String... paths) {
-		// Build classpath string
-		final StringBuilder sb = new StringBuilder();
-		Arrays.stream(paths).forEach(path -> {
-			if (!path.endsWith("*"))
-				sb.append(path + System.getProperty("path.separator"));
-			path = path.substring(0, path.length() - 1);
-			File pathf = new File(path);
-			String finalPath = path;
-			Arrays.stream(pathf.listFiles()).filter(f -> f.isFile() && f.getName().endsWith(".jar")).forEach(file -> sb.append(finalPath + file.getName() + System.getProperty("path.separator")));
-		});
-		return sb.toString();
-	}
-
-	private File writeScriptToDisk(String code) throws IOException {
-		// Generate random name
-		String randomName = RandomStringUtils.randomAlphabetic(1).toUpperCase() + RandomStringUtils.randomAlphabetic(11).toLowerCase();
-		// Insert into template code
-		code = autocompleteCode(code, randomName);
-		// Make sure script folder exists
-		new File(SCRIPT_DIR).mkdirs();
-		// Create empty file
-		String fileName = randomName + ".java";
-		File outputFile = new File(SCRIPT_DIR + File.separator + fileName);
-		outputFile.createNewFile();
-		// Write code to it
-		PrintWriter pw = new PrintWriter(outputFile);
-		pw.println(code);
-		pw.close();
-		// Return the created file
-		return outputFile;
-	}
-
-	private String autocompleteCode(String code, String classname) {
-		// Define standard imports
-		String[] standardImports = new String[0];
-		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("java.util").toArray(new String[0]));
-		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("java.net").toArray(new String[0]));
-		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("net.bemacized.grimoire").toArray(new String[0]));
-		standardImports = ArrayUtils.addAll(standardImports, getPackagesInPackage("net.dv8tion.jda").toArray(new String[0]));
-		// Check if full class was provided, if not wrap it
-		if (Arrays.stream(code.split("[\\r\\n]")).noneMatch(l -> l.matches("((public|private|protected)\\s)class\\s[^\\s\\n\\r]+\\simplements.*[\\n]")))
-			code = String.format("public class Exec implements ExecHandler.Debugger { @Override public void exec(Grimoire grimoire) throws Exception { %s } }", code);
-		// Attach standard imports
-		for (String i : standardImports)
-			code = String.format("import %s;\n%s", i, code);
-		// Insert classname
-		code = code.replaceAll("public class ([^\\n\\s]+) implements", "public class " + classname + " implements");
-		return code;
-	}
-
-	private List<String> getPackagesInPackage(String p) {
-		ConfigurationBuilder config = new ConfigurationBuilder()
-				.setScanners(new SubTypesScanner(false), new ResourcesScanner())
-				.setUrls(ClasspathHelper.forClassLoader(
-						Stream.of(ClasspathHelper.contextClassLoader(), ClasspathHelper.staticClassLoader())
-								.collect(Collectors.toList()).toArray(new ClassLoader[0])))
-				.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(p)));
-		Reflections reflections = new Reflections(config);
-		return reflections.getSubTypesOf(Object.class).parallelStream()
-				.filter(c -> (c.getModifiers() & Modifier.PUBLIC) != 0)
-				.map(c -> c.getPackage().getName() + ".*")
-				.distinct()
-				.collect(Collectors.toList());
-	}
-
-	public static interface Debugger {
-		void exec(Grimoire grimoire) throws Exception;
-	}
+//	public class UtilMethods {
+//
+//	}
 }

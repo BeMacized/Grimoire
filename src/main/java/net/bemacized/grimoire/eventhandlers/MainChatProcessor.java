@@ -19,10 +19,10 @@ public class MainChatProcessor extends ListenerAdapter {
 		if (chatHandlers == null) chatHandlers = new ArrayList<>();
 		// Register handlers
 		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
+				EvalHandler.class,
 				CommandHandler.class,
 				InlineCardHandler.class,
-				InlinePriceHandler.class,
-				ExecHandler.class
+				InlinePriceHandler.class
 		);
 		Collections.reverse(handlerClasses);
 		handlerClasses.forEach(this::registerChatHandler);
