@@ -353,6 +353,11 @@ public class MtgCard {
 			this.mtgjsonLayout = mtgjsonLayout;
 			this.scryfallLayout = scryfallLayout;
 		}
+
+		@Override
+		public String toString() {
+			return WordUtils.capitalize(name().replaceAll("_", " ").toLowerCase()) + " Card";
+		}
 	}
 
 	public enum Rarity {

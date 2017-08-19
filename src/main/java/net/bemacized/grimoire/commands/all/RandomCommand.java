@@ -31,7 +31,7 @@ public class RandomCommand extends BaseCommand {
 
 	@Override
 	public String paramUsage() {
-		return "<[supertype] [type] [subtype] [rarity] [set] [setcode]>...";
+		return "<[supertype] [type] [subtype] [rarity] [set] [setcode] [layout]>...";
 	}
 
 	@Override
@@ -41,6 +41,7 @@ public class RandomCommand extends BaseCommand {
 		List<String> subtypes = new ArrayList<>();
 		MtgCard.Rarity rarity = null;
 		MtgSet set = null;
+		MtgCard.Layout layout = null;
 
 		// Send load message
 		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true);
@@ -70,6 +71,12 @@ public class RandomCommand extends BaseCommand {
 					return;
 				}
 				rarity = rarityAliases.containsKey(arg.toLowerCase()) ? rarityAliases.get(arg.toLowerCase()) : Arrays.stream(MtgCard.Rarity.values()).parallel().filter(r -> r.toString().equalsIgnoreCase(arg)).findFirst().orElse(null);
+			} else if (Arrays.stream(MtgCard.Layout.values()).parallel().anyMatch(r -> r.toString().toLowerCase().startsWith(arg.toLowerCase()))) {
+				if (layout != null) {
+					sendErrorEmbed(loadMsg, "Please do not specify more than one layout.");
+					return;
+				}
+				layout = Arrays.stream(MtgCard.Layout.values()).parallel().filter(r -> r.toString().toLowerCase().startsWith(arg.toLowerCase())).findFirst().orElse(null);
 			} else if (tmpSet != null) {
 				if (set != null) {
 					sendErrorEmbed(loadMsg, "Please do not specify more than one set.");
@@ -91,6 +98,7 @@ public class RandomCommand extends BaseCommand {
 		List<String> properties = new ArrayList<>();
 		if (rarity != null) properties.add(rarity.toString());
 		if (joinedType != null && !joinedType.isEmpty()) properties.add(joinedType);
+		if (layout != null) properties.add(layout.toString());
 		if (set != null) properties.add(String.format("from set '%s (%s)'", set.getName(), set.getCode()));
 		loadMsg.setLineFormat(
 				"Drawing random **%s**...",
@@ -98,12 +106,15 @@ public class RandomCommand extends BaseCommand {
 		);
 
 		//Find cards
-		CardProvider.SearchQuery query = new CardProvider.SearchQuery().noTokens().noEmblems().inLanguage("English");
+		CardProvider.SearchQuery query = new CardProvider.SearchQuery().inLanguage("English");
+		if (layout != MtgCard.Layout.TOKEN) query = query.noTokens();
+		if (layout != MtgCard.Layout.EMBLEM) query = query.noEmblems();
 		for (String supertype : supertypes) query = query.hasSupertype(supertype);
 		for (String type : types) query = query.hasType(type);
 		for (String subtype : subtypes) query = query.hasSubtype(subtype);
 		if (rarity != null) query = query.isOfRarity(rarity);
 		if (set != null) query = query.inSet(set);
+		if (layout != null) query = query.hasLayout(layout);
 
 		//Stop if none found
 		if (query.isEmpty()) {
