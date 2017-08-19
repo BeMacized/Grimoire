@@ -66,18 +66,18 @@ public class RandomCommand extends BaseCommand {
 				if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
 			} else if (Arrays.stream(MtgCard.Rarity.values()).parallel().anyMatch(r -> r.toString().equalsIgnoreCase(arg)) || rarityAliases.containsKey(arg.toLowerCase())) {
 				if (rarity != null) {
-					sendEmbed(loadMsg, ":anger: Please do not specify more than one rarity.");
+					sendErrorEmbed(loadMsg, "Please do not specify more than one rarity.");
 					return;
 				}
 				rarity = rarityAliases.containsKey(arg.toLowerCase()) ? rarityAliases.get(arg.toLowerCase()) : Arrays.stream(MtgCard.Rarity.values()).parallel().filter(r -> r.toString().equalsIgnoreCase(arg)).findFirst().orElse(null);
 			} else if (tmpSet != null) {
 				if (set != null) {
-					sendEmbed(loadMsg, ":anger: Please do not specify more than one set.");
+					sendErrorEmbed(loadMsg, "Please do not specify more than one set.");
 					return;
 				}
 				set = tmpSet;
 			} else {
-				sendEmbedFormat(loadMsg, ":anger: **'%s'** is neither a rarity, set, setcode, type, supertype or subtype. Please only specify valid properties.", arg);
+				sendErrorEmbedFormat(loadMsg, "**'%s'** is neither a rarity, set, setcode, type, supertype or subtype. Please only specify valid properties.", arg);
 				return;
 			}
 		}
@@ -107,7 +107,7 @@ public class RandomCommand extends BaseCommand {
 
 		//Stop if none found
 		if (query.isEmpty()) {
-			sendEmbed(loadMsg, ":anger: No cards have been found with the properties you've supplied.");
+			sendErrorEmbed(loadMsg, "No cards have been found with the properties you've supplied.");
 			return;
 		}
 

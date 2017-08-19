@@ -34,7 +34,7 @@ public class OracleCommand extends CardBaseCommand {
 	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e) {
 		// Verify that text exists
 		if (card.getText() == null) {
-			sendEmbedFormat(loadMsg, ":anger: The card **'%s'** has no oracle text available.", card.getName());
+			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no oracle text available.", card.getName());
 			return;
 		}
 

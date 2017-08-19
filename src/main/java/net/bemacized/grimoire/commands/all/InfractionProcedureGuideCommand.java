@@ -8,6 +8,7 @@ import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			// Verify that section exists
 			if (section == null) {
 				e.getChannel().sendMessage(new EmbedBuilder()
-						.setColor(Globals.EMBED_COLOR_PRIMARY)
+						.setColor(Color.RED)
 						.setAuthor("Infraction Procedure Guide", null, null)
 						.setDescription(":anger: The specified section could not be found.\n\nThe following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 								.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
@@ -70,7 +71,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				subsection = section.getSubSections().parallelStream().filter(s -> s.getSectionId().equalsIgnoreCase(args[0])).findFirst().orElse(null);
 				if (subsection == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
-							.setColor(Globals.EMBED_COLOR_PRIMARY)
+							.setColor(Color.RED)
 							.setAuthor("Infraction Procedure Guide", null, null)
 							.setDescription(String.format(":anger: The specified subsection could not be found.\n\nWithin **'%s %s'**, the following sections are available:\n%s",
 									section.getSectionId(), section.getTitle(),
@@ -89,7 +90,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				topic = subsection.getSubSections().parallelStream().filter(s -> s.getTitle().equalsIgnoreCase(topicname)).findFirst().orElse(null);
 				if (topic == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
-							.setColor(Globals.EMBED_COLOR_PRIMARY)
+							.setColor(Color.RED)
 							.setAuthor("Infraction Procedure Guide", null, null)
 							.setDescription(String.format(":anger: The specified topic could not be found.\n\nWithin **'%s %s'**, the following topics are available:\n%s", subsection.getSectionId(), subsection.getTitle(), String.join("\n",
 									subsection.getSubSections().parallelStream()
@@ -129,7 +130,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				}
 			}
 		} else {
-			sendEmbedFormat(e.getChannel(), ":anger: The specified section could not be found.\n\nThe following sections are available:\n%s", String.join("\n",
+			sendErrorEmbedFormat(e.getChannel(), "The specified section could not be found.\n\nThe following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 							.map(section -> ":small_orange_diamond: **" + section.getSectionId() + "** " + section.getTitle())
 							.collect(Collectors.toList())

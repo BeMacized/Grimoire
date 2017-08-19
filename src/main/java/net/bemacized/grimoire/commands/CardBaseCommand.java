@@ -25,7 +25,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), ":anger: Please provide a card name.");
+			sendErrorEmbed(e.getChannel(), "Please provide a card name.");
 			return;
 		}
 
@@ -42,12 +42,12 @@ public abstract class CardBaseCommand extends BaseCommand {
 		try {
 			set = setname != null ? Grimoire.getInstance().getCardProvider().getSingleSetByNameOrCode(setname) : null;
 			if (set == null && setname != null) {
-				sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
+				sendErrorEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
 				return;
 			}
 		} catch (CardProvider.MultipleSetResultsException ex) {
 			if (ex.getResults().size() > MAX_SET_ALTERNATIVES)
-				sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);
+				sendErrorEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
 			else
 				sendEmbedFormat(
 						loadMsg,
@@ -78,16 +78,16 @@ public abstract class CardBaseCommand extends BaseCommand {
 			else if (foreignQuery.distinctCards().size() == 1)
 				card = foreignQuery.distinctCards().get(0);
 			else if (set == null) {
-				sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'**", cardname);
+				sendErrorEmbedFormat(loadMsg, "There are no results for a card named **'%s'**", cardname);
 				return;
 			} else {
-				sendEmbedFormat(loadMsg, ":anger: There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
+				sendErrorEmbedFormat(loadMsg, "There are no results for a card named **'%s'** in set **'%s (%s)'**", cardname, set.getName(), set.getCode());
 				return;
 			}
 		}
 		// We got multiple results. Check if too many?
 		else if (query.distinctCards().size() > MAX_CARD_ALTERNATIVES) {
-			sendEmbedFormat(loadMsg, ":anger: There are too many results for a card named **'%s'**. Please be more specific.", cardname);
+			sendErrorEmbedFormat(loadMsg, "There are too many results for a card named **'%s'**. Please be more specific.", cardname);
 			return;
 		}
 		// Nope, show the alternatives!

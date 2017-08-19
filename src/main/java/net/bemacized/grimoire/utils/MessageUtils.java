@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.requests.RequestFuture;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +19,18 @@ public class MessageUtils {
 		return Arrays.stream(splitMessage(text)).map(t -> new EmbedBuilder().setColor(Globals.EMBED_COLOR_PRIMARY).setDescription(t).build()).collect(Collectors.toList());
 	}
 
+	public static List<MessageEmbed> errorEmbed(String text) {
+		return Arrays.stream(splitMessage(":anger: " + text)).map(t -> new EmbedBuilder().setColor(Color.RED).setDescription(t).build()).collect(Collectors.toList());
+	}
+
 	public static List<MessageEmbed> simpleEmbedFormat(String template, Object... inserts) {
 		return simpleEmbed(String.format(template, inserts));
 	}
+
+	public static List<MessageEmbed> errorEmbedFormat(String template, Object... inserts) {
+		return errorEmbed(String.format(template, inserts));
+	}
+
 
 	public static List<RequestFuture<Message>> sendEmbed(MessageChannel c, String text) {
 		return simpleEmbed(text).stream().map(t -> c.sendMessage(t).submit()).collect(Collectors.toList());
@@ -39,9 +49,32 @@ public class MessageUtils {
 		}
 	}
 
+	public static void sendErrorEmbedFormat(LoadMessage lm, String template, Object... inserts) {
+		sendErrorEmbed(lm, String.format(template, inserts));
+	}
+
+	public static List<RequestFuture<Message>> sendErrorEmbed(MessageChannel c, String text) {
+		return errorEmbed(text).stream().map(t -> c.sendMessage(t).submit()).collect(Collectors.toList());
+	}
+
+	public static List<RequestFuture<Message>> sendErrorEmbedFormat(MessageChannel c, String template, Object... inserts) {
+		return sendErrorEmbed(c, String.format(template, inserts));
+	}
+
+	public static void sendErrorEmbed(LoadMessage lm, String text) {
+		List<MessageEmbed> embeds = errorEmbed(text);
+		if (embeds.size() == 1) lm.complete(embeds.get(0));
+		else {
+			lm.complete();
+			embeds.forEach(t -> lm.getChannel().sendMessage(t).submit());
+		}
+	}
+
 	public static void sendEmbedFormat(LoadMessage lm, String template, Object... inserts) {
 		sendEmbed(lm, String.format(template, inserts));
 	}
+
+
 
 	public static String[] splitMessage(String text, int maxlength, boolean codeblock) {
 		if (text.length() <= maxlength) return new String[]{((codeblock) ? "```\n" + text + "\n```" : text)};

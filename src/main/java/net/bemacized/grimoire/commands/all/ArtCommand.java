@@ -33,7 +33,7 @@ public class ArtCommand extends CardBaseCommand {
 	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e) {
 		// Check if an image is available
 		if (card.getImageUrl() == null) {
-			sendEmbedFormat(loadMsg, ":anger: There is no known art for **'%s'**.", card.getName());
+			sendErrorEmbedFormat(loadMsg, "There is no known art for **'%s'**.", card.getName());
 			return;
 		}
 

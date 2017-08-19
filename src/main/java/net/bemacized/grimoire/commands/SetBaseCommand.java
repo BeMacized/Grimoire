@@ -21,7 +21,7 @@ public abstract class SetBaseCommand extends BaseCommand {
 	public void exec(String[] args, MessageReceivedEvent e) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), ":anger: Please provide a set name.");
+			sendErrorEmbed(e.getChannel(), "Please provide a set name.");
 			return;
 		}
 
@@ -36,12 +36,12 @@ public abstract class SetBaseCommand extends BaseCommand {
 		try {
 			set = setname != null ? Grimoire.getInstance().getCardProvider().getSingleSetByNameOrCode(setname) : null;
 			if (set == null && setname != null) {
-				sendEmbedFormat(loadMsg, ":anger: No set found with **'%s'** as its code or name.", setname);
+				sendErrorEmbedFormat(loadMsg, "No set found with **'%s'** as its code or name.", setname);
 				return;
 			}
 		} catch (CardProvider.MultipleSetResultsException ex) {
 			if (ex.getResults().size() > MAX_SET_ALTERNATIVES)
-				sendEmbedFormat(loadMsg, ":anger: There are too many results for a set named **'%s'**. Please be more specific.", setname);
+				sendErrorEmbedFormat(loadMsg, "There are too many results for a set named **'%s'**. Please be more specific.", setname);
 			else
 				sendEmbedFormat(
 						loadMsg,

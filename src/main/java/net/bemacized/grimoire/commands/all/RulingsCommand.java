@@ -35,7 +35,7 @@ public class RulingsCommand extends CardBaseCommand {
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings().length == 0) {
-			sendEmbedFormat(e.getChannel(), ":anger: There are no rulings for **'%s'**.", card.getName());
+			sendErrorEmbedFormat(e.getChannel(), "There are no rulings for **'%s'**.", card.getName());
 			return;
 		}
 
