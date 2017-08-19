@@ -55,13 +55,13 @@ public class MtgJsonSet {
 
 	private long timestamp = System.currentTimeMillis();
 
-	
+
 	@Nonnull
 	public String getName() {
 		return name;
 	}
 
-	
+
 	@Nonnull
 	public String getCode() {
 		return code;
@@ -129,7 +129,7 @@ public class MtgJsonSet {
 //		return onlineOnly;
 	}
 
-	
+
 	public long getTimestamp() {
 		return timestamp;
 	}

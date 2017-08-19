@@ -1,5 +1,7 @@
 package net.bemacized.grimoire.chathandlers;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.bemacized.grimoire.commands.all.CardCommand;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -8,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class InlineCardHandler extends ChatHandler {
 
-	private final static int MAX_REQUESTS_PER_MESSAGE = 5;
+	private final static int MAX_REQUESTS_PER_MESSAGE = 3;
 
 	public InlineCardHandler(ChatHandler next) {
 		super(next);
@@ -21,12 +23,20 @@ public class InlineCardHandler extends ChatHandler {
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
+		Multimap<String, String> references = HashMultimap.create();
+
 		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) {
 			String[] data = m.group().substring(2, m.group().length() - 2).split("[|]");
 			String cardname = data[0].trim();
 			String setname = (data.length > 1) ? data[1].trim() : null;
-			new Thread(() -> new CardCommand().exec((cardname + (setname == null ? "" : " | " + setname)).split("\\s+"), e)).start();
+			references.put(cardname, setname);
 		}
+
+		references.entries().forEach(entry -> {
+			String cardname = entry.getKey();
+			String setname = entry.getValue();
+			new Thread(() -> new CardCommand().exec((cardname + (setname == null ? "" : " | " + setname)).split("\\s+"), e)).start();
+		});
 
 		next.handle(e);
 	}

@@ -75,7 +75,6 @@ public class MessageUtils {
 	}
 
 
-
 	public static String[] splitMessage(String text, int maxlength, boolean codeblock) {
 		if (text.length() <= maxlength) return new String[]{((codeblock) ? "```\n" + text + "\n```" : text)};
 		final String[] split = text.split("[\r\n]");

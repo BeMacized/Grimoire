@@ -38,8 +38,10 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 			if (!setMap.getAsJsonObject().has(getStoreId())) return;
 			// Get the set code
 			String setCode;
-			if (setMap.getAsJsonObject().has("scryfall")) setCode = setMap.getAsJsonObject().get("scryfall").getAsJsonObject().get("code").getAsString();
-			else if (setMap.getAsJsonObject().has("mtgjson"))  setCode = setMap.getAsJsonObject().get("mtgjson").getAsJsonObject().get("code").getAsString();
+			if (setMap.getAsJsonObject().has("scryfall"))
+				setCode = setMap.getAsJsonObject().get("scryfall").getAsJsonObject().get("code").getAsString();
+			else if (setMap.getAsJsonObject().has("mtgjson"))
+				setCode = setMap.getAsJsonObject().get("mtgjson").getAsJsonObject().get("code").getAsString();
 			else return;
 			// Get the store set name
 			String setName = setMap.getAsJsonObject().get(getStoreId()).getAsJsonObject().get("name").getAsString();

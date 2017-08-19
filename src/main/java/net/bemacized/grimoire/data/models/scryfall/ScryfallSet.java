@@ -36,13 +36,13 @@ public class ScryfallSet {
 
 	private long timestamp = System.currentTimeMillis();
 
-	
+
 	@Nonnull
 	public String getCode() {
 		return code;
 	}
 
-	
+
 	@Nonnull
 	public String getName() {
 		return name;
@@ -60,7 +60,7 @@ public class ScryfallSet {
 //		return search_uri;
 	}
 
-	
+
 	@Nonnull
 	public Type getSetType() {
 		return set_type;
@@ -73,7 +73,7 @@ public class ScryfallSet {
 //		return block_code;
 	}
 
-	
+
 	@Nullable
 	public String getBlock() {
 		return block;
@@ -84,18 +84,18 @@ public class ScryfallSet {
 		return parent_set_code;
 	}
 
-	
+
 	@Nullable
 	public String getReleasedAt() {
 		return released_at;
 	}
 
-	
+
 	public int getCardCount() {
 		return card_count;
 	}
 
-	
+
 	public boolean isDigital() {
 		return digital;
 	}
@@ -106,7 +106,7 @@ public class ScryfallSet {
 //		return foil;
 	}
 
-	
+
 	public long getTimestamp() {
 		return timestamp;
 	}

@@ -1,42 +1,13 @@
 package net.bemacized.grimoire.chathandlers;
 
 import net.bemacized.grimoire.Grimoire;
-import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.MessageUtils;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.tools.JavaCompiler;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EvalHandler extends ChatHandler {
 
@@ -61,7 +32,7 @@ public class EvalHandler extends ChatHandler {
 		code = (code.startsWith("!eval ")) ? code.substring(6).trim() : code.substring(13, code.length() - 3).trim();
 
 		//Wrap for imports
-		code = String.format(String.join("\n",new String[]{
+		code = String.format(String.join("\n", new String[]{
 				"load(\"nashorn:mozilla_compat.js\");",
 				"importPackage(Packages.net.bemacized.grimoire.data.models.card);",
 				"importPackage(Packages.net.bemacized.grimoire.data.models.mtgjson);",
