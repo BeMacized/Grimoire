@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class PlaystatusHandler {
 
 	private static final Logger LOG = Logger.getLogger(PlaystatusHandler.class.getName());
-	private static final int CHANGE_INTERVAL = 30 * 1000;
+	private static final int CHANGE_INTERVAL = 60 * 1000;
 
 	private List<PlaystatusLines> statuses;
 	private Random random;
