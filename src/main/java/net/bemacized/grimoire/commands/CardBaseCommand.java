@@ -92,7 +92,6 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 		// Nope, show the alternatives!
 		else {
-			query.distinctCards().parallelStream().forEach(c -> new MessageBuilder().appendCodeBlock(new Gson().toJson(c), "javascript").buildAll(MessageBuilder.SplitPolicy.NEWLINE).forEach(m -> e.getChannel().sendMessage(m).queue()));
 			sendEmbedFormat(loadMsg, "There are multiple cards which match **'%s'**. Did you perhaps mean any of the following?\n\n%s", cardname,
 					String.join("\n", query.distinctCards().parallelStream().map(c -> String.format(":small_orange_diamond: %s", c.getName())).collect(Collectors.toList())));
 			return;
