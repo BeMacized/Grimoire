@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.card.MtgSet;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -22,7 +23,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Quit and error out if none provided
 		if (args.length == 0) {
 			sendErrorEmbed(e.getChannel(), "Please provide a card name.");
@@ -97,10 +98,10 @@ public abstract class CardBaseCommand extends BaseCommand {
 			return;
 		}
 
-		execForCard(card, loadMsg, e);
+		execForCard(card, loadMsg, e, guildPreferences);
 	}
 
 	protected abstract String getInitialLoadLine();
 
-	protected abstract void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e);
+	protected abstract void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences);
 }

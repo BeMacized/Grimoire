@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands.all;
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.rules.TournamentRule;
 import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -32,7 +33,7 @@ public class TournamentRulesCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
 			sendEmbedFormat(e.getChannel(), "Please specify a chapter from the tournament rules (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",

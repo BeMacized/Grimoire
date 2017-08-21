@@ -295,7 +295,7 @@ public class CardProvider extends Provider {
 		}
 
 		public SearchQuery distinctCards() {
-			return new SearchQuery(this.parallelStream().filter(StreamUtils.distinctByKey(MtgCard::getName)).collect(Collectors.toList()));
+			return new SearchQuery(this.stream().filter(StreamUtils.distinctByKey(MtgCard::getName)).collect(Collectors.toList()));
 		}
 
 		public SearchQuery hasMultiverseId(int multiverseId) {

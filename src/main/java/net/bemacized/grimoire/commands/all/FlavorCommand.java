@@ -9,33 +9,33 @@ import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class OracleCommand extends CardBaseCommand {
+public class FlavorCommand extends CardBaseCommand {
 
 	@Override
 	public String name() {
-		return "oracle";
+		return "flavor";
 	}
 
 	@Override
 	public String[] aliases() {
-		return new String[]{"cardtext"};
+		return new String[]{"flavortext"};
 	}
 
 	@Override
 	public String description() {
-		return "Retrieves the oracle text of a card.";
+		return "Retrieves the flavor text of a card.";
 	}
 
 	@Override
 	protected String getInitialLoadLine() {
-		return "Loading oracle text...";
+		return "Loading flavor text...";
 	}
 
 	@Override
 	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that text exists
-		if (card.getText() == null) {
-			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no oracle text available.", card.getName());
+		if (card.getFlavorText() == null) {
+			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no flavor text.", card.getName());
 			return;
 		}
 
@@ -44,7 +44,7 @@ public class OracleCommand extends CardBaseCommand {
 				new EmbedBuilder()
 						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getText(), e.getGuild()), false)
+						.addField("Flavor Text", "_\"" + Grimoire.getInstance().getEmojiParser().parseEmoji(card.getFlavorText(), e.getGuild()) + "\"_", false)
 						.build()
 		);
 	}

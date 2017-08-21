@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.bemacized.grimoire.utils.MessageUtils;
@@ -33,12 +34,12 @@ public class PrintsCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e) {
+	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Show the sets
 		String sets = String.join("\n", card.getPrintings().parallelStream().map(set -> String.format(":small_orange_diamond: %s (%s)", set.getName(), set.getCode())).collect(Collectors.toList()));
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), card.getGathererUrl());
+				.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		String[] splits = MessageUtils.splitMessage(sets, 1000);
 		for (int i = 0; i < splits.length; i++)
 			eb.addField((i == 0) ? "Sets" : "", splits[i], false);

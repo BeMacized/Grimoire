@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Grimoire {
 
 	public final static String DEV_ID = "87551321762172928";
-	private final static String BOT_NAME = "Mac's Grimoire";
+	public final static String BOT_NAME = "Mac's Grimoire";
 
 	private final static Logger LOG = Logger.getLogger(Grimoire.class.getName());
 	private static Grimoire instance;
@@ -42,8 +42,7 @@ public class Grimoire {
 	private InfractionProcedureGuideProvider infractionProcedureGuideProvider;
 	private StandardRotationProvider standardRotationProvider;
 	private PricingProvider pricingProvider;
-
-
+	private GuildPreferenceProvider guildPreferenceProvider;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -67,6 +66,9 @@ public class Grimoire {
 				System.getenv("MONGO_USER"),
 				System.getenv("MONGO_PASSWORD")
 		);
+
+		// Load guild preferences
+		this.guildPreferenceProvider = new GuildPreferenceProvider();
 
 		// Load cards and sets
 		this.cardProvider = new CardProvider();
@@ -165,4 +167,7 @@ public class Grimoire {
 		return playstatusHandler;
 	}
 
+	public GuildPreferenceProvider getGuildPreferenceProvider() {
+		return guildPreferenceProvider;
+	}
 }

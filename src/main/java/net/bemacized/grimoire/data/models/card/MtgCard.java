@@ -2,6 +2,7 @@ package net.bemacized.grimoire.data.models.card;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
@@ -15,6 +16,8 @@ import org.jongo.marshall.jackson.oid.MongoId;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -154,57 +157,61 @@ public class MtgCard {
 		return scryfallCard.getId();
 	}
 
-	@Nullable
-	public String getGathererUrl() {
-		return (getMultiverseid() > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + getMultiverseid() : null;
-	}
-
 	public String[] getColorIdentity() {
 		return scryfallCard.getColorIdentity();
 	}
 
 	@Nullable
 	public String getReleaseDate() {
-		if (mtgJsonCard != null && mtgJsonCard.getReleaseDate() != null) return mtgJsonCard.getReleaseDate();
 		return getSet().getReleaseDate();
 	}
 
-	public MessageEmbed getEmbed(Guild guild) {
-		// Construct the data
-		String formats = String.join(", ",
-				getLegalities().entrySet().parallelStream().filter(e -> e.getValue().equals(ScryfallCard.Legality.LEGAL)).map(s -> s.getKey().substring(0, 1).toUpperCase() + s.getKey().substring(1).toLowerCase()).collect(Collectors.toList()));
-		String rarities = String.join(", ",
-				new CardProvider.SearchQuery().hasName(getName()).parallelStream().map(c -> c.getRarity().toString()).distinct().collect(Collectors.toList()));
-		String printings = String.join(", ",
-				new String[]{"**" + getSet().getName() + " (" + getSet().getCode() + ")**", String.join(", ", getPrintings().parallelStream().filter(set -> !getSet().getCode().equalsIgnoreCase(set.getCode())).map(MtgSet::getCode).collect(Collectors.toList()))}).trim();
-		if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
-		String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
-		String title = getName();
-		String cmc = getCmc();
-		try {
-			cmc = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
-		} catch (NumberFormatException e) {
-		}
-		String cost = (getManaCost() == null || getManaCost().isEmpty()) ? "" :
-				Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild) + " **(" + cmc + ")**";
-
-		// Build the embed
+	public MessageEmbed getEmbed(Guild guild, GuildPreferences guildPreferences) {
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setThumbnail(getImageUrl());
+
 		eb.setColor(MTGUtils.colorIdentitiesToColor(getColorIdentity()));
-		eb.setTitle(title, getGathererUrl());
-		if (!cost.isEmpty()) eb.appendDescription(cost + "\n");
-		if (getType() != null) {
-			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
-			eb.appendDescription(getType());
-			eb.appendDescription("\n\n");
+		if (guildPreferences.showThumbnail()) eb.setThumbnail(getImageUrl());
+		eb.setTitle(getName(), guildPreferences.getCardUrl(this));
+		if (guildPreferences.showManaCost())
+			eb.appendDescription((getManaCost() == null || getManaCost().isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild));
+		if (guildPreferences.showConvertedManaCost()) {
+			String cmc = getCmc();
+			try {
+				cmc = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
+			} catch (NumberFormatException e) {
+			}
+			eb.appendDescription(" **(" + cmc + ")**");
 		}
-		if (getText() != null)
-			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild));
-		if (!formats.isEmpty()) eb.addField("Formats", formats, true);
-		if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
-		if (!printings.isEmpty()) eb.addField("Printings", printings, true);
-		if (getLoyalty() != null) eb.addField("Loyalty", getLoyalty(), true);
+		eb.appendDescription("\n");
+		if (guildPreferences.showPowerToughness()) {
+			String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
+			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
+		}
+		if (guildPreferences.showCardType() && getType() != null)
+			eb.appendDescription(getType() + "\n\n");
+		if (guildPreferences.showOracleText() && getText() != null)
+			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild) + "\n");
+		if (guildPreferences.showFlavorText() && getFlavorText() != null)
+			eb.appendDescription("\n_\"" + getFlavorText() + "\"_");
+		if (guildPreferences.showLegalFormats()) {
+			String formats = String.join(", ", getLegalities().entrySet().parallelStream().filter(e -> e.getValue().equals(ScryfallCard.Legality.LEGAL)).map(s -> s.getKey().substring(0, 1).toUpperCase() + s.getKey().substring(1).toLowerCase()).collect(Collectors.toList()));
+			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
+		}
+		if (guildPreferences.showPrintedRarities()) {
+			String rarities = String.join(", ", new CardProvider.SearchQuery().hasName(getName()).parallelStream().map(c -> c.getRarity().toString()).distinct().collect(Collectors.toList()));
+			if (!rarities.isEmpty()) eb.addField("Rarities", rarities, true);
+		}
+		if (guildPreferences.showPrintings()) {
+			String printings = String.join(", ",
+					new String[]{"**" + getSet().getName() + " (" + getSet().getCode() + ")**", String.join(", ", getPrintings().parallelStream().filter(set -> !getSet().getCode().equalsIgnoreCase(set.getCode())).map(MtgSet::getCode).collect(Collectors.toList()))}).trim();
+			if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
+			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
+		}
+		if (guildPreferences.showMiscProperties()) {
+			if (getLoyalty() != null) eb.addField("Loyalty", getLoyalty(), true);
+			if (getHandModifier() != null && getLifeModifier() != null)
+				eb.addField("Vanguard Hand/Life Modifiers", getHandModifier() + "/" + getLifeModifier(),true);
+		}
 
 		// Return result
 		return eb.build();
@@ -250,6 +257,19 @@ public class MtgCard {
 	@Nullable
 	public String getLoyalty() {
 		return scryfallCard.getLoyalty();
+	}
+
+	@Nullable
+	public String getFlavorText() { return scryfallCard.getFlavorText(); }
+
+	@Nullable
+	public String getLifeModifier() {
+		return scryfallCard.getLifeModifier();
+	}
+
+	@Nullable
+	public String getHandModifier() {
+		return scryfallCard.getHandModifier();
 	}
 
 	@Nonnull
@@ -318,6 +338,24 @@ public class MtgCard {
 		if (c != null) {
 			this.scryfallCard = c;
 			this.save();
+		}
+	}
+
+	@Nullable
+	public String getGathererUrl() {
+		return (getMultiverseid() > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + getMultiverseid() : null;
+	}
+
+	public String getScryfallUrl() {
+		return scryfallCard.getScryfallUri();
+	}
+
+	public String getMagicCardsInfoUrl() {
+		try {
+			return "http://magiccards.info/query?q=!" + URLEncoder.encode(getName(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// Should never happen
+			return "http://magiccards.info/query?q=!" + getName();
 		}
 	}
 

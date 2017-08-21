@@ -1,0 +1,128 @@
+[
+  {
+    "type": "MULTI",
+    "id": 0,
+    "name": "Command Prefix",
+    "default": 0,
+    "options": [
+      ["g! - Default", "g!"],
+      ["! - Exclamation Mark", "!"],
+      ["_ - Underscore", "_"],
+      ["@Mac's Grimoire - Mention", "@"]
+    ]
+  },
+  {
+    "type": "SWITCH",
+    "id": 1,
+    "name": "Inline Card References",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 2,
+    "name": "Inline Price References",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 3,
+    "name": "Show Card Type",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 4,
+    "name": "Show Power / Toughness",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 5,
+    "name": "Show Mana Cost",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 6,
+    "name": "Show Converted Mana Cost",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 7,
+    "name": "Show Thumbnail",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 8,
+    "name": "Show Oracle Text",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 9,
+    "name": "List Legal Formats",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 10,
+    "name": "List Printed Rarities",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 11,
+    "name": "List Printings",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 12,
+    "name": "Show Miscellaneous Properties",
+    "description": "E.g. Loyalty for planeswalkers, modifiers for Vanguard cards, etc.",
+    "default": 1
+  },
+  {
+    "type": "MULTI",
+    "id": 13,
+    "name": "Title link to Service",
+    "default": 0,
+    "options": [
+      ["Gatherer (gatherer.wizards.com)", "GATHERER"],
+      ["Scryfall (scryfall.com)", "SCRYFALL"],
+      ["MagicCards.Info (magiccards.info)", "MAGICCARDSINFO"]
+    ]
+  },
+  {
+    "type": "MULTI",
+    "id": 14,
+    "name": "Presentation",
+    "default": 0,
+    "options": [
+      ["All marketplaces: One printing (Latest default)", "ALL_MARKETS"],
+      ["Scryfall only: One printing (Latest default)", "SCRYFALL_ONE"],
+      ["Scryfall only: All printings", "SCRYFALL_ALL"]
+    ]
+  },
+  {
+    "type": "MULTI",
+    "id": 15,
+    "name": "Currency",
+    "default": 0,
+    "options": [
+      ["Marketplace Specific", "DEFAULT"],
+      ["Force USD ($) (Convert)", "USD"],
+      ["Force EUR (€) (Convert)", "EUR"],
+      ["Force JPY (¥) (Convert)", "JPY"],
+      ["Force GBP (£) (Convert)", "GBP"]
+    ]
+  },
+  {
+    "type": "SWITCH",
+    "id": 16,
+    "name": "Show Flavor Text",
+    "default": 0
+  }
+]

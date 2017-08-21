@@ -145,31 +145,19 @@ public class TCGPlayerRetriever extends StoreRetriever {
 
 		// Return null if we don't have a link
 		if (doc.getDocumentElement().getElementsByTagName("link").getLength() == 0) return null;
-
 		return new StoreCardPriceRecord(
 				card.getName(),
 				card.getSet().getCode(),
 				doc.getDocumentElement().getElementsByTagName("link").item(0).getTextContent(),
 				System.currentTimeMillis(),
 				this.getStoreId(),
-				new HashMap<String, String>() {{
-					put("Low", formatPrice(doc.getDocumentElement().getElementsByTagName("lowprice").item(0).getTextContent()));
-					put("Average", formatPrice(doc.getDocumentElement().getElementsByTagName("avgprice").item(0).getTextContent()));
-					put("High", formatPrice(doc.getDocumentElement().getElementsByTagName("hiprice").item(0).getTextContent()));
-					put("Average Foil", formatPrice(doc.getDocumentElement().getElementsByTagName("foilavgprice").item(0).getTextContent()));
+				new HashMap<String, Price>() {{
+					put("Low", new Price(Double.parseDouble(doc.getDocumentElement().getElementsByTagName("lowprice").item(0).getTextContent()), Currency.USD));
+					put("Average", new Price(Double.parseDouble(doc.getDocumentElement().getElementsByTagName("avgprice").item(0).getTextContent()), Currency.USD));
+					put("High", new Price(Double.parseDouble(doc.getDocumentElement().getElementsByTagName("hiprice").item(0).getTextContent()), Currency.USD));
+					put("Average Foil", new Price(Double.parseDouble(doc.getDocumentElement().getElementsByTagName("foilavgprice").item(0).getTextContent()), Currency.USD));
 				}}
 		);
-	}
-
-	private String formatPrice(String price) {
-		if (price == null || price.isEmpty()) price = "0";
-		try {
-			if (Double.parseDouble(price) <= 0) price = "N/A";
-			else price = "$" + price;
-		} catch (Exception e) {
-			price = "N/A";
-		}
-		return price;
 	}
 
 }

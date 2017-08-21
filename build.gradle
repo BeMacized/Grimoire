@@ -28,6 +28,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
     compile group: 'es.moki.ratelimitj', name: 'ratelimitj-inmemory', version: '0.4.0.M2'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+    compile 'com.github.Ritaja:java-exchange-rates:1.0'
 }
 
 task uberjar(type: Jar) {

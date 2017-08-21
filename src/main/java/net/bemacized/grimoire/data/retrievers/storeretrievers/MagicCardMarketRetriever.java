@@ -139,7 +139,7 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 		// Return null if we didn't find anything
 		if (product == null) return null;
 
-		DecimalFormat formatter = new DecimalFormat("#.00");
+		DecimalFormat formatter = new DecimalFormat("#0.00");
 		// Return the found data
 		return new StoreCardPriceRecord(
 				card.getName(),
@@ -147,11 +147,11 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 				"https://www.magiccardmarket.eu" + product.getString("website"),
 				System.currentTimeMillis(),
 				this.getStoreId(),
-				new HashMap<String, String>() {{
-					put("Low", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("LOW"))));
-					put("Avg. Sell Price", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("SELL"))));
-					put("Low Foil", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("LOWFOIL"))));
-					put("Average", formatPrice(formatter.format(product.getJSONObject("priceGuide").getDouble("AVG"))));
+				new HashMap<String, Price>() {{
+					put("Low", new Price(product.getJSONObject("priceGuide").getDouble("LOW"), Currency.EUR));
+					put("Avg. Sell Price", new Price(product.getJSONObject("priceGuide").getDouble("SELL"), Currency.EUR));
+					put("Low Foil", new Price(product.getJSONObject("priceGuide").getDouble("LOWFOIL"), Currency.EUR));
+					put("Average", new Price(product.getJSONObject("priceGuide").getDouble("AVG"), Currency.EUR));
 				}}
 		);
 	}
@@ -196,17 +196,6 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 			LOG.log(Level.SEVERE, "Could not construct authorization header for price fetching", e);
 			return null;
 		}
-	}
-
-	private String formatPrice(String price) {
-		if (price == null || price.isEmpty()) price = "0";
-		try {
-			if (Double.parseDouble(price) <= 0) price = "N/A";
-			else price = "€" + price;
-		} catch (Exception e) {
-			price = "N/A";
-		}
-		return price;
 	}
 
 	private static String generateRandomString(int length) {

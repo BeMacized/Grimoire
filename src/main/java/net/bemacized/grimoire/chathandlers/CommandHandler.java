@@ -3,15 +3,20 @@ package net.bemacized.grimoire.chathandlers;
 import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
 import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.*;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.bemacized.grimoire.eventlogger.events.LogEntry;
 import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
 import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +48,8 @@ public class CommandHandler extends ChatHandler {
 				new TokenCommand(),
 				new StandardCommand(),
 				new RandomCommand(),
-				new PricingCommand()
+				new PricingCommand(),
+				new FlavorCommand()
 		).collect(Collectors.toList());
 		rateLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
 				RequestLimitRule.of(20, TimeUnit.SECONDS, 6),
@@ -55,15 +61,17 @@ public class CommandHandler extends ChatHandler {
 	}
 
 	@Override
-	protected void handle(MessageReceivedEvent e, ChatHandler next) {
-		// If no command prefix is found, quit here.
-		if (!e.getMessage().getContent().startsWith("!") && !e.getMessage().getContent().startsWith("/")) {
+	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
+		// Check command prefix;
+		String prefix = guildPreferences.getPrefix();
+		if (prefix.equals("@")) prefix = "@" + Grimoire.BOT_NAME + " ";
+		if (!e.getMessage().getContent().startsWith(prefix)) {
 			next.handle(e);
 			return;
 		}
 
 		// Extract command and arguments
-		String[] data = e.getMessage().getContent().substring(1).split("\\s+");
+		String[] data = e.getMessage().getContent().substring(prefix.length()).split("\\s+");
 		String cmd = data[0];
 		String rawArgs = String.join(" ", Arrays.copyOfRange(data, 1, data.length));
 		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(rawArgs);
@@ -80,9 +88,7 @@ public class CommandHandler extends ChatHandler {
 		BaseCommand command = commands
 				.stream()
 				.filter(c ->
-						c.name().equalsIgnoreCase(cmd) ||
-								Arrays.stream(c.aliases())
-										.anyMatch(a -> a.equalsIgnoreCase(cmd))
+						c.name().equalsIgnoreCase(cmd) || Arrays.stream(c.aliases()).anyMatch(a -> a.equalsIgnoreCase(cmd))
 				)
 				.findAny()
 				.orElse(null);
@@ -127,6 +133,6 @@ public class CommandHandler extends ChatHandler {
 		));
 
 		// Execute command otherwise
-		new Thread(() -> command.exec(args.toArray(new String[0]), e)).start();
+		new Thread(() -> command.exec(args.toArray(new String[0]), e, guildPreferences)).start();
 	}
 }

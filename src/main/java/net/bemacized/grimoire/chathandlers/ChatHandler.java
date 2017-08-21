@@ -1,5 +1,7 @@
 package net.bemacized.grimoire.chathandlers;
 
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -16,8 +18,9 @@ public abstract class ChatHandler extends MessageUtils {
 	}
 
 	public void handle(MessageReceivedEvent e) {
-		this.handle(e, next);
+		GuildPreferences preferences = Grimoire.getInstance().getGuildPreferenceProvider().getPreferences(e.getGuild());
+		this.handle(e, preferences, next);
 	}
 
-	protected abstract void handle(MessageReceivedEvent e, ChatHandler next);
+	protected abstract void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next);
 }

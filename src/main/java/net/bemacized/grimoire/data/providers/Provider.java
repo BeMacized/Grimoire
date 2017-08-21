@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 abstract class Provider {
 
-	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
+	protected static final Logger LOG = Logger.getLogger(Provider.class.getName());
 
 	public void load() {
 		if (!loadFromDB()) loadFromSource();

@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands.all;
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.rules.Definition;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -34,7 +35,7 @@ public class DefineCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that a keyword was given
 		if (args.length == 0) {
 			sendEmbed(e.getChannel(), "Please specify a keyword to look up.");

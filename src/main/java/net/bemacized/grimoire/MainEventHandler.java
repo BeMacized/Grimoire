@@ -1,6 +1,7 @@
 package net.bemacized.grimoire;
 
 import net.bemacized.grimoire.chathandlers.*;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -32,7 +33,7 @@ public class MainEventHandler extends ListenerAdapter {
 		// Obtain top handler
 		ChatHandler lastHandler = (!chatHandlers.isEmpty()) ? chatHandlers.get(0) : new ChatHandler(null) {
 			@Override
-			protected void handle(MessageReceivedEvent e, ChatHandler next) {
+			protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
 			}
 		};
 

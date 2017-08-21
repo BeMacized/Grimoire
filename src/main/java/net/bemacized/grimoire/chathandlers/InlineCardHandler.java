@@ -7,6 +7,7 @@ import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.CardCommand;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.bemacized.grimoire.eventlogger.events.LogEntry;
 import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
@@ -40,7 +41,12 @@ public class InlineCardHandler extends ChatHandler {
 	}
 
 	@Override
-	protected void handle(MessageReceivedEvent e, ChatHandler next) {
+	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
+		if (!guildPreferences.inlineCardReferencesEnabled()) {
+			next.handle(e);
+			return;
+		}
+
 		// Find matches for <<CARD[|SET(CODE)]>> pattern.
 		Pattern p = Pattern.compile("(<<|\\[\\[)[^$<|> ][^$<|>]*?([|][^<|>]+?)?(>>|]])");
 		Matcher m = p.matcher(e.getMessage().getContent());
@@ -97,7 +103,7 @@ public class InlineCardHandler extends ChatHandler {
 					true
 			));
 
-			new Thread(() -> command.exec(args, e)).start();
+			new Thread(() -> command.exec(args, e, guildPreferences)).start();
 		}
 
 		next.handle(e);

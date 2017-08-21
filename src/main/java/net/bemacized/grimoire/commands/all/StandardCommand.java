@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands.all;
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.providers.StandardRotationProvider;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -35,7 +36,7 @@ public class StandardCommand extends BaseCommand {
 
 	@SuppressWarnings("Duplicates")
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		final EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setTitle("What's in Standard?", "http://whatsinstandard.com");

@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -33,11 +34,11 @@ public class LegalityCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e) {
+	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), card.getGathererUrl())
+				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
 				.setDescription("**Legality**\n");
 		for (Map.Entry<String, ScryfallCard.Legality> entry : card.getLegalities().entrySet()) {
 			eb.addField(entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1).toLowerCase(), entry.getValue().getDisplayName(), true);

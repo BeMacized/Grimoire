@@ -1,5 +1,6 @@
 package net.bemacized.grimoire.commands;
 
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -21,6 +22,6 @@ public abstract class BaseCommand extends MessageUtils {
 
 	public abstract String paramUsage();
 
-	public abstract void exec(String[] args, MessageReceivedEvent e);
+	public abstract void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences);
 
 }

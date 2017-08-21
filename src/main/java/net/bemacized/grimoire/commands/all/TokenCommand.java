@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -40,7 +41,7 @@ public class TokenCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify token name presence
 		if (args.length == 0) {
 			sendEmbed(e.getChannel(), "Please provide a valid token name.");

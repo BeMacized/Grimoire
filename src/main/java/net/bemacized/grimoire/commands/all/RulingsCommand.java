@@ -3,6 +3,7 @@ package net.bemacized.grimoire.commands.all;
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -31,7 +32,7 @@ public class RulingsCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e) {
+	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings().length == 0) {
@@ -42,7 +43,7 @@ public class RulingsCommand extends CardBaseCommand {
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setTitle(card.getName(), card.getGathererUrl())
+				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
 				.setDescription("**Rulings**");
 		for (MtgJsonCard.Ruling ruling : card.getRulings())
 			eb.addField(ruling.getDate(), ruling.getText(), false);

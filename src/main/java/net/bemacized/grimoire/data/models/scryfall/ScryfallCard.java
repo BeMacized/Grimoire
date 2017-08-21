@@ -40,8 +40,8 @@ public class ScryfallCard {
 //	private Frame frame = Frame.UNKNOWN;
 //	@Nonnull
 //	private BorderColor border_color = BorderColor.UNKNOWN;
-//	@Nonnull
-//	private String scryfall_uri = "UNKNOWN";
+	@Nonnull
+	private String scryfall_uri = "UNKNOWN";
 //	@Nonnull
 //	private ImageUris image_uris = new ImageUris();
 //	@Nonnull
@@ -63,18 +63,18 @@ public class ScryfallCard {
 	private String toughness;
 	@Nullable
 	private String loyalty;
-	//	@Nullable
-//	private String hand_modifier;
-//	@Nullable
-//	private String life_modifier;
+	@Nullable
+	private String hand_modifier;
+	@Nullable
+	private String life_modifier;
 //	@Nullable
 //	private String mtgo_id;
 	@Nullable
 	private String collector_number;
 	//	@Nullable
 //	private String watermark;
-//	@Nullable
-//	private String flavor_text;
+	@Nullable
+	private String flavor_text;
 	@Nullable
 	private String usd;
 	@Nullable
@@ -187,11 +187,9 @@ public class ScryfallCard {
 //		return border_color;
 	}
 
-	@JsonIgnore
 	@Nonnull
 	public String getScryfallUri() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return scryfall_uri;
+		return scryfall_uri;
 	}
 
 	@JsonIgnore
@@ -251,18 +249,14 @@ public class ScryfallCard {
 		return loyalty;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getHandModifier() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return hand_modifier;
+		return hand_modifier;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getLifeModifier() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return life_modifier;
+		return life_modifier;
 	}
 
 	@JsonIgnore
@@ -292,11 +286,9 @@ public class ScryfallCard {
 //		return watermark;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getFlavorText() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return flavor_text;
+		return flavor_text;
 	}
 
 
@@ -556,7 +548,7 @@ public class ScryfallCard {
 		assert !rarity.equals(Rarity.UNKNOWN);
 //		assert !frame.equals(Frame.UNKNOWN);
 //		assert !border_color.equals(BorderColor.UNKNOWN);
-//		assert !scryfall_uri.equals("UNKNOWN");
+		assert !scryfall_uri.equals("UNKNOWN");
 //		if (all_parts.length > 0) {
 //			for (Part all_part : all_parts) {
 //				assert !all_part.id.equals("UNKNOWN");
@@ -582,7 +574,7 @@ public class ScryfallCard {
 				.append("rarity", rarity)
 //				.append("frame", frame)
 //				.append("border_color", border_color)
-//				.append("scryfall_uri", scryfall_uri)
+				.append("scryfall_uri", scryfall_uri)
 //				.append("image_uris", image_uris)
 //				.append("related_uris", related_uris)
 //				.append("purchase_uris", purchase_uris)
@@ -593,13 +585,13 @@ public class ScryfallCard {
 				.append("power", power)
 				.append("toughness", toughness)
 				.append("loyalty", loyalty)
-//				.append("hand_modifier", hand_modifier)
-//				.append("life_modifier", life_modifier)
+				.append("hand_modifier", hand_modifier)
+				.append("life_modifier", life_modifier)
 				.append("multiverse_id", multiverse_id)
 //				.append("mtgo_id", mtgo_id)
 				.append("collector_number", collector_number)
 //				.append("watermark", watermark)
-//				.append("flavor_text", flavor_text)
+				.append("flavor_text", flavor_text)
 				.append("usd", usd)
 				.append("eur", eur)
 				.append("tix", tix)

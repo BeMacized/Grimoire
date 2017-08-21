@@ -4,6 +4,7 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.card.MtgSet;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -35,7 +36,7 @@ public class RandomCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e) {
+	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		List<String> supertypes = new ArrayList<>();
 		List<String> types = new ArrayList<>();
 		List<String> subtypes = new ArrayList<>();
@@ -130,7 +131,7 @@ public class RandomCommand extends BaseCommand {
 		if (("Random " + String.join(" ", properties)).length() <= 128)
 			eb.setAuthor("Random " + String.join(" ", properties), null, null);
 		else eb.appendDescription("Random " + String.join(" ", properties) + "\n");
-		eb.setTitle(card.getName(), card.getGathererUrl());
+		eb.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
