@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.controllers;
 
 import net.bemacized.grimoire.Grimoire;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -38,24 +39,24 @@ public class ListReporter {
 
 				@Override
 				public void report(int serverCount) {
-					HttpsURLConnection connection;
+					HttpsURLConnection conn;
 					try {
-						connection = (HttpsURLConnection) new URL("https://bots.discordlist.net/api.php").openConnection();
-						connection.setDoOutput(true);
-						connection.setUseCaches(false);
-						connection.setRequestMethod("POST");
-						connection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+						conn = (HttpsURLConnection) new URL("https://bots.discordlist.net/api.php").openConnection();
+						conn.setDoOutput(true);
+						conn.setUseCaches(false);
+						conn.setRequestMethod("POST");
+						conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 					} catch (IOException e) {
 						LOG.log(Level.WARNING, "Could not post server count to bots.discordlist.net, 1", e);
 						return;
 					}
 					String encodedToken = URLEncoder.encode(getToken());
 					String body = "token=" + encodedToken + "&servers=" + serverCount;
-					try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+					try (DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream())) {
 						outputStream.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8.name()));
 						outputStream.flush();
-						if (connection.getResponseCode() != 200)
-							LOG.log(Level.WARNING, "Could not post server count bots.discordlist.net, 2. Status " + connection.getResponseCode());
+						if (conn.getResponseCode() != 200)
+							LOG.log(Level.WARNING, "Could not post server count bots.discordlist.net, 2. Status " + conn.getResponseCode() + ", " + IOUtils.toString(conn.getErrorStream()));
 					} catch (IOException e) {
 						LOG.log(Level.WARNING, "Could not post server count to bots.discordlist.net, 3", e);
 					}
@@ -72,12 +73,12 @@ public class ListReporter {
 
 				@Override
 				public void report(int serverCount) {
-					HttpsURLConnection connection;
+					HttpsURLConnection conn;
 					try {
-						connection = (HttpsURLConnection) new URL("https://bots.discord.pw/api/bots/" + Grimoire.getInstance().getDiscord().getSelfUser().getId() + "/stats").openConnection();
-						connection.setDoOutput(true);
-						connection.setRequestMethod("POST");
-						connection.addRequestProperty("Authorization", getToken());
+						conn = (HttpsURLConnection) new URL("https://bots.discord.pw/api/bots/" + Grimoire.getInstance().getDiscord().getSelfUser().getId() + "/stats").openConnection();
+						conn.setDoOutput(true);
+						conn.setRequestMethod("POST");
+						conn.addRequestProperty("Authorization", getToken());
 					} catch (IOException e) {
 						LOG.log(Level.WARNING, "Could not post server count to bots.discord.pw, 1", e);
 						return;
@@ -90,11 +91,11 @@ public class ListReporter {
 						put("server_count", serverCount);
 					}};
 
-					try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+					try (DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream())) {
 						outputStream.write(data.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8.name()));
 						outputStream.flush();
-						if (connection.getResponseCode() != 200)
-							LOG.log(Level.WARNING, "Could not post server count to bots.discord.pw, 2. Status " + connection.getResponseCode());
+						if (conn.getResponseCode() != 200)
+							LOG.log(Level.WARNING, "Could not post server count to bots.discord.pw, 2. Status " + conn.getResponseCode() + ", " + IOUtils.toString(conn.getErrorStream()));
 					} catch (IOException e) {
 						LOG.log(Level.WARNING, "Could not post server count to bots.discord.pw, 3", e);
 					}
@@ -129,7 +130,7 @@ public class ListReporter {
 						output.write(data.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8.name()));
 						output.close();
 						if (conn.getResponseCode() != 200)
-							LOG.log(Level.WARNING, "Could not post server count to discordbots.org, 1. Status " + conn.getResponseCode());
+							LOG.log(Level.WARNING, "Could not post server count to discordbots.org, 1. Status " + conn.getResponseCode() + ", " + IOUtils.toString(conn.getErrorStream()));
 					} catch (IOException e) {
 						LOG.log(Level.WARNING, "Could not post server count to discordbots.org, 2", e);
 

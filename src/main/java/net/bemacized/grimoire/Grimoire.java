@@ -8,6 +8,7 @@ import net.bemacized.grimoire.data.providers.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
@@ -56,6 +57,26 @@ public class Grimoire {
 			System.exit(1);
 		}
 
+		// Log in to Discord
+		try {
+			LOG.info("Logging in to Discord...");
+			discord = new JDABuilder(AccountType.BOT)
+					.setAutoReconnect(true)
+					.setToken(bot_token)
+					.buildBlocking();
+			discord.getPresence().setGame(Game.of("Starting Up..."));
+			LOG.info("Discord login complete.");
+		} catch (LoginException e) {
+			LOG.log(Level.SEVERE, "Could not log in to Discord. Quitting...", e);
+			System.exit(1);
+		} catch (RateLimitedException e) {
+			LOG.log(Level.SEVERE, "Walked into a rate limit while logging in. Please try again later. Quitting...", e);
+			System.exit(1);
+		} catch (InterruptedException e) {
+			LOG.log(Level.SEVERE, "Login procedure was interrupted. Quitting...", e);
+			System.exit(1);
+		}
+
 		// Connect to Mongo database
 		int MONGO_PORT = -1;
 		try {
@@ -96,27 +117,12 @@ public class Grimoire {
 		// Instantiate pricing provider
 		this.pricingProvider = new PricingProvider();
 
-		// Log in to Discord
-		try {
-			LOG.info("Logging in to Discord...");
-			discord = new JDABuilder(AccountType.BOT)
-					.setAutoReconnect(true)
-					.setToken(bot_token)
-					.buildBlocking();
-			LOG.info("Discord login complete.");
-		} catch (LoginException e) {
-			LOG.log(Level.SEVERE, "Could not log in to Discord. Quitting...", e);
-			System.exit(1);
-		} catch (RateLimitedException e) {
-			LOG.log(Level.SEVERE, "Walked into a rate limit while logging in. Please try again later. Quitting...", e);
-			System.exit(1);
-		} catch (InterruptedException e) {
-			LOG.log(Level.SEVERE, "Login procedure was interrupted. Quitting...", e);
-			System.exit(1);
-		}
 
 		// Load emoji references
 		this.emojiParser = new EmojiParser();
+
+		// Remove starting message
+		discord.getPresence().setGame(null);
 
 		// Register EventHandlers
 		discord.addEventListener(new MainEventHandler());

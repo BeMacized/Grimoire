@@ -26,6 +26,8 @@ public class DBManager {
 
 		// Wrap with jongo
 		jongo = new Jongo(client.getDB(dbname));
+
+		getJongo().getCollection("MtgCards").drop();
 	}
 
 

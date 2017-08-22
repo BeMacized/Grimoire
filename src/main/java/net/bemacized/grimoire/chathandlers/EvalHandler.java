@@ -45,6 +45,10 @@ public class EvalHandler extends ChatHandler {
 		}), code);
 
 		ScriptEngine se = new ScriptEngineManager().getEngineByName("Nashorn");
+
+		Grimoire.getInstance().getDBManager().getJongo().getCollection("MtgCards").drop();
+		Grimoire.getInstance().getDBManager().getJongo().getCollection("MtgSets").drop();
+
 		se.put("event", e);
 		se.put("grimoire", Grimoire.getInstance());
 		se.put("jda", e.getJDA());
