@@ -222,7 +222,7 @@ public class MtgCard {
 	}
 
 	public List<MtgSet> getPrintings() {
-		return new CardProvider.SearchQuery().hasName(getName()).parallelStream().map(MtgCard::getSet).collect(Collectors.toList());
+		return new CardProvider.SearchQuery().hasName(getName()).inLanguage("English").distinctSets().parallelStream().map(MtgCard::getSet).collect(Collectors.toList());
 	}
 
 	@Nullable

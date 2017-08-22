@@ -324,5 +324,8 @@ public class CardProvider extends Provider {
 			return notLayout(MtgCard.Layout.EMBLEM);
 		}
 
+		public SearchQuery distinctSets() {
+			return new SearchQuery(this.stream().filter(StreamUtils.distinctByKey(c -> c.getSet().getCode())).collect(Collectors.toList()));
+		}
 	}
 }
