@@ -2,15 +2,22 @@ package net.bemacized.grimoire.chathandlers;
 
 import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.HelpCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.reflections.Reflections;
 
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class HelpHandler extends ChatHandler{
+public class HelpHandler extends ChatHandler {
 
 	public HelpHandler(ChatHandler next) {
 		super(next);
@@ -34,7 +41,34 @@ public class HelpHandler extends ChatHandler{
 
 		// List commands
 		if (msg.equalsIgnoreCase("commands")) {
-			sendEmbed(e.getChannel(), "This section is under construction, please try again later!");
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setAuthor("Mac's Grimoire: Commands", Grimoire.WEBSITE, e.getJDA().getSelfUser().getAvatarUrl());
+			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
+			eb.appendDescription("\n\n:link: [**Command Reference**](" + Grimoire.WEBSITE + "/reference)");
+			eb.appendDescription("\n\nThe following commands are available:");
+			Reflections reflections = new Reflections("net.bemacized.grimoire.commands.all");
+			List<List<String>> lists = new ArrayList<>(Stream.of(new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>()).collect(Collectors.toList()));
+			Set<Class<? extends BaseCommand>> cmdClasses = reflections.getSubTypesOf(BaseCommand.class).parallelStream().filter(c -> !Modifier.isAbstract(c.getModifiers())).collect(Collectors.toSet());
+			List<? extends BaseCommand> commands = cmdClasses.parallelStream()
+					.map(c -> {
+						try {
+							return c.newInstance();
+						} catch (InstantiationException | IllegalAccessException ex) {
+							LOG.log(Level.SEVERE, "Cannot instantiate command class: " + c.getName(), ex);
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.filter(cmd -> !cmd.unlisted())
+					.sorted(Comparator.comparing(BaseCommand::name))
+					.collect(Collectors.toList());
+			IntStream.range(0, commands.size()).forEach(i -> lists.get(i % 3).add("[`" + commands.get(i).name() + "`](" + Grimoire.WEBSITE + "/reference/" + commands.get(i).name() + ")"));
+
+			lists.forEach(l -> eb.addField("", String.join("\n", l), true));
+
+			eb.setFooter("Get more information about any of them using \"help <command>\".", null);
+
+			e.getChannel().sendMessage(eb.build()).submit();
 			return;
 		}
 
@@ -61,15 +95,34 @@ public class HelpHandler extends ChatHandler{
 			return;
 		}
 
-		// Show info
-		if (msg.equalsIgnoreCase("info")) {
-			sendEmbed(e.getChannel(), "This section is under construction, please try again later!");
-			return;
-		}
-
 		// Show command help
 		if (msg.matches("help [a-zA-Z]+")) {
-			sendEmbed(e.getChannel(), "This section is under construction, please try again later!");
+			Reflections reflections = new Reflections("net.bemacized.grimoire.commands.all");
+			Set<Class<? extends BaseCommand>> cmdClasses = reflections.getSubTypesOf(BaseCommand.class).parallelStream().filter(c -> !Modifier.isAbstract(c.getModifiers())).collect(Collectors.toSet());
+			BaseCommand command = cmdClasses.parallelStream()
+					.map(c -> {
+						try {
+							return c.newInstance();
+						} catch (InstantiationException | IllegalAccessException ex) {
+							LOG.log(Level.SEVERE, "Cannot instantiate command class: " + c.getName(), ex);
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.filter(c -> c.name().equalsIgnoreCase(msg.substring(5)) || Arrays.stream(c.aliases()).parallel().anyMatch(a -> a.equalsIgnoreCase(msg.substring(5))))
+					.findFirst().orElse(null);
+			if (command == null) {
+				sendErrorEmbed(e.getChannel(), "**\"" + msg.substring(5) + "\"** is not a valid command.");
+				return;
+			}
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setAuthor("Mac's Grimoire: " + command.name() + " command", Grimoire.WEBSITE, e.getJDA().getSelfUser().getAvatarUrl());
+			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
+			eb.addField("Command", "`g!" + command.name() + "`", false);
+			eb.addField("Description", command.description(), false);
+			eb.addField("Usage" + (command.usages().length > 1 ? "s" : ""), String.join("\n", Arrays.stream(command.usages()).parallel().map(u -> "`g!" + command.name() + " " + u + "`").collect(Collectors.toList())), false);
+			eb.addField("Examples" + (command.usages().length > 1 ? "s" : ""), String.join("\n", Arrays.stream(command.examples()).parallel().map(ex -> "`g!" + command.name() + " " + ex + "`").collect(Collectors.toList())), false);
+			e.getChannel().sendMessage(eb.build()).submit();
 			return;
 		}
 

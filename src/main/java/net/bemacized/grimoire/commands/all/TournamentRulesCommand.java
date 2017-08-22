@@ -28,8 +28,17 @@ public class TournamentRulesCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<paragraph nr>";
+	public String[] usages() {
+		return new String[]{"<paragraph nr>"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"",
+				"3",
+				"3.10"
+		};
 	}
 
 	@Override

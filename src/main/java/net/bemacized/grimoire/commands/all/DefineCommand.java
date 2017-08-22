@@ -30,8 +30,17 @@ public class DefineCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<keyword>";
+	public String[] usages() {
+		return new String[]{"<keyword>"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"enchant",
+				"vigilance",
+				"prowess"
+		};
 	}
 
 	@Override

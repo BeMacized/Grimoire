@@ -12,6 +12,8 @@ import net.bemacized.grimoire.eventlogger.events.LogEntry;
 import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
 import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +61,22 @@ public class CommandHandler extends ChatHandler {
 		rateLimitLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
 				RequestLimitRule.of(2, TimeUnit.MINUTES, 1)
 		).collect(Collectors.toSet()));
+
+//		JSONArray arr = new JSONArray();
+//		commands.parallelStream().map(c -> new JSONObject(){{
+//			put("command", new JSONArray(){{
+//				if (c.usages().length == 0) put(c.name());
+//				else Arrays.stream(c.usages()).parallel().forEach(u -> put(c.name() + " " + u));
+//			}});
+//			put("description", c.description());
+//			put("aliases", new JSONArray(){{
+//				Arrays.stream(c.aliases()).parallel().forEach(this::put);
+//			}});
+//			put("examples", new JSONArray(){{
+//				Arrays.stream(c.examples()).parallel().forEach(this::put);
+//			}});
+//		}}).forEach(arr::put);
+//		System.out.println(arr.toString(2));
 	}
 
 	@Override

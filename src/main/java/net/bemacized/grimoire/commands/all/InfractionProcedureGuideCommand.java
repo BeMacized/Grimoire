@@ -30,8 +30,18 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<paragraph> [topic]";
+	public String[] usages() {
+		return new String[]{"<paragraph> [topic]"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"",
+				"2",
+				"2.5",
+				"2.5 philosophy"
+		};
 	}
 
 	@Override

@@ -27,12 +27,22 @@ public class RandomCommand extends BaseCommand {
 
 	@Override
 	public String description() {
-		return "Show a random card of a certain type. Example: `!random legendary creature angel`.";
+		return "Show a random card of a certain type.";
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<[supertype] [type] [subtype] [rarity] [set] [setcode] [layout]>...";
+	public String[] usages() {
+		return new String[]{"[supertype] [type] [subtype] [rarity] [set] [setcode] [layout]"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"",
+				"legendary creature",
+				"C17 mythic",
+				"rare artifact"
+		};
 	}
 
 	@Override

@@ -20,7 +20,13 @@ public abstract class BaseCommand extends MessageUtils {
 
 	public abstract String description();
 
-	public abstract String paramUsage();
+	public abstract String[] usages();
+
+	public abstract String[] examples();
+
+	public boolean unlisted() {
+		return false;
+	}
 
 	public abstract void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences);
 

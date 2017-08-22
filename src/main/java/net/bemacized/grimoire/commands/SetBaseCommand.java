@@ -14,9 +14,20 @@ public abstract class SetBaseCommand extends BaseCommand {
 	private final static int MAX_SET_ALTERNATIVES = 15;
 
 	@Override
-	public String paramUsage() {
-		return "<set>";
+	public String[] usages() {
+		return new String[] {
+				"<set>",
+		};
 	}
+
+	@Override
+	public String[] examples() {
+		return new String[] {
+				"ORI",
+				"Magic Origins"
+		};
+	}
+
 
 	@Override
 	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {

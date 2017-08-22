@@ -36,8 +36,19 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<paragraph nr>";
+	public String[] usages() {
+		return new String[]{"<paragraph nr>"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"",
+				"7",
+				"702",
+				"702.5",
+				"702.5c"
+		};
 	}
 
 	@Override

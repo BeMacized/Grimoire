@@ -36,8 +36,16 @@ public class TokenCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "<token_name> [choice]";
+	public String[] usages() {
+		return new String[]{"<token_name> [choice]"};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[]{
+				"angel",
+				"angel 3"
+		};
 	}
 
 	@Override

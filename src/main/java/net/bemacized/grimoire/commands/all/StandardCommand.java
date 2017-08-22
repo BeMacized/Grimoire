@@ -30,8 +30,13 @@ public class StandardCommand extends BaseCommand {
 	}
 
 	@Override
-	public String paramUsage() {
-		return "";
+	public String[] usages() {
+		return new String[0];
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[0];
 	}
 
 	@SuppressWarnings("Duplicates")

@@ -18,8 +18,20 @@ public abstract class CardBaseCommand extends BaseCommand {
 	private final static int MAX_CARD_ALTERNATIVES = 15;
 
 	@Override
-	public String paramUsage() {
-		return "<card>\n<card|set>";
+	public String[] usages() {
+		return new String[] {
+				"<card>",
+				"<card|set>"
+		};
+	}
+
+	@Override
+	public String[] examples() {
+		return new String[] {
+				"Mighty Leap",
+				"Mighty Leap | ORI",
+				"Mighty Leap | Magic Origins"
+		};
 	}
 
 	@Override
