@@ -48,7 +48,7 @@ public class MainEventHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
-		if (!chatHandlers.isEmpty() && !e.getAuthor().isBot())
+		if (!chatHandlers.isEmpty() && !e.getAuthor().isBot() && !e.getAuthor().getId().equals(Grimoire.getInstance().getDiscord().getSelfUser().getId()))
 			new Thread(() -> this.chatHandlers.get(0).handle(e)).start();
 	}
 
