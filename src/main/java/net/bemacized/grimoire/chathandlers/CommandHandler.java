@@ -65,7 +65,6 @@ public class CommandHandler extends ChatHandler {
 	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
 		// Check command prefix;
 		String prefix = guildPreferences.getPrefix();
-		if (prefix.equals("@")) prefix = "@" + Grimoire.BOT_NAME + " ";
 		if (!e.getMessage().getContent().startsWith(prefix)) {
 			next.handle(e);
 			return;

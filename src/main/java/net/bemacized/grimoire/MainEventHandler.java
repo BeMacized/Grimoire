@@ -21,6 +21,7 @@ public class MainEventHandler extends ListenerAdapter {
 		// Register handlers
 		List<Class<? extends ChatHandler>> handlerClasses = Arrays.asList(
 				EvalHandler.class,
+				HelpHandler.class,
 				CommandHandler.class,
 				InlineCardHandler.class,
 				InlinePriceHandler.class

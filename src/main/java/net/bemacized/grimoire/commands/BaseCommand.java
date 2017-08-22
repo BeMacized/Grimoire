@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public abstract class BaseCommand extends MessageUtils {
 
-	final Logger LOG;
+	protected final Logger LOG;
 
 	protected BaseCommand() {
 		LOG = Logger.getLogger(this.getClass().getName());

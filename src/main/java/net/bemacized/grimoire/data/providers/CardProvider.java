@@ -187,21 +187,23 @@ public class CardProvider extends Provider {
 	}
 
 	private void sortData() {
-		LOG.info("Sorting sets...");
-		this.sets.sort((o1, o2) -> {
-			if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
-			if (o1.getReleaseDate() == null) return 1;
-			if (o2.getReleaseDate() == null) return -1;
-			return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
-		});
-		LOG.info("Sorting cards...");
-		this.cards.sort((o1, o2) -> {
-			if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
-			if (o1.getReleaseDate() == null) return 1;
-			if (o2.getReleaseDate() == null) return -1;
-			return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
-		});
-		LOG.info("Set & Card sorting complete");
+		if (!"1".equals(System.getenv("DONT_SORT_CARDDATA"))) {
+			LOG.info("Sorting sets...");
+			this.sets.sort((o1, o2) -> {
+				if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
+				if (o1.getReleaseDate() == null) return 1;
+				if (o2.getReleaseDate() == null) return -1;
+				return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
+			});
+			LOG.info("Sorting cards...");
+			this.cards.sort((o1, o2) -> {
+				if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
+				if (o1.getReleaseDate() == null) return 1;
+				if (o2.getReleaseDate() == null) return -1;
+				return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
+			});
+			LOG.info("Set & Card sorting complete");
+		}
 	}
 
 	private void assertValidity() {

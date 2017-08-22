@@ -41,7 +41,9 @@ public class GuildPreferences {
 
 	@Nonnull
 	public String getPrefix() {
-		return getMultiValue(0, getValue(0));
+		String prefix = getMultiValue(0, getValue(0));
+		if (prefix.equals("@")) prefix = "@" + Grimoire.BOT_NAME + " ";
+		return prefix;
 	}
 
 	public boolean inlineCardReferencesEnabled() {
