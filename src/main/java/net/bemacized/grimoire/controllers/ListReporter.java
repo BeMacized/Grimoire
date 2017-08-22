@@ -106,7 +106,7 @@ public class ListReporter {
 			reporters.add(new Reporter() {
 				@Override
 				public String getToken() {
-					return System.getenv("https://img.bemacized.net/h6Ojah31CdNEDR53STuuIC0nwwyTSpc8.png");
+					return System.getenv("DISCORDBOTSORG_API_TOKEN");
 				}
 
 				@Override
