@@ -2,6 +2,7 @@ package net.bemacized.grimoire;
 
 import net.bemacized.grimoire.controllers.DBManager;
 import net.bemacized.grimoire.controllers.EmojiParser;
+import net.bemacized.grimoire.controllers.ListReporter;
 import net.bemacized.grimoire.controllers.PlaystatusHandler;
 import net.bemacized.grimoire.data.providers.*;
 import net.dv8tion.jda.core.AccountType;
@@ -35,6 +36,7 @@ public class Grimoire {
 	private JDA discord;
 	private DBManager dbManager;
 	private PlaystatusHandler playstatusHandler;
+	private ListReporter listReporter;
 
 	// Providers
 	private CardProvider cardProvider;
@@ -126,6 +128,9 @@ public class Grimoire {
 		//TODO: Move to on guild join
 		if (!discord.getSelfUser().getName().equals(BOT_NAME))
 			discord.getSelfUser().getManager().setName(BOT_NAME).submit();
+
+		// Start bot list reporters
+		this.listReporter = new ListReporter();
 	}
 
 	public JDA getDiscord() {
@@ -170,5 +175,9 @@ public class Grimoire {
 
 	public GuildPreferenceProvider getGuildPreferenceProvider() {
 		return guildPreferenceProvider;
+	}
+
+	public ListReporter getListReporter() {
+		return listReporter;
 	}
 }
