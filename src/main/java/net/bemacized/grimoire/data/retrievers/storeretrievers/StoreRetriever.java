@@ -38,9 +38,9 @@ public abstract class StoreRetriever {
 
 	public abstract long timeout();
 
-	protected abstract StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreDisabledException;
+	protected abstract StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException;
 
-	public StoreCardPriceRecord retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, LanguageUnsupportedException, StoreDisabledException {
+	public StoreCardPriceRecord retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, LanguageUnsupportedException {
 		if (Arrays.stream(supportedLanguages()).parallel().noneMatch(l -> l.equalsIgnoreCase(card.getLanguage())))
 			throw new LanguageUnsupportedException(card.getLanguage());
 		return _retrievePrice(card);
@@ -237,10 +237,6 @@ public abstract class StoreRetriever {
 					.append("prices", prices)
 					.toString();
 		}
-	}
-
-	public class StoreDisabledException extends Exception {
-
 	}
 
 	public class StoreAuthException extends Exception {

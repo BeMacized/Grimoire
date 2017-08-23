@@ -71,8 +71,7 @@ public class MagicCardMarketRetriever extends StoreRetriever {
 	}
 
 	@Override
-	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException, StoreDisabledException {
-		if (MCM_TOKEN == null || MCM_HOST == null || MCM_SECRET == null) throw new StoreDisabledException();
+	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 
 		// First fetch MCM set name
 		String storeSetName = setDictionary.get(card.getSet().getCode());

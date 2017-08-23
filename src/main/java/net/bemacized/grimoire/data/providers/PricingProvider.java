@@ -5,12 +5,8 @@ import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.MagicCardMarketRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.ScryfallRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.StoreRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.TCGPlayerRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.*;
 import net.bemacized.grimoire.utils.MTGUtils;
-import net.bemacized.grimoire.utils.StreamUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.io.IOUtils;
@@ -18,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jongo.MongoCollection;
 import org.json.JSONObject;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,25 +44,32 @@ public class PricingProvider {
 		}
 
 		this.stores = new ArrayList<StoreRetriever>() {{
-			add(new MagicCardMarketRetriever(
-					System.getenv("MCM_HOST"),
-					System.getenv("MCM_TOKEN"),
-					System.getenv("MCM_SECRET"),
-					setDictionary
-			));
-			add(new TCGPlayerRetriever(
-					System.getenv("TCG_HOST"),
-					System.getenv("TCG_KEY"),
-					setDictionary
-			));
+			if (System.getenv("MCM_HOST") != null && System.getenv("MCM_TOKEN") != null && System.getenv("MCM_SECRET") != null)
+				add(new MagicCardMarketRetriever(
+						System.getenv("MCM_HOST"),
+						System.getenv("MCM_TOKEN"),
+						System.getenv("MCM_SECRET"),
+						setDictionary
+				));
+			if (System.getenv("TCG_HOST") != null && System.getenv("TCG_KEY") != null)
+				add(new TCGPlayerRetriever(
+						System.getenv("TCG_HOST"),
+						System.getenv("TCG_KEY"),
+						setDictionary
+				));
 			add(new ScryfallRetriever());
+			add(new MTGGoldfishRetriever());
 		}};
 	}
 
-	public List<StoreCardPrice> getPricing(MtgCard card, Class<? extends StoreRetriever>... retrievers) {
+	public List<StoreCardPrice> getPricing(MtgCard card) {
+		return getPricing(card, null);
+	}
+
+	public List<StoreCardPrice> getPricing(MtgCard card, @Nullable List<Class<? extends StoreRetriever>> retrievers) {
 
 		return stores.parallelStream()
-				.filter(store -> retrievers == null || retrievers.length == 0 || Stream.of(retrievers).anyMatch(r -> r.isInstance(store)))
+				.filter(store -> retrievers == null || retrievers.size() == 0 || retrievers.parallelStream().anyMatch(r -> r.isInstance(store)))
 				.map(store -> {
 					// Check DB
 					MongoCollection priceRecords = Grimoire.getInstance().getDBManager().getJongo().getCollection(RECORDS_COLLECTION);
@@ -94,8 +98,6 @@ public class PricingProvider {
 						return new StoreCardPrice(StoreCardPriceStatus.UNKNOWN_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 					} catch (StoreRetriever.LanguageUnsupportedException e) {
 						return new StoreCardPrice(StoreCardPriceStatus.LANGUAGE_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
-					} catch (StoreRetriever.StoreDisabledException e) {
-						return new StoreCardPrice(StoreCardPriceStatus.STORE_DISABLED, card, store.getStoreName(), store.getStoreId(), null);
 					}
 				}).collect(Collectors.toList());
 	}
@@ -112,7 +114,12 @@ public class PricingProvider {
 		// Check layout
 		switch (guildPreferences.getPricePresentationMode()) {
 			case "ALL_MARKETS": {
-				List<StoreCardPrice> pricing = getPricing(card);
+				List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
+				if (guildPreferences.enabledMagicCardMarketStore()) stores.add(MagicCardMarketRetriever.class);
+				if (guildPreferences.enabledTCGPlayerStore()) stores.add(TCGPlayerRetriever.class);
+				if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
+				if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+				List<StoreCardPrice> pricing = getPricing(card, stores);
 				embed.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 				pricing.forEach(storeprice -> {
 					switch (storeprice.getStatus()) {
@@ -134,11 +141,11 @@ public class PricingProvider {
 									.collect(Collectors.toList());
 
 							// Scryfall exception
-							if (targetCurrency != null && storeprice.getStoreId().equals(new ScryfallRetriever().getStoreId()))
-								prices = prices.parallelStream()
-										.map(p -> new AbstractMap.SimpleEntry<>(p.getValue().getCurrency() == targetCurrency ? "Average" : p.getKey(), p.getValue()))
-										.filter(StreamUtils.distinctByKey(AbstractMap.SimpleEntry::getKey))
-										.collect(Collectors.toList());
+//							if (targetCurrency != null && storeprice.getStoreId().equals(new ScryfallRetriever().getStoreId()))
+//								prices = prices.parallelStream()
+//										.map(p -> new AbstractMap.SimpleEntry<>(p.getValue().getCurrency() == targetCurrency ? "Average" : p.getKey(), p.getValue()))
+//										.filter(StreamUtils.distinctByKey(AbstractMap.SimpleEntry::getKey))
+//										.collect(Collectors.toList());
 
 							List<StoreRetriever.Currency> convertedFrom = prices.parallelStream().map(p -> p.getValue().getConvertedFrom()).filter(Objects::nonNull).distinct().collect(Collectors.toList());
 
@@ -165,15 +172,12 @@ public class PricingProvider {
 						case LANGUAGE_UNSUPPORTED:
 							embed.addField(storeprice.getStoreName(), "Language not supported.", true);
 							break;
-						case STORE_DISABLED:
-							embed.addField(storeprice.getStoreName(), "Store not enabled", true);
-							break;
 					}
 				});
 				break;
 			}
 			case "SCRYFALL_ONE": {
-				List<StoreCardPrice> pricing = getPricing(card, ScryfallRetriever.class);
+				List<StoreCardPrice> pricing = getPricing(card, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
 				pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
 					switch (storeprice.getStatus()) {
 						case SUCCESS:
@@ -212,16 +216,13 @@ public class PricingProvider {
 						case LANGUAGE_UNSUPPORTED:
 							embed.addField("", "Card language not supported.", true);
 							break;
-						case STORE_DISABLED:
-							embed.addField("", "Scryfall is currently not enabled.", true);
-							break;
 					}
 				});
 				break;
 			}
 			case "SCRYFALL_ALL": {
 				new CardProvider.SearchQuery().noTokens().noEmblems().hasName(card.getName()).forEach(c -> {
-					List<StoreCardPrice> pricing = getPricing(c, ScryfallRetriever.class);
+					List<StoreCardPrice> pricing = getPricing(c, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
 					pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
 						switch (storeprice.getStatus()) {
 							case SUCCESS:
@@ -259,9 +260,6 @@ public class PricingProvider {
 								break;
 							case LANGUAGE_UNSUPPORTED:
 								embed.addField("", "Card language not supported.", true);
-								break;
-							case STORE_DISABLED:
-								embed.addField("", "Scryfall is currently not enabled.", true);
 								break;
 						}
 					});
@@ -316,7 +314,6 @@ public class PricingProvider {
 		AUTH_ERROR,
 		UNKNOWN_ERROR,
 		CARD_UNKNOWN,
-		LANGUAGE_UNSUPPORTED,
-		STORE_DISABLED
+		LANGUAGE_UNSUPPORTED
 	}
 }

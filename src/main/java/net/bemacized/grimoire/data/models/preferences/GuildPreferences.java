@@ -113,6 +113,22 @@ public class GuildPreferences {
 		return getMultiValue(15, getValue(15));
 	}
 
+	public boolean enabledMagicCardMarketStore() {
+		return getValue(17) == 1;
+	}
+
+	public boolean enabledTCGPlayerStore() {
+		return getValue(18) == 1;
+	}
+
+	public boolean enabledMTGGoldfishStore() {
+		return getValue(19) == 1;
+	}
+
+	public boolean enabledScryfallStore() {
+		return getValue(20) == 1;
+	}
+
 	public long getTimestamp() {
 		return timestamp;
 	}

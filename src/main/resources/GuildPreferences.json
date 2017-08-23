@@ -124,5 +124,29 @@
     "id": 16,
     "name": "Show Flavor Text",
     "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 17,
+    "name": "MagicCardMarket.eu",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 18,
+    "name": "TCGPlayer.com",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 19,
+    "name": "MTGGoldfish.com",
+    "default": 1
+  },
+  {
+    "type": "SWITCH",
+    "id": 20,
+    "name": "Scryfall.com",
+    "default": 1
   }
 ]
