@@ -38,8 +38,10 @@ public class GuildPreferenceProvider {
 		GuildPreferences preferences = this.guildPreferenceList.parallelStream().filter(p -> p.getGuildId().equals(guild.getId())).findFirst().orElse(null);
 		if (!forceReload && preferences != null && System.currentTimeMillis() - preferences.getTimestamp() < MAX_PREFERENCE_AGE)
 			return preferences;
+		String permStr = GuildPreferenceRetriever.retrieveSettings(guild.getId());
+		if (permStr == null && preferences != null) return preferences;
 		if (preferences != null) guildPreferenceList.remove(preferences);
-		preferences = new GuildPreferences(guild.getId(), GuildPreferenceRetriever.retrieveSettings(guild.getId()));
+		preferences = new GuildPreferences(guild.getId(), permStr);
 		guildPreferenceList.add(preferences);
 		return preferences;
 	}
