@@ -13,21 +13,28 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jongo.marshall.jackson.oid.MongoId;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"SpellCheckingInspection", "WeakerAccess"})
 public class MtgCard {
 
+	private static final Logger LOG = Logger.getLogger(MtgCard.class.getName());
 	public static final String COLLECTION = "MtgCards";
 
 	@MongoId
@@ -56,6 +63,7 @@ public class MtgCard {
 
 	// Transient data
 	private transient String imageUrl;
+	private transient String printedText;
 
 	public MtgCard() {
 	}
@@ -189,8 +197,8 @@ public class MtgCard {
 		}
 		if (guildPreferences.showCardType() && getType() != null)
 			eb.appendDescription(getType() + "\n\n");
-		if (guildPreferences.showOracleText() && getText() != null)
-			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild) + "\n");
+		if (guildPreferences.showOracleText() && getPrintedText() != null)
+			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getPrintedText(), guild) + "\n");
 		if (guildPreferences.showFlavorText() && getFlavorText() != null)
 			eb.appendDescription("\n_\"" + getFlavorText() + "\"_");
 		if (guildPreferences.showLegalFormats()) {
@@ -210,7 +218,7 @@ public class MtgCard {
 		if (guildPreferences.showMiscProperties()) {
 			if (getLoyalty() != null) eb.addField("Loyalty", getLoyalty(), true);
 			if (getHandModifier() != null && getLifeModifier() != null)
-				eb.addField("Vanguard Hand/Life Modifiers", getHandModifier() + "/" + getLifeModifier(),true);
+				eb.addField("Vanguard Hand/Life Modifiers", getHandModifier() + "/" + getLifeModifier(), true);
 		}
 
 		// Return result
@@ -260,7 +268,9 @@ public class MtgCard {
 	}
 
 	@Nullable
-	public String getFlavorText() { return scryfallCard.getFlavorText(); }
+	public String getFlavorText() {
+		return scryfallCard.getFlavorText();
+	}
 
 	@Nullable
 	public String getLifeModifier() {
@@ -280,6 +290,30 @@ public class MtgCard {
 	@Nullable
 	public String getTokenColor() {
 		return MTGUtils.colourIdToName(getColorIdentity().length > 0 ? getColorIdentity()[0] : null);
+	}
+
+	@Nullable
+	public String getPrintedText() {
+		if (language.equalsIgnoreCase("English") || getMultiverseid() < 1) return getText();
+		if (printedText != null && !printedText.isEmpty()) return printedText;
+		try {
+			printedText = String.join("\n",
+					Jsoup.parse(new URL("http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid=" + getMultiverseid()), 5000)
+							.getElementsByClass("cardComponentTable")
+							.first()
+							.getElementsByTag("td")
+							.first()
+							.getElementsByClass("cardtextbox")
+							.stream()
+							.map(Element::text)
+							.map(String::trim)
+							.collect(Collectors.toList())
+			);
+			if (printedText.isEmpty()) printedText = null;
+		} catch (IOException e) {
+			LOG.log(Level.WARNING, "Could not retrieve foreign text for card with multiverseid " + getMultiverseid(), e);
+		}
+		return (printedText == null) ? getText() : printedText;
 	}
 
 	@Nullable

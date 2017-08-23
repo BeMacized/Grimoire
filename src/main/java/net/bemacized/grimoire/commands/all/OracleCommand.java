@@ -34,7 +34,7 @@ public class OracleCommand extends CardBaseCommand {
 	@Override
 	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that text exists
-		if (card.getText() == null) {
+		if (card.getPrintedText() == null) {
 			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no oracle text available.", card.getName());
 			return;
 		}
@@ -44,7 +44,7 @@ public class OracleCommand extends CardBaseCommand {
 				new EmbedBuilder()
 						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getText(), e.getGuild()), false)
+						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getPrintedText(), e.getGuild()), false)
 						.build()
 		);
 	}

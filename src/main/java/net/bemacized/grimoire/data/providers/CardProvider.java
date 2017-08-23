@@ -265,8 +265,8 @@ public class CardProvider extends Provider {
 
 		public SearchQuery containsName(String name) {
 			return new SearchQuery(this.parallelStream().filter(card -> {
-				String reducedCard = card.getName().toLowerCase().replaceAll("[^a-z0-9- ]", "");
-				String reducedInput = name.toLowerCase().replaceAll("[^a-z0-9- ]", "");
+				String reducedCard = card.getName().toLowerCase().replaceAll("[-!$%^&*()_+|~=`{}\\[\\]:\";'<>?,./]", "");
+				String reducedInput = name.toLowerCase().replaceAll("[-!$%^&*()_+|~=`{}\\[\\]:\";'<>?,./]", "");
 				return reducedCard.contains(reducedInput) || reducedCard.replaceAll("-", "").contains(reducedInput.replaceAll("-", "")) || reducedCard.replaceAll("-", " ").contains(reducedInput.replaceAll("-", " "));
 			}).collect(Collectors.toList()));
 		}
