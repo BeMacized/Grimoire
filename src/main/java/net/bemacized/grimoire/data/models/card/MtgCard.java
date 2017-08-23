@@ -380,11 +380,18 @@ public class MtgCard {
 		return (getMultiverseid() > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + getMultiverseid() : null;
 	}
 
+	@Nullable
 	public String getScryfallUrl() {
+		// Fallback to gatherer for foreign cards
+		if (!getLanguage().equalsIgnoreCase("English")) return getGathererUrl();
+
 		return scryfallCard.getScryfallUri();
 	}
 
+	@Nullable
 	public String getMagicCardsInfoUrl() {
+		// Fallback to gatherer for foreign cards
+		if (!getLanguage().equalsIgnoreCase("English")) return getGathererUrl();
 		try {
 			return "http://magiccards.info/query?q=!" + URLEncoder.encode(getName(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
