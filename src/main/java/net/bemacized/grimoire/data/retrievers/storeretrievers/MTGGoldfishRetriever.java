@@ -1,11 +1,13 @@
 package net.bemacized.grimoire.data.retrievers.storeretrievers;
 
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class MTGGoldfishRetriever extends StoreRetriever {
 		return 1000 * 60 * 60 * 6; // 6 hours
 	}
 
+	@Nullable
 	@Override
 	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 		Map<String, Price> prices = new HashMap<>();
@@ -49,6 +52,8 @@ public class MTGGoldfishRetriever extends StoreRetriever {
 			if (url == null || url.isEmpty()) url = onlineTableRow.child(0).child(0).attr("href");
 			if (paperPrice >= 0) prices.put("Paper", new Price(paperPrice, Currency.USD));
 			if (onlinePrice >= 0) prices.put("MTGO", new Price(onlinePrice, Currency.TIX));
+		} catch (HttpStatusException e) {
+			return null;
 		} catch (IOException e) {
 			LOG.log(java.util.logging.Level.SEVERE, "Could not fetch pricing from MTGGoldfish", e);
 			throw new UnknownStoreException();
