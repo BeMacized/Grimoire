@@ -57,8 +57,8 @@ public class PricingProvider {
 						System.getenv("TCG_KEY"),
 						setDictionary
 				));
-			add(new ScryfallRetriever());
 			add(new MTGGoldfishRetriever());
+			add(new ScryfallRetriever());
 		}};
 	}
 

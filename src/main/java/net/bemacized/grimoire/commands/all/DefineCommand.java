@@ -4,13 +4,19 @@ import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
+import net.bemacized.grimoire.data.models.rules.ComprehensiveRule;
 import net.bemacized.grimoire.data.models.rules.Definition;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DefineCommand extends BaseCommand {
@@ -68,7 +74,46 @@ public class DefineCommand extends BaseCommand {
 			return;
 		}
 
+		String explanation = definition.getExplanation();
+
+		Pattern rulePattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
+		Matcher ruleMatcher = rulePattern.matcher(explanation);
+		List<String> rules = new ArrayList<>();
+
+		while (ruleMatcher.find())
+			rules.add(ruleMatcher.group().substring(5));
+
+		explanation = formatText(explanation, e.getGuild());
+
+		EmbedBuilder eb = new EmbedBuilder().setTitle(definition.getKeyword(),"https://blogs.magicjudges.org/rules/cr-glossary/").setColor(Globals.EMBED_COLOR_PRIMARY).setDescription(explanation);
+
+		if (rules.size() == 1) {
+			String rule = rules.get(0).endsWith(".") ? rules.get(0).substring(0, rules.get(0).length() - 1) : rules.get(0);
+			List<ComprehensiveRule> crules = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(r -> r.getParagraphId().startsWith(rule)).collect(Collectors.toList());
+			crules.stream().limit(4).sorted().forEachOrdered(r -> {
+				String text = formatText(r.getText(), e.getGuild());
+				eb.addField("CR " + r.getParagraphId(), text, true);
+			});
+			if (crules.size() > 4)
+				eb.addField("", "More rules available: `" + guildPreferences.getPrefix() + "cr " + rule + "`", false);
+		}
+
 		// Show definition
-		e.getChannel().sendMessage(new EmbedBuilder().setColor(Globals.EMBED_COLOR_PRIMARY).addField(definition.getKeyword(), definition.getExplanation(), false).build()).submit();
+		e.getChannel().sendMessage(eb.build()).submit();
+	}
+
+	private String formatText(String str, Guild guild) {
+		return Grimoire.getInstance().getEmojiParser().parseEmoji(String.join("\n", Arrays.stream(str.split("[\r\n]")).parallel().map(line -> {
+			String text = String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
+					(Grimoire.getInstance().getComprehensiveRuleProvider().getDefinitions().parallelStream().map(Definition::getKeyword).anyMatch(w -> w.equalsIgnoreCase(word)))
+							? "__" + word + "__"
+							: (word.matches("[0-9]{3}([.]([0-9]+[.a-z]?)?)?") ? "`" + word + "`" : word)
+			).collect(Collectors.toList()));
+			Pattern pattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
+			Matcher matcher = pattern.matcher(text);
+			while(matcher.find())
+				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
+			return text;
+		}).collect(Collectors.toList())), guild);
 	}
 }

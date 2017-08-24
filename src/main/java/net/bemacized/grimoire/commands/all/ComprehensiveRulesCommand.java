@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -87,6 +88,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 		final ComprehensiveRule section = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream()
 				.filter(c -> c.getParagraphId().matches(reqId.substring(0, 1) + "[.]"))
 				.findFirst().orElse(null);
+
 		if (section == null) {
 			sendErrorEmbedFormat(e.getChannel(), "The section specified is not a valid option.\n\nThe following sections are available:\n%s", String.join("\n",
 					Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream()
@@ -145,7 +147,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			//Construct title
 			title = String.format("%s %s", section.getParagraphId(), section.getText());
 			subtitle = "**" + subsection.getParagraphId() + " " + subsection.getText() + "**";
-			description.append(":small_orange_diamond: __**" + subparagraph.getParagraphId() + "**__ " + underlineKeywordsAndParseEmoji(subparagraph.getText(), e.getGuild()));
+			description.append(":small_orange_diamond: __**" + subparagraph.getParagraphId() + "**__ " + formatText(subparagraph.getText(), e.getGuild()));
 			long peers = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream()
 					.filter(r -> r.getParagraphId().matches(Pattern.quote(paragraph.getParagraphId().substring(0, paragraph.getParagraphId().length() - 1)) + "[a-z]"))
 					.count() - 1;
@@ -158,7 +160,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			List<ComprehensiveRule> rules = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream()
 					.filter(r -> r.getParagraphId().matches(Pattern.quote(paragraph.getParagraphId().substring(0, paragraph.getParagraphId().length() - 1)) + "[a-z.]"))
 					.sorted().collect(Collectors.toList());
-			rules.forEach(r -> description.append("\n\n:small_orange_diamond: __**" + r.getParagraphId() + "**__ " + underlineKeywordsAndParseEmoji(r.getText(), e.getGuild())));
+			rules.forEach(r -> description.append("\n\n:small_orange_diamond: __**" + r.getParagraphId() + "**__ " + formatText(r.getText(), e.getGuild())));
 		}
 		// Subsection output
 		else if (subsection != null) {
@@ -172,21 +174,21 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 				paragraphStream.get().forEachOrdered(p -> {
 					int textlength = p.getText().split("\\s+").length;
 					if (textlength < 7) {
-						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + " " + underlineKeywordsAndParseEmoji(p.getText(), e.getGuild()) + "**");
+						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + " " + formatText(p.getText(), e.getGuild()) + "**");
 					} else if (textlength < 20) {
-						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + underlineKeywordsAndParseEmoji(p.getText(), e.getGuild()));
+						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + formatText(p.getText(), e.getGuild()));
 						if (Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(c -> c.getParagraphId().matches(Pattern.quote(p.getParagraphId().substring(0, p.getParagraphId().length() - 1)) + "[a-z]")).count() > 0)
 							description.append(" **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					} else {
 						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** ");
-						description.append(underlineKeywordsAndParseEmoji(String.join(" ", Arrays.copyOfRange(p.getText().split("\\s+"), 0, 19)), e.getGuild()));
+						description.append(formatText(String.join(" ", Arrays.copyOfRange(p.getText().split("\\s+"), 0, 19)), e.getGuild()));
 						description.append("..... **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					}
 				});
 			} else {
 				paragraphStream.get().forEachOrdered(p -> {
 					if (p.getText().split("\\s+").length >= 7) {
-						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + underlineKeywordsAndParseEmoji(p.getText(), e.getGuild()));
+						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + formatText(p.getText(), e.getGuild()));
 						if (Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(c -> c.getParagraphId().matches(Pattern.quote(p.getParagraphId().substring(0, p.getParagraphId().length() - 1)) + "[a-z]")).count() > 0)
 							description.append(" **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					}
@@ -223,13 +225,18 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 		}
 	}
 
-	private String underlineKeywordsAndParseEmoji(String str, Guild guild) {
-		return Grimoire.getInstance().getEmojiParser().parseEmoji(String.join("\n", Arrays.stream(str.split("[\r\n]")).parallel().map(line ->
-				String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
-						(Grimoire.getInstance().getComprehensiveRuleProvider().getDefinitions().parallelStream().map(Definition::getKeyword).anyMatch(w -> w.equalsIgnoreCase(word)))
-								? "__" + word + "__"
-								: (word.matches("[0-9]{3}([.]([0-9]+[.a-z]?)?)?") ? "`" + word + "`" : word)
-				).collect(Collectors.toList()))
-		).collect(Collectors.toList())), guild);
+	private String formatText(String str, Guild guild) {
+		return Grimoire.getInstance().getEmojiParser().parseEmoji(String.join("\n", Arrays.stream(str.split("[\r\n]")).parallel().map(line -> {
+			String text = String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
+					(Grimoire.getInstance().getComprehensiveRuleProvider().getDefinitions().parallelStream().map(Definition::getKeyword).anyMatch(w -> w.equalsIgnoreCase(word)))
+							? "__" + word + "__"
+							: (word.matches("[0-9]{3}([.]([0-9]+[.a-z]?)?)?") ? "`" + word + "`" : word)
+			).collect(Collectors.toList()));
+			Pattern pattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
+			Matcher matcher = pattern.matcher(text);
+			while(matcher.find())
+				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
+			return text;
+		}).collect(Collectors.toList())), guild);
 	}
 }

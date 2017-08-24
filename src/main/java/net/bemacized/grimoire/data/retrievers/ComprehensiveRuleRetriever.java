@@ -68,13 +68,15 @@ public class ComprehensiveRuleRetriever {
 						if (!sb.toString().isEmpty()) sb.append("\n");
 						sb.append(line.trim());
 					} else {
-						definitions.add(new Definition(keyword, sb.toString()));
+						for (String s : keyword.split(","))
+							definitions.add(new Definition(s.trim(), sb.toString()));
 						keyword = null;
 						sb = new StringBuilder();
 					}
 				}
 				if (keyword != null) {
-					definitions.add(new Definition(keyword, sb.toString()));
+					for (String s : keyword.split(","))
+						definitions.add(new Definition(s.trim(), sb.toString()));
 				}
 			}
 		} catch (Exception e) {
