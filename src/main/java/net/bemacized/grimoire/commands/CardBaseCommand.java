@@ -32,6 +32,11 @@ public abstract class CardBaseCommand extends BaseCommand {
 	}
 
 	@Override
+	public boolean scryfallSyntax() {
+		return true;
+	}
+
+	@Override
 	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 
 		// Quit and error out if none provided

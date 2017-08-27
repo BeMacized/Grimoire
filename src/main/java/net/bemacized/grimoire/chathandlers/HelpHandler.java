@@ -120,8 +120,9 @@ public class HelpHandler extends ChatHandler {
 			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 			eb.addField("Command", "`g!" + command.name() + "`", false);
 			eb.addField("Description", command.description(), false);
+			if (command.scryfallSyntax()) eb.addField("", "This command supports the full [Scryfall Syntax](https://scryfall.com/docs/reference)!", false);
 			eb.addField("Usage" + (command.usages().length > 1 ? "s" : ""), String.join("\n", Arrays.stream(command.usages()).parallel().map(u -> "`g!" + command.name() + " " + u + "`").collect(Collectors.toList())), false);
-			eb.addField("Examples" + (command.usages().length > 1 ? "s" : ""), String.join("\n", Arrays.stream(command.examples()).parallel().map(ex -> "`g!" + command.name() + " " + ex + "`").collect(Collectors.toList())), false);
+			eb.addField("Example" + (command.examples().length > 1 ? "s" : ""), String.join("\n", Arrays.stream(command.examples()).parallel().map(ex -> "`g!" + command.name() + " " + ex + "`").collect(Collectors.toList())), false);
 			e.getChannel().sendMessage(eb.build()).submit();
 			return;
 		}
