@@ -28,10 +28,14 @@ public class ScryfallRetriever extends StoreRetriever {
 	@Override
 	protected StoreCardPriceRecord _retrievePrice(MtgCard card) throws StoreAuthException, StoreServerErrorException, UnknownStoreException {
 		card.updateScryfall();
+
 		return new StoreCardPriceRecord(card.getName(), card.getSet().getCode(), null, System.currentTimeMillis(), getStoreId(), new HashMap<String, Price>() {{
-			if (card.getScryfallCard().getEur() != null) put("Paper (EUR)", new Price(Double.parseDouble(card.getScryfallCard().getEur()), Currency.EUR));
-			if (card.getScryfallCard().getTix() != null) put("MTGO", new Price(Double.parseDouble(card.getScryfallCard().getTix()), Currency.TIX));
-			if (card.getScryfallCard().getUsd() != null) put("Paper (USD)", new Price(Double.parseDouble(card.getScryfallCard().getUsd()), Currency.USD));
+			if (card.getScryfallCard().getEur() != null)
+				put("Paper (EUR)", new Price(Double.parseDouble(card.getScryfallCard().getEur()), Currency.EUR));
+			if (card.getScryfallCard().getTix() != null)
+				put("MTGO", new Price(Double.parseDouble(card.getScryfallCard().getTix()), Currency.TIX));
+			if (card.getScryfallCard().getUsd() != null)
+				put("Paper (USD)", new Price(Double.parseDouble(card.getScryfallCard().getUsd()), Currency.USD));
 		}});
 	}
 

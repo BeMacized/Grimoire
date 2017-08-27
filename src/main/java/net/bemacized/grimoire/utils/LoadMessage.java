@@ -53,8 +53,8 @@ public class LoadMessage {
 			@Override
 			public void run() {
 				if (System.currentTimeMillis() - startTime >= EXPIRE_TIME) LoadMessage.this.finish();
-				spinnerStage++;
-				if (spinnerStage == SPINNER.length) spinnerStage = 0;
+				if (spinnerStage + 1 == SPINNER.length) spinnerStage = 0;
+				else spinnerStage++;
 				if (taskQueue.isEmpty()) taskQueue.queue(LoadMessage.this::render);
 			}
 		}, 0, SPINNER_INTERVAL);

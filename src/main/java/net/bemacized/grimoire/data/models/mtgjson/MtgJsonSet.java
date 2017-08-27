@@ -1,10 +1,7 @@
 package net.bemacized.grimoire.data.models.mtgjson;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
@@ -15,120 +12,87 @@ import java.util.List;
 @SuppressWarnings({"FieldCanBeLocal", "MismatchedReadAndWriteOfArray", "unused"})
 public class MtgJsonSet {
 
-	@Expose
 	@Nonnull
 	private String name = "UNKNOWN";
-	@Expose
 	@Nonnull
 	private String code = "UNKNOWN";
-	//	@Expose
-//	@Nonnull
-//	private String releaseDate = "UNKNOWN";
-//	@Expose
-//	@Nonnull
-//	private Border border = Border.UNKNOWN;
-//	@Expose
-//	@Nonnull
-//	private Type type = Type.UNKNOWN;
-	@Expose(serialize = false)
+	@Nonnull
+	private String releaseDate = "UNKNOWN";
+	@Nonnull
+	private Border border = Border.UNKNOWN;
+	@Nonnull
+	private Type type = Type.UNKNOWN;
 	@Nonnull
 	private MtgJsonCard[] cards = new MtgJsonCard[0];
 
-//	@Expose
-//	@Nullable
-//	private String gathererCode;
-//	@Expose
-//	@Nullable
-//	private String oldCode;
-//	@Expose
-//	@Nullable
-//	private String magicCardsInfoCode;
-//	@Expose
-//	@Nullable
-//	private Booster booster;
-//	@Expose
-//	@Nullable
-//	private String block;
+	@Nullable
+	private String gathererCode;
+	@Nullable
+	private String oldCode;
+	@Nullable
+	private String magicCardsInfoCode;
+	@Nullable
+	private Booster booster;
+	@Nullable
+	private String block;
 
-//	@Expose
-//	private boolean onlineOnly;
+	private boolean onlineOnly;
 
 	private long timestamp = System.currentTimeMillis();
-
 
 	@Nonnull
 	public String getName() {
 		return name;
 	}
 
-
 	@Nonnull
 	public String getCode() {
 		return code;
 	}
 
-	@JsonIgnore
 	@Nonnull
 	public String getReleaseDate() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return releaseDate;
+		return releaseDate;
 	}
 
-	@JsonIgnore
 	@Nonnull
 	public Border getBorder() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return border;
+		return border;
 	}
 
-	@JsonIgnore
 	@Nonnull
 	public Type getType() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return type;
+		return type;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getBlock() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return block;
+		return block;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getGathererCode() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return gathererCode;
+		return gathererCode;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getOldCode() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return oldCode;
+		return oldCode;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getMagicCardsInfoCode() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return magicCardsInfoCode;
+		return magicCardsInfoCode;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public Booster getBooster() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return booster;
+		return booster;
 	}
 
-	@JsonIgnore
 	public boolean isOnlineOnly() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return onlineOnly;
+		return onlineOnly;
 	}
-
 
 	public long getTimestamp() {
 		return timestamp;
@@ -238,9 +202,9 @@ public class MtgJsonSet {
 	}
 
 	public void assertValidity() {
-//		assert !type.equals(Type.UNKNOWN);
-//		assert !border.equals(Border.UNKNOWN);
-//		assert !releaseDate.equals("UNKNOWN");
+		assert !type.equals(Type.UNKNOWN);
+		assert !border.equals(Border.UNKNOWN);
+		assert !releaseDate.equals("UNKNOWN");
 		assert !code.equals("UNKNOWN");
 		assert !name.equals("UNKNOWN");
 	}
@@ -250,15 +214,15 @@ public class MtgJsonSet {
 		return new ToStringBuilder(this)
 				.append("name", name)
 				.append("code", code)
-//				.append("releaseDate", releaseDate)
-//				.append("border", border)
-//				.append("type", type)
-//				.append("gathererCode", gathererCode)
-//				.append("oldCode", oldCode)
-//				.append("magicCardsInfoCode", magicCardsInfoCode)
-//				.append("booster", booster)
-//				.append("block", block)
-//				.append("onlineOnly", onlineOnly)
+				.append("releaseDate", releaseDate)
+				.append("border", border)
+				.append("type", type)
+				.append("gathererCode", gathererCode)
+				.append("oldCode", oldCode)
+				.append("magicCardsInfoCode", magicCardsInfoCode)
+				.append("booster", booster)
+				.append("block", block)
+				.append("onlineOnly", onlineOnly)
 				.append("timestamp", timestamp)
 				.toString();
 	}

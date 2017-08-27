@@ -45,7 +45,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
 			e.getChannel().sendMessage(new EmbedBuilder()

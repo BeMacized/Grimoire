@@ -41,7 +41,7 @@ public class StandardCommand extends BaseCommand {
 
 	@SuppressWarnings("Duplicates")
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		final EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setTitle("What's in Standard?", "http://whatsinstandard.com");

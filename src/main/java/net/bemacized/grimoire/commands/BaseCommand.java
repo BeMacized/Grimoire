@@ -28,6 +28,6 @@ public abstract class BaseCommand extends MessageUtils {
 		return false;
 	}
 
-	public abstract void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences);
+	public abstract void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences);
 
 }

@@ -29,6 +29,7 @@ dependencies {
     compile group: 'es.moki.ratelimitj', name: 'ratelimitj-inmemory', version: '0.4.0.M2'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile 'com.github.Ritaja:java-exchange-rates:1.0'
+    compile 'com.mashape.unirest:unirest-java:1.4.9'
 }
 
 task uberjar(type: Jar) {

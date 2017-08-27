@@ -38,7 +38,7 @@ public class HelpCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setAuthor("Mac's Grimoire: An MTG Discord Bot", Grimoire.WEBSITE, e.getJDA().getSelfUser().getAvatarUrl());
@@ -82,6 +82,9 @@ public class HelpCommand extends BaseCommand {
 		long users = e.getJDA().getGuilds().parallelStream().map(g -> g.getMembers().parallelStream()).flatMap(o -> o).map(m -> m.getUser().getId()).distinct().count();
 		eb.addField(":busts_in_silhouette: Total Users", "**" + users + "** User" + (users > 1 ? "s" : ""), true);
 		eb.addField(":gear: Discord Library", "JDA", true);
+
+		if (e.getGuild() != null)
+			sendEmbed(e.getChannel(), "I've sent you help in a private message!");
 
 		try {
 			e.getAuthor().openPrivateChannel().submit().get().sendMessage(eb.build()).submit();

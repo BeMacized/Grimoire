@@ -35,7 +35,7 @@ public class HelpHandler extends ChatHandler {
 
 		// Resend regular help
 		if (msg.equalsIgnoreCase("help") || msg.equalsIgnoreCase("g!help") || msg.equalsIgnoreCase("!help") || msg.equalsIgnoreCase("_help") || msg.equalsIgnoreCase("@" + Grimoire.BOT_NAME + " help")) {
-			new HelpCommand().exec(null, e, guildPreferences);
+			new HelpCommand().exec(null, "", e, guildPreferences);
 			return;
 		}
 
@@ -129,7 +129,7 @@ public class HelpHandler extends ChatHandler {
 		// Send help on first attempt
 		try {
 			if (e.getChannel().getHistory().retrievePast(1).submit().get().isEmpty()) {
-				new HelpCommand().exec(null, e, guildPreferences);
+				new HelpCommand().exec(null, "", e, guildPreferences);
 				return;
 			}
 		} catch (InterruptedException | ExecutionException ex) {

@@ -53,7 +53,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
 			sendEmbedFormat(e.getChannel(), "Please specify a section or paragraph from the comprehensive rules (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",
@@ -234,7 +234,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			).collect(Collectors.toList()));
 			Pattern pattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
 			Matcher matcher = pattern.matcher(text);
-			while(matcher.find())
+			while (matcher.find())
 				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
 			return text;
 		}).collect(Collectors.toList())), guild);

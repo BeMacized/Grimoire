@@ -42,7 +42,7 @@ public class TournamentRulesCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that paragraph number was given
 		if (args.length == 0) {
 			sendEmbedFormat(e.getChannel(), "Please specify a chapter from the tournament rules (ex. `1` or `1.1`). The following sections are available:\n%s", String.join("\n",

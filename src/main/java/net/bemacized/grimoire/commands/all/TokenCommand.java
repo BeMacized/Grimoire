@@ -1,9 +1,11 @@
 package net.bemacized.grimoire.commands.all;
 
+import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.providers.CardProvider;
+import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.bemacized.grimoire.utils.StreamUtils;
@@ -49,7 +51,7 @@ public class TokenCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args,String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify token name presence
 		if (args.length == 0) {
 			sendEmbed(e.getChannel(), "Please provide a valid token name.");
@@ -69,12 +71,8 @@ public class TokenCommand extends BaseCommand {
 			cardname = String.join(" ", args);
 		}
 
-		final List<MtgCard> matches = new CardProvider.SearchQuery()
-				.hasLayout(MtgCard.Layout.TOKEN)
-				.parallelStream()
-				.filter(StreamUtils.distinctByKey(c -> DigestUtils.sha1Hex(c.getSet().getCode() + c.getPower() + c.getToughness())))
-				.filter(token -> token.getName().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().contains(cardname.toLowerCase()))
-				.collect(Collectors.toList());
+		final List<MtgCard> matches = Grimoire.getInstance().getCardProvider().getCachedTokens();
+
 		final List<MtgCard> exactMatches = matches.parallelStream()
 				.filter(StreamUtils.distinctByKey(c -> DigestUtils.sha1Hex(c.getSet().getCode() + c.getPower() + c.getToughness())))
 				.filter(token -> token.getName().trim().equalsIgnoreCase(cardname.toLowerCase()))
@@ -118,17 +116,17 @@ public class TokenCommand extends BaseCommand {
 				return;
 			} else {
 				// List options
+				MtgCard[] matchArr = matches.toArray(new MtgCard[0]);
 				sendEmbedFormat(loadMsg, "There are multiple tokens matching your search. Please pick any of the following using `!token %s [#]`:\n%s", match.getName(), String.join("\n",
 						IntStream.range(0, matches.size()).parallel().mapToObj(i -> {
-							MtgCard m = matches.get(i);
+							MtgCard m = matchArr[i];
 							return String.format(
-									":small_orange_diamond: **%s.**%s%s%s%s%s",
+									":small_orange_diamond: **%s.**%s%s%s%s",
 									i + 1,
 									(m.getTokenColor() == null) ? "" : " " + m.getTokenColor(),
 									(m.getPower() == null || m.getToughness() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPower(), m.getToughness()) + "_",
 									" " + m.getName(),
-									" _(" + ((m.getSet().getParentSet() != null) ? m.getSet().getParentSet().getCode() : m.getSet().getCode()) + ")_",
-									(m.getImageUrl() == null) ? " __[NO ART AVAILABLE]__" : "");
+									" _(" + ((m.getSet().getParentSetCode() != null) ? m.getSet().getParentSetCode(): m.getSet().getCode()) + ")_");
 						}).collect(Collectors.toList())
 				));
 				return;

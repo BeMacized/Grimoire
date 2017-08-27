@@ -1,331 +1,154 @@
 package net.bemacized.grimoire.data.providers;
 
-import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
-import net.bemacized.grimoire.data.models.card.MtgSet;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
-import net.bemacized.grimoire.data.models.mtgjson.MtgJsonSet;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.bemacized.grimoire.data.retrievers.CardImageRetriever;
-import net.bemacized.grimoire.data.retrievers.MtgJsonRetriever;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
-import net.bemacized.grimoire.utils.StreamUtils;
+import net.bemacized.grimoire.utils.TimedValue;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class CardProvider extends Provider {
+public class CardProvider {
 
+	private final Logger LOG;
 	private CardImageRetriever imageRetriever;
+	private MtgJsonProvider mtgJsonProvider;
 
-	private List<MtgCard> cards;
-	private List<MtgSet> sets;
+	private List<ScryfallSet> sets;
+	private TimedValue<List<MtgCard>> cachedTokens;
 
 	public CardProvider() {
-		cards = new ArrayList<>();
 		sets = new ArrayList<>();
+		LOG = Logger.getLogger(this.getClass().getName());
 		imageRetriever = new CardImageRetriever();
-	}
-
-	public List<MtgCard> getCards() {
-		return new ArrayList<>(cards);
-	}
-
-	public List<MtgSet> getSets() {
-		return new ArrayList<>(sets);
+		mtgJsonProvider = new MtgJsonProvider();
+		mtgJsonProvider.load();
+		cachedTokens = new TimedValue<List<MtgCard>>(24 * 60 * 60 * 1000) {
+			@Nullable
+			@Override
+			public List<MtgCard> refresh() {
+				try {
+					return getCardsByScryfallQuery("++t:token");
+				} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+					LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
+				} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+					LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
+				} catch (ScryfallRetriever.ScryfallRequest.NoResultException e) {
+					LOG.log(Level.SEVERE, "Scryfall did not return any tokens", e);
+				}
+				return null;
+			}
+		};
+		LOG.info("Loading tokens...");
+		int tokenCount = cachedTokens.get().size();
+		LOG.info(tokenCount + " tokens loaded!");
 	}
 
 	public CardImageRetriever getImageRetriever() {
 		return imageRetriever;
 	}
 
-	public List<MtgSet> getSetsByNameOrCode(String query) {
-		return Stream.concat(
-				this.getSets().parallelStream().filter(set -> query.equalsIgnoreCase(set.getCode())),
-				this.getSets().parallelStream().filter(set -> set.getName().toLowerCase().contains(query.toLowerCase()))
-		).collect(Collectors.toList());
+	@Nonnull
+	public MtgCard getCardByScryfallId(@Nonnull String scryfallId) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+		//TODO: Get from cache list
+		MtgCard card = new MtgCard(scryfallId);
+		return card;
 	}
 
-	public MtgSet forceSingleSetByNameOrCode(String nameOrCode) {
-		List<MtgSet> sets = getSetsByNameOrCode(nameOrCode);
-		if (sets.isEmpty()) return null;
-		MtgSet exactCodeMatch = getSetByCode(nameOrCode);
-		if (exactCodeMatch != null) return exactCodeMatch;
-		MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
-		if (exactNameMatch != null) return exactNameMatch;
-		return sets.get(0);
+	@Nonnull
+	public MtgCard getCardByMultiverseId(int multiverseId) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+		//TODO: Get from cache list
+		MtgCard card = new MtgCard(ScryfallRetriever.getCardByMultiverseId(multiverseId));
+		return card;
 	}
 
-	public MtgSet getSingleSetByNameOrCode(String nameOrCode) throws MultipleSetResultsException {
-		List<MtgSet> sets = getSetsByNameOrCode(nameOrCode);
-		switch (sets.size()) {
-			case 0:
-				return null;
-			case 1:
-				return sets.get(0);
-			default: {
-				MtgSet exactCodeMatch = getSetByCode(nameOrCode);
-				if (exactCodeMatch != null) return exactCodeMatch;
-				MtgSet exactNameMatch = sets.parallelStream().filter(set -> nameOrCode.equalsIgnoreCase(set.getName())).findAny().orElse(null);
-				if (exactNameMatch != null) return exactNameMatch;
-				throw new MultipleSetResultsException(sets);
-			}
+	public MtgJsonProvider getMtgJsonProvider() {
+		return mtgJsonProvider;
+	}
+
+	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+		return getCardsByScryfallQuery(query, -1);
+	}
+
+	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query, int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).collect(Collectors.toList());
+	}
+
+	@Nullable
+	public ScryfallSet getSetByNameOrCode(@Nonnull String nameOrCode) {
+		// Attempt retrieval from cache
+		ScryfallSet set = sets.parallelStream().filter(s -> s.getCode().equalsIgnoreCase(nameOrCode)).findFirst().orElse(sets.parallelStream().filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase())).findFirst().orElse(null));
+		if (set != null) return set;
+		// Retrieve as code from Scryfall
+		try {
+			set = ScryfallRetriever.getSet(nameOrCode);
+			this.sets.add(set);
+			return set;
+		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
+			return null;
+		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+			LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
+			return null;
+		} catch (ScryfallRetriever.ScryfallRequest.NoResultException ignored) {
+		}
+		// Must be a name, try name matching
+		try {
+			List<ScryfallSet> sets = ScryfallRetriever.getSets();
+			sets.parallelStream().filter(s -> sets.parallelStream().noneMatch(_s -> _s.getCode().equalsIgnoreCase(s.getCode()))).forEach(this.sets::add);
+			set = sets.parallelStream().filter(s -> s.getName().equalsIgnoreCase(nameOrCode) || s.getCode().equalsIgnoreCase(nameOrCode)).findFirst().orElse(null);
+			return set;
+		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
+			return null;
+		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+			LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
+			return null;
 		}
 	}
 
 	@Nullable
-	public MtgSet getSetByCode(String code) {
-		return this.getSets().parallelStream().filter(s -> s.getCode().equalsIgnoreCase(code)).findFirst().orElse(null);
-	}
-
-	@Override
-	boolean loadFromDB() {
-		LOG.info("Attempting to load card data from database...");
-		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgSet.COLLECTION).find().as(MtgSet.class).forEach(set -> this.sets.add(set));
-		if (sets.isEmpty()) {
-			LOG.info("Could not find any sets in database. Fetching from web instead.");
-			return false;
-		}
-		LOG.info("Loaded sets from database.");
-		Grimoire.getInstance().getDBManager().getJongo().getCollection(MtgCard.COLLECTION).find().as(MtgCard.class).forEach(card -> this.cards.add(card));
-		if (cards.isEmpty()) {
-			LOG.info("Could not find any cards in database. Fetching from web instead.");
-			return false;
-		}
-
-		// Add foreign cards
-		this.cards.addAll(this.cards.parallelStream()
-				.map(c -> Arrays.stream(c.getForeignNames()).parallel().map(fv -> new MtgCard(c, fv)))
-				.flatMap(o -> o)
-				.collect(Collectors.toList()));
-		LOG.info("Loaded cards from database.");
-
-		// Sort the data
-		sortData();
-		return true;
-	}
-
-	@Override
-	void saveToDB() {
-		LOG.info("Saving sets to database...");
-		this.sets.stream().forEach(MtgSet::save);
-		LOG.info("Saving cards to database...");
-		this.cards.stream().forEach(MtgCard::save);
-		LOG.info("Saved sets and cards to database.");
-	}
-
-	@Override
-	public void loadFromSource() {
-		// Load data from ScryfallRetriever
-		List<ScryfallCard> scryfallCards;
-		List<ScryfallSet> scryfallSets;
+	public MtgCard matchNonEnglishCardName(@Nonnull String query, @Nullable ScryfallSet set) {
+		MtgJsonCard mjc = mtgJsonProvider.getCards().parallelStream()
+				.filter(c -> set == null || (c.getSetCode().equalsIgnoreCase(set.getCode()) || c.getSetName().equalsIgnoreCase(set.getName())))
+				.filter(c -> !c.getLanguage().equalsIgnoreCase("English"))
+				.filter(c -> c.getName().equalsIgnoreCase(query))
+				.findFirst()
+				.orElse(null);
+		if (mjc == null) return null;
+		MtgJsonCard engVersion = mjc.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
+		if (engVersion == null) return null;
+		MtgCard card;
 		try {
-			scryfallCards = ScryfallRetriever.retrieveCards();
-			scryfallSets = ScryfallRetriever.retrieveSets();
-		} catch (IOException | InterruptedException e) {
-			LOG.log(Level.SEVERE, "Could not fetch data from ScryfallRetriever", e);
-			return;
-		}
-
-		// Load data from MTGJSON
-		List<MtgJsonCard> mtgJsonCards;
-		List<MtgJsonSet> mtgJsonSets;
-		try {
-			Map<MtgJsonSet, List<MtgJsonCard>> mtgJsonSetListMap = MtgJsonRetriever.retrieveData();
-			mtgJsonSets = new ArrayList<>(mtgJsonSetListMap.keySet());
-			mtgJsonCards = new ArrayList<>(mtgJsonSetListMap.values().parallelStream().map(Collection::parallelStream).flatMap(o -> o).collect(Collectors.toList()));
-		} catch (IOException e) {
-			e.printStackTrace();
-			LOG.log(Level.SEVERE, "Could not fetch data from MTGJSON", e);
-			return;
-		}
-
-		LOG.info("Merging set models...");
-
-		// Merge set models
-		this.sets = scryfallSets.parallelStream()
-				.map(scryfallSet -> new MtgSet(
-						scryfallSet,
-						mtgJsonSets.parallelStream()
-								.filter(mtgJsonSet -> mtgJsonSet.getCode().equalsIgnoreCase(scryfallSet.getCode()))
-								.findFirst().orElse(null)
-				))
-				.collect(Collectors.toList());
-
-		LOG.info("Merging card models...");
-
-		// Merge card models
-		this.cards = scryfallCards.parallelStream()
-				.map(scryfallCard -> new MtgCard(
-						scryfallCard,
-						mtgJsonCards.parallelStream().filter(mtgJsonCard -> mtgJsonCard.getMultiverseid() > 0 && scryfallCard.getMultiverseId() > 0 && mtgJsonCard.getMultiverseid() == scryfallCard.getMultiverseId() || mtgJsonCard.getName().equalsIgnoreCase(scryfallCard.getName()) && scryfallCard.getSet().equalsIgnoreCase(mtgJsonCard.getSetCode())).findFirst().orElse(null)
-				))
-				.collect(Collectors.toList());
-
-		// Validate models
-		this.sets.parallelStream().forEach(MtgSet::assertValidity);
-		this.cards.parallelStream().forEach(MtgCard::assertValidity);
-		assertValidity();
-
-		// Save models to database
-		saveToDB();
-
-		// Add foreign cards
-		LOG.info("Adding foreign cards...");
-		this.cards.addAll(this.cards.parallelStream()
-				.map(c -> Arrays.stream(c.getForeignNames()).parallel().map(fv -> new MtgCard(c, fv)))
-				.flatMap(o -> o)
-				.collect(Collectors.toList()));
-
-		// Sort the data
-		sortData();
-	}
-
-	private void sortData() {
-		if (!"1".equals(System.getenv("DONT_SORT_CARDDATA"))) {
-			LOG.info("Sorting sets...");
-			this.sets.sort((o1, o2) -> {
-				if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
-				if (o1.getReleaseDate() == null) return 1;
-				if (o2.getReleaseDate() == null) return -1;
-				return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
-			});
-			LOG.info("Sorting cards...");
-			this.cards.sort((o1, o2) -> {
-				if (o1.getReleaseDate() == null && o2.getReleaseDate() == null) return 0;
-				if (o1.getReleaseDate() == null) return 1;
-				if (o2.getReleaseDate() == null) return -1;
-				return o1.getReleaseDate().compareTo(o2.getReleaseDate()) * -1;
-			});
-			LOG.info("Set & Card sorting complete");
+			card = getCardByMultiverseId(engVersion.getMultiverseid());
+			return new MtgCard(card.getScryfallCard(), mjc);
+		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
+			return null;
+		} catch (ScryfallRetriever.ScryfallRequest.NoResultException e) {
+			return null;
+		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+			LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
+			return null;
 		}
 	}
 
-	private void assertValidity() {
-		assert this.sets.parallelStream().map(MtgSet::getCode).count() == this.sets.parallelStream().map(MtgSet::getCode).distinct().count();
+	public List<MtgCard> getCachedTokens() {
+		return cachedTokens.get();
 	}
 
-	public List<String> getAllSupertypes() {
-		return cards.parallelStream()
-				.filter(card -> card.getMtgJsonCard() != null)
-				.map(MtgCard::getMtgJsonCard)
-				.map(card -> Arrays.stream(card.getSupertypes()))
-				.flatMap(o -> o)
-				.distinct()
-				.collect(Collectors.toList());
-	}
-
-	public List<String> getAllTypes() {
-		return cards.parallelStream()
-				.filter(card -> card.getMtgJsonCard() != null)
-				.map(MtgCard::getMtgJsonCard)
-				.map(card -> Arrays.stream(card.getTypes()))
-				.flatMap(o -> o)
-				.distinct()
-				.collect(Collectors.toList());
-	}
-
-	public List<String> getAllSubtypes() {
-		return cards.parallelStream()
-				.filter(card -> card.getMtgJsonCard() != null)
-				.map(MtgCard::getMtgJsonCard)
-				.map(card -> Arrays.stream(card.getSubtypes()))
-				.flatMap(o -> o)
-				.distinct()
-				.collect(Collectors.toList());
-	}
-
-	public class MultipleSetResultsException extends Exception {
-
-		private List<MtgSet> results;
-
-		MultipleSetResultsException(List<MtgSet> sets) {
-			results = sets;
-		}
-
-		public List<MtgSet> getResults() {
-			return results;
-		}
-	}
-
-	public static class SearchQuery extends ArrayList<MtgCard> {
-
-		public SearchQuery() {
-			this(Grimoire.getInstance().getCardProvider().getCards());
-		}
-
-		SearchQuery(Collection<? extends MtgCard> c) {
-			super(c);
-		}
-
-		public SearchQuery containsName(String name) {
-			return new SearchQuery(this.parallelStream().filter(card -> {
-				String reducedCard = card.getName().toLowerCase().replaceAll("[-!$%^&*()_+|~=`{}\\[\\]:\";'<>?,./]", "");
-				String reducedInput = name.toLowerCase().replaceAll("[-!$%^&*()_+|~=`{}\\[\\]:\";'<>?,./]", "");
-				return reducedCard.contains(reducedInput) || reducedCard.replaceAll("-", "").contains(reducedInput.replaceAll("-", "")) || reducedCard.replaceAll("-", " ").contains(reducedInput.replaceAll("-", " "));
-			}).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasName(String name) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getName().equalsIgnoreCase(name)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasSupertype(String supertype) {
-			return new SearchQuery(this.parallelStream().filter(card -> Arrays.stream(card.getSupertypes()).parallel().anyMatch(t -> t.equalsIgnoreCase(supertype))).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasType(String type) {
-			return new SearchQuery(this.parallelStream().filter(card -> Arrays.stream(card.getTypes()).parallel().anyMatch(t -> t.equalsIgnoreCase(type))).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasSubtype(String subtype) {
-			return new SearchQuery(this.parallelStream().filter(card -> Arrays.stream(card.getSubtypes()).parallel().anyMatch(t -> t.equalsIgnoreCase(subtype))).collect(Collectors.toList()));
-		}
-
-		public SearchQuery inSet(@Nullable MtgSet set) {
-			if (set == null) return this;
-			return new SearchQuery(this.parallelStream().filter(card -> card.getSet().getCode().equalsIgnoreCase(set.getCode())).collect(Collectors.toList()));
-		}
-
-		public SearchQuery isOfRarity(MtgCard.Rarity rarity) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getRarity().equals(rarity)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery distinctCards() {
-			return new SearchQuery(this.stream().filter(StreamUtils.distinctByKey(MtgCard::getName)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasMultiverseId(int multiverseId) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getMultiverseid() == multiverseId).collect(Collectors.toList()));
-		}
-
-		public SearchQuery notLayout(MtgCard.Layout layout) {
-			return new SearchQuery(this.parallelStream().filter(card -> !card.getLayout().equals(layout)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery hasLayout(MtgCard.Layout layout) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getLayout().equals(layout)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery inLanguage(String language) {
-			return new SearchQuery(this.parallelStream().filter(card -> card.getLanguage().equalsIgnoreCase(language)).collect(Collectors.toList()));
-		}
-
-		public SearchQuery noTokens() {
-			return notLayout(MtgCard.Layout.TOKEN);
-		}
-
-		public SearchQuery noEmblems() {
-			return notLayout(MtgCard.Layout.EMBLEM);
-		}
-
-		public SearchQuery distinctSets() {
-			return new SearchQuery(this.stream().filter(StreamUtils.distinctByKey(c -> c.getSet().getCode())).collect(Collectors.toList()));
-		}
+	@Nullable
+	public MtgCard getRandomCardByScryfallQuery(String query) throws ScryfallRetriever.ScryfallRequest.ScryfallErrorException, ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException {
+		ScryfallCard card = ScryfallRetriever.getRandomCardFromQuery(query);
+		if (card == null) return null;
+		return new MtgCard(card);
 	}
 }

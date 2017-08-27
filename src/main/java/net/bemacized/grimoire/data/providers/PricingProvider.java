@@ -221,49 +221,57 @@ public class PricingProvider {
 				break;
 			}
 			case "SCRYFALL_ALL": {
-				new CardProvider.SearchQuery().noTokens().noEmblems().hasName(card.getName()).forEach(c -> {
-					List<StoreCardPrice> pricing = getPricing(c, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
-					pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
-						switch (storeprice.getStatus()) {
-							case SUCCESS:
-								List<String> prices = new ArrayList<>();
-								if (guildPreferences.getPricingCurrencyMode().equals("DEFAULT"))
-									storeprice.getRecord().getPrices().forEach((key, value) -> prices.add(value.toString()));
-								else {
-									StoreRetriever.Currency targetCurrency = StoreRetriever.Currency.valueOf(guildPreferences.getPricingCurrencyMode());
-									Supplier<Stream<StoreRetriever.Price>> getPrices = () -> storeprice
-											.getRecord().getPrices().values().parallelStream()
-											.sorted(Comparator.comparing(o -> o.getCurrency().name()));
-									StoreRetriever.Price price = getPrices.get()
-											.filter(p -> p.getCurrency() == targetCurrency)
-											.findFirst().orElseGet(() -> {
-												StoreRetriever.Price source = getPrices.get().filter(p -> p.getCurrency().isConvertable()).findFirst().orElse(null);
-												if (source == null) return null;
-												return source.convertTo(targetCurrency);
-											});
-									if (price != null) prices.add(price.toString(true));
-								}
-								String priceString = prices.isEmpty() ? "No pricing available." : String.join(" • ", prices);
-								embed.addField(String.format("%s (%s)", c.getSet().getName(), c.getSet().getCode()), priceString, false);
-								break;
-							case UNKNOWN_ERROR:
-								embed.addField("", "An unknown error occurred.", true);
-								break;
-							case CARD_UNKNOWN:
-								embed.addField("", "No results for card.", true);
-								break;
-							case AUTH_ERROR:
-								embed.addField("", "Could not authenticate.", true);
-								break;
-							case SERVER_ERROR:
-								embed.addField("", "Scryfall is having server issues. Please try again later.", true);
-								break;
-							case LANGUAGE_UNSUPPORTED:
-								embed.addField("", "Card language not supported.", true);
-								break;
-						}
+				try {
+					card.getAllPrintings().forEach(c -> {
+						List<StoreCardPrice> pricing = getPricing(c, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
+						pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
+							switch (storeprice.getStatus()) {
+								case SUCCESS:
+									List<String> prices = new ArrayList<>();
+									if (guildPreferences.getPricingCurrencyMode().equals("DEFAULT"))
+										storeprice.getRecord().getPrices().forEach((key, value) -> prices.add(value.toString()));
+									else {
+										StoreRetriever.Currency targetCurrency = StoreRetriever.Currency.valueOf(guildPreferences.getPricingCurrencyMode());
+										Supplier<Stream<StoreRetriever.Price>> getPrices = () -> storeprice
+												.getRecord().getPrices().values().parallelStream()
+												.sorted(Comparator.comparing(o -> o.getCurrency().name()));
+										StoreRetriever.Price price = getPrices.get()
+												.filter(p -> p.getCurrency() == targetCurrency)
+												.findFirst().orElseGet(() -> {
+													StoreRetriever.Price source = getPrices.get().filter(p -> p.getCurrency().isConvertable()).findFirst().orElse(null);
+													if (source == null) return null;
+													return source.convertTo(targetCurrency);
+												});
+										if (price != null) prices.add(price.toString(true));
+									}
+									String priceString = prices.isEmpty() ? "No pricing available." : String.join(" • ", prices);
+									embed.addField(String.format("%s (%s)", c.getSet().getName(), c.getSet().getCode()), priceString, false);
+									break;
+								case UNKNOWN_ERROR:
+									embed.addField("", "An unknown error occurred.", true);
+									break;
+								case CARD_UNKNOWN:
+									embed.addField("", "No results for card.", true);
+									break;
+								case AUTH_ERROR:
+									embed.addField("", "Could not authenticate.", true);
+									break;
+								case SERVER_ERROR:
+									embed.addField("", "Scryfall is having server issues. Please try again later.", true);
+									break;
+								case LANGUAGE_UNSUPPORTED:
+									embed.addField("", "Card language not supported.", true);
+									break;
+							}
+						});
 					});
-				});
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+					LOG.log(Level.WARNING, "Scryfall Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \""+card.getName()+"\". The error has been logged. Please try again later!");
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+					LOG.log(Level.SEVERE, "Unknown Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \""+card.getName()+"\". The error has been logged. Please try again later!");
+				}
 				break;
 			}
 		}

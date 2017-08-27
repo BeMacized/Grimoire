@@ -147,7 +147,7 @@ public class GuildPreferences {
 			case "MAGICCARDSINFO":
 				return card.getMagicCardsInfoUrl();
 			default:
-				return card.getScryfallUrl();
+				return card.getGathererUrl();
 		}
 	}
 

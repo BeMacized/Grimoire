@@ -6,7 +6,7 @@ import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class ReloadPreferencesCommand extends BaseCommand{
+public class ReloadPreferencesCommand extends BaseCommand {
 	@Override
 	public String name() {
 		return "reloadpreferences";
@@ -33,14 +33,14 @@ public class ReloadPreferencesCommand extends BaseCommand{
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Disable outside of guilds
 		if (e.getGuild() == null) return;
 		if (!e.getMember().hasPermission(Permission.MANAGE_SERVER)) {
 			sendErrorEmbed(e.getChannel(), "You need to have the Manage Server permission in order to reload preferences.");
 			return;
 		}
-		Grimoire.getInstance().getGuildPreferenceProvider().getPreferences(e.getGuild(),true);
+		Grimoire.getInstance().getGuildPreferenceProvider().getPreferences(e.getGuild(), true);
 		sendEmbed(e.getChannel(), "Your guild settings have been reloaded!");
 	}
 }

@@ -13,35 +13,27 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class StandardRotationProvider extends Provider {
+public class StandardRotationProvider {
 
 	private static final String SOURCE = "http://whatsinstandard.com/api/4/sets.json";
 	private static final String CHARSET = "UTF-8";
 	private static final long TIMEOUT = 60 * 5 * 1000;
 
+	private final Logger LOG;
 	private List<StandardSet> sets;
 	private long lastRetrieval;
 
 	public StandardRotationProvider() {
+		LOG = Logger.getLogger(this.getClass().getName());
 		sets = new ArrayList<>();
 	}
 
-	@Override
-	boolean loadFromDB() {
-		// Don't cache this stuff
-		return false;
-	}
+	public void load() {
 
-	@Override
-	void saveToDB() {
-		// Don't cache this stuff
-	}
-
-	@Override
-	public void loadFromSource() {
 		sets.clear();
 		LOG.info("Retrieving standard sets...");
 
@@ -66,7 +58,7 @@ public class StandardRotationProvider extends Provider {
 	}
 
 	public List<StandardSet> getSets() {
-		if (System.currentTimeMillis() - lastRetrieval >= TIMEOUT) loadFromSource();
+		if (System.currentTimeMillis() - lastRetrieval >= TIMEOUT) load();
 		return new ArrayList<>(sets);
 	}
 

@@ -51,7 +51,6 @@ public class EvalHandler extends ChatHandler {
 		se.put("jda", e.getJDA());
 		se.put("guild", e.getGuild());
 		se.put("channel", e.getChannel());
-		se.put("query", new CardProvider.SearchQuery());
 //		se.put("_", new UtilMethods());
 		try {
 			String result = se.eval(code).toString();

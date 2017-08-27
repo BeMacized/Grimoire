@@ -7,13 +7,14 @@ import net.bemacized.grimoire.data.retrievers.InfractionProcedureGuideRetriever;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfractionProcedureGuideProvider extends Provider {
+public class InfractionProcedureGuideProvider extends CachedProvider {
 
 	private static final String COLLECTION = "InfractionProcedureGuideSections";
 
 	private List<InfractionProcedureGuideSection> sections;
 
 	public InfractionProcedureGuideProvider() {
+		super();
 		sections = new ArrayList<>();
 	}
 

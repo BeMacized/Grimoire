@@ -1,8 +1,11 @@
 package net.bemacized.grimoire.data.models.scryfall;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.NotImplementedException;
+import net.bemacized.grimoire.Globals;
+import net.bemacized.grimoire.Grimoire;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.events.ShutdownEvent;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
@@ -16,13 +19,13 @@ public class ScryfallSet {
 	private String name = "UNKNOWN";
 	@Nonnull
 	private String icon_svg_uri = "UNKNOWN";
-	//	@Nonnull
-//	private String search_uri = "UNKNOWN";
+	@Nonnull
+	private String search_uri = "UNKNOWN";
 	@Nonnull
 	private Type set_type = Type.UNKNOWN;
 
-	//	@Nullable
-//	private String block_code;
+	@Nullable
+	private String block_code;
 	@Nullable
 	private String block;
 	@Nullable
@@ -32,16 +35,14 @@ public class ScryfallSet {
 
 	private int card_count = 0;
 	private boolean digital;
-//	private boolean foil;
+	private boolean foil;
 
 	private long timestamp = System.currentTimeMillis();
 
-
 	@Nonnull
 	public String getCode() {
-		return code;
+		return code.toUpperCase();
 	}
-
 
 	@Nonnull
 	public String getName() {
@@ -53,26 +54,20 @@ public class ScryfallSet {
 		return icon_svg_uri;
 	}
 
-	@JsonIgnore
 	@Nonnull
 	public String getSearchUri() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return search_uri;
+		return search_uri;
 	}
-
 
 	@Nonnull
 	public Type getSetType() {
 		return set_type;
 	}
 
-	@JsonIgnore
 	@Nullable
 	public String getBlockCode() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return block_code;
+		return block_code;
 	}
-
 
 	@Nullable
 	public String getBlock() {
@@ -81,34 +76,46 @@ public class ScryfallSet {
 
 	@Nullable
 	public String getParentSetCode() {
-		return parent_set_code;
+		return parent_set_code == null ? null : parent_set_code.toUpperCase();
 	}
-
 
 	@Nullable
 	public String getReleasedAt() {
 		return released_at;
 	}
 
-
 	public int getCardCount() {
 		return card_count;
 	}
-
 
 	public boolean isDigital() {
 		return digital;
 	}
 
-	@JsonIgnore
 	public boolean isFoil() {
-		throw new NotImplementedException("Property disabled. Checklist: Uncomment field+return, Remove @JsonIgnore, Fix assertValidity & toString methods.");
-//		return foil;
+		return foil;
 	}
-
 
 	public long getTimestamp() {
 		return timestamp;
+	}
+
+	public MessageEmbed getEmbed() {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
+		eb.setTitle(String.format("%s (%s)", getName(), getCode()), "https://scryfall.com/sets/" + getCode().toLowerCase());
+		if (getReleasedAt() != null) eb.addField("Release Date", getReleasedAt(), true);
+		eb.addField("Type", getSetType().getDisplayName().substring(0, 1).toUpperCase() + getSetType().getDisplayName().substring(1), true);
+		if (getBlock() != null && !getBlock().isEmpty()) eb.addField("Block", getBlock(), true);
+		eb.addField("MTG Online Only", isDigital() ? "Yes" : "No", true);
+		eb.addField("Cards", String.valueOf(getCardCount()), true);
+		return eb.build();
+	}
+
+	@Nullable
+	public ScryfallSet getParentSet() {
+		if (getParentSetCode() == null || getParentSetCode().isEmpty()) return null;
+		return Grimoire.getInstance().getCardProvider().getSetByNameOrCode(getParentSetCode());
 	}
 
 	@SuppressWarnings("SpellCheckingInspection")
@@ -163,7 +170,7 @@ public class ScryfallSet {
 		assert !code.equals("UNKNOWN");
 		assert !name.equals("UNKNOWN");
 		assert !icon_svg_uri.equals("UNKNOWN");
-//		assert !search_uri.equals("UNKNOWN");
+		assert !search_uri.equals("UNKNOWN");
 		assert !set_type.equals(Type.UNKNOWN);
 	}
 
@@ -173,15 +180,15 @@ public class ScryfallSet {
 				.append("code", code)
 				.append("name", name)
 				.append("icon_svg_uri", icon_svg_uri)
-//				.append("search_uri", search_uri)
+				.append("search_uri", search_uri)
 				.append("set_type", set_type)
-//				.append("block_code", block_code)
+				.append("block_code", block_code)
 				.append("block", block)
 				.append("parent_set_code", parent_set_code)
 				.append("released_at", released_at)
 				.append("card_count", card_count)
 				.append("digital", digital)
-//				.append("foil", foil)
+				.append("foil", foil)
 				.append("timestamp", timestamp)
 				.toString();
 	}

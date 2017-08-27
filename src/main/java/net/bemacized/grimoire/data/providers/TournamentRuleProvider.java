@@ -7,13 +7,14 @@ import net.bemacized.grimoire.data.retrievers.TournamentRuleRetriever;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TournamentRuleProvider extends Provider {
+public class TournamentRuleProvider extends CachedProvider {
 
 	private static final String COLLECTION = "TournamentRules";
 
 	private List<TournamentRule> rules;
 
 	public TournamentRuleProvider() {
+		super();
 		rules = new ArrayList<>();
 	}
 

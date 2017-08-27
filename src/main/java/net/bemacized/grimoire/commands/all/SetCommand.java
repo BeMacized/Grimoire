@@ -1,9 +1,9 @@
 package net.bemacized.grimoire.commands.all;
 
-import net.bemacized.grimoire.commands.SetBaseCommand;
-import net.bemacized.grimoire.data.models.card.MtgSet;
+import net.bemacized.grimoire.Grimoire;
+import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.utils.LoadMessage;
+import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
@@ -13,7 +13,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import java.io.ByteArrayOutputStream;
 
-public class SetCommand extends SetBaseCommand {
+public class SetCommand extends BaseCommand {
 
 	@Override
 	public String name() {
@@ -31,20 +31,39 @@ public class SetCommand extends SetBaseCommand {
 	}
 
 	@Override
-	protected String getInitialLoadLine() {
-		return "Loading set...";
+	public String[] usages() {
+		return new String[] {
+				"<set code>",
+				"<set name>"
+		};
 	}
 
 	@Override
-	protected void execForSet(MtgSet set, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public String[] examples() {
+		return new String[] {
+				"ORI",
+				"Magic Origins"
+		};
+	}
 
-		// Update load text
-		loadMsg.setLineFormat("Loading set '%s, (%s)'...", set.getName(), set.getCode());
+	@Override
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		// Quit and error out if none provided
+		if (args.length == 0) {
+			sendErrorEmbed(e.getChannel(), "Please provide a set name.");
+			return;
+		}
+
+		ScryfallSet set = Grimoire.getInstance().getCardProvider().getSetByNameOrCode(rawArgs);
+		if (set == null) {
+			sendErrorEmbedFormat(e.getChannel(), "I couldn't find any sets with **'%s'** as its name or code.", rawArgs);
+			return;
+		}
 
 		try {
 			// Attempt sending with set symbol
 			ByteArrayOutputStream resultByteStream = new ByteArrayOutputStream();
-			TranscoderInput transcoderInput = new TranscoderInput(set.getScryfallSet().getIconSvgUri());
+			TranscoderInput transcoderInput = new TranscoderInput(set.getIconSvgUri());
 			TranscoderOutput transcoderOutput = new TranscoderOutput(resultByteStream);
 			PNGTranscoder pngTranscoder = new PNGTranscoder();
 			pngTranscoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, 64f);
@@ -52,11 +71,10 @@ public class SetCommand extends SetBaseCommand {
 			pngTranscoder.transcode(transcoderInput, transcoderOutput);
 			resultByteStream.flush();
 			e.getChannel().sendFile(resultByteStream.toByteArray(), "set.png", new MessageBuilder().setEmbed(set.getEmbed()).build()).submit();
-			// Remove load message
-			loadMsg.complete();
 		} catch (Exception ex) {
 			// Fall back to no set symbol if needed
-			loadMsg.complete(set.getEmbed());
+			e.getChannel().sendMessage(set.getEmbed());
 		}
 	}
+
 }

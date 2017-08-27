@@ -50,7 +50,7 @@ public class DefineCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that a keyword was given
 		if (args.length == 0) {
 			sendEmbed(e.getChannel(), "Please specify a keyword to look up.");

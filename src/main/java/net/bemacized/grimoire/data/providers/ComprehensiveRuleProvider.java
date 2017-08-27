@@ -8,7 +8,7 @@ import net.bemacized.grimoire.data.retrievers.ComprehensiveRuleRetriever;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComprehensiveRuleProvider extends Provider {
+public class ComprehensiveRuleProvider extends CachedProvider {
 
 	private static final String RULE_COLLECTION = "ComprehensiveRules";
 	private static final String DEFINITION_COLLECTION = "Definitions";
@@ -17,6 +17,7 @@ public class ComprehensiveRuleProvider extends Provider {
 	private List<Definition> definitions;
 
 	public ComprehensiveRuleProvider() {
+		super();
 		rules = new ArrayList<>();
 		definitions = new ArrayList<>();
 	}

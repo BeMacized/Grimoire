@@ -2,9 +2,13 @@ package net.bemacized.grimoire.data.providers;
 
 import java.util.logging.Logger;
 
-abstract class Provider {
+abstract class CachedProvider {
 
-	protected static final Logger LOG = Logger.getLogger(Provider.class.getName());
+	protected final Logger LOG;
+
+	public CachedProvider() {
+		LOG = Logger.getLogger(this.getClass().getName());
+	}
 
 	public void load() {
 		if (!loadFromDB()) loadFromSource();
@@ -15,5 +19,4 @@ abstract class Provider {
 	abstract void saveToDB();
 
 	public abstract void loadFromSource();
-
 }

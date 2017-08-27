@@ -62,6 +62,10 @@ public class MtgJsonRetriever {
 					setCodeField.setAccessible(true);
 					setCodeField.set(card, set.getCode().toUpperCase());
 					setCodeField.setAccessible(false);
+					Field setNameField = MtgJsonCard.class.getDeclaredField("setName");
+					setNameField.setAccessible(true);
+					setNameField.set(card, set.getName());
+					setNameField.setAccessible(false);
 				}
 			} catch (NoSuchFieldException | IllegalAccessException e) {
 				LOG.log(Level.SEVERE, "Could not extract cards", e);
@@ -70,10 +74,10 @@ public class MtgJsonRetriever {
 			results.put(set, cards);
 		}
 
-		LOG.info("Retrieved " + results.values().parallelStream().mapToInt(List::size).sum() + " cards.");
-
 		results.keySet().parallelStream().forEach(MtgJsonSet::assertValidity);
 		results.values().parallelStream().map(Collection::parallelStream).flatMap(o -> o).forEach(MtgJsonCard::assertValidity);
+
+		LOG.info("Retrieved " + results.values().parallelStream().mapToInt(List::size).sum() + " cards.");
 
 		return results;
 	}

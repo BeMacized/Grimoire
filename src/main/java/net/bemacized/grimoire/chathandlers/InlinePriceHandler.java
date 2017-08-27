@@ -16,7 +16,9 @@ import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,40 +51,32 @@ public class InlinePriceHandler extends ChatHandler {
 		}
 
 		// Find matches for <<$CARD[|SET(CODE)]>> pattern.
-		Pattern p = Pattern.compile("(<<|\\[\\[)\\$[^<|> ][^<|>]*?([|][^<|>]+?)?(>>|]])");
+		Pattern p = Pattern.compile("(<<|\\[\\[)\\$[^<> ][^<>]*?(>>|]])");
 		Matcher m = p.matcher(e.getMessage().getContent());
 
 		// Parse matches
-		Multimap<String, String> references = HashMultimap.create();
+		Set<String> references = new HashSet<>();
 
-		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++) {
-			String[] data = m.group().substring(3, m.group().length() - 2).split("[|]");
-			String cardname = data[0].trim();
-			String setname = (data.length > 1) ? data[1].trim() : null;
-			references.put(cardname, setname);
-		}
+		for (int i = 0; i < MAX_REQUESTS_PER_MESSAGE && m.find(); i++)
+			references.add(m.group().substring(3, m.group().length() - 2));
 
 		BaseCommand command = new PricingCommand();
 
 		// Execute inline references as commands
-		for (Map.Entry<String, String> entry : references.entries()) {
-			String cardname = entry.getKey();
-			String setname = entry.getValue();
-			String rawArgs = cardname + (setname == null ? "" : " | " + setname);
-			String[] args = rawArgs.split("\\s+");
+		for (String reference : references) {
 
 			// Check rate limits
 			if (!references.isEmpty() && rateLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
 				// Send & log Warning
 				if (!rateLimitLimiter.overLimitWhenIncremented("user:" + e.getAuthor().getId())) {
-					sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam inline card references!");
+					sendErrorEmbed(e.getChannel(), "Woah woah woah, easy there! Please don't spam inline price references!");
 					EventLogger.saveLog(new UserRateLimited(
 							new LogEntry.User(e.getAuthor().getName(), e.getAuthor().getIdLong()),
 							(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
 							new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
 							command.name(),
-							args,
-							rawArgs,
+							new String[0],
+							reference,
 							command.name(),
 							new Date(System.currentTimeMillis()),
 							false
@@ -97,14 +91,14 @@ public class InlinePriceHandler extends ChatHandler {
 					(e.getGuild() == null) ? null : new LogEntry.Guild(e.getGuild().getIdLong(), e.getGuild().getName()),
 					new LogEntry.Channel(e.getChannel().getIdLong(), e.getChannel().getName()),
 					command.name(),
-					args,
-					rawArgs,
+					new String[0],
+					reference,
 					command.name(),
 					new Date(System.currentTimeMillis()),
 					true
 			));
 
-			new Thread(() -> command.exec(args, e, guildPreferences)).start();
+			new Thread(() -> command.exec(new String[0], reference, e, guildPreferences)).start();
 		}
 
 		next.handle(e);

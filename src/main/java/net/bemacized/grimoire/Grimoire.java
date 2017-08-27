@@ -1,5 +1,8 @@
 package net.bemacized.grimoire;
 
+import com.google.gson.Gson;
+import com.mashape.unirest.http.ObjectMapper;
+import com.mashape.unirest.http.Unirest;
 import net.bemacized.grimoire.controllers.DBManager;
 import net.bemacized.grimoire.controllers.EmojiParser;
 import net.bemacized.grimoire.controllers.ListReporter;
@@ -57,6 +60,27 @@ public class Grimoire {
 			System.exit(1);
 		}
 
+		// Configure UniRest
+		Unirest.setObjectMapper(new ObjectMapper() {
+			private Gson gson = new Gson();
+
+			public <T> T readValue(String s, Class<T> aClass) {
+				try{
+					return gson.fromJson(s, aClass);
+				}catch(Exception e){
+					throw new RuntimeException(e);
+				}
+			}
+
+			public String writeValue(Object o) {
+				try{
+					return gson.toJson(o);
+				}catch(Exception e){
+					throw new RuntimeException(e);
+				}
+			}
+		});
+
 		// Log in to Discord
 		try {
 			LOG.info("Logging in to Discord...");
@@ -96,7 +120,6 @@ public class Grimoire {
 
 		// Load cards and sets
 		this.cardProvider = new CardProvider();
-		this.cardProvider.load();
 
 		// Load comprehensive rules and definitions
 		this.comprehensiveRuleProvider = new ComprehensiveRuleProvider();
@@ -116,7 +139,6 @@ public class Grimoire {
 
 		// Instantiate pricing provider
 		this.pricingProvider = new PricingProvider();
-
 
 		// Load emoji references
 		this.emojiParser = new EmojiParser();

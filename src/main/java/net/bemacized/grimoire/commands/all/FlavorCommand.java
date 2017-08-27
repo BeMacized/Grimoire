@@ -44,7 +44,7 @@ public class FlavorCommand extends CardBaseCommand {
 				new EmbedBuilder()
 						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-						.addField("Flavor Text", "_\"" + Grimoire.getInstance().getEmojiParser().parseEmoji(card.getFlavorText(), e.getGuild()) + "\"_", false)
+						.addField("Flavor Text", "_" + Grimoire.getInstance().getEmojiParser().parseEmoji(card.getFlavorText(), e.getGuild()) + "_", false)
 						.build()
 		);
 	}

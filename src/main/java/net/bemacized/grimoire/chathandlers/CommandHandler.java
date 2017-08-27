@@ -3,7 +3,6 @@ package net.bemacized.grimoire.chathandlers;
 import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
 import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
-import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.*;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
@@ -12,8 +11,6 @@ import net.bemacized.grimoire.eventlogger.events.LogEntry;
 import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
 import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +88,7 @@ public class CommandHandler extends ChatHandler {
 		// Extract command and arguments
 		String[] data = e.getMessage().getContent().substring(prefix.length()).split("\\s+");
 		String cmd = data[0];
-		String rawArgs = String.join(" ", Arrays.copyOfRange(data, 1, data.length));
+		String rawArgs = e.getMessage().getContent().substring(prefix.length()).substring(cmd.length() + 1).trim();
 		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(rawArgs);
 		List<String> args = new ArrayList<>();
 		while (argsMatcher.find()) {
@@ -151,6 +148,6 @@ public class CommandHandler extends ChatHandler {
 		));
 
 		// Execute command otherwise
-		new Thread(() -> command.exec(args.toArray(new String[0]), e, guildPreferences)).start();
+		new Thread(() -> command.exec(args.toArray(new String[0]), rawArgs, e, guildPreferences)).start();
 	}
 }
