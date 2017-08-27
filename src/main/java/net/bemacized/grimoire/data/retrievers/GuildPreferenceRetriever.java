@@ -16,7 +16,7 @@ public class GuildPreferenceRetriever {
 	@Nullable
 	public static String retrieveSettings(String guildId) {
 		try {
-			JsonObject json = new JsonParser().parse(IOUtils.toString(new URL(SOURCE + guildId),"UTF-8")).getAsJsonObject();
+			JsonObject json = new JsonParser().parse(IOUtils.toString(new URL(SOURCE + guildId), "UTF-8")).getAsJsonObject();
 			return json.get("preferences").getAsString();
 		} catch (IOException e) {
 			return null;

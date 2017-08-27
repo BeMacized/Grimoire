@@ -4,8 +4,6 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.data.providers.CardProvider;
-import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.bemacized.grimoire.utils.StreamUtils;
@@ -51,7 +49,7 @@ public class TokenCommand extends BaseCommand {
 	}
 
 	@Override
-	public void exec(String[] args,String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify token name presence
 		if (args.length == 0) {
 			sendEmbed(e.getChannel(), "Please provide a valid token name.");
@@ -126,7 +124,7 @@ public class TokenCommand extends BaseCommand {
 									(m.getTokenColor() == null) ? "" : " " + m.getTokenColor(),
 									(m.getPower() == null || m.getToughness() == null) ? "" : " _" + MTGUtils.parsePowerAndToughness(m.getPower(), m.getToughness()) + "_",
 									" " + m.getName(),
-									" _(" + ((m.getSet().getParentSetCode() != null) ? m.getSet().getParentSetCode(): m.getSet().getCode()) + ")_");
+									" _(" + ((m.getSet().getParentSetCode() != null) ? m.getSet().getParentSetCode() : m.getSet().getCode()) + ")_");
 						}).collect(Collectors.toList())
 				));
 				return;

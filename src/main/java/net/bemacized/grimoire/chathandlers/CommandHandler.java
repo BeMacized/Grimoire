@@ -58,22 +58,6 @@ public class CommandHandler extends ChatHandler {
 		rateLimitLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
 				RequestLimitRule.of(2, TimeUnit.MINUTES, 1)
 		).collect(Collectors.toSet()));
-
-//		JSONArray arr = new JSONArray();
-//		commands.parallelStream().map(c -> new JSONObject(){{
-//			put("command", new JSONArray(){{
-//				if (c.usages().length == 0) put(c.name());
-//				else Arrays.stream(c.usages()).parallel().forEach(u -> put(c.name() + " " + u));
-//			}});
-//			put("description", c.description());
-//			put("aliases", new JSONArray(){{
-//				Arrays.stream(c.aliases()).parallel().forEach(this::put);
-//			}});
-//			put("examples", new JSONArray(){{
-//				Arrays.stream(c.examples()).parallel().forEach(this::put);
-//			}});
-//		}}).forEach(arr::put);
-//		System.out.println(arr.toString(2));
 	}
 
 	@Override
@@ -88,7 +72,7 @@ public class CommandHandler extends ChatHandler {
 		// Extract command and arguments
 		String[] data = e.getMessage().getContent().substring(prefix.length()).split("\\s+");
 		String cmd = data[0];
-		String rawArgs = e.getMessage().getContent().substring(prefix.length()).substring(cmd.length() + 1).trim();
+		String rawArgs = e.getMessage().getContent().substring(prefix.length()).substring(cmd.length()).trim();
 		Matcher argsMatcher = Pattern.compile("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|[^\\s\"]+").matcher(rawArgs);
 		List<String> args = new ArrayList<>();
 		while (argsMatcher.find()) {

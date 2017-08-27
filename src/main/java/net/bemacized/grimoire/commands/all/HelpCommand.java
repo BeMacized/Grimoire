@@ -46,7 +46,8 @@ public class HelpCommand extends BaseCommand {
 		eb.appendDescription("**Mac's Grimoire** is a Discord bot that brings many **Magic The Gathering** related tools straight into your discord server. ");
 		eb.appendDescription("I can perform tasks like card-, price- or rule lookups, and more!");
 
-		if (e.getGuild() != null) eb.appendDescription("\n\n:large_blue_diamond: The current command prefix for guild **'" + e.getGuild().getName() + "'** is set to `" + guildPreferences.getPrefix() + "`.");
+		if (e.getGuild() != null)
+			eb.appendDescription("\n\n:large_blue_diamond: The current command prefix for guild **'" + e.getGuild().getName() + "'** is set to `" + guildPreferences.getPrefix() + "`.");
 
 		eb.appendDescription("\n\n**Type any of the following options to get more info:**");
 

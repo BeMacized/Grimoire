@@ -32,7 +32,7 @@ public class SetCommand extends BaseCommand {
 
 	@Override
 	public String[] usages() {
-		return new String[] {
+		return new String[]{
 				"<set code>",
 				"<set name>"
 		};
@@ -40,7 +40,7 @@ public class SetCommand extends BaseCommand {
 
 	@Override
 	public String[] examples() {
-		return new String[] {
+		return new String[]{
 				"ORI",
 				"Magic Origins"
 		};

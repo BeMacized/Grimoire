@@ -1,7 +1,5 @@
 package net.bemacized.grimoire.chathandlers;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import es.moki.ratelimitj.core.limiter.request.RequestLimitRule;
 import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
@@ -16,7 +14,6 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;

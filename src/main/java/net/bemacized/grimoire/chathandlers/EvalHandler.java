@@ -2,7 +2,6 @@ package net.bemacized.grimoire.chathandlers;
 
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.data.providers.CardProvider;
 import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -17,7 +16,7 @@ public class EvalHandler extends ChatHandler {
 	}
 
 	@Override
-	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences,  ChatHandler next) {
+	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
 		String code = e.getMessage().getRawContent();
 
 		// Only allow dev to execute code, and only when enabled with an env variable

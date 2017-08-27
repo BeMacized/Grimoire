@@ -85,7 +85,7 @@ public class DefineCommand extends BaseCommand {
 
 		explanation = formatText(explanation, e.getGuild());
 
-		EmbedBuilder eb = new EmbedBuilder().setTitle(definition.getKeyword(),"https://blogs.magicjudges.org/rules/cr-glossary/").setColor(Globals.EMBED_COLOR_PRIMARY).setDescription(explanation);
+		EmbedBuilder eb = new EmbedBuilder().setTitle(definition.getKeyword(), "https://blogs.magicjudges.org/rules/cr-glossary/").setColor(Globals.EMBED_COLOR_PRIMARY).setDescription(explanation);
 
 		if (rules.size() == 1) {
 			String rule = rules.get(0).endsWith(".") ? rules.get(0).substring(0, rules.get(0).length() - 1) : rules.get(0);
@@ -111,7 +111,7 @@ public class DefineCommand extends BaseCommand {
 			).collect(Collectors.toList()));
 			Pattern pattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
 			Matcher matcher = pattern.matcher(text);
-			while(matcher.find())
+			while (matcher.find())
 				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
 			return text;
 		}).collect(Collectors.toList())), guild);

@@ -36,7 +36,6 @@ public class ScryfallRetriever {
 	@Nonnull
 	public static ScryfallCard getCardByMultiverseId(int multiverseId) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		return new Gson().fromJson(new ScryfallRequest("/cards/multiverse/" + multiverseId).makeRequest(), ScryfallCard.class);
-
 	}
 
 	@Nonnull

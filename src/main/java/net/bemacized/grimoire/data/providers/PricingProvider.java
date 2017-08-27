@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jongo.MongoCollection;
 import org.json.JSONObject;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -267,10 +266,10 @@ public class PricingProvider {
 					});
 				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 					LOG.log(Level.WARNING, "Scryfall Error occurred when getting all printings", e);
-					embed.setDescription("Could not retrieve all printings for \""+card.getName()+"\". The error has been logged. Please try again later!");
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
 				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
 					LOG.log(Level.SEVERE, "Unknown Error occurred when getting all printings", e);
-					embed.setDescription("Could not retrieve all printings for \""+card.getName()+"\". The error has been logged. Please try again later!");
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
 				}
 				break;
 			}

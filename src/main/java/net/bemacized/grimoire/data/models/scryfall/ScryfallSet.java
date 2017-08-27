@@ -5,7 +5,6 @@ import net.bemacized.grimoire.Globals;
 import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.events.ShutdownEvent;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;

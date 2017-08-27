@@ -65,17 +65,17 @@ public class Grimoire {
 			private Gson gson = new Gson();
 
 			public <T> T readValue(String s, Class<T> aClass) {
-				try{
+				try {
 					return gson.fromJson(s, aClass);
-				}catch(Exception e){
+				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
 			}
 
 			public String writeValue(Object o) {
-				try{
+				try {
 					return gson.toJson(o);
-				}catch(Exception e){
+				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
 			}

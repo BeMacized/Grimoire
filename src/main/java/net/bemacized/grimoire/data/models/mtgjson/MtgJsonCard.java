@@ -92,7 +92,6 @@ public class MtgJsonCard {
 	private long timestamp = System.currentTimeMillis();
 
 
-
 	@Nonnull
 	public String getId() {
 		return id;
@@ -510,14 +509,16 @@ public class MtgJsonCard {
 		e.addProperty("language", language);
 		e.addProperty("name", name);
 		e.addProperty("multiverseid", multiverseid);
-		if (this.getLanguage().equalsIgnoreCase("English")) e.addProperty("englishMultiverseId", this.getMultiverseid());
+		if (this.getLanguage().equalsIgnoreCase("English"))
+			e.addProperty("englishMultiverseId", this.getMultiverseid());
 		return gson.fromJson(e, this.getClass());
 	}
 
 	public List<MtgJsonCard> getAllLanguages() {
 		List<MtgJsonCard> cards = Arrays.stream(getForeignNames()).parallel().map(f -> getForeignCopy(f.getLanguage(), f.getName(), f.getMultiverseid())).collect(Collectors.toList());
 		if (englishMultiverseId == -1) cards.add(this);
-		else cards.add(Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardByMultiverseId(englishMultiverseId));
+		else
+			cards.add(Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardByMultiverseId(englishMultiverseId));
 		return cards;
 	}
 
