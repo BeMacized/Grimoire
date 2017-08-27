@@ -42,10 +42,10 @@ All commands are prefixed using `g!` by default. You can change this behaviour v
 
 |Command|Description|Aliases|Examples|
 |:--- |:--- |:--- |:--- |
-|`g!art <query\|set>`|Fetch the full art of a card. This command supports the entire Scryfall Syntax for the query parameter.|`cardart`|`g!art Mighty Leap \| ORI`|
+|`g!art <query\|set>`|Fetch the full art of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`cardart`|`g!art Mighty Leap \| ORI`|
 |`g!art <query>`|-|-|`g!art Mighty Leap \| Magic Origins`|
 |-|-|-|`g!art Mighty Leap`|
-|`g!card <query\|set>`|Fetch information for a card This command supports the entire Scryfall Syntax for the query parameter.|`c`|`g!card Mighty Leap \| ORI`|
+|`g!card <query\|set>`|Fetch information for a card This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`c`|`g!card Mighty Leap \| ORI`|
 |`g!card <query>`|-|-|`g!card Mighty Leap \| Magic Origins`|
 |-|-|-|`g!card Mighty Leap`|
 |`g!comprules <paragraph nr>`|Retrieve a paragraph from the comprehensive rules|`crules` `comprehensiverules` `cr`|`g!comprules 702`|
@@ -56,7 +56,7 @@ All commands are prefixed using `g!` by default. You can change this behaviour v
 |`g!define <keyword>`|Looks up the definition for the specified keyword|`keyword` `definition`|`g!define vigilance`|
 |-|-|-|`g!define prowess`|
 |-|-|-|`g!define enchant`|
-|`g!flavor <query\|set>`|Retrieves the flavor text of a card. This command supports the entire Scryfall Syntax for the query parameter.|`flavortext`|`g!flavor Mighty Leap \| ORI`|
+|`g!flavor <query\|set>`|Retrieves the flavor text of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`flavortext`|`g!flavor Mighty Leap \| ORI`|
 |`g!flavor <query>`|-|-|`g!flavor Mighty Leap \| Magic Origins`|
 |-|-|-|`g!flavor Mighty Leap`|
 |`g!help`|Shows the help text, containing all of the command references.|-|-|
@@ -64,19 +64,19 @@ All commands are prefixed using `g!` by default. You can change this behaviour v
 |-|-|-|`g!infractionprocedure 2.5 philosophy`|
 |-|-|-|`g!infractionprocedure 2`|
 |-|-|-|`g!infractionprocedure`|
-|`g!legality <query\|set>`|Checks the legality of a card, for every known format This command supports the entire Scryfall Syntax for the query parameter.|`format` `legalities` `formats` `illegal` `legal`|`g!legality Mighty Leap \| ORI`|
+|`g!legality <query\|set>`|Checks the legality of a card, for every known format This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`format` `legalities` `formats` `illegal` `legal`|`g!legality Mighty Leap \| ORI`|
 |`g!legality <query>`|-|-|`g!legality Mighty Leap \| Magic Origins`|
 |-|-|-|`g!legality Mighty Leap`|
-|`g!names <query\|set>`|Retrieves all known foreign names for a card. This command supports the entire Scryfall Syntax for the query parameter.|`foreign` `named` `abroad`|`g!names Mighty Leap \| ORI`|
+|`g!names <query\|set>`|Retrieves all known foreign names for a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`foreign` `named` `abroad`|`g!names Mighty Leap \| ORI`|
 |`g!names <query>`|-|-|`g!names Mighty Leap \| Magic Origins`|
 |-|-|-|`g!names Mighty Leap`|
-|`g!oracle <query\|set>`|Retrieves the oracle text of a card. This command supports the entire Scryfall Syntax for the query parameter.|`cardtext`|`g!oracle Mighty Leap \| ORI`|
+|`g!oracle <query\|set>`|Retrieves the oracle text of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`cardtext`|`g!oracle Mighty Leap \| ORI`|
 |`g!oracle <query>`|-|-|`g!oracle Mighty Leap \| Magic Origins`|
 |-|-|-|`g!oracle Mighty Leap`|
-|`g!pricing <query\|set>`|Retrieves the current pricing for a card. This command supports the entire Scryfall Syntax for the query parameter.|`dollarydoos` `price`|`g!pricing Mighty Leap \| ORI`|
+|`g!pricing <query\|set>`|Retrieves the current pricing for a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`dollarydoos` `price`|`g!pricing Mighty Leap \| ORI`|
 |`g!pricing <query>`|-|-|`g!pricing Mighty Leap \| Magic Origins`|
 |-|-|-|`g!pricing Mighty Leap`|
-|`g!prints <query\|set>`|Retrieves all sets that a card was printed in. This command supports the entire Scryfall Syntax for the query parameter.|`versions` `printings` `sets`|`g!prints Mighty Leap \| ORI`|
+|`g!prints <query\|set>`|Retrieves all sets that a card was printed in. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`versions` `printings` `sets`|`g!prints Mighty Leap \| ORI`|
 |`g!prints <query>`|-|-|`g!prints Mighty Leap`|
 |-|-|-|`g!prints Mighty Leap \| Magic Origins`|
 |`g!random [supertype] [type] [subtype] [rarity] [set] [setcode]`|Show a random card of a certain type.|`rng` `rand`|`g!random C17 mythic`|
@@ -84,7 +84,7 @@ All commands are prefixed using `g!` by default. You can change this behaviour v
 |-|-|-|`g!random legendary creature`|
 |-|-|-|`g!random`|
 |`g!reloadpreferences`|Reload preferences immediately for your guild|`reloadprefs`|
-|`g!rulings <query\|set>`|Retrieves the current rulings of the specified card. This command supports the entire Scryfall Syntax for the query parameter.|`ruling` `rules`|`g!rulings Mighty Leap \| ORI`|
+|`g!rulings <query\|set>`|Retrieves the current rulings of the specified card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`ruling` `rules`|`g!rulings Mighty Leap \| ORI`|
 |`g!rulings <query>`|-|-|`g!rulings Mighty Leap \| Magic Origins`|
 |-|-|-|`g!rulings Mighty Leap`|
 |`g!set <set>`|Fetch information for a set|`s`|`g!set Magic Origins`|
