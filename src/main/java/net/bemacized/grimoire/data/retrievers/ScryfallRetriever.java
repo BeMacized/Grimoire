@@ -6,13 +6,13 @@ import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.istack.internal.NotNull;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallError;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallList;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -28,29 +28,28 @@ public class ScryfallRetriever {
 
 	private final static Logger LOG = Logger.getLogger(ScryfallRetriever.class.getName());
 
-
-	@NotNull
+	@Nonnull
 	public static ScryfallCard getCardByScryfallId(String scryfallId) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		return new Gson().fromJson(new ScryfallRequest("/cards/" + scryfallId).makeRequest(), ScryfallCard.class);
 	}
 
-	@NotNull
+	@Nonnull
 	public static ScryfallCard getCardByMultiverseId(int multiverseId) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		return new Gson().fromJson(new ScryfallRequest("/cards/multiverse/" + multiverseId).makeRequest(), ScryfallCard.class);
 
 	}
 
-	@NotNull
+	@Nonnull
 	public static ScryfallSet getSet(String setCode) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		return new Gson().fromJson(new ScryfallRequest("/sets/" + setCode.toLowerCase()).makeRequest(), ScryfallSet.class);
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<ScryfallCard> getCardsFromQuery(String query) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		return getCardsFromQuery(query, -1);
 	}
 
-	@NotNull
+	@Nonnull
 	public static List<ScryfallCard> getCardsFromQuery(String query, int maxResults) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		try {
 			Gson gson = new Gson();
