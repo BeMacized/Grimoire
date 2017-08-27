@@ -15,6 +15,7 @@ Supported features include, but are not limited to:
 * Keyword definition lookups
 * Currency Conversion
 * Non-English Card Support
+* Scryfall Syntax Support
 * More on the [Website](https://grimoire.bemacized.net)
 
 Invite the bot to your Guild via this link: [Invite Grimoire](https://grimoire.bemacized.net/invite)
