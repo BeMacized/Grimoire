@@ -137,6 +137,11 @@ public class GuildPreferences {
 		return guildId;
 	}
 
+	public String getPreferredLanguage() {
+		//TODO: INTEGRATE WITH LOCALISATION AT SOME POINT
+		return "English";
+	}
+
 	@Nullable
 	public String getCardUrl(MtgCard card) {
 		switch (getTitleService()) {

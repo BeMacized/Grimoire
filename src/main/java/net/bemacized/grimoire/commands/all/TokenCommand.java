@@ -69,7 +69,7 @@ public class TokenCommand extends BaseCommand {
 			cardname = String.join(" ", args);
 		}
 
-		final List<MtgCard> matches = Grimoire.getInstance().getCardProvider().getCachedTokens();
+		final List<MtgCard> matches = Grimoire.getInstance().getCardProvider().getCachedTokens().parallelStream().filter(t -> t.getName().toLowerCase().contains(cardname.toLowerCase())).collect(Collectors.toList());
 
 		final List<MtgCard> exactMatches = matches.parallelStream()
 				.filter(StreamUtils.distinctByKey(c -> DigestUtils.sha1Hex(c.getSet().getCode() + c.getPower() + c.getToughness())))

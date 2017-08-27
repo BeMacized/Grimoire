@@ -64,7 +64,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 
 		// Check if we match with a non-english card name;
-		MtgCard card = Grimoire.getInstance().getCardProvider().matchNonEnglishCardName(query, set);
+		MtgCard card = Grimoire.getInstance().getCardProvider().matchAnyCardName(query, set, guildPreferences);
 
 		// If none found, relay our query to scryfall
 		if (card == null) {

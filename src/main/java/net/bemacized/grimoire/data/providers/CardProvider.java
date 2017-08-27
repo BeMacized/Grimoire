@@ -2,6 +2,7 @@ package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.bemacized.grimoire.data.retrievers.CardImageRetriever;
@@ -36,7 +37,7 @@ public class CardProvider {
 			@Override
 			public List<MtgCard> refresh() {
 				try {
-					return getCardsByScryfallQuery("++t:token");
+					return new ArrayList<>(getCardsByScryfallQuery("++t:token"));
 				} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
 					LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
 				} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
@@ -116,16 +117,17 @@ public class CardProvider {
 	}
 
 	@Nullable
-	public MtgCard matchNonEnglishCardName(@Nonnull String query, @Nullable ScryfallSet set) {
-		MtgJsonCard mjc = mtgJsonProvider.getCards().parallelStream()
+	public MtgCard matchAnyCardName(@Nonnull String query, @Nullable ScryfallSet set, GuildPreferences guildPreferences) {
+		List<MtgJsonCard> matches = mtgJsonProvider.getCards().parallelStream()
 				.filter(c -> set == null || (c.getSetCode().equalsIgnoreCase(set.getCode()) || c.getSetName().equalsIgnoreCase(set.getName())))
-				.filter(c -> !c.getLanguage().equalsIgnoreCase("English"))
-				.filter(c -> c.getName().equalsIgnoreCase(query))
-				.findFirst()
-				.orElse(null);
+				.filter(c -> c.getName().equalsIgnoreCase(query)).collect(Collectors.toList());
+
+		MtgJsonCard mjc = matches.parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase(guildPreferences.getPreferredLanguage())).findFirst().orElse(matches.parallelStream().findAny().orElse(null));
 		if (mjc == null) return null;
-		MtgJsonCard engVersion = mjc.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
+
+		MtgJsonCard engVersion = mjc.getLanguage().equalsIgnoreCase("English") ? mjc : mjc.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
 		if (engVersion == null) return null;
+
 		MtgCard card;
 		try {
 			card = getCardByMultiverseId(engVersion.getMultiverseid());

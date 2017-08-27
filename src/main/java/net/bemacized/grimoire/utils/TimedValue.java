@@ -13,7 +13,8 @@ public abstract class TimedValue<T> {
 	public T get() {
 		if (value == null || System.currentTimeMillis() - timestamp > max_age) {
 			timestamp = System.currentTimeMillis();
-			value = refresh();
+			T v = refresh();
+			if (v != null) value = v;
 		}
 		return value;
 	}
