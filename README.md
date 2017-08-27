@@ -15,6 +15,7 @@ Supported features include, but are not limited to:
 * Keyword definition lookups
 * Currency Conversion
 * Non-English Card Support
+* Scryfall Syntax Support
 * More on the [Website](https://grimoire.bemacized.net)
 
 Invite the bot to your Guild via this link: [Invite Grimoire](https://grimoire.bemacized.net/invite)
@@ -31,36 +32,98 @@ You can change your Guild preferences over at the [Dashboard](https://grimoire.b
 
 You can use inline shortcuts to quickly reference multiple cards within your message. You are limited to a max of 3 inline references per message.
 
-| Shortcut                                                      | Command   | Examples                                                                         |
-|---------------------------------------------------------------|-----------|----------------------------------------------------------------------------------|
-| `<<card>>`<br>`<<card \| set>>`<br>`[[card]]`<br>`[[card \| set]]`    | `g!card`    | `<<Mighty Leap>>`<br>`<<Mighty Leap \| ORI>>`<br>`[[Mighty Leap \| Magic Origins]]`    |
-| `<<$card>>`<br>`<<$card \| set>>`<br>`[[$card]]`<br>`[[card \| set]]` | `g!pricing` | `<<$Mighty Leap>>`<br>`<<$Might Leap \| ORI>>`<br>`[[$Mighty Leap \| Magic Origins]]`  |
+|Shortcut|Command|Examples|
+|:--- |:--- |:--- |
+|`<<query>>`|`g!card`|`<<Mighty Leap>>`|
+|`<<query \| set>>`|-|`<<Mighty Leap \| ORI>>`|
+|`[[query]]`|-|`[[Mighty Leap \| Magic Origins]]`|
+||||
+|`<<$query>>`|`g!pricing`|`<<$Mighty Leap>>`|
+|`<<$query \| set>>`|-|`<<$Mighty Leap \| ORI>>`|
+|`[[$query]]`|-|`[[$Mighty Leap \| Magic Origins]]`|
+
+
 
 #### Commands
 
 All commands are prefixed using `g!` by default. You can change this behaviour via the Dashboard. For more in-depth information, you can visit the [Command Reference](https://grimoire.bemacized.net/reference) on the website! Alternatively, you can browse the commands via the bot by sending "commands" in a private message.
 
-| Command                                                                 | Description                                                    | Aliases                                | Examples<br>                                                                                                              |
-|-------------------------------------------------------------------------|----------------------------------------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| g!art <card\|set><br>g!art <card>                                       | Fetch the full art of a card                                   | cardart                                | g!art Mighty Leap \| ORI<br>g!art Mighty Leap \| Magic Origins`<br>`g!art Mighty Leap                                   |
-| g!card <card\|set><br>g!card <card>                                     | Fetch information for a card                                   | c                                      | g!card Mighty Leap \| ORI<br>g!card Mighty Leap \| Magic Origins<br>g!card Mighty Leap<br>                                |
-| g!comprules <paragraph nr>                                              | Retrieve a paragraph from the comprehensive rules              | crules comprehensiverulescr            | g!comprules 702<br>g!comprules 702.5c<br>g!comprules 702.5<br>g!comprules 7<br>g!comprules<br>                            |
-| g!define <keyword>                                                      | Looks up the definition for the specified keyword              | keyword definition                     | g!define vigilance<br>g!define prowess<br>g!define enchant<br>                                                            |
-| g!flavor <card\|set><br>g!flavor <card>                                 | Retrieves the flavor text of a card.                           | flavortext                             | g!flavor Mighty Leap \| ORI<br>g!flavor Mighty Leap \| Magic Origins<br>g!flavor Mighty Leap<br>                          |
-| g!help                                                                  | Shows the help text, containing all of the command references. |                                        | <br>                                                                                                                      |
-| g!infractionprocedure <paragraph> [topic]                               | Retrieve a paragraph from the tournament rules.                | ipguide ipg                            | g!infractionprocedure 2.5<br>g!infractionprocedure 2.5 philosophy<br>g!infractionprocedure 2<br>g!infractionprocedure<br> |
-| g!legality <card\|set><br>g!legality <card>                             | Checks the legality of a card, for every known format          | format legalities formatsillegal legal | g!legality Mighty Leap \| ORI<br>g!legality Mighty Leap \| Magic Origins<br>g!legality Mighty Leap<br>                    |
-| g!names <card\|set><br>g!names <card>                                   | Retrieves all known foreign names for a card                   | foreign named abroad                   | g!names Mighty Leap \| ORI<br>g!names Mighty Leap \| Magic Origins<br>g!names Mighty Leap<br>                             |
-| g!oracle <card\|set><br>g!oracle <card>                                 | Retrieves the oracle text of a card.                           | cardtext                               | g!oracle Mighty Leap \| ORI<br>g!oracle Mighty Leap \| Magic Origins<br>g!oracle Mighty Leap<br>                          |
-| g!pricing <card\|set><br>g!pricing <card>                               | Retrieves the current pricing for a card.                      | dollarydoos price                      | g!pricing Mighty Leap \| ORI<br>g!pricing Mighty Leap \| Magic Origins<br>g!pricing Mighty Leap<br>                       |
-| g!prints <card\|set><br>g!prints <card>                                 | Retrieves all sets that a card was printed in.                 | versions printings sets                | g!prints Mighty Leap \| ORI<br>g!prints Mighty Leap<br>g!prints Mighty Leap \| Magic Origins<br>                          |
-| g!random [supertype] [type] [subtype] [rarity] [set] [setcode] [layout] | Show a random card of a certain type.                          | rng rand                               | g!random C17 mythic<br>g!random rare artifact<br>g!random legendary creature<br>g!random<br>                              |
-| g!reloadpreferences                                                     | Reload preferences immediately for your guild                  | reloadprefs                            | <br>                                                                                                                      |
-| g!rulings <card\|set><br>g!rulings <card>                               | Retrieves the current rulings of the specified card.           | ruling rules                           | g!rulings Mighty Leap \| ORI<br>g!rulings Mighty Leap \| Magic Origins<br>g!rulings Mighty Leap<br>                       |
-| g!set <set>                                                             | Fetch information for a set                                    | s                                      | g!set Magic Origins<br>g!set ORI<br>                                                                                      |
-| g!standard                                                              | See what sets are currently in standard rotation               | wis whatsinstandard                    | <br>                                                                                                                      |
-| g!token <token_name> [choice]                                           | Retrieve the art of a token.                                   |                                        | g!token angel 3<br>g!token angel<br>                                                                                      |
-| g!tournamentrules <paragraph nr>                                        | Retrieve a paragraph from the tournament rules                 | mtr trmagictournamentrules             | g!tournamentrules<br>g!tournamentrules 3<br>g!tournamentrules 3.10<br>                                                    |
+|Command|Description|Aliases|Examples|
+|:--- |:--- |:--- |:--- |
+|`g!art <query\|set>`|Fetch the full art of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`cardart`|`g!art Mighty Leap \| ORI`|
+|`g!art <query>`|-|-|`g!art Mighty Leap \| Magic Origins`|
+|-|-|-|`g!art Mighty Leap`|
+||||
+|`g!card <query\|set>`|Fetch information for a card This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`c`|`g!card Mighty Leap \| ORI`|
+|`g!card <query>`|-|-|`g!card Mighty Leap \| Magic Origins`|
+|-|-|-|`g!card Mighty Leap`|
+||||
+|`g!comprules <paragraph nr>`|Retrieve a paragraph from the comprehensive rules|`crules` `comprehensiverules` `cr`|`g!comprules 702`|
+|-|-|-|`g!comprules 702.5c`|
+|-|-|-|`g!comprules 702.5`|
+|-|-|-|`g!comprules 7`|
+|-|-|-|`g!comprules`|
+||||
+|`g!define <keyword>`|Looks up the definition for the specified keyword|`keyword` `definition`|`g!define vigilance`|
+|-|-|-|`g!define prowess`|
+|-|-|-|`g!define enchant`|
+||||
+|`g!flavor <query\|set>`|Retrieves the flavor text of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`flavortext`|`g!flavor Mighty Leap \| ORI`|
+|`g!flavor <query>`|-|-|`g!flavor Mighty Leap \| Magic Origins`|
+|-|-|-|`g!flavor Mighty Leap`|
+||||
+|`g!help`|Shows the help text, containing all of the command references.|-|-|
+||||
+|`g!infractionprocedure <paragraph> [topic]`|Retrieve a paragraph from the tournament rules.|`ipguide` `ipg`|`g!infractionprocedure 2.5`|
+|-|-|-|`g!infractionprocedure 2.5 philosophy`|
+|-|-|-|`g!infractionprocedure 2`|
+|-|-|-|`g!infractionprocedure`|
+||||
+|`g!legality <query\|set>`|Checks the legality of a card, for every known format This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`format` `legalities` `formats` `illegal` `legal`|`g!legality Mighty Leap \| ORI`|
+|`g!legality <query>`|-|-|`g!legality Mighty Leap \| Magic Origins`|
+|-|-|-|`g!legality Mighty Leap`|
+||||
+|`g!names <query\|set>`|Retrieves all known foreign names for a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`foreign` `named` `abroad`|`g!names Mighty Leap \| ORI`|
+|`g!names <query>`|-|-|`g!names Mighty Leap \| Magic Origins`|
+|-|-|-|`g!names Mighty Leap`|
+||||
+|`g!oracle <query\|set>`|Retrieves the oracle text of a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`cardtext`|`g!oracle Mighty Leap \| ORI`|
+|`g!oracle <query>`|-|-|`g!oracle Mighty Leap \| Magic Origins`|
+|-|-|-|`g!oracle Mighty Leap`|
+||||
+|`g!pricing <query\|set>`|Retrieves the current pricing for a card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`dollarydoos` `price`|`g!pricing Mighty Leap \| ORI`|
+|`g!pricing <query>`|-|-|`g!pricing Mighty Leap \| Magic Origins`|
+|-|-|-|`g!pricing Mighty Leap`|
+||||
+|`g!prints <query\|set>`|Retrieves all sets that a card was printed in. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`versions` `printings` `sets`|`g!prints Mighty Leap \| ORI`|
+|`g!prints <query>`|-|-|`g!prints Mighty Leap`|
+|-|-|-|`g!prints Mighty Leap \| Magic Origins`|
+||||
+|`g!random [supertype] [type] [subtype] [rarity] [set] [setcode]`|Show a random card of a certain type.|`rng` `rand`|`g!random C17 mythic`|
+|-|-|-|`g!random rare artifact`|
+|-|-|-|`g!random legendary creature`|
+|-|-|-|`g!random`|
+||||
+|`g!reloadpreferences`|Reload preferences immediately for your guild|`reloadprefs`|
+||||
+|`g!rulings <query\|set>`|Retrieves the current rulings of the specified card. This command supports the entire [Scryfall Syntax](https://scryfall.com/docs/reference) for the query parameter.|`ruling` `rules`|`g!rulings Mighty Leap \| ORI`|
+|`g!rulings <query>`|-|-|`g!rulings Mighty Leap \| Magic Origins`|
+|-|-|-|`g!rulings Mighty Leap`|
+||||
+|`g!set <set>`|Fetch information for a set|`s`|`g!set Magic Origins`|
+|-|-|-|`g!set ORI`|
+||||
+|`g!standard`|See what sets are currently in standard rotation|`wis` `whatsinstandard`|-|
+||||
+|`g!statistics`|View statistics for Grimoire.|`stats`|-|
+||||
+|`g!token <token_name> [choice]`|Retrieve the art of a token.|-|`g!token angel 3`|
+|-|-|-|`g!token angel`|
+||||
+|`g!tournamentrules <paragraph nr>`|Retrieve a paragraph from the tournament rules|`mtr` `tr` `magictournamentrules`|`g!tournamentrules`|
+|-|-|-|`g!tournamentrules 3`|
+|-|-|-|`g!tournamentrules 3.10`|
+
 
 ### Selfhosting
 Instructions for hosting this bot by yourself are coming soon!
