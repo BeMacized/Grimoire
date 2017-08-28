@@ -75,10 +75,14 @@ public class StatsCommand extends BaseCommand {
 		eb.addField(":wrench: CPU", String.format("**%s** Cores\n**%s** Running Threads", cores, threadCount), true);
 
 		long totalCalls = Grimoire.getInstance().getDBManager().getJongo().getCollection(EventLogger.COLLECTION).count(String.format("{ _class: %s }", JSONObject.quote(UserCommandInvocation.class.getName())));
-		long inlineCalls = Grimoire.getInstance().getDBManager().getJongo().getCollection(EventLogger.COLLECTION).count(String.format("{ _class: %s, inline: %s }", JSONObject.quote(UserCommandInvocation.class.getName()), "true"));
-		double inlineCallPercentage = Math.ceil(Math.round(((double) inlineCalls) / ((double) totalCalls) * 10000d) / 100d);
+		long totalInlineCalls = Grimoire.getInstance().getDBManager().getJongo().getCollection(EventLogger.COLLECTION).count(String.format("{ _class: %s, inline: %s }", JSONObject.quote(UserCommandInvocation.class.getName()), "true"));
+		double totalInlineCallPercentage = Math.ceil(Math.round(((double) totalInlineCalls) / ((double) totalCalls) * 10000d) / 100d);
 		long guildCalls = Grimoire.getInstance().getDBManager().getJongo().getCollection(EventLogger.COLLECTION).count(String.format("{ _class: %s, guild.guildId: %s }", JSONObject.quote(UserCommandInvocation.class.getName()), e.getGuild().getId()));
-		eb.addField(":exclamation: Command Calls", String.format("Total: **%s** | Guild: **%s** | Inline: **%s%%**", totalCalls, guildCalls, inlineCallPercentage), true);
+		long guildInlineCalls = Grimoire.getInstance().getDBManager().getJongo().getCollection(EventLogger.COLLECTION).count(String.format("{ _class: %s, inline: %s, guild.guildId: %s }", JSONObject.quote(UserCommandInvocation.class.getName()), "true", e.getGuild().getId()));
+		double guildInlineCallPercentage = Math.ceil(Math.round(((double) guildInlineCalls) / ((double) guildCalls) * 10000d) / 100d);
+		eb.addField(":exclamation: Command Calls", String.format("Total: **%s** | Inline: **%s%%**\nGuild: **%s** | Inline: **%s%%**", totalCalls, totalInlineCallPercentage, guildCalls, guildInlineCallPercentage), true);
+
+		eb.addField(":gear: Language", "Java", true);
 
 		e.getChannel().sendMessage(eb.build()).submit();
 	}

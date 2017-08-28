@@ -22,7 +22,7 @@ public class Grimoire {
 
 	public final static String DEV_ID = "87551321762172928";
 	public final static String BOT_NAME = "Mac's Grimoire";
-	public final static String WEBSITE = "https://grimoirebot.xyz/";
+	public final static String WEBSITE = "https://grimoirebot.xyz";
 
 	private final static Logger LOG = Logger.getLogger(Grimoire.class.getName());
 	private static Grimoire instance;
