@@ -1,5 +1,5 @@
 
-[![Grimoire Logo](https://img.bemacized.net/Heo6WJMr08yK5d74bmOTeMtLwhZDHXfb.png)](https://grimoire.bemacized.net/)
+[![Grimoire Logo](https://img.bemacized.net/Heo6WJMr08yK5d74bmOTeMtLwhZDHXfb.png)](https://grimoirebot.xyz/)
 
 [![](https://images.microbadger.com/badges/version/bemacized/grimoire.svg)](https://microbadger.com/images/bemacized/grimoire)
 
@@ -16,15 +16,15 @@ Supported features include, but are not limited to:
 * Currency Conversion
 * Non-English Card Support
 * Scryfall Syntax Support
-* More on the [Website](https://grimoire.bemacized.net)
+* More on the [Website](https://grimoirebot.xyz)
 
-Invite the bot to your Guild via this link: [Invite Grimoire](https://grimoire.bemacized.net/invite)
+Invite the bot to your Guild via this link: [Invite Grimoire](https://grimoirebot.xyz/invite)
 
-You can join our support server via here: [Support Server](https://grimoire.bemacized.net/support)
+You can join our support server via here: [Support Server](https://grimoirebot.xyz/support)
 
 ### Preference Dashboard
-You can change your Guild preferences over at the [Dashboard](https://grimoire.bemacized.net/dashboard). Much of the bots functionality can be tailored to your preferences via this panel.
-![Dashboard Screenshot](https://grimoire.bemacized.net/img/screenshots/Dashboard.png)
+You can change your Guild preferences over at the [Dashboard](https://grimoirebot.xyz/dashboard). Much of the bots functionality can be tailored to your preferences via this panel.
+![Dashboard Screenshot](https://grimoirebot.xyz/img/screenshots/Dashboard.png)
 
 ### Command Reference
 
@@ -46,7 +46,7 @@ You can use inline shortcuts to quickly reference multiple cards within your mes
 
 #### Commands
 
-All commands are prefixed using `g!` by default. You can change this behaviour via the Dashboard. For more in-depth information, you can visit the [Command Reference](https://grimoire.bemacized.net/reference) on the website! Alternatively, you can browse the commands via the bot by sending "commands" in a private message.
+All commands are prefixed using `g!` by default. You can change this behaviour via the Dashboard. For more in-depth information, you can visit the [Command Reference](https://grimoirebot.xyz/reference) on the website! Alternatively, you can browse the commands via the bot by sending "commands" in a private message.
 
 |Command|Description|Aliases|Examples|
 |:--- |:--- |:--- |:--- |
