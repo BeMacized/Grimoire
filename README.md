@@ -8,7 +8,7 @@
 Supported features include, but are not limited to:
 
 * Card Fetching
-* Price Fetching (MagicCardMarket & TCGPlayer)
+* Price Fetching (MagicCardMarket, TCGPlayer & MTGGoldfish)
 * Rule Fetching (Comprehensive- & Tournament Rules)
 * Token Fetching
 * Infraction Procedures
