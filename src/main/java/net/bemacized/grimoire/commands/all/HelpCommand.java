@@ -5,6 +5,8 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.concurrent.ExecutionException;
@@ -67,14 +69,16 @@ public class HelpCommand extends BaseCommand {
 		sb.delete(0, sb.length());
 
 		sb.append("\n:link: [Command Reference](" + Grimoire.WEBSITE + "/reference)");
-		sb.append("\n:link: [About & FAQ Page](" + Grimoire.WEBSITE + "/about)");
 		sb.append("\n:speech_balloon: [Support Server](" + Grimoire.WEBSITE + "/support)");
+		sb.append("\n:heart: [Donate](https://paypal.me/BeMacized)");
 
 		eb.addField("", sb.toString(), true);
 		sb.delete(0, sb.length());
 
-		sb.append("\n:heart: [Donate](https://paypal.me/BeMacized)");
+		Guild dbotsorgGuild = e.getJDA().getGuildById(264445053596991498L);
+		Emote dbotsorgEmote = dbotsorgGuild == null ? null : dbotsorgGuild.getEmotesByName("discordbot", true).stream().findFirst().orElse(null);
 		sb.append("\n:gear: [Source Code](https://github.com/BeMacized/Grimoire)");
+		sb.append("\n" + (dbotsorgEmote == null ? ":link:" : dbotsorgEmote.getAsMention()) + " [DiscordBots.org Page](https://discordbots.org/bot/239399098862665728)");
 
 		eb.addField("", sb.toString(), true);
 		sb.delete(0, sb.length());
@@ -86,7 +90,6 @@ public class HelpCommand extends BaseCommand {
 
 		if (e.getGuild() != null)
 			sendEmbed(e.getChannel(), "I've sent you help in a private message!");
-
 		try {
 			e.getAuthor().openPrivateChannel().submit().get().sendMessage(eb.build()).submit();
 		} catch (InterruptedException | ExecutionException ex) {
