@@ -50,7 +50,9 @@ public class MtgJsonProvider {
 	public void load() {
 		try {
 			Map<MtgJsonSet, List<MtgJsonCard>> mtgJsonSetListMap = MtgJsonRetriever.retrieveData();
+			LOG.info("Transforming MTGJSON data...");
 			cards = new ArrayList<>(mtgJsonSetListMap.values().parallelStream().map(Collection::parallelStream).flatMap(o -> o).map(c -> c.getAllLanguages().stream()).flatMap(o -> o).collect(Collectors.toList()));
+			LOG.info("Transformed " + cards.size() + " cards!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			LOG.log(Level.SEVERE, "Could not fetch data from MTGJSON", e);
