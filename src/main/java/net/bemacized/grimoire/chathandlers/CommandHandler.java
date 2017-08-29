@@ -10,6 +10,7 @@ import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.bemacized.grimoire.eventlogger.events.LogEntry;
 import net.bemacized.grimoire.eventlogger.events.UserCommandInvocation;
 import net.bemacized.grimoire.eventlogger.events.UserRateLimited;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -133,6 +134,9 @@ public class CommandHandler extends ChatHandler {
 		));
 
 		// Execute command otherwise
-		new Thread(() -> command.exec(args.toArray(new String[0]), rawArgs, e, guildPreferences)).start();
+		new Thread(() -> {
+			if (guildPreferences.removeCommandCalls() && e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE)) e.getMessage().delete().queue();
+			command.exec(args.toArray(new String[0]), rawArgs, e, guildPreferences);
+		}).start();
 	}
 }

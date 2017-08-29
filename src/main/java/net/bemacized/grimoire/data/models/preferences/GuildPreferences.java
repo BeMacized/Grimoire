@@ -138,8 +138,15 @@ public class GuildPreferences {
 	}
 
 	public String getPreferredLanguage() {
-		//TODO: INTEGRATE WITH LOCALISATION AT SOME POINT
-		return "English";
+		return getMultiValue(23, getValue(23));
+	}
+
+	public boolean showPriceOnCard() {
+		return getValue(21) == 1;
+	}
+
+	public boolean removeCommandCalls() {
+		return getValue(22) == 1;
 	}
 
 	@Nullable

@@ -151,5 +151,36 @@
     "id": 20,
     "name": "Scryfall.com",
     "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 21,
+    "name": "Show Pricing Below Card",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 22,
+    "name": "Remove command calls (Requires \"Manage Messages\" Permission)",
+    "default": 0
+  },
+  {
+    "type": "MULTI",
+    "id": 23,
+    "name": "Preferred Language (For Card Lookups)",
+    "default": 0,
+    "options": [
+      ["English", "English"],
+      ["Chinese Simplified", "Chinese Simplified"],
+      ["Chinese Traditional", "Chinese Traditional"],
+      ["French", "French"],
+      ["German","German"],
+      ["Italian","Italian"],
+      ["Japanese", "Japanese"],
+      ["Korean", "Korean"],
+      ["Portuguese (Brazil)","Portuguese (Brazil)"],
+      ["Russian","Russian"],
+      ["Spanish","Spanish"]
+    ]
   }
 ]
