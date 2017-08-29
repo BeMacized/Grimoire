@@ -104,7 +104,9 @@
     "options": [
       ["All marketplaces: One printing (Latest default)", "ALL_MARKETS"],
       ["Scryfall only: One printing (Latest default)", "SCRYFALL_ONE"],
-      ["Scryfall only: All printings", "SCRYFALL_ALL"]
+      ["Scryfall only: All printings", "SCRYFALL_ALL"],
+      ["MTGO: One printing (Latest default)", "MTGO_ONE"],
+      ["MTGO: All printings (Latest default)", "MTGO_ALL"]
     ]
   },
   {

@@ -51,7 +51,10 @@ public class MtgJsonProvider {
 		try {
 			Map<MtgJsonSet, List<MtgJsonCard>> mtgJsonSetListMap = MtgJsonRetriever.retrieveData();
 			LOG.info("Transforming MTGJSON data...");
+			sets = mtgJsonSetListMap.keySet().parallelStream().collect(Collectors.toList());
 			cards = new ArrayList<>(mtgJsonSetListMap.values().parallelStream().map(Collection::parallelStream).flatMap(o -> o).map(c -> c.getAllLanguages().stream()).flatMap(o -> o).collect(Collectors.toList()));
+			cards.sort(Comparator.comparing(o -> getSetByCodeOrName(o.getSetCode()).getReleaseDate()));
+			Collections.reverse(cards);
 			LOG.info("Transformed " + cards.size() + " cards!");
 		} catch (IOException e) {
 			e.printStackTrace();

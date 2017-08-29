@@ -225,7 +225,10 @@ public class MtgCard {
 				eb.addField("Rarities", "Could not retrieve rarities: An unknown error occurred.", true);
 			}
 			if (printings.endsWith(",")) printings = printings.substring(0, printings.length() - 1);
-			if (!printings.isEmpty()) eb.addField("Printings", printings, true);
+			if (!printings.isEmpty())
+				eb.addField("Printings", printings.length() <= 1024 ? printings : "Too many printings to list.", true);
+			if (printings.length() > 1024)
+				LOG.log(Level.SEVERE, "PRINTINGS EXCEEDS 1024 CHARS FOR : " + toString() + "\n\n" + printings);
 		}
 		if (guildPreferences.showMiscProperties()) {
 			if (getLoyalty() != null) eb.addField("Loyalty", getLoyalty(), true);

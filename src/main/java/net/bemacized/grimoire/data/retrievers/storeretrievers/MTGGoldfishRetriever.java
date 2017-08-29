@@ -49,6 +49,7 @@ public class MTGGoldfishRetriever extends StoreRetriever {
 			double paperPrice = paperTableRow == null ? 0 : Double.parseDouble(paperTableRow.child(3).text().isEmpty() ? "0" : paperTableRow.child(3).text().replaceAll(",",""));
 			double onlinePrice = onlineTableRow == null ? 0 : Double.parseDouble(onlineTableRow.child(3).text().isEmpty() ? "0" : onlineTableRow.child(3).text().replaceAll(",",""));
 			url = paperTableRow != null ? paperTableRow.child(0).child(0).attr("href") : onlineTableRow != null ? onlineTableRow.child(0).child(0).attr("href") : null;
+			if (url != null) url = "https://www.mtggoldfish.com" + url;
 			if (paperPrice > 0) prices.put("Paper", new Price(paperPrice, Currency.USD));
 			if (onlinePrice > 0) prices.put("MTGO", new Price(onlinePrice, Currency.TIX));
 		} catch (HttpStatusException e) {

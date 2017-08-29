@@ -90,10 +90,13 @@ public class PricingProvider {
 							Grimoire.getInstance().getDBManager().getJongo().getCollection(RECORDS_COLLECTION).save(price);
 						return new StoreCardPrice((price == null) ? StoreCardPriceStatus.CARD_UNKNOWN : StoreCardPriceStatus.SUCCESS, card, store.getStoreName(), store.getStoreId(), price);
 					} catch (StoreRetriever.StoreServerErrorException e) {
+						LOG.log(Level.WARNING, "Store produced error", e);
 						return new StoreCardPrice(StoreCardPriceStatus.SERVER_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 					} catch (StoreRetriever.StoreAuthException e) {
+						LOG.log(Level.WARNING, "Store produced AUTH error", e);
 						return new StoreCardPrice(StoreCardPriceStatus.AUTH_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 					} catch (StoreRetriever.UnknownStoreException e) {
+						LOG.log(Level.WARNING, "Store produced unknown error", e);
 						return new StoreCardPrice(StoreCardPriceStatus.UNKNOWN_ERROR, card, store.getStoreName(), store.getStoreId(), null);
 					} catch (StoreRetriever.LanguageUnsupportedException e) {
 						return new StoreCardPrice(StoreCardPriceStatus.LANGUAGE_UNSUPPORTED, card, store.getStoreName(), store.getStoreId(), null);
@@ -273,9 +276,84 @@ public class PricingProvider {
 				}
 				break;
 			}
+			case "MTGO_ONE": {
+				try {
+					List<MtgCard> prints = card.getAllPrintings();
+					prints.remove(card);
+					prints.add(0, card);
+					for (MtgCard c : prints) {
+						List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
+						if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
+						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+
+						List<StoreCardPrice> pricing = getPricing(c, stores);
+
+						final Map<StoreCardPrice, Boolean> prices = new HashMap<>();
+						pricing.forEach(storeprice -> {
+							switch (storeprice.getStatus()) {
+								case SUCCESS:
+									prices.put(storeprice, storeprice.getRecord().getPrices().get("MTGO") != null);
+									break;
+							}
+						});
+						if (prices.values().contains(true)) {
+							embed.setDescription(String.format("%s (%s)", c.getSet().getName(), c.getSet().getCode()));
+							if (!c.getScryfallId().equalsIgnoreCase(card.getScryfallId()))
+								embed.appendDescription(String.format("\n(There was no MTGO pricing for the **%s** print. Showing the **%s** print instead.)", card.getSet().getCode(), c.getSet().getCode()));
+							prices.entrySet().parallelStream().filter(e -> e.getValue()).forEachOrdered(e -> {
+								String priceText = e.getKey().getRecord().getPrices().get("MTGO").toString()
+										+ "\n**Last updated: **" + sdf.format(new Date(e.getKey().getRecord().getTimestamp()))
+										+ (e.getKey().getRecord().getUrl() == null ? "" : String.format("\n[`[%s]`](%s)", "Store Page", e.getKey().getRecord().getUrl()));
+								embed.addField(e.getKey().getStoreName(), priceText, true);
+							});
+							break;
+						}
+					}
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+					LOG.log(Level.WARNING, "Scryfall Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+					LOG.log(Level.SEVERE, "Unknown Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
+				}
+				if (embed.getFields().isEmpty())
+					embed.setDescription("There are no prices available.");
+				break;
+			}
+			case "MTGO_ALL": {
+				try {
+					card.getAllPrintings().forEach(c -> {
+						List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
+						if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
+						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+
+						List<StoreCardPrice> pricing = getPricing(c, stores);
+
+						final Map<StoreCardPrice, Boolean> prices = new HashMap<>();
+						pricing.forEach(storeprice -> {
+							switch (storeprice.getStatus()) {
+								case SUCCESS:
+									prices.put(storeprice, storeprice.getRecord().getPrices().get("MTGO") != null);
+									break;
+							}
+						});
+						if (prices.values().contains(true))
+							embed.addField(c.getSet().getName() + " (" + c.getSet().getCode() + ")", String.join("\n", prices.entrySet().parallelStream().filter(Map.Entry::getValue).map(e ->
+											e.getKey().getStoreName() + ": **" + e.getKey().getRecord().getPrices().get("MTGO").toString() + "**").collect(Collectors.toList())),
+									true);
+					});
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+					LOG.log(Level.WARNING, "Scryfall Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
+				} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+					LOG.log(Level.SEVERE, "Unknown Error occurred when getting all printings", e);
+					embed.setDescription("Could not retrieve all printings for \"" + card.getName() + "\". The error has been logged. Please try again later!");
+				}
+				if (embed.getFields().isEmpty())
+					embed.setDescription("There are no prices available.");
+				break;
+			}
 		}
-
-
 		return embed.build();
 	}
 

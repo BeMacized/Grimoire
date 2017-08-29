@@ -40,7 +40,7 @@ public class PrintsCommand extends CardBaseCommand {
 		// Show the sets
 		String sets;
 		try {
-			sets = String.join("\n", card.getAllPrintings().parallelStream().map(c -> String.format(":small_orange_diamond: %s (%s)", c.getSet().getName(), c.getSet().getCode())).collect(Collectors.toList()));
+			sets = String.join("\n", card.getAllPrintings().parallelStream().map(c -> String.format(":small_orange_diamond: %s **(%s)** *[%s]*", c.getSet().getName(), c.getSet().getCode(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList()));
 		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e1) {
 			LOG.log(Level.WARNING, "Scryfall returned an error when retrieving prints: " + e1.getError().getDetails(), e1);
 			sendErrorEmbed(loadMsg, "I could not retrieve prints: " + e1.getError().getDetails());

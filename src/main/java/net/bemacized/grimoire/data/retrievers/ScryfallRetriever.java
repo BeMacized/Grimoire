@@ -52,7 +52,8 @@ public class ScryfallRetriever {
 	public static List<ScryfallCard> getCardsFromQuery(String query, int maxResults) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		try {
 			Gson gson = new Gson();
-			return new ListRetriever("/cards/search?q=" + URLEncoder.encode(query, "UTF-8")).getListContent().parallelStream().map(e -> gson.fromJson(e, ScryfallCard.class)).collect(Collectors.toList());
+			List<ScryfallCard> cards = new ListRetriever("/cards/search?q=" + URLEncoder.encode(query, "UTF-8")).getListContent(maxResults).parallelStream().map(e -> gson.fromJson(e, ScryfallCard.class)).collect(Collectors.toList());
+			return cards;
 		} catch (UnsupportedEncodingException e) {
 			LOG.log(Level.SEVERE, "UTF-8 is not a supported encoding", e);
 			throw new ScryfallRequest.UnknownResponseException(e);
@@ -99,13 +100,14 @@ public class ScryfallRetriever {
 			return getListContent(-1);
 		}
 
-		List<JsonElement> getListContent(int maxPages) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
+		List<JsonElement> getListContent(int maxResults) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 			Gson gson = new Gson();
 			List<JsonElement> content = new ArrayList<>();
 			ScryfallList list = null;
 			while (list == null || list.hasMore()) {
 				list = gson.fromJson(new ScryfallRequest(list == null ? endpoint : list.getNextPage().substring(list.getNextPage().indexOf("/", "https://".length()))).makeRequest(), ScryfallList.class);
 				content.addAll(StreamSupport.stream(list.getData().spliterator(), false).collect(Collectors.toList()));
+				if (content.size() >= maxResults && maxResults != -1) break;
 			}
 			return content;
 		}

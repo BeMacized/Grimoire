@@ -80,7 +80,7 @@ public class CardProvider {
 	}
 
 	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query, int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).collect(Collectors.toList());
+		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).sorted((o1,o2)-> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt())).collect(Collectors.toList());
 	}
 
 	@Nullable
@@ -118,11 +118,12 @@ public class CardProvider {
 
 	@Nullable
 	public MtgCard matchAnyCardName(@Nonnull String query, @Nullable ScryfallSet set, GuildPreferences guildPreferences) {
+
 		List<MtgJsonCard> matches = mtgJsonProvider.getCards().parallelStream()
 				.filter(c -> set == null || (c.getSetCode().equalsIgnoreCase(set.getCode()) || c.getSetName().equalsIgnoreCase(set.getName())))
 				.filter(c -> c.getName().equalsIgnoreCase(query)).collect(Collectors.toList());
 
-		MtgJsonCard mjc = matches.parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase(guildPreferences.getPreferredLanguage())).findFirst().orElse(matches.parallelStream().findAny().orElse(null));
+		MtgJsonCard mjc = matches.parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase(guildPreferences.getPreferredLanguage())).findFirst().orElse(matches.parallelStream().findFirst().orElse(null));
 		if (mjc == null) return null;
 
 		MtgJsonCard engVersion = mjc.getLanguage().equalsIgnoreCase("English") ? mjc : mjc.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
