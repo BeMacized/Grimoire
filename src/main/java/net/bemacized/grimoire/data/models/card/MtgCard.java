@@ -194,7 +194,7 @@ public class MtgCard {
 		if (guildPreferences.showOracleText() && getPrintedText() != null)
 			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getPrintedText(), guild) + "\n");
 		if (guildPreferences.showFlavorText() && getFlavorText() != null)
-			eb.appendDescription("\n_\"" + getFlavorText() + "\"_");
+			eb.appendDescription("\n_" + getFlavorText() + "_");
 		if (guildPreferences.showLegalFormats()) {
 			String formats = String.join(", ", getLegalities().entrySet().parallelStream().filter(e -> e.getValue().equals(ScryfallCard.Legality.LEGAL)).map(s -> s.getKey().substring(0, 1).toUpperCase() + s.getKey().substring(1).toLowerCase()).collect(Collectors.toList()));
 			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
