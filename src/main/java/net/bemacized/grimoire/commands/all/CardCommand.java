@@ -58,6 +58,8 @@ public class CardCommand extends CardBaseCommand {
 			});
 		}
 
+		eb.setFooter("Requested by " + e.getAuthor().getName(),null);
+
 		// Build embed & show
 		loadMsg.complete(eb.build());
 	}

@@ -4,6 +4,7 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
@@ -60,6 +61,8 @@ public class SetCommand extends BaseCommand {
 			return;
 		}
 
+		EmbedBuilder eb = new EmbedBuilder(set.getEmbed()).setFooter("Requested by " + e.getAuthor().getName(), null);
+
 		try {
 			// Attempt sending with set symbol
 			ByteArrayOutputStream resultByteStream = new ByteArrayOutputStream();
@@ -70,10 +73,10 @@ public class SetCommand extends BaseCommand {
 			pngTranscoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, 64f);
 			pngTranscoder.transcode(transcoderInput, transcoderOutput);
 			resultByteStream.flush();
-			e.getChannel().sendFile(resultByteStream.toByteArray(), "set.png", new MessageBuilder().setEmbed(set.getEmbed()).build()).submit();
+			e.getChannel().sendFile(resultByteStream.toByteArray(), "set.png", new MessageBuilder().setEmbed(eb.build()).build()).submit();
 		} catch (Exception ex) {
 			// Fall back to no set symbol if needed
-			e.getChannel().sendMessage(set.getEmbed());
+			e.getChannel().sendMessage(eb.build());
 		}
 	}
 

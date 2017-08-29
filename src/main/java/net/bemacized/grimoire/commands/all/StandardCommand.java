@@ -45,6 +45,7 @@ public class StandardCommand extends BaseCommand {
 		final EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setTitle("What's in Standard?", "http://whatsinstandard.com");
+		eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 		// Group by blocks & add them to the embed
 		Grimoire.getInstance().getStandardRotationProvider().getSets()
 				.parallelStream()

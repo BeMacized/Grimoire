@@ -44,6 +44,7 @@ public class OracleCommand extends CardBaseCommand {
 				new EmbedBuilder()
 						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
+						.setFooter("Requested by " + e.getAuthor().getName(),null)
 						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getPrintedText(), e.getGuild()), false)
 						.build()
 		);

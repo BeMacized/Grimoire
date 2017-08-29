@@ -221,6 +221,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			if (i == 0)
 				eb.setAuthor("Comprehensive Rules", null, null).setTitle(errorline == null ? title : null);
 			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
+			eb.setFooter("Requested by " + e.getAuthor().getName(),null);
 			e.getChannel().sendMessage(eb.build()).submit();
 		}
 	}

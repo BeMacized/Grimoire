@@ -5,6 +5,7 @@ import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class PricingCommand extends CardBaseCommand {
@@ -34,7 +35,10 @@ public class PricingCommand extends CardBaseCommand {
 		// Update load text
 		loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
 
+		EmbedBuilder eb = new EmbedBuilder(Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences));
+		eb.setFooter("Requested by " + e.getAuthor().getName(),null);
+
 		//Send the message
-		loadMsg.complete(Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences));
+		loadMsg.complete(eb.build());
 	}
 }

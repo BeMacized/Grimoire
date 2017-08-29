@@ -47,6 +47,7 @@ public class StatsCommand extends BaseCommand {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 		eb.setAuthor("Bot Statistics", Grimoire.WEBSITE, e.getJDA().getSelfUser().getAvatarUrl());
+		eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 
 		eb.addField(":globe_with_meridians: Server Count", "**" + e.getJDA().getGuilds().size() + "** Server" + (e.getJDA().getGuilds().size() > 1 ? "s" : ""), true);
 

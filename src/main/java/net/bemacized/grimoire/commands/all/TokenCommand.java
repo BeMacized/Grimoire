@@ -144,6 +144,7 @@ public class TokenCommand extends BaseCommand {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(match.getName());
 		eb.setImage(match.getImageUrl());
+		eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getTokenColor()}));
 		loadMsg.complete(eb.build());
 	}
