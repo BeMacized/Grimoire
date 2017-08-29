@@ -149,6 +149,10 @@ public class GuildPreferences {
 		return getValue(22) == 1;
 	}
 
+	public boolean showRequestersName() {
+		return getValue(24) == 1;
+	}
+
 	@Nullable
 	public String getCardUrl(MtgCard card) {
 		switch (getTitleService()) {

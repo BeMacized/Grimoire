@@ -61,7 +61,8 @@ public class SetCommand extends BaseCommand {
 			return;
 		}
 
-		EmbedBuilder eb = new EmbedBuilder(set.getEmbed()).setFooter("Requested by " + e.getAuthor().getName(), null);
+		EmbedBuilder eb = new EmbedBuilder(set.getEmbed());
+		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 
 		try {
 			// Attempt sending with set symbol

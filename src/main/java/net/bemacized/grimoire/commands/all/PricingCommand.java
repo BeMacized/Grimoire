@@ -36,7 +36,7 @@ public class PricingCommand extends CardBaseCommand {
 		loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
 
 		EmbedBuilder eb = new EmbedBuilder(Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences));
-		eb.setFooter("Requested by " + e.getAuthor().getName(),null);
+		eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null);
 
 		//Send the message
 		loadMsg.complete(eb.build());

@@ -52,7 +52,7 @@ public class PrintsCommand extends CardBaseCommand {
 		}
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-				.setFooter("Requested by " + e.getAuthor().getName(),null)
+				.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		String[] splits = MessageUtils.splitMessage(sets, 1000);
 		for (int i = 0; i < splits.length; i++)

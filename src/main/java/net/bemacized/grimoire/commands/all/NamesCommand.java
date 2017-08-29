@@ -38,7 +38,7 @@ public class NamesCommand extends CardBaseCommand {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-				.setFooter("Requested by " + e.getAuthor().getName(),null)
+				.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
 				.setDescription("**Foreign Names**\n");
 		for (MtgJsonCard.ForeignName foreignName : card.getForeignNames())
 			eb.addField(foreignName.getLanguage(), foreignName.getMultiverseid() > 0 ? String.format("[%s](%s)", foreignName.getName(), foreignName.getGathererUrl()) : foreignName.getName(), true);
