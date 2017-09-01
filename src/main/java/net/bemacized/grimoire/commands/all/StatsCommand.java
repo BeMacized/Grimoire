@@ -34,7 +34,7 @@ public class StatsCommand extends BaseCommand {
 
 	@Override
 	public String[] usages() {
-		return new String[0];
+		return new String[]{""};
 	}
 
 	@Override

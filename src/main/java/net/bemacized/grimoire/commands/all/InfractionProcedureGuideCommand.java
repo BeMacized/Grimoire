@@ -51,7 +51,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			e.getChannel().sendMessage(new EmbedBuilder()
 					.setColor(Globals.EMBED_COLOR_PRIMARY)
 					.setAuthor("Infraction Procedure Guide", null, null)
-					.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
+					.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 					.setDescription("The following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 							.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
 							.collect(Collectors.toList()))).build()).submit();
@@ -70,7 +70,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 			if (section == null) {
 				e.getChannel().sendMessage(new EmbedBuilder()
 						.setColor(Color.RED)
-						.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
+						.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 						.setAuthor("Infraction Procedure Guide", null, null)
 						.setDescription(":anger: The specified section could not be found.\n\nThe following sections are available:\n" + String.join("\n", Grimoire.getInstance().getInfractionProcedureGuideProvider().getSections().parallelStream()
 								.map(s -> ":small_orange_diamond: **" + s.getSectionId() + ".** " + s.getTitle())
@@ -86,7 +86,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 					e.getChannel().sendMessage(new EmbedBuilder()
 							.setColor(Color.RED)
 							.setAuthor("Infraction Procedure Guide", null, null)
-							.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
+							.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 							.setDescription(String.format(":anger: The specified subsection could not be found.\n\nWithin **'%s %s'**, the following sections are available:\n%s",
 									section.getSectionId(), section.getTitle(),
 									String.join("\n", section.getSubSections().parallelStream()
@@ -105,7 +105,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				if (topic == null) {
 					e.getChannel().sendMessage(new EmbedBuilder()
 							.setColor(Color.RED)
-							.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
+							.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 							.setAuthor("Infraction Procedure Guide", null, null)
 							.setDescription(String.format(":anger: The specified topic could not be found.\n\nWithin **'%s %s'**, the following topics are available:\n%s", subsection.getSectionId(), subsection.getTitle(), String.join("\n",
 									subsection.getSubSections().parallelStream()
@@ -119,7 +119,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				String[] splits = MessageUtils.splitMessage(String.format("**%s**\n%s", topic.getTitle(), topic.getContent()));
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
-					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null);
+					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
@@ -130,7 +130,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				String[] splits = MessageUtils.splitMessage(content + subsections);
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
-					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null);
+					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", subsection.getSectionId(), subsection.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();
@@ -141,7 +141,7 @@ public class InfractionProcedureGuideCommand extends BaseCommand {
 				String[] splits = MessageUtils.splitMessage(content + subsections);
 				for (int i = 0; i < splits.length; i++) {
 					EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]).setColor(Globals.EMBED_COLOR_PRIMARY);
-					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null);
+					eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null);
 					if (i == 0)
 						eb.setAuthor("Infraction Procedure Guide", null, null).setTitle(String.format("%s %s", section.getSectionId(), section.getTitle()));
 					e.getChannel().sendMessage(eb.build()).submit();

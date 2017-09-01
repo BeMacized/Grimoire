@@ -80,7 +80,7 @@ public class CardProvider {
 	}
 
 	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query, int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).sorted((o1,o2)-> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt())).collect(Collectors.toList());
+		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).sorted((o1, o2) -> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt())).collect(Collectors.toList());
 	}
 
 	@Nullable

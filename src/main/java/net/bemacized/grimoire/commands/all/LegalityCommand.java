@@ -39,7 +39,7 @@ public class LegalityCommand extends CardBaseCommand {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-				.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null,null)
+				.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 				.setDescription("**Legality**\n");
 		for (Map.Entry<String, ScryfallCard.Legality> entry : card.getLegalities().entrySet()) {
 			eb.addField(entry.getKey().substring(0, 1).toUpperCase() + entry.getKey().substring(1).toLowerCase(), entry.getValue().getDisplayName(), true);

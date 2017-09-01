@@ -99,7 +99,7 @@ public class DefineCommand extends BaseCommand {
 		}
 
 		// Show definition
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(),null);
+		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 		e.getChannel().sendMessage(eb.build()).submit();
 	}
 

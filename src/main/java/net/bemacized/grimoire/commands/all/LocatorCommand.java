@@ -24,7 +24,6 @@ import java.net.URLEncoder;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class LocatorCommand extends BaseCommand {
@@ -55,7 +54,8 @@ public class LocatorCommand extends BaseCommand {
 	@Override
 	public String[] examples() {
 		return new String[]{
-				"Sydney, Australia"
+				"Sydney, Australia",
+				"1027 Newport Avenue Pawtucket, RI 02862"
 		};
 	}
 
@@ -139,7 +139,7 @@ public class LocatorCommand extends BaseCommand {
 					}}).asBinary();
 
 			if (mapData.getStatus() != 200) {
-				switch(mapData.getStatus()) {
+				switch (mapData.getStatus()) {
 					case 403: {
 						sendErrorEmbed(e.getChannel(), "Could not generate map image as I was not permitted to by the Google Static Map API. Please make sure the Static Map API is enabled for your API Token.");
 						break;
@@ -183,7 +183,8 @@ public class LocatorCommand extends BaseCommand {
 			}
 
 			// Send embed
-			if (mapData.getStatus() == 200) e.getChannel().sendFile(mapData.getBody(), "map.png", new MessageBuilder().setEmbed(eb.build()).build()).submit();
+			if (mapData.getStatus() == 200)
+				e.getChannel().sendFile(mapData.getBody(), "map.png", new MessageBuilder().setEmbed(eb.build()).build()).submit();
 			else e.getChannel().sendMessage(eb.build()).submit();
 			loadMsg.complete();
 		} catch (ApiException | InterruptedException | IOException | UnirestException ex) {

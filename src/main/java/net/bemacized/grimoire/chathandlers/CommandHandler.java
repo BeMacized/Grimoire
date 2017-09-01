@@ -137,7 +137,8 @@ public class CommandHandler extends ChatHandler {
 
 		// Execute command otherwise
 		new Thread(() -> {
-			if (guildPreferences.removeCommandCalls() && e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE)) e.getMessage().delete().queue();
+			if (guildPreferences.removeCommandCalls() && e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE))
+				e.getMessage().delete().queue();
 			command.exec(args.toArray(new String[0]), rawArgs, e, guildPreferences);
 		}).start();
 	}

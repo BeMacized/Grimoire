@@ -28,7 +28,9 @@ public abstract class BaseCommand extends MessageUtils {
 		return false;
 	}
 
-	public boolean scryfallSyntax() { return false; }
+	public boolean scryfallSyntax() {
+		return false;
+	}
 
 	public abstract void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences);
 

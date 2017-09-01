@@ -46,8 +46,8 @@ public class MTGGoldfishRetriever extends StoreRetriever {
 			Elements onlineTableRows = doc.getElementsByClass("index-price-table-online").first().getElementsByTag("table").first().getElementsByTag("tbody").first().getElementsByTag("tr");
 			Element paperTableRow = paperTableRows.parallelStream().filter(r -> r.child(0).text().equalsIgnoreCase(card.getName())).findFirst().orElse(null);
 			Element onlineTableRow = onlineTableRows.parallelStream().filter(r -> r.child(0).text().equalsIgnoreCase(card.getName())).findFirst().orElse(null);
-			double paperPrice = paperTableRow == null ? 0 : Double.parseDouble(paperTableRow.child(3).text().isEmpty() ? "0" : paperTableRow.child(3).text().replaceAll(",",""));
-			double onlinePrice = onlineTableRow == null ? 0 : Double.parseDouble(onlineTableRow.child(3).text().isEmpty() ? "0" : onlineTableRow.child(3).text().replaceAll(",",""));
+			double paperPrice = paperTableRow == null ? 0 : Double.parseDouble(paperTableRow.child(3).text().isEmpty() ? "0" : paperTableRow.child(3).text().replaceAll(",", ""));
+			double onlinePrice = onlineTableRow == null ? 0 : Double.parseDouble(onlineTableRow.child(3).text().isEmpty() ? "0" : onlineTableRow.child(3).text().replaceAll(",", ""));
 			url = paperTableRow != null ? paperTableRow.child(0).child(0).attr("href") : onlineTableRow != null ? onlineTableRow.child(0).child(0).attr("href") : null;
 			if (url != null) url = "https://www.mtggoldfish.com" + url;
 			if (paperPrice > 0) prices.put("Paper", new Price(paperPrice, Currency.USD));

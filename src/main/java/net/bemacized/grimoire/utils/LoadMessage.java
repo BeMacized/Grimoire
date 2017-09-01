@@ -18,19 +18,19 @@ public class LoadMessage {
 
 	private final static Logger LOG = Logger.getLogger(LoadMessage.class.getName());
 	private final static String[][] SPINNERS = new String[][]{
-			new String[] {
-					Grimoire.getInstance().getEmojiParser().parseEmoji("{T}",null),
+			new String[]{
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{T}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{Q}", null)
 			},
-			new String[] {
-					Grimoire.getInstance().getEmojiParser().parseEmoji("{W}",null),
+			new String[]{
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{W}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{R}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{G}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{B}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{U}", null)
 			},
-			new String[] {
-					Grimoire.getInstance().getEmojiParser().parseEmoji("{1}",null),
+			new String[]{
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{1}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{2}", null),
 					Grimoire.getInstance().getEmojiParser().parseEmoji("{3}", null)
 			}

@@ -77,7 +77,8 @@ public class TournamentRulesCommand extends BaseCommand {
 			String[] splits = MessageUtils.splitMessage(Grimoire.getInstance().getEmojiParser().parseEmoji(subsection.getContent(), e.getGuild()));
 			for (int i = 0; i < splits.length; i++) {
 				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
-				if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
+				if (guildPreferences.showRequestersName())
+					eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 				eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 				if (i == 0)
 					eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s: %s", subsection.getParagraphNr(), section.getTitle(), subsection.getTitle()));
@@ -99,7 +100,8 @@ public class TournamentRulesCommand extends BaseCommand {
 			String[] splits = MessageUtils.splitMessage("The following subsections are available:\n" + String.join("\n", section.getSubsections().parallelStream().map(s -> ":small_orange_diamond: **" + s.getParagraphNr() + "** " + s.getTitle()).collect(Collectors.toList())));
 			for (int i = 0; i < splits.length; i++) {
 				EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
-				if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
+				if (guildPreferences.showRequestersName())
+					eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 				eb.setColor(Globals.EMBED_COLOR_PRIMARY);
 				if (i == 0)
 					eb.setAuthor("Magic Tournament Rules", null, null).setTitle(String.format("%s %s", section.getParagraphNr(), section.getTitle()));
