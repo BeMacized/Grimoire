@@ -6,6 +6,7 @@ import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
+import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.ListUtils;
@@ -36,7 +37,7 @@ public class BanListCommand extends BaseCommand {
 	@Override
 	public String[] usages() {
 		return new String[]{
-				"[standard|modern|legacy|vintage|commander|future|pauper|frontier|penny|1v1|duel]"
+				"<standard | modern | legacy | vintage | commander | future | pauper | frontier | penny | 1v1 | duel>"
 		};
 	}
 
@@ -64,6 +65,9 @@ public class BanListCommand extends BaseCommand {
 		}
 		format = WordUtils.capitalize(format);
 
+		// Send initial status message
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading " + format + " Banlist...", true);
+
 		try {
 			// Retrieve banlist
 			List<MtgCard> cards = Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery("banned:" + format.toLowerCase());
@@ -75,20 +79,20 @@ public class BanListCommand extends BaseCommand {
 			if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 			eb.appendDescription("The following cards are banned in **\"" + format + "\"**.");
 			// Split list in 3 or more if needed and append fields properly.
-			ListUtils.partition(cards, Math.max((int) Math.ceil(((double)cards.size()) / 3d), 10)).forEach(list -> {
+			ListUtils.partition(cards, Math.max((int) Math.ceil(((double) cards.size()) / 3d), 10)).forEach(list -> {
 				final StringBuilder sb = new StringBuilder();
 				list.forEach(c -> sb.append("\n" + c.getName()));
-				eb.addField("",sb.toString().trim(), true);
+				eb.addField("", sb.toString().trim(), true);
 			});
-			e.getChannel().sendMessage(eb.build()).queue();
+			loadMsg.complete(eb.build());
 		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e1) {
 			LOG.log(Level.SEVERE, "Unknown scryfall response", e1);
-			sendErrorEmbed(e.getChannel(), "An unknown error ocurred when retrieving the banlist.");
+			loadMsg.complete(errorEmbed("An unknown error ocurred when retrieving the banlist.").get(0));
 		} catch (ScryfallRetriever.ScryfallRequest.NoResultException e1) {
-			sendEmbed(e.getChannel(), "No cards are banned in **\"" + format + "\"**!");
+			loadMsg.complete(simpleEmbed("No cards are banned in **\"" + format + "\"**!").get(0));
 		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e1) {
 			LOG.log(Level.SEVERE, "Scryfall error response: " + e1.getError().getDetails(), e1);
-			sendErrorEmbed(e.getChannel(), "Scryfall returned an error while retrieving the banlist: " + e1.getError().getDetails());
+			loadMsg.complete(errorEmbed("Scryfall returned an error while retrieving the banlist: " + e1.getError().getDetails()).get(0));
 		}
 	}
 }
