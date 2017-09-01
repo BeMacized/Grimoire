@@ -33,3 +33,4 @@ services:
 #      - "MONGO_PASSWORD="
 #      - "EMOJI_GUILD="
 #      - "ENABLE_EVAL_MODULE=0"
+#      - "GOOGLE_API_KEY="
