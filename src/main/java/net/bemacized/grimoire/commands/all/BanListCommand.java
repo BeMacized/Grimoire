@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -66,6 +67,7 @@ public class BanListCommand extends BaseCommand {
 		try {
 			// Retrieve banlist
 			List<MtgCard> cards = Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery("banned:" + format.toLowerCase());
+			cards.sort(Comparator.comparing(MtgCard::getName));
 			// Construct embed
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle(":no_entry: " + format + " Banlist.", "http://magic.wizards.com/en/game-info/gameplay/rules-and-formats/banned-restricted");
