@@ -45,8 +45,8 @@ public class CardCommand extends CardBaseCommand {
 
 		// Inject prices if preferred
 		if (guildPreferences.showPriceOnCard()) {
-			final  MessageEmbed pricing = Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences);
-			String descLine = pricing.getDescription().split("\n")[0];
+			final MessageEmbed pricing = Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences);
+			String descLine = pricing.getDescription() != null ? pricing.getDescription().split("\n")[0] : "";
 			final String set = (descLine.matches(".*?[(].+?[)]"))
 					? descLine.substring(descLine.indexOf("(") + 1, descLine.indexOf(")", descLine.indexOf("(")))
 					: "";
@@ -58,7 +58,7 @@ public class CardCommand extends CardBaseCommand {
 			});
 		}
 
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(),null);
+		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 
 		// Build embed & show
 		loadMsg.complete(eb.build());
