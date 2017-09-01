@@ -30,6 +30,8 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile 'com.github.Ritaja:java-exchange-rates:1.0'
     compile 'com.mashape.unirest:unirest-java:1.4.9'
+    compile 'com.google.maps:google-maps-services:0.2.2'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
 }
 
 task uberjar(type: Jar) {

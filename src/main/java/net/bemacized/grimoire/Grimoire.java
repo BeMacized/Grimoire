@@ -1,6 +1,10 @@
 package net.bemacized.grimoire;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import net.bemacized.grimoire.controllers.DBManager;
@@ -35,9 +39,13 @@ public class Grimoire {
 		new Grimoire(System.getenv("BOT_TOKEN"));
 	}
 
+	// API Instances
+	private JDA discord;
+	private GeoApiContext geoAPI;
+
+
 	// Controllers
 	private EmojiParser emojiParser;
-	private JDA discord;
 	private DBManager dbManager;
 	private PlaystatusHandler playstatusHandler;
 	private ListReporter listReporter;
@@ -80,6 +88,11 @@ public class Grimoire {
 				}
 			}
 		});
+
+		// Configure Google Geocoding API
+		geoAPI = (System.getenv("GOOGLE_API_KEY") == null) ? null : new GeoApiContext.Builder()
+				.apiKey(System.getenv("GOOGLE_API_KEY"))
+				.build();
 
 		// Log in to Discord
 		try {
@@ -207,5 +220,9 @@ public class Grimoire {
 
 	public ListReporter getListReporter() {
 		return listReporter;
+	}
+
+	public GeoApiContext getGeoAPI() {
+		return geoAPI;
 	}
 }

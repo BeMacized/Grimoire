@@ -65,7 +65,7 @@ public class BanListCommand extends BaseCommand {
 		}
 		format = WordUtils.capitalize(format);
 
-		// Send initial status message
+		// Send initial load message
 		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading " + format + " Banlist...", true);
 
 		try {
