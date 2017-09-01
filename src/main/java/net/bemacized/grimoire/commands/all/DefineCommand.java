@@ -53,7 +53,7 @@ public class DefineCommand extends BaseCommand {
 	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
 		// Verify that a keyword was given
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), "Please specify a keyword to look up.");
+			sendErrorEmbed(e.getChannel(), "Please specify a keyword to look up.");
 			return;
 		}
 
