@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.utils;
 
 import net.bemacized.grimoire.Globals;
+import net.bemacized.grimoire.Grimoire;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -16,12 +17,26 @@ import java.util.stream.Collectors;
 public class LoadMessage {
 
 	private final static Logger LOG = Logger.getLogger(LoadMessage.class.getName());
-	private final static String[] SPINNER = new String[]{
-			":small_blue_diamond:",
-			":large_orange_diamond:"
+	private final static String[][] SPINNERS = new String[][]{
+			new String[] {
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{T}",null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{Q}", null)
+			},
+			new String[] {
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{W}",null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{R}", null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{G}", null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{B}", null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{U}", null)
+			},
+			new String[] {
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{1}",null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{2}", null),
+					Grimoire.getInstance().getEmojiParser().parseEmoji("{3}", null)
+			}
 	};
 	private final static long EXPIRE_TIME = 1000 * 90;
-	private final static int SPINNER_INTERVAL = 2000;
+	private final static int SPINNER_INTERVAL = 1000;
 
 	private List<Message> messages;
 	private List<String> lines;
@@ -32,14 +47,16 @@ public class LoadMessage {
 	private boolean showSpinner;
 	private long startTime;
 	private MessageChannel channel;
+	private String[] spinner;
 
 	public LoadMessage(MessageChannel channel, String msg, boolean showSpinner) {
 		// Initialize fields
+		this.spinner = SPINNERS[new Random().nextInt(SPINNERS.length)];
 		this.showSpinner = showSpinner;
 		this.lines = new ArrayList<>();
 		this.messages = new ArrayList<>();
 		this.finished = false;
-		this.spinnerStage = new Random().nextInt(SPINNER.length);
+		this.spinnerStage = new Random().nextInt(this.spinner.length);
 		this.taskQueue = new RunnableQueue(SPINNER_INTERVAL);
 		this.spinnerTimer = new Timer();
 		this.startTime = System.currentTimeMillis();
@@ -53,7 +70,7 @@ public class LoadMessage {
 			@Override
 			public void run() {
 				if (System.currentTimeMillis() - startTime >= EXPIRE_TIME) LoadMessage.this.finish();
-				if (spinnerStage + 1 == SPINNER.length) spinnerStage = 0;
+				if (spinnerStage + 1 == spinner.length) spinnerStage = 0;
 				else spinnerStage++;
 				if (taskQueue.isEmpty()) taskQueue.queue(LoadMessage.this::render);
 			}
@@ -92,7 +109,7 @@ public class LoadMessage {
 	private void render() {
 		try {
 			final StringBuilder sb = new StringBuilder();
-			if (showSpinner) sb.append(SPINNER[spinnerStage]).append(" ");
+			if (showSpinner) sb.append(spinner[spinnerStage]).append(" ");
 			sb.append(String.join("\n", this.lines));
 			String[] messageTexts = MessageUtils.splitMessage(sb.toString().trim(), false);
 			for (int i = 0; i < messageTexts.length; i++) {

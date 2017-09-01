@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -51,7 +52,7 @@ public class EmojiParser {
 		LOG.info("Loaded " + emojiMap.size() + "/" + symbolTable.size() + " guild emoji.");
 	}
 
-	public String parseEmoji(String text, Guild guild) {
+	public String parseEmoji(String text, @Nullable Guild guild) {
 		// Private chat or guild which allows external emoji
 		if (guild == null || guild.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
 			for (Map.Entry<String, Emote> e : emojiMap.entrySet())
