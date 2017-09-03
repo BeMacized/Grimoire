@@ -231,9 +231,9 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			String text = String.join(" ", Arrays.stream(line.split("\\s+")).parallel().map(word ->
 					(Grimoire.getInstance().getComprehensiveRuleProvider().getDefinitions().parallelStream().map(Definition::getKeyword).anyMatch(w -> w.equalsIgnoreCase(word)))
 							? "__" + word + "__"
-							: (word.matches("[0-9]{3}([.]([0-9]+[.a-z]?)?)?") ? "`" + word + "`" : word)
+							: word
 			).collect(Collectors.toList()));
-			Pattern pattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
+			Pattern pattern = Pattern.compile("(rules? )?[0-9]([0-9]{2}(([.][0-9]{1,3}(([a-z])|([.]))?)|([.])))?");
 			Matcher matcher = pattern.matcher(text);
 			while (matcher.find())
 				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
