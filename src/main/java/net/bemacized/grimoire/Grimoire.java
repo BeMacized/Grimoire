@@ -8,6 +8,7 @@ import net.bemacized.grimoire.controllers.DBManager;
 import net.bemacized.grimoire.controllers.EmojiParser;
 import net.bemacized.grimoire.controllers.ListReporter;
 import net.bemacized.grimoire.controllers.PlaystatusHandler;
+import net.bemacized.grimoire.controllers.quiz.AvatarQuizManager;
 import net.bemacized.grimoire.data.providers.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -46,6 +47,7 @@ public class Grimoire {
 	private DBManager dbManager;
 	private PlaystatusHandler playstatusHandler;
 	private ListReporter listReporter;
+	private AvatarQuizManager avatarQuizManager;
 
 	// Providers
 	private CardProvider cardProvider;
@@ -153,6 +155,9 @@ public class Grimoire {
 		// Load emoji references
 		this.emojiParser = new EmojiParser();
 
+		// Start avatar quiz handler
+		this.avatarQuizManager = new AvatarQuizManager();
+
 		// Remove starting message
 		discord.getPresence().setGame(null);
 
@@ -221,5 +226,9 @@ public class Grimoire {
 
 	public GeoApiContext getGeoAPI() {
 		return geoAPI;
+	}
+
+	public AvatarQuizManager getAvatarQuizManager() {
+		return avatarQuizManager;
 	}
 }

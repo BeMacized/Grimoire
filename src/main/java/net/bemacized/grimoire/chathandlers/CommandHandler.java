@@ -5,6 +5,8 @@ import es.moki.ratelimitj.core.limiter.request.RequestRateLimiter;
 import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimiter;
 import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.commands.all.*;
+import net.bemacized.grimoire.commands.all.avatar.AvatarCommand;
+import net.bemacized.grimoire.commands.all.avatar.CreateAvatarCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.eventlogger.EventLogger;
 import net.bemacized.grimoire.eventlogger.events.LogEntry;
@@ -53,7 +55,9 @@ public class CommandHandler extends ChatHandler {
 				new ReloadPreferencesCommand(),
 				new StatsCommand(),
 				new BanListCommand(),
-				new LocatorCommand()
+				new LocatorCommand(),
+				new AvatarCommand(),
+				new CreateAvatarCommand()
 		).collect(Collectors.toList());
 		rateLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
 				RequestLimitRule.of(20, TimeUnit.SECONDS, 6),
