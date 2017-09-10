@@ -110,7 +110,7 @@ public class DefineCommand extends BaseCommand {
 							? "__" + word + "__"
 							: word
 			).collect(Collectors.toList()));
-			Pattern pattern = Pattern.compile("(rules? )?[0-9]([0-9]{2}(([.][0-9]{1,3}(([a-z])|([.]))?)|([.])))?");
+			Pattern pattern = Pattern.compile("(rules? )?[0-9]{3}(([.][0-9]{1,3}([a-z]|[.])?)|[.])?");
 			Matcher matcher = pattern.matcher(text);
 			while (matcher.find())
 				text = text.replaceAll(matcher.group(), "**" + matcher.group() + "**");
