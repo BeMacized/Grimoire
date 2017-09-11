@@ -9,6 +9,8 @@ import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.List;
+
 public class OracleCommand extends CardBaseCommand {
 
 	@Override
@@ -32,7 +34,9 @@ public class OracleCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		MtgCard card = cards.get(0);
+
 		// Verify that text exists
 		if (card.getPrintedText() == null) {
 			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no oracle text available.", card.getName());

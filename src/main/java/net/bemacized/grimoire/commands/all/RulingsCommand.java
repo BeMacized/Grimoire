@@ -9,6 +9,8 @@ import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.List;
+
 public class RulingsCommand extends CardBaseCommand {
 
 	@Override
@@ -32,7 +34,8 @@ public class RulingsCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		MtgCard card = cards.get(0);
 
 		// We have found it. Let's check if there are any rulings
 		if (card.getRulings().length == 0) {

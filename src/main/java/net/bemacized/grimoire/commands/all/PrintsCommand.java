@@ -10,6 +10,7 @@ import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,9 @@ public class PrintsCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		MtgCard card = cards.get(0);
+
 		// Show the sets
 		String sets;
 		try {
