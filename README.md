@@ -3,7 +3,7 @@
 
 [![](https://images.microbadger.com/badges/version/bemacized/grimoire.svg)](https://microbadger.com/images/bemacized/grimoire)
 
-**Mac's Grimoire** is a Discord bot that brings many **Magic The Gathering** related tools straight into your discord server. It can perform tasks such as card-, price- or rule lookups, and even more.
+**Mac's Grimoire** is a Discord bot that brings many **Magic The Gathering** related tools straight into your discord server. It can perform tasks such as card, price and rule lookups to name a few.
 
 Supported features include, but are not limited to:
 
@@ -136,7 +136,7 @@ The literal and graphical information presented in this repository, and by the D
 
 Card prices represent daily averages and/or market values provided by our affiliates. Absolutely no guarantee is made for any price information. See stores for final prices and availability.
 
-The Discord logo and Discord API are copyright Discord, Grimoire is not created by, affiliated with, or supported by Discord.
+"Discord" and any associated logos are registered trademarks of Discord, Inc. Grimoire is not created by, affiliated with, or supported by Discord.
 
 The Scryfall logo and Scryfall API are copyright Some Assembly, LLC, DBA Scryfall. Grimoire is not created by, affiliated with, or supported by Scryfall.
 
