@@ -1,7 +1,9 @@
 package net.bemacized.grimoire.utils;
 
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -64,7 +66,8 @@ public class ReactionListener extends ListenerAdapter {
 	public void disable() {
 		this.jda.removeEventListener(this);
 		this.expireTimer.cancel();
-		this.message.clearReactions().queue();
+		if (message.getGuild().getSelfMember().hasPermission((TextChannel) message.getChannel(), Permission.MESSAGE_MANAGE))
+			this.message.clearReactions().queue();
 	}
 
 	private void resetTimer() {

@@ -153,19 +153,19 @@ public abstract class CardBaseCommand extends BaseCommand {
 
 	private void applyControls(NavigableEmbed navEb, boolean removalEnabled) {
 		Message m = navEb.getMessage();
-		applyControl(PREVIOUS_ICON, m, navEb.getWidth() > 1);
-		applyControl(NEXT_ICON, m, navEb.getWidth() > 1);
-		applyControl(FLIP_ICON, m, navEb.getHeightAt(navEb.getX()) > 1);
+		applyControl(PREVIOUS_ICON, m, navEb.getWidth() > 1, removalEnabled);
+		applyControl(NEXT_ICON, m, navEb.getWidth() > 1, removalEnabled);
+		applyControl(FLIP_ICON, m, navEb.getHeightAt(navEb.getX()) > 1, removalEnabled);
 		if (removalEnabled) {
-			applyControl(REMOVE_ICON, m, true);
+			applyControl(REMOVE_ICON, m, true, removalEnabled);
 		}
 	}
 
-	private void applyControl(String emote, Message message, boolean enabled) {
+	private void applyControl(String emote, Message message, boolean enabled, boolean removalEnabled) {
 		boolean present = message.getReactions().parallelStream().anyMatch(r -> r.getEmote().getName().equals(emote));
 		if (!present && enabled) {
 			message.addReaction(emote).queue();
-		} else if (present && !enabled) {
+		} else if (present && !enabled && removalEnabled) {
 			message.getReactions().parallelStream().filter(r -> r.getEmote().getName().equals(emote))
 					.forEach(r -> {
 						try {
