@@ -103,7 +103,7 @@ public class ListReporter {
 			public void run() {
 				reporters.forEach(r -> r.report(Grimoire.getInstance().getDiscord().getGuilds().size()));
 			}
-		}, 0, REPORT_INTERVAL);
+		}, 20 * 1000, REPORT_INTERVAL);
 
 	}
 
