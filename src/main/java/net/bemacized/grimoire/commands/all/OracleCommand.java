@@ -7,7 +7,10 @@ import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
+import java.util.List;
 
 public class OracleCommand extends CardBaseCommand {
 
@@ -32,21 +35,18 @@ public class OracleCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Verify that text exists
-		if (card.getPrintedText() == null) {
-			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no oracle text available.", card.getName());
-			return;
+		if (card.getText() == null) {
+			return errorEmbedFormat("The card **'%s'** has no oracle text available.", card.getName()).get(0);
 		}
 
 		// Show the text
-		loadMsg.complete(
-				new EmbedBuilder()
-						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-						.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
-						.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getPrintedText(), e.getGuild()), false)
-						.build()
-		);
+		return new EmbedBuilder()
+				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
+				.addField("Oracle Text", Grimoire.getInstance().getEmojiParser().parseEmoji(card.getText(), e.getGuild()), false)
+				.build();
 	}
+
 }

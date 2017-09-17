@@ -50,9 +50,14 @@ public class TokenCommand extends BaseCommand {
 
 	@Override
 	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		if (Grimoire.getInstance().getCardProvider().getCachedTokens() == null) {
+			sendEmbed(e.getChannel(), ":clock1: I am still in the process of loading tokens! Please try again later.");
+			return;
+		}
+
 		// Verify token name presence
 		if (args.length == 0) {
-			sendEmbed(e.getChannel(), "Please provide a valid token name.");
+			sendErrorEmbed(e.getChannel(), "Please provide a valid token name.");
 			return;
 		}
 
@@ -144,7 +149,6 @@ public class TokenCommand extends BaseCommand {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(match.getName());
 		eb.setImage(match.getImageUrl());
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getTokenColor()}));
 		loadMsg.complete(eb.build());
 	}

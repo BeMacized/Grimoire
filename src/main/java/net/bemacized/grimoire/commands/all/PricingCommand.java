@@ -6,7 +6,10 @@ import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
+import java.util.List;
 
 public class PricingCommand extends CardBaseCommand {
 
@@ -31,14 +34,10 @@ public class PricingCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		// Update load text
-		loadMsg.setLineFormat("Loading price data for card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
-
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		EmbedBuilder eb = new EmbedBuilder(Grimoire.getInstance().getPricingProvider().getPricingEmbed(card, guildPreferences));
-		eb.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null);
 
 		//Send the message
-		loadMsg.complete(eb.build());
+		return eb.build();
 	}
 }

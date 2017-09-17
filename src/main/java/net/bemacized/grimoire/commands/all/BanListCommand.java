@@ -73,16 +73,15 @@ public class BanListCommand extends BaseCommand {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":no_entry: " + format + " Banlist.", "http://magic.wizards.com/en/game-info/gameplay/rules-and-formats/banned-restricted");
 		eb.setColor(Globals.EMBED_COLOR_PRIMARY);
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 
 		try {
 			// Retrieve banlist
 			try {
 				List<MtgCard> bannedCards = Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery("banned:" + format.toLowerCase());
 				// Filter out conspiracies if needed
-				boolean bannedConspiracies = bannedCards.parallelStream().anyMatch(c -> c.getType() != null && c.getType().contains("Conspiracy"));
+				boolean bannedConspiracies = bannedCards.parallelStream().anyMatch(c -> c.getTypeLine() != null && c.getTypeLine().contains("Conspiracy"));
 				if (bannedConspiracies)
-					bannedCards = bannedCards.parallelStream().filter(c -> !(c.getType() != null && c.getType().contains("Conspiracy"))).collect(Collectors.toList());
+					bannedCards = bannedCards.parallelStream().filter(c -> !(c.getTypeLine() != null && c.getTypeLine().contains("Conspiracy"))).collect(Collectors.toList());
 				// Sort list
 				bannedCards.sort(Comparator.comparing(MtgCard::getName));
 				eb.appendDescription("The following cards are banned in **\"" + format + "\"**:");

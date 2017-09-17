@@ -5,27 +5,24 @@ import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
+import net.bemacized.grimoire.data.retrievers.GathererRetriever;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.text.WordUtils;
-import org.jongo.marshall.jackson.oid.MongoId;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
+import org.json.JSONObject;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -34,89 +31,185 @@ import java.util.stream.Collectors;
 public class MtgCard {
 
 	private static final Logger LOG = Logger.getLogger(MtgCard.class.getName());
-	public static final String COLLECTION = "MtgCards";
 
-	@MongoId
-	private String scryfallId = "UNKNOWN";
+	private int multiverseId;
+	private String name;
+	private String manacost;
+	private String cmc;
+	private String language;
+	private String typeLine;
+	private ScryfallCard.Rarity rarity;
+	private ScryfallSet set;
+	private String scryfallId;
+	private String[] colorIdentity = new String[0];
+	private HashMap<String, ScryfallCard.Legality> legalities = new HashMap<>();
+	private String text;
+	private String power;
+	private String toughness;
+	private String flavorText;
+	private String loyalty;
+	private String vgHandModifier;
+	private String vgLifeModifier;
+	private String scryfallUrl;
+	private String number;
+	private MtgJsonCard.Ruling[] rulings;
+	private MtgJsonCard.ForeignName[] foreignNames;
+	private Supplier<MtgCard> otherSideSupplier;
+	private ScryfallCard.Layout layout;
 
-	@Nonnull
-	private String language = "English";
-	private int multiverseid = -1;
-
-	// Transient values
-	private transient ScryfallCard scryfallCard;
-	private transient ScryfallSet scryfallSet;
-	private transient MtgJsonCard mtgJsonCard;
 	private transient String imageUrl;
-	private String printedText;
-	private String printedType;
+	private transient String printedText;
+	private transient String printedTypeLine;
+	private transient MtgCard otherSide;
 
-	public MtgCard() {
-	}
-
-	public MtgCard(String scryfallId) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+	MtgCard(int multiverseId, String name, String manacost, String cmc, String language, String typeLine, ScryfallCard.Rarity rarity, ScryfallSet set, String scryfallId, String[] colorIdentity, HashMap<String, ScryfallCard.Legality> legalities, String text, String power, String toughness, String flavorText, String loyalty, String vgHandModifier, String vgLifeModifier, String scryfallUrl, String number, MtgJsonCard.Ruling[] rulings, MtgJsonCard.ForeignName[] foreignNames, Supplier<MtgCard> otherSideSupplier, ScryfallCard.Layout layout) {
+		this.multiverseId = multiverseId;
+		this.name = name;
+		this.manacost = manacost;
+		this.cmc = cmc;
+		this.language = language;
+		this.typeLine = typeLine;
+		this.rarity = rarity;
+		this.set = set;
 		this.scryfallId = scryfallId;
-		initialize();
+		this.colorIdentity = colorIdentity;
+		this.legalities = legalities;
+		this.text = text;
+		this.power = power;
+		this.toughness = toughness;
+		this.flavorText = flavorText;
+		this.loyalty = loyalty;
+		this.vgHandModifier = vgHandModifier;
+		this.vgLifeModifier = vgLifeModifier;
+		this.scryfallUrl = scryfallUrl;
+		this.number = number;
+		this.rulings = rulings;
+		this.foreignNames = foreignNames;
+		this.otherSideSupplier = otherSideSupplier;
+		this.layout = layout;
 	}
 
-	public MtgCard(@Nonnull ScryfallCard scryfallCard) {
-		this.scryfallCard = scryfallCard;
-		this.scryfallId = scryfallCard.getId();
-		try {
-			initialize();
-		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
-			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
-		} catch (ScryfallRetriever.ScryfallRequest.NoResultException ignored) {
-		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
-			LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
-		}
-	}
-
-	public MtgCard(@Nonnull ScryfallCard scryfallCard, @Nonnull MtgJsonCard mtgJsonCard) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		this(scryfallCard);
-		this.mtgJsonCard = mtgJsonCard;
-		initialize();
-	}
-
-	private void initialize() throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		// Retrieve scryfall card if needed
-		if (scryfallCard == null)
-			scryfallCard = ScryfallRetriever.getCardByScryfallId(scryfallId);
-		// Retrieve scryfall set
-		scryfallSet = ScryfallRetriever.getSet(scryfallCard.getSet());
-		// Get the multiverse id from the mtg json card if it exists already (For foreign cards)
-		multiverseid = mtgJsonCard == null ? scryfallCard.getMultiverseId() : mtgJsonCard.getMultiverseid();
-		// Get the language from the mtg json card if it exists already (For foreign cards)
-		if (mtgJsonCard != null)
-			language = mtgJsonCard.getLanguage();
-		// Fetch a mtg json card instance if we don't have one yet.
-		if (getMultiverseId() > 0 && mtgJsonCard == null)
-			mtgJsonCard = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardByMultiverseId(multiverseid);
-	}
+	//
+	// Standard Getters
+	//
 
 	@Nullable
-	public String getName() {
-		if (mtgJsonCard != null) return mtgJsonCard.getName();
-		if (scryfallCard == null) return null;
-		return scryfallCard.getName();
+	public MtgCard getOtherSide() {
+		if (otherSide == null) otherSide = otherSideSupplier.get();
+		return otherSide;
+	}
+
+	public ScryfallCard.Layout getLayout() {
+		return layout;
+	}
+
+	public MtgJsonCard.ForeignName[] getForeignNames() {
+		return foreignNames;
+	}
+
+	public MtgJsonCard.Ruling[] getRulings() {
+		return rulings;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public String getScryfallId() {
+		return scryfallId;
 	}
 
 	public int getMultiverseId() {
-		return multiverseid;
+		return multiverseId;
 	}
 
-	public String[] getColorIdentity() {
-		if (scryfallCard == null) return new String[0];
-		return scryfallCard.getColorIdentity();
+	public String getName() {
+		return name;
+	}
+
+	public String getManacost() {
+		return manacost;
+	}
+
+	public String getCmc() {
+		return cmc;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public String getTypeLine() {
+		// Return printed type line if available
+		if (printedTypeLine != null) return printedTypeLine;
+		// Attempt fetching printed type line
+		printedTypeLine = fetchPrintedTypeLine();
+		if (printedTypeLine != null) return printedTypeLine;
+		// Fall back to given type line otherwise
+		return typeLine;
+	}
+
+	public ScryfallCard.Rarity getRarity() {
+		return rarity;
 	}
 
 	public ScryfallSet getSet() {
-		return scryfallSet;
+		return set;
 	}
 
-	public List<MtgCard> getAllPrintings() throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
+	public String[] getColorIdentity() {
+		return colorIdentity;
+	}
+
+	public HashMap<String, ScryfallCard.Legality> getLegalities() {
+		return legalities;
+	}
+
+	public String getText() {
+		// Return printed text if available
+		if (printedText != null) {
+			return printedText;
+		}
+		// Attempt fetching printed text
+		printedText = fetchPrintedText();
+		if (printedText != null) {
+			return printedText;
+		}
+		// Fall back to given text otherwise
+		return text;
+	}
+
+	public String getPower() {
+		return power;
+	}
+
+	public String getToughness() {
+		return toughness;
+	}
+
+	public String getFlavorText() {
+		return flavorText;
+	}
+
+	public String getLoyalty() {
+		return loyalty;
+	}
+
+	public String getVgHandModifier() {
+		return vgHandModifier;
+	}
+
+	public String getVgLifeModifier() {
+		return vgLifeModifier;
+	}
+
+	//
+	// Utility Getters
+	//
+
+	public List<MtgCard> getAllPrintings(int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
 		try {
-			return Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(String.format("++!\"%s\"", this.getName()));
+			return Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(String.format("++!\"%s\"", name), maxResults);
 		} catch (ScryfallRetriever.ScryfallRequest.NoResultException e) {
 			return new ArrayList<MtgCard>() {{
 				add(MtgCard.this);
@@ -124,42 +217,33 @@ public class MtgCard {
 		}
 	}
 
-	@Nonnull
-	public String getLanguage() {
-		return language;
+	@Nullable
+	public String getTokenColor() {
+		return MTGUtils.colourIdToName(getColorIdentity().length > 0 ? getColorIdentity()[0] : null);
 	}
 
 	@Nullable
 	public String getGathererUrl() {
-		return (getMultiverseId() > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + getMultiverseId() : null;
+		return (multiverseId > 0) ? "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" + multiverseId : null;
 	}
 
 	@Nullable
 	public String getScryfallUrl() {
 		// Fallback to gatherer for foreign cards
-		if (!getLanguage().equalsIgnoreCase("English") || scryfallCard == null) return getGathererUrl();
-		return scryfallCard.getScryfallUri();
+		if (!language.equalsIgnoreCase("English")) return getGathererUrl();
+		return scryfallUrl;
 	}
 
 	@Nullable
 	public String getMagicCardsInfoUrl() {
 		// Fallback to gatherer for foreign cards
-		if (!getLanguage().equalsIgnoreCase("English")) return getGathererUrl();
+		if (!language.equalsIgnoreCase("English")) return getGathererUrl();
 		try {
-			return "http://magiccards.info/query?q=!" + URLEncoder.encode(getName(), "UTF-8");
+			return "http://magiccards.info/query?q=!" + URLEncoder.encode(name, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// Should never happen
-			return "http://magiccards.info/query?q=!" + getName();
+			return "http://magiccards.info/query?q=!" + name;
 		}
-	}
-
-	@Nullable
-	public ScryfallCard getScryfallCard() {
-		return scryfallCard;
-	}
-
-	public MtgJsonCard.Ruling[] getRulings() {
-		return mtgJsonCard == null ? new MtgJsonCard.Ruling[0] : mtgJsonCard.getRulings();
 	}
 
 	@Nullable
@@ -171,38 +255,38 @@ public class MtgCard {
 	public MessageEmbed getEmbed(Guild guild, GuildPreferences guildPreferences) {
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setColor(MTGUtils.colorIdentitiesToColor(getColorIdentity()));
+		eb.setColor(MTGUtils.colorIdentitiesToColor(colorIdentity));
 		if (guildPreferences.showThumbnail()) eb.setThumbnail(getImageUrl());
-		eb.setTitle(getName(), guildPreferences.getCardUrl(this));
+		eb.setTitle(name, guildPreferences.getCardUrl(this));
 		if (guildPreferences.showManaCost())
-			eb.appendDescription((getManaCost() == null || getManaCost().isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(getManaCost(), guild));
+			eb.appendDescription((manacost == null || manacost.isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(manacost, guild));
 		if (guildPreferences.showConvertedManaCost()) {
-			String cmc = getCmc();
+			String cmcStr;
 			try {
-				cmc = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
+				cmcStr = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
+				eb.appendDescription(" **(" + cmcStr + ")**");
 			} catch (NumberFormatException e) {
 			}
-			eb.appendDescription(" **(" + cmc + ")**");
 		}
 		eb.appendDescription("\n");
 		if (guildPreferences.showPowerToughness()) {
-			String pat = MTGUtils.parsePowerAndToughness(getPower(), getToughness());
+			String pat = MTGUtils.parsePowerAndToughness(power, toughness);
 			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 		}
-		if (guildPreferences.showCardType() && getType() != null)
-			eb.appendDescription(getType() + "\n\n");
-		if (guildPreferences.showOracleText() && getPrintedText() != null)
-			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getPrintedText(), guild) + "\n");
+		if (guildPreferences.showCardType() && getTypeLine() != null)
+			eb.appendDescription(getTypeLine() + "\n\n");
+		if (guildPreferences.showOracleText() && getText() != null)
+			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild) + "\n");
 		if (guildPreferences.showFlavorText() && getFlavorText() != null)
 			eb.appendDescription("\n_" + getFlavorText() + "_");
 		if (guildPreferences.showLegalFormats()) {
-			String formats = String.join(", ", getLegalities().entrySet().parallelStream().filter(e -> e.getValue().equals(ScryfallCard.Legality.LEGAL)).map(s -> s.getKey().substring(0, 1).toUpperCase() + s.getKey().substring(1).toLowerCase()).collect(Collectors.toList()));
+			String formats = String.join(", ", legalities.entrySet().parallelStream().filter(e -> e.getValue().equals(ScryfallCard.Legality.LEGAL)).map(s -> s.getKey().substring(0, 1).toUpperCase() + s.getKey().substring(1).toLowerCase()).collect(Collectors.toList()));
 			if (!formats.isEmpty()) eb.addField("Formats", formats, true);
 		}
-		if (guildPreferences.showPrintedRarities()) {
+		if (guildPreferences.showPrintedRarities() && !typeLine.contains("Basic Land")) {
 			String rarities = null;
 			try {
-				rarities = String.join(", ", getAllPrintings().parallelStream().map(c -> c.getRarity().toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase())).collect(Collectors.toList()));
+				rarities = String.join(", ", getAllPrintings(-1).parallelStream().map(c -> c.rarity.toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase())).collect(Collectors.toList()));
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
@@ -212,11 +296,11 @@ public class MtgCard {
 			}
 			if (rarities != null && !rarities.isEmpty()) eb.addField("Rarities", rarities, true);
 		}
-		if (guildPreferences.showPrintings()) {
+		if (guildPreferences.showPrintings() && !typeLine.contains("Basic Land")) {
 			String printings = "";
 			try {
 				printings = String.join(", ",
-						new String[]{"**" + getSet().getName() + " (" + getSet().getCode() + ")**", String.join(", ", getAllPrintings().parallelStream().filter(card -> !getSet().getCode().equalsIgnoreCase(card.getSet().getCode())).map(card -> card.getSet().getCode()).collect(Collectors.toList()))}).trim();
+						new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllPrintings(-1).parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.set.getCode())).map(card -> card.set.getCode()).collect(Collectors.toList()))}).trim();
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
@@ -231,150 +315,67 @@ public class MtgCard {
 				LOG.log(Level.SEVERE, "PRINTINGS EXCEEDS 1024 CHARS FOR : " + toString() + "\n\n" + printings);
 		}
 		if (guildPreferences.showMiscProperties()) {
-			if (getLoyalty() != null) eb.addField("Loyalty", getLoyalty(), true);
-			if (getHandModifier() != null && getLifeModifier() != null)
-				eb.addField("Vanguard Hand/Life Modifiers", getHandModifier() + "/" + getLifeModifier(), true);
+			if (loyalty != null) eb.addField("Loyalty", loyalty, true);
+			if (vgHandModifier != null && vgLifeModifier != null)
+				eb.addField("Vanguard Hand/Life Modifiers", vgHandModifier + "/" + vgLifeModifier, true);
 		}
 
 		// Return result
 		return eb.build();
 	}
 
-	@Nullable
-	public String getManaCost() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getManaCost();
+	public boolean sameCardAs(MtgCard mtgCard) {
+		if (mtgCard.getName().equalsIgnoreCase(getName())) return true;
+		return (getOtherSide() != null && getOtherSide().getName().equalsIgnoreCase(mtgCard.getName()));
 	}
 
-	@Nullable
-	public String getPower() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getPower();
+	//
+	// Internal utilities
+	//
+
+	private String fetchPrintedText() {
+		if (getLanguage().equalsIgnoreCase("English")) return text;
+		GathererRetriever.GathererData data = GathererRetriever.getGathererData(getMultiverseId(), getName());
+		return (data == null) ? null : data.getText();
 	}
 
-	@Nullable
-	public String getToughness() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getToughness();
+	private String fetchPrintedTypeLine() {
+		if (getLanguage().equalsIgnoreCase("English")) return typeLine;
+		GathererRetriever.GathererData data = GathererRetriever.getGathererData(getMultiverseId(), getName());
+		return (data == null) ? null : data.getTypeLine();
 	}
 
-	@Nullable
-	public String getType() {
-		if (language.equalsIgnoreCase("English") || getMultiverseId() < 1) return scryfallCard.getTypeLine();
-		if (printedType != null && !printedType.isEmpty()) return printedType;
-		try {
-			printedType = Jsoup.parse(new URL("http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid=" + getMultiverseId()), 5000)
-					.getElementsByClass("cardComponentTable")
-					.first()
-					.getElementsByTag("td")
-					.first()
-					.select("[id$=_typeRow]")
-					.first()
-					.getElementsByClass("value")
-					.first()
-					.text()
-					.trim();
-			if (printedType.isEmpty()) printedType = null;
-		} catch (IOException e) {
-			LOG.log(Level.WARNING, "Could not retrieve foreign type for card with multiverseid " + getMultiverseId(), e);
-		}
-		return (printedType == null) ? scryfallCard.getTypeLine() : printedType;
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("multiverseId", multiverseId)
+				.append("name", name)
+				.append("manacost", manacost)
+				.append("cmc", cmc)
+				.append("language", language)
+				.append("typeLine", typeLine)
+				.append("rarity", rarity)
+				.append("set", set)
+				.append("scryfallId", scryfallId)
+				.append("colorIdentity", colorIdentity)
+				.append("legalities", legalities)
+				.append("text", text)
+				.append("power", power)
+				.append("toughness", toughness)
+				.append("flavorText", flavorText)
+				.append("loyalty", loyalty)
+				.append("vgHandModifier", vgHandModifier)
+				.append("vgLifeModifier", vgLifeModifier)
+				.append("scryfallUrl", scryfallUrl)
+				.append("number", number)
+				.append("rulings", rulings)
+				.append("foreignNames", foreignNames)
+				.append("imageUrl", imageUrl)
+				.append("printedText", printedText)
+				.append("tokenColor", getTokenColor())
+				.append("gathererUrl", getGathererUrl())
+				.append("magicCardsInfoUrl", getMagicCardsInfoUrl())
+				.toString();
 	}
 
-	@Nullable
-	public String getPrintedText() {
-		if (language.equalsIgnoreCase("English") || getMultiverseId() < 1) return scryfallCard.getOracleText();
-		if (printedText != null && !printedText.isEmpty()) return printedText;
-		try {
-			printedText = String.join("\n",
-					Jsoup.parse(new URL("http://gatherer.wizards.com/Pages/Card/Details.aspx?printed=true&multiverseid=" + getMultiverseId()), 5000)
-							.getElementsByClass("cardComponentTable")
-							.first()
-							.getElementsByTag("td")
-							.first()
-							.getElementsByClass("cardtextbox")
-							.stream()
-							.map(Element::text)
-							.map(String::trim)
-							.collect(Collectors.toList())
-			);
-			if (printedText.isEmpty()) printedText = null;
-		} catch (IOException e) {
-			LOG.log(Level.WARNING, "Could not retrieve foreign text for card with multiverseid " + getMultiverseId(), e);
-		}
-		return (printedText == null) ? scryfallCard.getOracleText() : printedText;
-	}
-
-	@Nullable
-	public String getFlavorText() {
-		return scryfallCard.getFlavorText();
-	}
-
-	public Map<String, ScryfallCard.Legality> getLegalities() {
-		if (scryfallCard == null) return new HashMap<>();
-		return scryfallCard.getLegalities();
-	}
-
-	@Nullable
-	public String getLoyalty() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getLoyalty();
-	}
-
-	@Nullable
-	public String getHandModifier() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getHandModifier();
-	}
-
-	@Nullable
-	public String getLifeModifier() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getLifeModifier();
-	}
-
-	public ScryfallCard.Rarity getRarity() {
-		if (scryfallCard == null) return ScryfallCard.Rarity.UNKNOWN;
-		return scryfallCard.getRarity();
-	}
-
-	@Nullable
-	public String getCmc() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getCMC();
-	}
-
-	public MtgJsonCard.ForeignName[] getForeignNames() {
-		if (mtgJsonCard == null) return new MtgJsonCard.ForeignName[0];
-		return mtgJsonCard.getForeignNames();
-	}
-
-	@Nullable
-	public String getTokenColor() {
-		return MTGUtils.colourIdToName(getColorIdentity().length > 0 ? getColorIdentity()[0] : null);
-	}
-
-	@Nullable
-	public String getNumber() {
-		if (scryfallCard == null) return null;
-		return scryfallCard.getCollectorNumber();
-	}
-
-	public String getScryfallId() {
-		return scryfallId;
-	}
-
-	public void updateScryfall() {
-		ScryfallCard card = null;
-		try {
-			card = ScryfallRetriever.getCardByScryfallId(getScryfallId());
-		} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
-			LOG.log(Level.WARNING, "Could not refresh scryfall card because of an unknown error", e);
-		} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.NoResultException e) {
-			LOG.log(Level.WARNING, "Could not refresh scryfall card because it could not be found", e);
-		} catch (net.bemacized.grimoire.data.retrievers.ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
-			LOG.log(Level.WARNING, "Could not refresh scryfall card because scryfall returned an error", e);
-		}
-		if (card != null) this.scryfallCard = card;
-	}
 }

@@ -144,7 +144,6 @@ public class RandomCommand extends BaseCommand {
 		eb.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		loadMsg.complete(eb.build());
 	}

@@ -4,7 +4,6 @@ import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.utils.LoadMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -36,10 +35,7 @@ public class CardCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCard(MtgCard card, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		// Update load text
-		loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
-
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Get card embed
 		EmbedBuilder eb = new EmbedBuilder(card.getEmbed(e.getGuild(), guildPreferences));
 
@@ -58,9 +54,9 @@ public class CardCommand extends CardBaseCommand {
 			});
 		}
 
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
-
 		// Build embed & show
-		loadMsg.complete(eb.build());
+		return eb.build();
 	}
+
+
 }

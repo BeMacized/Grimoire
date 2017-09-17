@@ -6,15 +6,19 @@ public abstract class TimedValue<T> {
 	private T value;
 	private long timestamp;
 
+	private boolean refreshing;
+
 	public TimedValue(long max_age) {
 		this.max_age = max_age;
 	}
 
 	public T get() {
-		if (value == null || System.currentTimeMillis() - timestamp > max_age) {
+		if ((value == null || System.currentTimeMillis() - timestamp > max_age) && !refreshing) {
+			refreshing = true;
 			timestamp = System.currentTimeMillis();
 			T v = refresh();
 			if (v != null) value = v;
+			refreshing = false;
 		}
 		return value;
 	}
