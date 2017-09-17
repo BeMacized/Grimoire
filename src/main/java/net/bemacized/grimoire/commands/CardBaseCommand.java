@@ -8,6 +8,7 @@ import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.NavigableEmbed;
 import net.bemacized.grimoire.utils.ReactionListener;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -116,7 +117,8 @@ public abstract class CardBaseCommand extends BaseCommand {
 		loadMsg.complete();
 
 		// Add controls
-		applyControls(navEb);
+		boolean removalDisabled = e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE);
+		applyControls(navEb, removalDisabled);
 
 		// Setup controls
 		ReactionListener rl = new ReactionListener(Grimoire.getInstance().getDiscord(), navEb.getMessage(), false, 30 * 1000);
@@ -124,35 +126,39 @@ public abstract class CardBaseCommand extends BaseCommand {
 		rl.addResponse(PREVIOUS_ICON, (emoji, event) -> {
 			navEb.setY(0);
 			if (navEb.getX() > 0) navEb.left();
-			applyControls(navEb);
+			applyControls(navEb, removalDisabled);
 		});
 		rl.addResponse(NEXT_ICON, (emoji, event) -> {
 			navEb.setY(0);
 			if (navEb.getX() < navEb.getWidth() - 1) navEb.right();
-			applyControls(navEb);
+			applyControls(navEb, removalDisabled);
 		});
 		rl.addResponse(FLIP_ICON, (emoji, event) -> {
 			if (navEb.getY() > 0) navEb.up();
 			else navEb.down();
-			applyControls(navEb);
+			applyControls(navEb, removalDisabled);
 		});
-		rl.addResponse(REMOVE_ICON, (emoji, event) -> {
-			rl.disable();
-			navEb.getMessage().delete().queue();
-			e.getMessage().delete().queue();
-		});
+		if (removalDisabled) {
+			rl.addResponse(REMOVE_ICON, (emoji, event) -> {
+				rl.disable();
+				navEb.getMessage().delete().queue();
+				e.getMessage().delete().queue();
+			});
+		}
 	}
 
 	protected abstract String getInitialLoadLine();
 
 	protected abstract MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e);
 
-	private void applyControls(NavigableEmbed navEb) {
+	private void applyControls(NavigableEmbed navEb, boolean removalEnabled) {
 		Message m = navEb.getMessage();
 		applyControl(PREVIOUS_ICON, m, navEb.getWidth() > 1);
 		applyControl(NEXT_ICON, m, navEb.getWidth() > 1);
 		applyControl(FLIP_ICON, m, navEb.getHeightAt(navEb.getX()) > 1);
-		applyControl(REMOVE_ICON, m, true);
+		if (removalEnabled) {
+			applyControl(REMOVE_ICON, m, true);
+		}
 	}
 
 	private void applyControl(String emote, Message message, boolean enabled) {
