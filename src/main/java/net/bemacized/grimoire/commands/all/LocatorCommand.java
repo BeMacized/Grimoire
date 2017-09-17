@@ -151,7 +151,6 @@ public class LocatorCommand extends BaseCommand {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle("Wizards Locator Results", String.format("http://locator.wizards.com/#brand=magic&a=search&p=%s&massmarket=no", URLEncoder.encode(rawArgs, "UTF-8")));
 			eb.setColor(Globals.EMBED_COLOR_PRIMARY);
-			if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
 			eb.appendDescription("The following results were found for **\"" + rawArgs + "\"**");
 
 			// Insert stores into embed

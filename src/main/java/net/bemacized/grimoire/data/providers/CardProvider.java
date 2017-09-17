@@ -1,6 +1,7 @@
 package net.bemacized.grimoire.data.providers;
 
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.card.MtgCardBuilder;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
@@ -48,9 +49,11 @@ public class CardProvider {
 				return null;
 			}
 		};
-		LOG.info("Loading tokens...");
-		int tokenCount = cachedTokens.get().size();
-		LOG.info(tokenCount + " tokens loaded!");
+		new Thread(() -> {
+			LOG.info("Loading tokens...");
+			int tokenCount = cachedTokens.get().size();
+			LOG.info(tokenCount + " tokens loaded!");
+		}).start();
 	}
 
 	public CardImageRetriever getImageRetriever() {
@@ -59,16 +62,12 @@ public class CardProvider {
 
 	@Nonnull
 	public MtgCard getCardByScryfallId(@Nonnull String scryfallId) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		//TODO: Get from cache list
-		MtgCard card = new MtgCard(scryfallId);
-		return card;
+		return autoCompleteMtgJsonCard(ScryfallRetriever.getCardByScryfallId(scryfallId));
 	}
 
 	@Nonnull
 	public MtgCard getCardByMultiverseId(int multiverseId) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		//TODO: Get from cache list
-		MtgCard card = new MtgCard(ScryfallRetriever.getCardByMultiverseId(multiverseId));
-		return card;
+		return autoCompleteMtgJsonCard(ScryfallRetriever.getCardByMultiverseId(multiverseId));
 	}
 
 	public MtgJsonProvider getMtgJsonProvider() {
@@ -80,13 +79,26 @@ public class CardProvider {
 	}
 
 	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query, int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream().map(MtgCard::new).sorted((o1, o2) -> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt())).collect(Collectors.toList());
+		return ScryfallRetriever.getCardsFromQuery(query, maxResults).stream()
+				.map(sCard -> {
+					// Try find fitting MtgJson card
+					MtgJsonCard mCard = sCard.getMultiverseId() > 0
+							? mtgJsonProvider.getCardsByMultiverseId(sCard.getMultiverseId())
+							.parallelStream()
+							.filter(c -> c.getLanguage().equalsIgnoreCase("English"))
+							.findFirst()
+							.orElse(null)
+							: null;
+					return mCard == null ? new MtgCardBuilder(sCard).createMtgCard() : new MtgCardBuilder(sCard, mCard).createMtgCard();
+				})
+				.sorted((o1, o2) -> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt()))
+				.collect(Collectors.toList());
 	}
 
 	@Nullable
 	public ScryfallSet getSetByNameOrCode(@Nonnull String nameOrCode) {
 		// Attempt retrieval from cache
-		ScryfallSet set = sets.parallelStream().filter(s -> s.getCode().equalsIgnoreCase(nameOrCode)).findFirst().orElse(sets.parallelStream().filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase())).findFirst().orElse(null));
+		ScryfallSet set = sets.stream().filter(s -> s.getCode().equalsIgnoreCase(nameOrCode)).findFirst().orElse(sets.stream().filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase())).findFirst().orElse(null));
 		if (set != null) return set;
 		// Retrieve as code from Scryfall
 		try {
@@ -117,22 +129,27 @@ public class CardProvider {
 	}
 
 	@Nullable
-	public MtgCard matchAnyCardName(@Nonnull String query, @Nullable ScryfallSet set, GuildPreferences guildPreferences) {
+	public MtgCard matchCardAnyLanguage(@Nonnull String query, @Nullable ScryfallSet set, GuildPreferences guildPreferences) {
 
 		List<MtgJsonCard> matches = mtgJsonProvider.getCards().parallelStream()
 				.filter(c -> set == null || (c.getSetCode().equalsIgnoreCase(set.getCode()) || c.getSetName().equalsIgnoreCase(set.getName())))
 				.filter(c -> c.getName().equalsIgnoreCase(query)).collect(Collectors.toList());
 
-		MtgJsonCard mjc = matches.parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase(guildPreferences.getPreferredLanguage())).findFirst().orElse(matches.parallelStream().findFirst().orElse(null));
-		if (mjc == null) return null;
+		MtgJsonCard mCard = matches.parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase(guildPreferences.getPreferredLanguage())).findFirst().orElse(matches.parallelStream().findFirst().orElse(null));
+		if (mCard == null) {
+			return null;
+		}
 
-		MtgJsonCard engVersion = mjc.getLanguage().equalsIgnoreCase("English") ? mjc : mjc.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
-		if (engVersion == null) return null;
+		MtgJsonCard mCardEnglish = mCard.getLanguage().equalsIgnoreCase("English") ? mCard : mCard.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
+		if (mCardEnglish == null) {
+			return null;
+		}
 
-		MtgCard card;
 		try {
-			card = getCardByMultiverseId(engVersion.getMultiverseid());
-			return new MtgCard(card.getScryfallCard(), mjc);
+			String sfQuery = mCardEnglish.getName();
+			if (set != null) sfQuery += "s:" + set.getCode();
+			ScryfallCard sCard = ScryfallRetriever.getCardsFromQuery(sfQuery).parallelStream().findFirst().orElse(null);
+			return new MtgCardBuilder(sCard, mCard).createMtgCard();
 		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
 			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
 			return null;
@@ -150,8 +167,13 @@ public class CardProvider {
 
 	@Nullable
 	public MtgCard getRandomCardByScryfallQuery(String query) throws ScryfallRetriever.ScryfallRequest.ScryfallErrorException, ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException {
-		ScryfallCard card = ScryfallRetriever.getRandomCardFromQuery(query);
-		if (card == null) return null;
-		return new MtgCard(card);
+		ScryfallCard sCard = ScryfallRetriever.getRandomCardFromQuery(query);
+		if (sCard == null) return null;
+		return autoCompleteMtgJsonCard(sCard);
+	}
+
+	private MtgCard autoCompleteMtgJsonCard(ScryfallCard sCard) {
+		MtgJsonCard mCard = mtgJsonProvider.getCardsByMultiverseId(sCard.getMultiverseId()).parallelStream().findFirst().orElse(null);
+		return mCard == null ? new MtgCardBuilder(sCard).createMtgCard() : new MtgCardBuilder(sCard, mCard).createMtgCard();
 	}
 }

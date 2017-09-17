@@ -6,6 +6,7 @@ import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
@@ -33,17 +34,11 @@ public class ArtCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		MtgCard card = cards.get(0);
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 
 		// Check if an image is available
-		if (card.getImageUrl() == null) {
-			sendErrorEmbedFormat(loadMsg, "There is no known art for **'%s'**.", card.getName());
-			return;
-		}
-
-		// Update load text
-		loadMsg.setLineFormat("Loading card '%s' from set '%s, (%s)'...", card.getName(), card.getSet().getName(), card.getSet().getCode());
+		if (card.getImageUrl() == null)
+			return errorEmbedFormat("There is no known art for **'%s'**.", card.getName()).get(0);
 
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();
@@ -51,7 +46,6 @@ public class ArtCommand extends CardBaseCommand {
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 		eb.setImage(card.getImageUrl());
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
-		if (guildPreferences.showRequestersName()) eb.setFooter("Requested by " + e.getAuthor().getName(), null);
-		loadMsg.complete(eb.build());
+		return eb.build();
 	}
 }

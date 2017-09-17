@@ -149,10 +149,6 @@ public class GuildPreferences {
 		return getValue(22) == 1;
 	}
 
-	public boolean showRequestersName() {
-		return getValue(24) == 1;
-	}
-
 	@Nullable
 	public String getCardUrl(MtgCard card) {
 		switch (getTitleService()) {
@@ -200,8 +196,8 @@ public class GuildPreferences {
 		if (defaultPreferences == null)
 			throw new IllegalStateException("Cannot determine validity without default preferences");
 		if (preferences.isEmpty()) return false;
-		if (preferences.keySet().stream().anyMatch(id -> StreamSupport.stream(defaultPreferences.spliterator(), false).noneMatch(p -> p.getAsJsonObject().get("id").getAsInt() == id)))
-			return false;
+//		if (preferences.keySet().stream().anyMatch(id -> StreamSupport.stream(defaultPreferences.spliterator(), false).noneMatch(p -> p.getAsJsonObject().get("id").getAsInt() == id)))
+//			return false;
 		for (JsonElement preference : defaultPreferences) {
 			JsonObject obj = preference.getAsJsonObject();
 			int id = obj.get("id").getAsInt();

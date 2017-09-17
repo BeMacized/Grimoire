@@ -3,7 +3,6 @@ package net.bemacized.grimoire.utils;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
@@ -16,126 +15,135 @@ import java.util.function.Supplier;
 
 public class NavigableEmbed extends ListenerAdapter {
 
-    // Preferences
-    private long controlTimeout;
-    private Set<String> controlUsers;
-    private List<List<Supplier<MessageEmbed>>> embeds;
-    private MessageChannel channel;
+	// Preferences
+	private List<List<Supplier<MessageEmbed>>> embeds;
+	private MessageChannel channel;
 
-    // Internals
-    private long creationTime;
-    private int xindex;
-    private int yindex;
-    private Message message;
+	// Internals
+	private int xindex;
+	private int yindex;
+	private Message message;
 
-    NavigableEmbed(@Nonnull Set<String> controlUsers, @Nonnull List<List<Supplier<MessageEmbed>>> embeds, long controlTimeout, @Nonnull MessageChannel channel) {
-        this.controlUsers = new HashSet<>();
-        this.controlUsers.addAll(controlUsers);
-        this.embeds = new ArrayList<>();
-        this.embeds.addAll(embeds);
-        this.channel = channel;
-        xindex = 0;
-        yindex = 0;
-        creationTime = System.currentTimeMillis();
-    }
+	NavigableEmbed(@Nonnull List<List<Supplier<MessageEmbed>>> embeds, @Nonnull MessageChannel channel) {
+		this.embeds = new ArrayList<>();
+		this.embeds.addAll(embeds);
+		this.channel = channel;
+		xindex = 0;
+		yindex = 0;
+		render();
+	}
 
-    public List<String> getControlUsers() {
-        return new ArrayList<>(controlUsers);
-    }
+	public Message getMessage() {
+		return message;
+	}
 
-    public List<List<Supplier<MessageEmbed>>> getEmbeds() {
-        return new ArrayList<>(embeds);
-    }
+	public int getX() {
+		return xindex;
+	}
 
-    private void render() {
-        //TODO: WRITE RENDER MECHANISM
-        MessageEmbed embed = embeds.get(xindex).get(yindex).get();
-        try {
-            if (message == null)
-                message = channel.sendMessage(embed).submit().get();
-            else {
-                message.clearReactions().submit().get();
-                message = message.editMessage(embed).submit().get();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            //TODO: HANDLE EXCEPTION
-            e.printStackTrace();
-        }
-        //TODO: ADD REACTIONS TO MESSAGE
-    }
+	public int getY() {
+		return yindex;
+	}
 
-    private void next() {
-        if (xindex < embeds.size() - 1) {
-            xindex++;
-            yindex = 0;
-            render();
-        }
-    }
+	public int getWidth() {
+		return embeds.size();
+	}
 
-    private void previous() {
-        if (xindex > 0) {
-            xindex--;
-            yindex = 0;
-            render();
-        }
-    }
+	public int getHeight() {
+		return embeds.parallelStream().mapToInt(List::size).max().orElse(0);
+	}
 
-    private void down() {
-        if (yindex < embeds.get(xindex).size() - 1) {
-            yindex++;
-            render();
-        } else if (yindex != 0) {
-            yindex = 0;
-            render();
-        }
-    }
+	public int getHeightAt(int x) {
+		if (x < 0 || x >= embeds.size()) throw new IllegalArgumentException("X is out of bounds.");
+		return embeds.get(x).size();
+	}
 
-    @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        //TODO: CONNECT TO next(), previous() and down();
-    }
+	public List<List<Supplier<MessageEmbed>>> getEmbeds() {
+		return new ArrayList<>(embeds);
+	}
 
-    public static class Builder {
-        private long controlTimeout = 30 * 1000;
-        private Set<String> controlUsers;
-        private List<List<Supplier<MessageEmbed>>> embeds;
-        private MessageChannel channel;
+	private void render() {
+		MessageEmbed embed = embeds.get(xindex).get(yindex).get();
+		try {
+			if (message == null)
+				message = channel.sendMessage(embed).submit().get();
+			else {
+				message = message.editMessage(embed).submit().get();
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			//TODO: HANDLE EXCEPTION
+			e.printStackTrace();
+		}
+		//TODO: ADD REACTIONS TO MESSAGE
+	}
 
-        public Builder(@Nonnull MessageChannel channel) {
-            controlUsers = new HashSet<>();
-            embeds = new ArrayList<>();
-            this.channel = channel;
-        }
+	public void setX(int x) {
+		int newX = Math.min(Math.max(x, 0), getWidth() - 1);
+		if (newX != xindex) {
+			xindex = newX;
+			render();
+		}
+	}
 
-        public Builder setControlTimeout(long value) {
-            if (value < 0) throw new IllegalArgumentException("Value cannot be negative.");
-            this.controlTimeout = value;
-            return this;
-        }
+	public void setY(int y) {
+		int newY = Math.min(Math.max(y, 0), embeds.get(xindex).size() - 1);
+		if (newY != yindex) {
+			yindex = newY;
+			render();
+		}
+	}
 
-        public Builder addUser(@Nonnull String user) {
-            this.controlUsers.add(user);
-            return this;
-        }
+	public void modX(int mod) {
+		setX(getX() + mod);
+	}
 
-        public Builder addEmbed(@Nonnull Supplier<MessageEmbed> embedSupplier) {
-            embeds.add(new ArrayList<Supplier<MessageEmbed>>() {{
-                add(embedSupplier);
-            }});
-            return this;
-        }
+	public void modY(int mod) {
+		setY(getY() + mod);
+	}
 
-        public Builder addEmbed(Supplier<MessageEmbed> embedSupplier, int xIndex) {
-            if (xIndex >= embeds.size())
-                throw new IllegalArgumentException("xIndex is not within current bounds of the navigatable embed. " + xIndex + " >= " + embeds.size());
-            List<Supplier<MessageEmbed>> xList = embeds.get(xIndex);
-            xList.add(embedSupplier);
-            return this;
-        }
+	public void right() {
+		modX(1);
+	}
 
-        public NavigableEmbed build() {
-            return new NavigableEmbed(controlUsers, embeds, controlTimeout, channel);
-        }
+	public void left() {
+		modX(-1);
+	}
 
-    }
+	public void up() {
+		modY(-1);
+	}
+
+	public void down() {
+		modY(1);
+	}
+
+	public static class Builder {
+		private List<List<Supplier<MessageEmbed>>> embeds;
+		private MessageChannel channel;
+
+		public Builder(@Nonnull MessageChannel channel) {
+			embeds = new ArrayList<>();
+			this.channel = channel;
+		}
+
+		public Builder addEmbed(@Nonnull Supplier<MessageEmbed> embedSupplier) {
+			embeds.add(new ArrayList<Supplier<MessageEmbed>>() {{
+				add(embedSupplier);
+			}});
+			return this;
+		}
+
+		public Builder addEmbed(Supplier<MessageEmbed> embedSupplier, int xIndex) {
+			if (xIndex >= embeds.size())
+				throw new IllegalArgumentException("xIndex is not within current bounds of the navigatable embed. " + xIndex + " >= " + embeds.size());
+			List<Supplier<MessageEmbed>> xList = embeds.get(xIndex);
+			xList.add(embedSupplier);
+			return this;
+		}
+
+		public NavigableEmbed build() {
+			return new NavigableEmbed(embeds, channel);
+		}
+
+	}
 }

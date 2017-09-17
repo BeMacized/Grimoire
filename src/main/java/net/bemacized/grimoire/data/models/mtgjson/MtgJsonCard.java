@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
@@ -275,6 +276,12 @@ public class MtgJsonCard {
 		return setName;
 	}
 
+	public boolean isPrimaryPart() {
+		int maxPrimary = 0;
+		if (getLayout() == Layout.MELD) maxPrimary = 1;
+		return Arrays.asList(getNames()).indexOf(getName()) <= maxPrimary;
+	}
+
 	public static class Legality {
 		@Nonnull
 		private String format = "UNKNOWN";
@@ -518,7 +525,7 @@ public class MtgJsonCard {
 		List<MtgJsonCard> cards = Arrays.stream(getForeignNames()).parallel().map(f -> getForeignCopy(f.getLanguage(), f.getName(), f.getMultiverseid())).collect(Collectors.toList());
 		if (englishMultiverseId == -1) cards.add(this);
 		else
-			cards.add(Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardByMultiverseId(englishMultiverseId));
+			cards.addAll(Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardsByMultiverseId(englishMultiverseId));
 		return cards;
 	}
 

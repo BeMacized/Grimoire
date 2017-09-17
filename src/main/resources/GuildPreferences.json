@@ -182,11 +182,5 @@
       ["Russian","Russian"],
       ["Spanish","Spanish"]
     ]
-  },
-  {
-    "type": "SWITCH",
-    "id": 24,
-    "name": "Show requesting user's name on command output.",
-    "default": 1
   }
 ]

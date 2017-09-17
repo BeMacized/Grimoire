@@ -63,9 +63,22 @@ public class MtgJsonProvider {
 		}
 	}
 
+	public List<MtgJsonCard> getCardsByMultiverseId(int multiverseId) {
+		return cards.parallelStream().filter(c -> c.getMultiverseid() == multiverseId).sorted((x,y)->{
+			int xi = Arrays.asList(x.getNames()).indexOf(x.getName());
+			int yi = Arrays.asList(x.getNames()).indexOf(y.getName());
+			if (xi == -1 || yi == -1) return 0;
+			else return Integer.compare(xi, yi);
+		}).collect(Collectors.toList());
+	}
+
+	public List<MtgJsonCard> getCardsByName(String name) {
+		return cards.parallelStream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+	}
+
 	@Nullable
-	public MtgJsonCard getCardByMultiverseId(int multiverseId) {
-		return cards.parallelStream().filter(c -> c.getMultiverseid() == multiverseId).findFirst().orElse(null);
+	public MtgJsonCard getCardByName(String name) {
+		return getCardsByName(name).parallelStream().findFirst().orElse(null);
 	}
 
 	public List<MtgJsonCard> getCards() {
@@ -82,4 +95,6 @@ public class MtgJsonProvider {
 				sets.parallelStream().filter(set -> set.getName().toLowerCase().contains(arg.toLowerCase())).findFirst().orElse(null)
 		);
 	}
+
+
 }

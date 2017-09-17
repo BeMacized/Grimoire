@@ -371,7 +371,9 @@ public class ScryfallCard {
 		@SerializedName("token")
 		TOKEN,
 		@SerializedName("emblem")
-		EMBLEM
+		EMBLEM,
+		@SerializedName("double_sided_token")
+		DOUBLE_SIDED_TOKEN
 	}
 
 	public enum Legality {

@@ -57,7 +57,7 @@ public class PricingProvider {
 						setDictionary
 				));
 			add(new MTGGoldfishRetriever());
-			add(new ScryfallRetriever());
+			add(new ScryfallPriceRetriever());
 		}};
 	}
 
@@ -120,7 +120,7 @@ public class PricingProvider {
 				if (guildPreferences.enabledMagicCardMarketStore()) stores.add(MagicCardMarketRetriever.class);
 				if (guildPreferences.enabledTCGPlayerStore()) stores.add(TCGPlayerRetriever.class);
 				if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
-				if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+				if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallPriceRetriever.class);
 				List<StoreCardPrice> pricing = getPricing(card, stores);
 				embed.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
 				pricing.forEach(storeprice -> {
@@ -143,7 +143,7 @@ public class PricingProvider {
 									.collect(Collectors.toList());
 
 							// Scryfall exception
-//							if (targetCurrency != null && storeprice.getStoreId().equals(new ScryfallRetriever().getStoreId()))
+//							if (targetCurrency != null && storeprice.getStoreId().equals(new ScryfallPriceRetriever().getStoreId()))
 //								prices = prices.parallelStream()
 //										.map(p -> new AbstractMap.SimpleEntry<>(p.getValue().getCurrency() == targetCurrency ? "Average" : p.getKey(), p.getValue()))
 //										.filter(StreamUtils.distinctByKey(AbstractMap.SimpleEntry::getKey))
@@ -179,8 +179,8 @@ public class PricingProvider {
 				break;
 			}
 			case "SCRYFALL_ONE": {
-				List<StoreCardPrice> pricing = getPricing(card, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
-				pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
+				List<StoreCardPrice> pricing = getPricing(card, Stream.of(ScryfallPriceRetriever.class).collect(Collectors.toList()));
+				pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallPriceRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
 					switch (storeprice.getStatus()) {
 						case SUCCESS:
 							List<String> prices = new ArrayList<>();
@@ -224,9 +224,13 @@ public class PricingProvider {
 			}
 			case "SCRYFALL_ALL": {
 				try {
-					card.getAllPrintings().forEach(c -> {
-						List<StoreCardPrice> pricing = getPricing(c, Stream.of(ScryfallRetriever.class).collect(Collectors.toList()));
-						pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
+					if (card.getTypeLine().contains("Basic Land")) {
+						embed.addField("", "Due to the fact that **basic lands** are in every set, I cannot give a price overview in the currently selected price presentation mode.\n\nIf you want to check pricing for basic lands, please configure a different price presentation mode in the [Dashboard](" + Grimoire.WEBSITE + "/dashboard).", true);
+						break;
+					}
+					card.getAllPrintings(-1).forEach(c -> {
+						List<StoreCardPrice> pricing = getPricing(c, Stream.of(ScryfallPriceRetriever.class).collect(Collectors.toList()));
+						pricing.parallelStream().filter(p -> p.getStoreId().equals(new ScryfallPriceRetriever().getStoreId())).findFirst().ifPresent(storeprice -> {
 							switch (storeprice.getStatus()) {
 								case SUCCESS:
 									List<String> prices = new ArrayList<>();
@@ -277,14 +281,18 @@ public class PricingProvider {
 				break;
 			}
 			case "MTGO_ONE": {
+				if (card.getTypeLine().contains("Basic Land")) {
+					embed.addField("", "Due to the fact that **basic lands** are in every set, I cannot give a price overview in the currently selected price presentation mode.\n\nIf you want to check pricing for basic lands, please configure a different price presentation mode in the [Dashboard](" + Grimoire.WEBSITE + "/dashboard).", true);
+					break;
+				}
 				try {
-					List<MtgCard> prints = card.getAllPrintings();
+					List<MtgCard> prints = card.getAllPrintings(-1);
 					prints.remove(card);
 					prints.add(0, card);
 					for (MtgCard c : prints) {
 						List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
 						if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
-						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallPriceRetriever.class);
 
 						List<StoreCardPrice> pricing = getPricing(c, stores);
 
@@ -321,11 +329,15 @@ public class PricingProvider {
 				break;
 			}
 			case "MTGO_ALL": {
+				if (card.getTypeLine().contains("Basic Land")) {
+					embed.addField("", "Due to the fact that **basic lands** are in every set, I cannot give a price overview in the currently selected price presentation mode.\n\nIf you want to check pricing for basic lands, please configure a different price presentation mode in the [Dashboard](" + Grimoire.WEBSITE + "/dashboard).", true);
+					break;
+				}
 				try {
-					card.getAllPrintings().forEach(c -> {
+					card.getAllPrintings(-1).forEach(c -> {
 						List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
 						if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
-						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallRetriever.class);
+						if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallPriceRetriever.class);
 
 						List<StoreCardPrice> pricing = getPricing(c, stores);
 

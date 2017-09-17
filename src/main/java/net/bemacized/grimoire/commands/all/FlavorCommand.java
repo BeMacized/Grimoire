@@ -7,6 +7,7 @@ import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
@@ -34,23 +35,17 @@ public class FlavorCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		MtgCard card = cards.get(0);
-
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Verify that text exists
-		if (card.getFlavorText() == null) {
-			sendErrorEmbedFormat(loadMsg, "The card **'%s'** has no flavor text.", card.getName());
-			return;
-		}
+		if (card.getFlavorText() == null)
+			return errorEmbedFormat("The card **'%s'** has no flavor text.", card.getName()).get(0);
 
 		// Show the text
-		loadMsg.complete(
-				new EmbedBuilder()
-						.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
-						.setFooter((guildPreferences.showRequestersName()) ? "Requested by " + e.getAuthor().getName() : null, null)
-						.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-						.addField("Flavor Text", "_" + Grimoire.getInstance().getEmojiParser().parseEmoji(card.getFlavorText(), e.getGuild()) + "_", false)
-						.build()
-		);
+		return new EmbedBuilder()
+				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
+				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
+				.addField("Flavor Text", "_" + Grimoire.getInstance().getEmojiParser().parseEmoji(card.getFlavorText(), e.getGuild()) + "_", false)
+				.build();
 	}
+
 }

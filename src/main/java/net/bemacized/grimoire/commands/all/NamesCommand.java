@@ -4,12 +4,10 @@ import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-
-import java.util.List;
 
 public class NamesCommand extends CardBaseCommand {
 
@@ -35,17 +33,16 @@ public class NamesCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected void execForCards(List<MtgCard> cards, LoadMessage loadMsg, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		MtgCard card = cards.get(0);
-
+	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Show the rulings
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
-				.setFooter(guildPreferences.showRequestersName() ? "Requested by " + e.getAuthor().getName() : null, null)
 				.setDescription("**Foreign Names**\n");
 		for (MtgJsonCard.ForeignName foreignName : card.getForeignNames())
 			eb.addField(foreignName.getLanguage(), foreignName.getMultiverseid() > 0 ? String.format("[%s](%s)", foreignName.getName(), foreignName.getGathererUrl()) : foreignName.getName(), true);
-		loadMsg.complete(eb.build());
+		return eb.build();
 	}
+
+
 }
