@@ -64,7 +64,7 @@ public class MtgJsonProvider {
 	}
 
 	public List<MtgJsonCard> getCardsByMultiverseId(int multiverseId) {
-		return cards.parallelStream().filter(c -> c.getMultiverseid() == multiverseId).sorted((x,y)->{
+		return cards.parallelStream().filter(c -> c.getMultiverseid() == multiverseId).sorted((x, y) -> {
 			int xi = Arrays.asList(x.getNames()).indexOf(x.getName());
 			int yi = Arrays.asList(x.getNames()).indexOf(y.getName());
 			if (xi == -1 || yi == -1) return 0;

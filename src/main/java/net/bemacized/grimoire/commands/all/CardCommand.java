@@ -30,11 +30,6 @@ public class CardCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected String getInitialLoadLine() {
-		return "Loading card data...";
-	}
-
-	@Override
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Get card embed
 		EmbedBuilder eb = new EmbedBuilder(card.getEmbed(e.getGuild(), guildPreferences));

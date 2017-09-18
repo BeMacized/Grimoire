@@ -7,9 +7,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 

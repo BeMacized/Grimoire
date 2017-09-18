@@ -10,7 +10,6 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.ListUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -31,11 +30,6 @@ public class PrintsCommand extends CardBaseCommand {
 	@Override
 	public String description() {
 		return "Retrieves all sets that a card was printed in. ";
-	}
-
-	@Override
-	protected String getInitialLoadLine() {
-		return "Loading card prints...";
 	}
 
 	@Override

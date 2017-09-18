@@ -146,8 +146,8 @@ public class CardProvider {
 		}
 
 		try {
-			String sfQuery = mCardEnglish.getName();
-			if (set != null) sfQuery += "s:" + set.getCode();
+			String sfQuery = "!\"" + mCardEnglish.getName() + "\"";
+			if (set != null) sfQuery += " s:" + set.getCode();
 			ScryfallCard sCard = ScryfallRetriever.getCardsFromQuery(sfQuery).parallelStream().findFirst().orElse(null);
 			return new MtgCardBuilder(sCard, mCard).createMtgCard();
 		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {

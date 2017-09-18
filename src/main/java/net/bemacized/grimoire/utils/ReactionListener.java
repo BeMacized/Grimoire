@@ -49,7 +49,8 @@ public class ReactionListener extends ListenerAdapter {
 
 	@Override
 	public void onGenericMessageReaction(GenericMessageReactionEvent event) {
-		if (event.getMessageIdLong() != message.getIdLong() || !controllers.contains(event.getUser().getId())) return;
+		if (message == null || event.getMessageIdLong() != message.getIdLong() || !controllers.contains(event.getUser().getId()))
+			return;
 		ReactionCallback cb = actionMap.getOrDefault(event.getReactionEmote().getName(), null);
 		if (cb != null) {
 			cb.exec(event.getReactionEmote().getName(), event);
@@ -67,7 +68,9 @@ public class ReactionListener extends ListenerAdapter {
 		this.jda.removeEventListener(this);
 		this.expireTimer.cancel();
 		if (message.getGuild().getSelfMember().hasPermission((TextChannel) message.getChannel(), Permission.MESSAGE_MANAGE))
-			this.message.clearReactions().queue();
+			this.message.clearReactions().queue(s -> {
+			}, e -> {
+			});
 	}
 
 	private void resetTimer() {

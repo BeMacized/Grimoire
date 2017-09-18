@@ -3,13 +3,10 @@ package net.bemacized.grimoire.commands.all;
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-
-import java.util.List;
 
 public class ArtCommand extends CardBaseCommand {
 
@@ -26,11 +23,6 @@ public class ArtCommand extends CardBaseCommand {
 	@Override
 	public String description() {
 		return "Fetch the full art of a card";
-	}
-
-	@Override
-	protected String getInitialLoadLine() {
-		return "Loading card art...";
 	}
 
 	@Override

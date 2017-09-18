@@ -13,7 +13,6 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.text.WordUtils;
-import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;

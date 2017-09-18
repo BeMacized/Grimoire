@@ -26,12 +26,6 @@ public class NamesCommand extends CardBaseCommand {
 		return "Retrieves all known foreign names for a card";
 	}
 
-
-	@Override
-	protected String getInitialLoadLine() {
-		return "Loading names...";
-	}
-
 	@Override
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Show the rulings

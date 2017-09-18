@@ -29,11 +29,6 @@ public class LegalityCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected String getInitialLoadLine() {
-		return "Loading legalities...";
-	}
-
-	@Override
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))

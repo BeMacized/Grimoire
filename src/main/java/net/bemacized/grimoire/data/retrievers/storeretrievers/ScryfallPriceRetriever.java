@@ -1,13 +1,11 @@
 package net.bemacized.grimoire.data.retrievers.storeretrievers;
 
-import net.bemacized.grimoire.controllers.EmojiParser;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.scryfall.ScryfallCard;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ScryfallPriceRetriever extends StoreRetriever {
 

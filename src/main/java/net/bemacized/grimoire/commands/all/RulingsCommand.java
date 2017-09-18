@@ -27,11 +27,6 @@ public class RulingsCommand extends CardBaseCommand {
 	}
 
 	@Override
-	protected String getInitialLoadLine() {
-		return "Loading rulings...";
-	}
-
-	@Override
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 		// Let's check if there are any rulings
 		if (card.getRulings().length == 0)

@@ -2,21 +2,13 @@ package net.bemacized.grimoire.controllers;
 
 import com.mashape.unirest.http.Unirest;
 import net.bemacized.grimoire.Grimoire;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ListReporter {
@@ -59,7 +51,7 @@ public class ListReporter {
 				public void report(int serverCount) {
 					JSONObject data = new JSONObject();
 					data.put("server_count", serverCount);
-					if (Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal() > 1) {
+					if (Grimoire.getInstance().getDiscord().getShardInfo() != null && Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal() > 1) {
 						data.put("shard_id", Grimoire.getInstance().getDiscord().getShardInfo().getShardId());
 						data.put("shard_count", Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal());
 					}
@@ -83,7 +75,7 @@ public class ListReporter {
 				public void report(int serverCount) {
 					JSONObject data = new JSONObject();
 					data.put("server_count", serverCount);
-					if (Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal() > 1) {
+					if (Grimoire.getInstance().getDiscord().getShardInfo() != null && Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal() > 1) {
 						data.put("shard_id", Grimoire.getInstance().getDiscord().getShardInfo().getShardId());
 						data.put("shard_count", Grimoire.getInstance().getDiscord().getShardInfo().getShardTotal());
 					}

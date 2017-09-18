@@ -57,7 +57,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 
 		// Send initial status message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), getInitialLoadLine(), true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading card...", true);
 
 		// Obtain parameters
 		String manualSet = null;
@@ -146,8 +146,6 @@ public abstract class CardBaseCommand extends BaseCommand {
 			});
 		}
 	}
-
-	protected abstract String getInitialLoadLine();
 
 	protected abstract MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e);
 
