@@ -181,10 +181,10 @@ public class LoadMessage {
 				if (edit != null) edit.editMessage((String) msg);
 				else channel.sendMessage((String) msg).submit();
 			} else if (msg instanceof Message) {
-				if (edit != null) edit.editMessage((String) msg);
+				if (edit != null) edit.editMessage((Message) msg);
 				else channel.sendMessage((Message) msg).submit();
 			} else if (msg instanceof MessageEmbed) {
-				if (edit != null) edit.editMessage((String) msg);
+				if (edit != null) edit.editMessage((MessageEmbed) msg);
 				else channel.sendMessage((MessageEmbed) msg).submit();
 			} else {
 				throw new InvalidParameterException("Msg parameter must be a String, Message, or MessageEmbed object.");
