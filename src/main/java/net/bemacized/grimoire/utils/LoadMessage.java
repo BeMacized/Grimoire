@@ -175,16 +175,17 @@ public class LoadMessage {
 
 	private void complete(Object msg) {
 		if (this.finished) throw new IllegalStateException("Object exceeded its purpose");
+		System.out.println("");
 		taskQueue.queue(() -> {
 			Message edit = messages.isEmpty() ? null : messages.get(0);
 			if (msg instanceof String) {
-				if (edit != null) edit.editMessage((String) msg);
+				if (edit != null) edit.editMessage((String) msg).submit();
 				else channel.sendMessage((String) msg).submit();
 			} else if (msg instanceof Message) {
-				if (edit != null) edit.editMessage((Message) msg);
+				if (edit != null) edit.editMessage((Message) msg).submit();
 				else channel.sendMessage((Message) msg).submit();
 			} else if (msg instanceof MessageEmbed) {
-				if (edit != null) edit.editMessage((MessageEmbed) msg);
+				if (edit != null) edit.editMessage((MessageEmbed) msg).submit();
 				else channel.sendMessage((MessageEmbed) msg).submit();
 			} else {
 				throw new InvalidParameterException("Msg parameter must be a String, Message, or MessageEmbed object.");
