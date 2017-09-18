@@ -49,6 +49,8 @@ public abstract class CardBaseCommand extends BaseCommand {
 
 	@Override
 	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
+		int dbg_i = -1;
+		long dbg_s = System.currentTimeMillis();
 
 		// Quit and error out if none provided
 		if (rawArgs.trim().length() == 0) {
@@ -57,7 +59,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 
 		// Send initial status message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading card...", true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading card...", true, guildPreferences.disableLoadingMessages());
 
 		// Obtain parameters
 		String manualSet = null;
@@ -78,12 +80,15 @@ public abstract class CardBaseCommand extends BaseCommand {
 		List<MtgCard> results = new ArrayList<>();
 
 		// Check if we match with a mtgjson card name.
-		MtgCard card = Grimoire.getInstance().getCardProvider().matchCardAnyLanguage(query, set, guildPreferences);
-		if (card != null) results.add(card);
+		MtgCard card = null;
+		if (!guildPreferences.disableNonEnglishCardQueries()) {
+			card = Grimoire.getInstance().getCardProvider().matchCardAnyLanguage(query, set, guildPreferences);
+			if (card != null) results.add(card);
+		}
 
 		// Relay our query to scryfall
 		try {
-			results.addAll(Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(query + ((set != null) ? " s:" + set.getCode() : ""), 1));
+			results.addAll(Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(query + ((set != null) ? " s:" + set.getCode() : ""), 20));
 			if (results.isEmpty()) throw new ScryfallRetriever.ScryfallRequest.NoResultException();
 		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException ex) {
 			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", ex);

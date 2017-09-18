@@ -13,7 +13,7 @@ public abstract class ImageService {
 
 	protected static final Logger LOG = Logger.getLogger(ImageService.class.getName());
 
-	public abstract String getUrl(MtgCard card);
+	public abstract String getUrl(MtgCard card, boolean checkAvailability);
 
 	protected boolean imageAvailable(String url) {
 		try {

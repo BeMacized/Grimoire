@@ -29,14 +29,14 @@ public class ArtCommand extends CardBaseCommand {
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
 
 		// Check if an image is available
-		if (card.getImageUrl() == null)
+		if (card.getImageUrl(guildPreferences) == null)
 			return errorEmbedFormat("There is no known art for **'%s'**.", card.getName()).get(0);
 
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
-		eb.setImage(card.getImageUrl());
+		eb.setImage(card.getImageUrl(guildPreferences));
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		return eb.build();
 	}

@@ -72,7 +72,6 @@ public class NavigableEmbed extends ListenerAdapter {
 			//TODO: HANDLE EXCEPTION
 			e.printStackTrace();
 		}
-		//TODO: ADD REACTIONS TO MESSAGE
 	}
 
 	public void setX(int x) {

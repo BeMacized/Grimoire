@@ -61,7 +61,7 @@ public class RandomCommand extends BaseCommand {
 		ScryfallSet set = null;
 
 		// Send load message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Drawing random card...", true, guildPreferences.disableLoadingMessages());
 
 		// Retrieve all types
 		List<String> allSupertypes = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getAllSupertypes();
@@ -143,7 +143,7 @@ public class RandomCommand extends BaseCommand {
 		else eb.appendDescription("Random " + String.join(" ", properties) + "\n");
 		eb.setTitle(card.getName(), guildPreferences.getCardUrl(card));
 		eb.setDescription(String.format("%s (%s)", card.getSet().getName(), card.getSet().getCode()));
-		eb.setImage(card.getImageUrl());
+		eb.setImage(card.getImageUrl(guildPreferences));
 		eb.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()));
 		loadMsg.complete(eb.build());
 	}

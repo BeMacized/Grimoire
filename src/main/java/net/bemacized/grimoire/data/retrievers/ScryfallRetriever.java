@@ -109,7 +109,7 @@ public class ScryfallRetriever {
 				content.addAll(StreamSupport.stream(list.getData().spliterator(), false).collect(Collectors.toList()));
 				if (content.size() >= maxResults && maxResults != -1) break;
 			}
-			return content;
+			return content.parallelStream().limit(maxResults > 0 ? maxResults : content.size()).collect(Collectors.toList());
 		}
 	}
 

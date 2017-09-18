@@ -12,8 +12,9 @@ public class Gatherer extends ImageService {
 
 	@Nullable
 	@Override
-	public String getUrl(MtgCard card) {
+	public String getUrl(MtgCard card, boolean checkAvailability) {
 		String url = String.format("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=%s&type=card", card.getMultiverseId());
+		if (!checkAvailability) return url;
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 			con.connect();

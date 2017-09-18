@@ -62,7 +62,7 @@ public class TokenCommand extends BaseCommand {
 		}
 
 		// Send load message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Searching for token...", true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Searching for token...", true, guildPreferences.disableLoadingMessages());
 
 		// Extract card name and optional choice id
 		int choice = -1;
@@ -137,7 +137,7 @@ public class TokenCommand extends BaseCommand {
 		}
 
 		// Check if match has image
-		if (match.getImageUrl() == null) {
+		if (match.getImageUrl(guildPreferences) == null) {
 			sendErrorEmbed(loadMsg, "I do not know of any art for this token. Please try a different one!");
 			return;
 		}
@@ -148,7 +148,7 @@ public class TokenCommand extends BaseCommand {
 		// Build embed & show
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(match.getName());
-		eb.setImage(match.getImageUrl());
+		eb.setImage(match.getImageUrl(guildPreferences));
 		eb.setColor(MTGUtils.colorIdentitiesToColor(new String[]{match.getTokenColor()}));
 		loadMsg.complete(eb.build());
 	}

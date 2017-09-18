@@ -2,6 +2,7 @@ package net.bemacized.grimoire.commands.all;
 
 import net.bemacized.grimoire.commands.CardBaseCommand;
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.mtgjson.MtgJsonCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;
@@ -44,13 +45,23 @@ public class PrintsCommand extends CardBaseCommand {
 		// Show the sets
 		List<String> sets;
 		try {
-			List<MtgCard> printings = card.getAllPrintings(-1);
-			if (printings.size() <= 10) {
-				sets = printings.parallelStream().map(c -> String.format(":small_orange_diamond: %s **(%s)** *[%s]*", c.getSet().getName(), c.getSet().getCode(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList());
-			} else {
-				sets = printings.parallelStream().map(c -> String.format("**(%s)** %s\n*[%s]*", c.getSet().getCode(), c.getSet().getName(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList());
+			if (guildPreferences.disableScryfallPrintChecks()) {
+				List<MtgJsonCard> printings = card.getAllMtgJsonPrintings();
+				if (printings.size() <= 10) {
+					sets = printings.parallelStream().map(c -> String.format(":small_orange_diamond: %s **(%s)**", c.getSetName(), c.getSetCode())).collect(Collectors.toList());
+				} else {
+					sets = printings.parallelStream().map(c -> String.format("**(%s)** %s", c.getSetCode(), c.getSetName())).collect(Collectors.toList());
+				}
 			}
-			sets = sets.parallelStream().filter(s -> s != null && !s.trim().isEmpty()).map(s -> s.trim()).collect(Collectors.toList());
+			else {
+				List<MtgCard> printings = card.getAllPrintings(-1);
+				if (printings.size() <= 10) {
+					sets = printings.parallelStream().map(c -> String.format(":small_orange_diamond: %s **(%s)** *[%s]*", c.getSet().getName(), c.getSet().getCode(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList());
+				} else {
+					sets = printings.parallelStream().map(c -> String.format("**(%s)** %s\n*[%s]*", c.getSet().getCode(), c.getSet().getName(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList());
+				}
+			}
+			sets = sets.parallelStream().filter(s -> s != null && !s.trim().isEmpty()).map(String::trim).collect(Collectors.toList());
 		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e1) {
 			LOG.log(Level.WARNING, "Scryfall returned an error when retrieving prints: " + e1.getError().getDetails(), e1);
 			return errorEmbed("I could not retrieve prints: " + e1.getError().getDetails()).get(0);

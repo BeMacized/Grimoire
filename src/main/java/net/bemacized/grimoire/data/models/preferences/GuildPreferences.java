@@ -149,6 +149,26 @@ public class GuildPreferences {
 		return getValue(22) == 1;
 	}
 
+	public boolean disableNonEnglishCardQueries() {
+		return getValue(25) == 1;
+	}
+
+	public boolean disableLoadingMessages() {
+		return getValue(26) == 1;
+	}
+
+	public boolean disableImageVerification() {
+		return getValue(27) == 1;
+	}
+
+	public boolean disableScryfallPrintChecks() {
+		return getValue(28) == 1;
+	}
+
+	public boolean preferLQImages() {
+		return getValue(29) == 1;
+	}
+
 	@Nullable
 	public String getCardUrl(MtgCard card) {
 		switch (getTitleService()) {

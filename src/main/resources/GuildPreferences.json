@@ -182,5 +182,38 @@
       ["Russian","Russian"],
       ["Spanish","Spanish"]
     ]
+  },
+  {
+    "type": "SWITCH",
+    "id": 25,
+    "name": "Disable Non-English Card Queries",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 26,
+    "name": "Disable Loading Messages",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 27,
+    "name": "Disable Card Image Verification",
+    "description": "By default, Grimoire verifies every card image\"s validity before sending it.",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 28,
+    "name": "Disable print checks with Scryfall",
+    "description": "Scryfall is more up-to-date, but takes more time to check.",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 29,
+    "name": "Prefer Low Quality Images",
+    "description": "Low Quality images load faster on slow connections.",
+    "default": 0
   }
 ]

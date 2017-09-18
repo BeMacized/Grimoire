@@ -1,11 +1,14 @@
 package net.bemacized.grimoire.data.retrievers;
 
 import net.bemacized.grimoire.data.models.card.MtgCard;
+import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.retrievers.imageproviders.Gatherer;
 import net.bemacized.grimoire.data.retrievers.imageproviders.ImageService;
 import net.bemacized.grimoire.data.retrievers.imageproviders.Scryfall;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,7 +26,9 @@ public class CardImageRetriever {
 	}
 
 	@Nullable
-	public String findUrl(MtgCard card) {
-		return imageServices.parallelStream().map(p -> p.getUrl(card)).filter(Objects::nonNull).findFirst().orElse(null);
+	public String findUrl(MtgCard card, GuildPreferences guildPreferences) {
+		List<ImageService> s = new ArrayList<>(imageServices);
+		if (guildPreferences.preferLQImages()) Collections.reverse(s);
+		return s.parallelStream().map(p -> p.getUrl(card, !guildPreferences.disableImageVerification())).filter(Objects::nonNull).findFirst().orElse(null);
 	}
 }

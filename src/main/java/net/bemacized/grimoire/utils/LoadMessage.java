@@ -48,8 +48,9 @@ public class LoadMessage {
 	private long startTime;
 	private MessageChannel channel;
 	private String[] spinner;
+	private boolean disabled;
 
-	public LoadMessage(MessageChannel channel, String msg, boolean showSpinner) {
+	public LoadMessage(MessageChannel channel, String msg, boolean showSpinner, boolean disabled) {
 		// Initialize fields
 		this.spinner = SPINNERS[new Random().nextInt(SPINNERS.length)];
 		this.showSpinner = showSpinner;
@@ -57,24 +58,27 @@ public class LoadMessage {
 		this.messages = new ArrayList<>();
 		this.finished = false;
 		this.spinnerStage = new Random().nextInt(this.spinner.length);
-		this.taskQueue = new RunnableQueue(SPINNER_INTERVAL);
+		this.taskQueue = new RunnableQueue(disabled ? 0 : SPINNER_INTERVAL);
 		this.spinnerTimer = new Timer();
 		this.startTime = System.currentTimeMillis();
 		this.channel = channel;
+		this.disabled = disabled;
 
 		// Add line(s) to list
 		this.lines.addAll(Arrays.stream(msg.split("[\n\r]")).collect(Collectors.toList()));
 
 		// Start timer for spinner & autofinish
-		this.spinnerTimer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				if (System.currentTimeMillis() - startTime >= EXPIRE_TIME) LoadMessage.this.finish();
-				if (spinnerStage + 1 == spinner.length) spinnerStage = 0;
-				else spinnerStage++;
-				if (taskQueue.isEmpty()) taskQueue.queue(LoadMessage.this::render);
-			}
-		}, 0, SPINNER_INTERVAL);
+		if (!disabled) {
+			this.spinnerTimer.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					if (System.currentTimeMillis() - startTime >= EXPIRE_TIME) LoadMessage.this.finish();
+					if (spinnerStage + 1 == spinner.length) spinnerStage = 0;
+					else spinnerStage++;
+					if (taskQueue.isEmpty()) taskQueue.queue(LoadMessage.this::render);
+				}
+			}, 0, SPINNER_INTERVAL);
+		}
 	}
 
 	public MessageChannel getChannel() {
@@ -107,6 +111,8 @@ public class LoadMessage {
 	}
 
 	private void render() {
+		// Don't ever render on fast mode
+		if (disabled) return;
 		try {
 			final StringBuilder sb = new StringBuilder();
 			if (showSpinner) sb.append(spinner[spinnerStage]).append(" ");
@@ -145,7 +151,7 @@ public class LoadMessage {
 	public void complete() {
 		if (this.finished) throw new IllegalStateException("Object exceeded its purpose");
 		taskQueue.queue(() -> {
-			messages.forEach(msg -> msg.delete().submit());
+			messages.forEach(msg -> msg.delete().queue());
 			messages.clear();
 			finish();
 		});
@@ -170,33 +176,25 @@ public class LoadMessage {
 	private void complete(Object msg) {
 		if (this.finished) throw new IllegalStateException("Object exceeded its purpose");
 		taskQueue.queue(() -> {
-			for (int i = 0; i < messages.size(); i++) {
-				if (i < messages.size() - 1)
-					try {
-						messages.get(i).delete().submit();
-					} catch (Exception e) {
-						LOG.log(Level.SEVERE, "Could not remove message object.", e);
-					}
-				else if (msg instanceof String)
-					try {
-						messages.get(i).editMessage((String) msg).submit();
-					} catch (Exception e) {
-						messages.get(i).getChannel().sendMessage((String) msg).submit();
-					}
-				else if (msg instanceof Message)
-					try {
-						messages.get(i).editMessage((Message) msg).submit();
-					} catch (Exception e) {
-						messages.get(i).getChannel().sendMessage((Message) msg).submit();
-					}
-				else if (msg instanceof MessageEmbed)
-					try {
-						messages.get(i).editMessage((MessageEmbed) msg).submit();
-					} catch (Exception e) {
-						messages.get(i).getChannel().sendMessage((MessageEmbed) msg).submit();
-					}
-				else
-					throw new InvalidParameterException("Msg parameter must be a String, Message, or MessageEmbed object.");
+			Message edit = messages.isEmpty() ? null : messages.get(0);
+			if (msg instanceof String) {
+				if (edit != null) edit.editMessage((String) msg);
+				else channel.sendMessage((String) msg).submit();
+			} else if (msg instanceof Message) {
+				if (edit != null) edit.editMessage((String) msg);
+				else channel.sendMessage((Message) msg).submit();
+			} else if (msg instanceof MessageEmbed) {
+				if (edit != null) edit.editMessage((String) msg);
+				else channel.sendMessage((MessageEmbed) msg).submit();
+			} else {
+				throw new InvalidParameterException("Msg parameter must be a String, Message, or MessageEmbed object.");
+			}
+			for (int i = 1; i < messages.size(); i++) {
+				try {
+					messages.get(i).delete().submit();
+				} catch (Exception e) {
+					LOG.log(Level.SEVERE, "Could not remove message object.", e);
+				}
 			}
 			finish();
 		});

@@ -85,7 +85,7 @@ public class MtgCardBuilder {
 					? (mCard == null ? 0 : Arrays.stream(sCard.getCardFaces()).parallel()
 					.map(ScryfallCard.Face::getName)
 					.collect(Collectors.toList())
-					.indexOf(mCard.getLanguage().equalsIgnoreCase("English") ? mCard.getName() : mCard.getAllLanguages().parallelStream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).map(MtgJsonCard::getName).findFirst().orElse(null)))
+					.indexOf(mCard.getLanguage().equals("English") ? mCard.getName() : mCard.getAllLanguages().parallelStream().filter(c -> c.getLanguage().equals("English")).map(MtgJsonCard::getName).findFirst().orElse(null)))
 					: Arrays.stream(sCard.getCardFaces()).parallel()
 					.map(ScryfallCard.Face::getName)
 					.collect(Collectors.toList())
@@ -96,7 +96,7 @@ public class MtgCardBuilder {
 			// Find the corresponding mtgjson card of the other side
 			MtgJsonCard otherSideMCard = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardByName(otherSide.getName());
 			// Get the correct language version of it
-			if (otherSideMCard != null && mCard != null && !mCard.getLanguage().equalsIgnoreCase("English")) {
+			if (otherSideMCard != null && mCard != null && !mCard.getLanguage().equals("English")) {
 				otherSideMCard = otherSideMCard.getAllLanguages()
 						.parallelStream()
 						.filter(c -> c.getLanguage().equalsIgnoreCase(mCard.getLanguage()))

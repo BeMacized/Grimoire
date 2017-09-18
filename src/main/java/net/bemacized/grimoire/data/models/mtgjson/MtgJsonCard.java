@@ -515,7 +515,7 @@ public class MtgJsonCard {
 		e.addProperty("language", language);
 		e.addProperty("name", name);
 		e.addProperty("multiverseid", multiverseid);
-		if (this.getLanguage().equalsIgnoreCase("English"))
+		if (this.getLanguage().equals("English"))
 			e.addProperty("englishMultiverseId", this.getMultiverseid());
 		return gson.fromJson(e, this.getClass());
 	}

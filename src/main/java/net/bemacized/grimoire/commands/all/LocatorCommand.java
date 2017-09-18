@@ -76,7 +76,7 @@ public class LocatorCommand extends BaseCommand {
 		}
 
 		// Send initial load message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Searching Wizards Locator....", true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Searching Wizards Locator....", true, guildPreferences.disableLoadingMessages());
 
 		try {
 			// Get location

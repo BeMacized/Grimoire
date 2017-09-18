@@ -9,6 +9,7 @@ import net.bemacized.grimoire.data.models.scryfall.ScryfallSet;
 import net.bemacized.grimoire.data.retrievers.CardImageRetriever;
 import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.TimedValue;
+import org.python.netty.util.internal.ConcurrentSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,11 +25,11 @@ public class CardProvider {
 	private CardImageRetriever imageRetriever;
 	private MtgJsonProvider mtgJsonProvider;
 
-	private List<ScryfallSet> sets;
+	private ConcurrentSet<ScryfallSet> sets;
 	private TimedValue<List<MtgCard>> cachedTokens;
 
 	public CardProvider() {
-		sets = new ArrayList<>();
+		sets = new ConcurrentSet<>();
 		LOG = Logger.getLogger(this.getClass().getName());
 		imageRetriever = new CardImageRetriever();
 		mtgJsonProvider = new MtgJsonProvider();
@@ -79,18 +80,8 @@ public class CardProvider {
 	}
 
 	public List<MtgCard> getCardsByScryfallQuery(@Nonnull String query, int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.NoResultException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
-		return ScryfallRetriever.getCardsFromQuery(query, maxResults).stream()
-				.map(sCard -> {
-					// Try find fitting MtgJson card
-					MtgJsonCard mCard = sCard.getMultiverseId() > 0
-							? mtgJsonProvider.getCardsByMultiverseId(sCard.getMultiverseId())
-							.parallelStream()
-							.filter(c -> c.getLanguage().equalsIgnoreCase("English"))
-							.findFirst()
-							.orElse(null)
-							: null;
-					return mCard == null ? new MtgCardBuilder(sCard).createMtgCard() : new MtgCardBuilder(sCard, mCard).createMtgCard();
-				})
+		return ScryfallRetriever.getCardsFromQuery(query, maxResults).parallelStream()
+				.map(this::autoCompleteMtgJsonCard)
 				.sorted((o1, o2) -> o2.getSet().getReleasedAt() == null ? -1 : o1.getSet().getReleasedAt() == null ? 1 : o2.getSet().getReleasedAt().compareTo(o1.getSet().getReleasedAt()))
 				.collect(Collectors.toList());
 	}
@@ -98,7 +89,14 @@ public class CardProvider {
 	@Nullable
 	public ScryfallSet getSetByNameOrCode(@Nonnull String nameOrCode) {
 		// Attempt retrieval from cache
-		ScryfallSet set = sets.stream().filter(s -> s.getCode().equalsIgnoreCase(nameOrCode)).findFirst().orElse(sets.stream().filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase())).findFirst().orElse(null));
+		ScryfallSet set = sets.parallelStream()
+				.filter(s -> s.getCode().equalsIgnoreCase(nameOrCode))
+				.findFirst()
+				.orElse(null);
+		if (set == null) set = sets.parallelStream()
+				.filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase()))
+				.findFirst()
+				.orElse(null);
 		if (set != null) return set;
 		// Retrieve as code from Scryfall
 		try {
@@ -140,7 +138,7 @@ public class CardProvider {
 			return null;
 		}
 
-		MtgJsonCard mCardEnglish = mCard.getLanguage().equalsIgnoreCase("English") ? mCard : mCard.getAllLanguages().stream().filter(c -> c.getLanguage().equalsIgnoreCase("English")).findFirst().orElse(null);
+		MtgJsonCard mCardEnglish = mCard.getLanguage().equals("English") ? mCard : mCard.getAllLanguages().stream().filter(c -> c.getLanguage().equals("English")).findFirst().orElse(null);
 		if (mCardEnglish == null) {
 			return null;
 		}
@@ -173,7 +171,7 @@ public class CardProvider {
 	}
 
 	private MtgCard autoCompleteMtgJsonCard(ScryfallCard sCard) {
-		MtgJsonCard mCard = mtgJsonProvider.getCardsByMultiverseId(sCard.getMultiverseId()).parallelStream().findFirst().orElse(null);
+		MtgJsonCard mCard = (sCard.getMultiverseId() > 0) ? mtgJsonProvider.getCardsByMultiverseId(sCard.getMultiverseId()).parallelStream().filter(c -> c.getLanguage().equals("English")).findFirst().orElse(null) : null;
 		return mCard == null ? new MtgCardBuilder(sCard).createMtgCard() : new MtgCardBuilder(sCard, mCard).createMtgCard();
 	}
 }

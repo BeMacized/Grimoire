@@ -21,6 +21,9 @@ public class RunnableQueue {
 		if (isEmpty()) {
 			lastAction = System.currentTimeMillis();
 			r.run();
+		} else if (interval <= 0) {
+			lastAction = System.currentTimeMillis();
+			r.run();
 		} else {
 			Timer timer = new Timer();
 			lastAction += interval;

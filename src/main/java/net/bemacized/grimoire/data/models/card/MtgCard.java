@@ -206,6 +206,19 @@ public class MtgCard {
 	// Utility Getters
 	//
 
+	public List<MtgJsonCard> getAllMtgJsonPrintings() {
+		List<MtgJsonCard> cards = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardsByName(name);
+		if (cards.isEmpty()) return cards;
+		if (!language.equals("English")) {
+			MtgJsonCard c = cards.get(0).getAllLanguages().parallelStream().filter(ca -> ca.getLanguage().equals("English")).findFirst().orElse(null);
+			if (c == null)
+				return cards.parallelStream().filter(ca -> ca.getLanguage().equals(language)).collect(Collectors.toList());
+			cards = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardsByName(c.getName());
+			if (cards.isEmpty()) return cards;
+		}
+		return cards;
+	}
+
 	public List<MtgCard> getAllPrintings(int maxResults) throws ScryfallRetriever.ScryfallRequest.UnknownResponseException, ScryfallRetriever.ScryfallRequest.ScryfallErrorException {
 		try {
 			return Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(String.format("++!\"%s\"", name), maxResults);
@@ -229,14 +242,14 @@ public class MtgCard {
 	@Nullable
 	public String getScryfallUrl() {
 		// Fallback to gatherer for foreign cards
-		if (!language.equalsIgnoreCase("English")) return getGathererUrl();
+		if (!language.equals("English")) return getGathererUrl();
 		return scryfallUrl;
 	}
 
 	@Nullable
 	public String getMagicCardsInfoUrl() {
 		// Fallback to gatherer for foreign cards
-		if (!language.equalsIgnoreCase("English")) return getGathererUrl();
+		if (!language.equals("English")) return getGathererUrl();
 		try {
 			return "http://magiccards.info/query?q=!" + URLEncoder.encode(name, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -246,8 +259,8 @@ public class MtgCard {
 	}
 
 	@Nullable
-	public String getImageUrl() {
-		if (imageUrl == null) imageUrl = Grimoire.getInstance().getCardProvider().getImageRetriever().findUrl(this);
+	public String getImageUrl(GuildPreferences guildPreferences) {
+		if (imageUrl == null) imageUrl = Grimoire.getInstance().getCardProvider().getImageRetriever().findUrl(this, guildPreferences);
 		return imageUrl;
 	}
 
@@ -255,7 +268,7 @@ public class MtgCard {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setColor(MTGUtils.colorIdentitiesToColor(colorIdentity));
-		if (guildPreferences.showThumbnail()) eb.setThumbnail(getImageUrl());
+		if (guildPreferences.showThumbnail()) eb.setThumbnail(getImageUrl(guildPreferences));
 		eb.setTitle(name, guildPreferences.getCardUrl(this));
 		if (guildPreferences.showManaCost())
 			eb.appendDescription((manacost == null || manacost.isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(manacost, guild));
@@ -285,7 +298,10 @@ public class MtgCard {
 		if (guildPreferences.showPrintedRarities() && !typeLine.contains("Basic Land")) {
 			String rarities = null;
 			try {
-				rarities = String.join(", ", getAllPrintings(-1).parallelStream().map(c -> c.rarity.toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase())).collect(Collectors.toList()));
+				if (guildPreferences.disableScryfallPrintChecks())
+					rarities = String.join(", ", getAllMtgJsonPrintings().parallelStream().map(c -> c.getRarity().toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase()).replaceAll("_", "")).collect(Collectors.toList()));
+				else
+					rarities = String.join(", ", getAllPrintings(-1).parallelStream().map(c -> c.rarity.toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase())).collect(Collectors.toList()));
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
@@ -298,8 +314,12 @@ public class MtgCard {
 		if (guildPreferences.showPrintings() && !typeLine.contains("Basic Land")) {
 			String printings = "";
 			try {
-				printings = String.join(", ",
-						new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllPrintings(-1).parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.set.getCode())).map(card -> card.set.getCode()).collect(Collectors.toList()))}).trim();
+				if (guildPreferences.disableScryfallPrintChecks())
+					printings = String.join(", ",
+							new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllMtgJsonPrintings().parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.getSetCode())).map(MtgJsonCard::getSetCode).collect(Collectors.toList()))}).trim();
+				else
+					printings = String.join(", ",
+							new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllPrintings(-1).parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.set.getCode())).map(card -> card.set.getCode()).collect(Collectors.toList()))}).trim();
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
@@ -333,13 +353,13 @@ public class MtgCard {
 	//
 
 	private String fetchPrintedText() {
-		if (getLanguage().equalsIgnoreCase("English")) return text;
+		if (getLanguage().equals("English")) return text;
 		GathererRetriever.GathererData data = GathererRetriever.getGathererData(getMultiverseId(), getName());
 		return (data == null) ? null : data.getText();
 	}
 
 	private String fetchPrintedTypeLine() {
-		if (getLanguage().equalsIgnoreCase("English")) return typeLine;
+		if (getLanguage().equals("English")) return typeLine;
 		GathererRetriever.GathererData data = GathererRetriever.getGathererData(getMultiverseId(), getName());
 		return (data == null) ? null : data.getTypeLine();
 	}

@@ -67,7 +67,7 @@ public class BanListCommand extends BaseCommand {
 		format = WordUtils.capitalize(format);
 
 		// Send initial load message
-		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading " + format + " Banlist...", true);
+		LoadMessage loadMsg = new LoadMessage(e.getChannel(), "Loading " + format + " Banlist...", true, guildPreferences.disableLoadingMessages());
 
 		// Construct embed
 		EmbedBuilder eb = new EmbedBuilder();
