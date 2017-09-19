@@ -14,6 +14,10 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.HttpClients;
 
 import javax.security.auth.login.LoginException;
 import java.util.logging.Level;
@@ -85,6 +89,9 @@ public class Grimoire {
 				}
 			}
 		});
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
+		HttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(globalConfig).build();
+		Unirest.setHttpClient(httpclient);
 
 		// Configure Google Geocoding API
 		geoAPI = (System.getenv("GOOGLE_API_KEY") == null) ? null : new GeoApiContext.Builder()
