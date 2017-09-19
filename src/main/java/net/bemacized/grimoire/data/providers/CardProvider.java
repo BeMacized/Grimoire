@@ -88,29 +88,37 @@ public class CardProvider {
 
 	@Nullable
 	public ScryfallSet getSetByNameOrCode(@Nonnull String nameOrCode) {
-		// Attempt retrieval from cache
+		//TODO: FIX DUPLICATE CALLS OF THIS METHOD!
+		// Attempt retrieval from cache by code
 		ScryfallSet set = sets.parallelStream()
 				.filter(s -> s.getCode().equalsIgnoreCase(nameOrCode))
 				.findFirst()
 				.orElse(null);
-		if (set == null) set = sets.parallelStream()
+		if (set != null) return set;
+
+		// Retrieve as code from Scryfall
+		if (nameOrCode.length() <= 5) {
+			try {
+				set = ScryfallRetriever.getSet(nameOrCode);
+				this.sets.add(set);
+				return set;
+			} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
+				LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
+				return null;
+			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
+				LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
+				return null;
+			} catch (ScryfallRetriever.ScryfallRequest.NoResultException ignored) {
+			}
+		}
+
+		// Attempt retrieval from cache by name
+		set = sets.parallelStream()
 				.filter(s -> s.getName().toLowerCase().contains(nameOrCode.toLowerCase()))
 				.findFirst()
 				.orElse(null);
 		if (set != null) return set;
-		// Retrieve as code from Scryfall
-		try {
-			set = ScryfallRetriever.getSet(nameOrCode);
-			this.sets.add(set);
-			return set;
-		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
-			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
-			return null;
-		} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
-			LOG.log(Level.SEVERE, "An error occurred with Scryfall", e);
-			return null;
-		} catch (ScryfallRetriever.ScryfallRequest.NoResultException ignored) {
-		}
+
 		// Must be a name, try name matching
 		try {
 			List<ScryfallSet> sets = ScryfallRetriever.getSets();

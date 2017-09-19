@@ -298,10 +298,11 @@ public class MtgCard {
 		if (guildPreferences.showPrintedRarities() && !typeLine.contains("Basic Land")) {
 			String rarities = null;
 			try {
-				if (guildPreferences.disableScryfallPrintChecks())
+				if (guildPreferences.disableScryfallPrintChecks()) {
 					rarities = String.join(", ", getAllMtgJsonPrintings().parallelStream().map(c -> c.getRarity().toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase()).replaceAll("_", "")).collect(Collectors.toList()));
-				else
+				} else {
 					rarities = String.join(", ", getAllPrintings(-1).parallelStream().map(c -> c.rarity.toString()).distinct().map(r -> WordUtils.capitalize(r.toLowerCase())).collect(Collectors.toList()));
+				}
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
@@ -314,12 +315,13 @@ public class MtgCard {
 		if (guildPreferences.showPrintings() && !typeLine.contains("Basic Land")) {
 			String printings = "";
 			try {
-				if (guildPreferences.disableScryfallPrintChecks())
+				if (guildPreferences.disableScryfallPrintChecks()) {
 					printings = String.join(", ",
 							new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllMtgJsonPrintings().parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.getSetCode())).map(MtgJsonCard::getSetCode).collect(Collectors.toList()))}).trim();
-				else
+				} else {
 					printings = String.join(", ",
 							new String[]{"**" + set.getName() + " (" + set.getCode() + ")**", String.join(", ", getAllPrintings(-1).parallelStream().filter(card -> !set.getCode().equalsIgnoreCase(card.set.getCode())).map(card -> card.set.getCode()).collect(Collectors.toList()))}).trim();
+				}
 			} catch (ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 				LOG.log(Level.WARNING, "Scryfall gave an error when trying to receive printings for a card embed.", e);
 				eb.addField("Rarities", "Could not retrieve rarities: " + e.getError().getDetails(), true);
