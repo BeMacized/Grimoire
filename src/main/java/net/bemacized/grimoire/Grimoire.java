@@ -89,7 +89,7 @@ public class Grimoire {
 				}
 			}
 		});
-		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build();
 		HttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(globalConfig).build();
 		Unirest.setHttpClient(httpclient);
 
