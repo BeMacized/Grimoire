@@ -37,8 +37,10 @@ public class RulingsCommand extends CardBaseCommand {
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
 				.setDescription("**Rulings**");
-		for (MtgJsonCard.Ruling ruling : card.getRulings())
-			eb.addField(ruling.getDate(), ruling.getText(), false);
+		for (MtgJsonCard.Ruling ruling : card.getRulings()) {
+			String rulingText = ruling.getText().length() <= 1024 ? ruling.getText() : "Ruling is too large to be displayed. You can go read it on [Gatherer]("+card.getGathererUrl()+").";
+			eb.addField(ruling.getDate(), rulingText, false);
+		}
 
 		return eb.build();
 	}
