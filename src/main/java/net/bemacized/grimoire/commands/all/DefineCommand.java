@@ -77,7 +77,7 @@ public class DefineCommand extends BaseCommand {
 
 		String explanation = definition.getExplanation();
 
-		Pattern rulePattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.]))?");
+		Pattern rulePattern = Pattern.compile("rule [0-9]([0-9]{2}([.][0-9]{1,3}([a-z]|[.])?|[.])?)?");
 		Matcher ruleMatcher = rulePattern.matcher(explanation);
 		List<String> rules = new ArrayList<>();
 
@@ -90,8 +90,8 @@ public class DefineCommand extends BaseCommand {
 
 		if (rules.size() == 1) {
 			String rule = rules.get(0).endsWith(".") ? rules.get(0).substring(0, rules.get(0).length() - 1) : rules.get(0);
-			List<ComprehensiveRule> crules = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(r -> r.getParagraphId().startsWith(rule)).collect(Collectors.toList());
-			crules.stream().filter(r -> !r.getText().equalsIgnoreCase(definition.getKeyword())).limit(4).sorted().forEachOrdered(r -> {
+			List<ComprehensiveRule> crules = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(r -> r.getParagraphId().startsWith(rule) && r.getParagraphId().length() - 1 <= rule.length()).collect(Collectors.toList());
+			crules.stream().filter(r -> r.getText().split("\\s+").length > 4 && !r.getText().equalsIgnoreCase(definition.getKeyword())).limit(4).sorted().forEachOrdered(r -> {
 				String text = formatText(r.getText(), e.getGuild());
 				String[] split = MessageUtils.splitMessage(text, 1024);
 				for (int i = 0; i < split.length; i++)
