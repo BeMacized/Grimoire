@@ -6,6 +6,7 @@ import net.bemacized.grimoire.commands.BaseCommand;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
 import net.bemacized.grimoire.data.models.rules.ComprehensiveRule;
 import net.bemacized.grimoire.data.models.rules.Definition;
+import net.bemacized.grimoire.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -92,7 +93,9 @@ public class DefineCommand extends BaseCommand {
 			List<ComprehensiveRule> crules = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(r -> r.getParagraphId().startsWith(rule)).collect(Collectors.toList());
 			crules.stream().filter(r -> !r.getText().equalsIgnoreCase(definition.getKeyword())).limit(4).sorted().forEachOrdered(r -> {
 				String text = formatText(r.getText(), e.getGuild());
-				eb.addField("CR " + r.getParagraphId(), text, true);
+				String[] split = MessageUtils.splitMessage(text, 1024);
+				for (int i = 0; i < split.length; i++)
+					eb.addField(i == 0 ? "CR " + r.getParagraphId() : "", split[i], true);
 			});
 			if (crules.size() > 4)
 				eb.addField("", "More rules available: `" + guildPreferences.getPrefix() + "cr " + rule + "`", false);

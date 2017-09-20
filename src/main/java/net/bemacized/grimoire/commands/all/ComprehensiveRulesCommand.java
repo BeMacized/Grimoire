@@ -151,7 +151,8 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 			long peers = Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream()
 					.filter(r -> r.getParagraphId().matches(Pattern.quote(paragraph.getParagraphId().substring(0, paragraph.getParagraphId().length() - 1)) + "[a-z]"))
 					.count() - 1;
-			if (peers > 0) description.append("\n\n**More info:** `!cr " + paragraph.getParagraphId() + "`");
+			if (peers > 0)
+				description.append("\n\n**More info:** `" + guildPreferences.getPrefix() + "cr " + paragraph.getParagraphId() + "`");
 		}
 		// Paragraph output
 		else if (paragraph != null) {
@@ -178,11 +179,11 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 					} else if (textlength < 20) {
 						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + formatText(p.getText(), e.getGuild()));
 						if (Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(c -> c.getParagraphId().matches(Pattern.quote(p.getParagraphId().substring(0, p.getParagraphId().length() - 1)) + "[a-z]")).count() > 0)
-							description.append(" **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
+							description.append(" **Read More:** `" + guildPreferences.getPrefix() + "cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					} else {
 						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** ");
 						description.append(formatText(String.join(" ", Arrays.copyOfRange(p.getText().split("\\s+"), 0, 19)), e.getGuild()));
-						description.append("..... **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
+						description.append("..... **Read More:** `" + guildPreferences.getPrefix() + "cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					}
 				});
 			} else {
@@ -190,11 +191,11 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 					if (p.getText().split("\\s+").length >= 7) {
 						description.append("\n:small_orange_diamond: **" + p.getParagraphId() + "** " + formatText(p.getText(), e.getGuild()));
 						if (Grimoire.getInstance().getComprehensiveRuleProvider().getRules().parallelStream().filter(c -> c.getParagraphId().matches(Pattern.quote(p.getParagraphId().substring(0, p.getParagraphId().length() - 1)) + "[a-z]")).count() > 0)
-							description.append(" **Read More:** `!cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
+							description.append(" **Read More:** `" + guildPreferences.getPrefix() + "cr " + p.getParagraphId().substring(0, p.getParagraphId().length() - 1) + "`");
 					}
 				});
 				if (subsection.getParagraphId().equals("702."))
-					description.append("\n\n**In order to get more information about a keyword, please look up the specific rule reference using `!define <keyword>`.**");
+					description.append("\n\n**In order to get more information about a keyword, please look up the specific rule reference using `"+guildPreferences.getPrefix()+"define <keyword>`.**");
 			}
 		}
 		// Section output
@@ -217,6 +218,10 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 		// Send rules
 		String[] splits = MessageUtils.splitMessage(description.toString());
 		for (int i = 0; i < splits.length; i++) {
+			if (splits[i].length() > 2048) {
+				System.out.println(splits[i].length());
+				System.out.println(description.toString());
+			}
 			EmbedBuilder eb = new EmbedBuilder().setDescription(splits[i]);
 			if (i == 0)
 				eb.setAuthor("Comprehensive Rules", null, null).setTitle(errorline == null ? title : null);

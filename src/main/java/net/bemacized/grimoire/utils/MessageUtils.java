@@ -76,26 +76,33 @@ public class MessageUtils {
 
 
 	public static String[] splitMessage(String text, int maxlength, boolean codeblock) {
-		if (text.length() <= maxlength) return new String[]{((codeblock) ? "```\n" + text + "\n```" : text)};
-		final String[] split = text.split("[\r\n]");
-		if (split.length == 1) throw new IllegalArgumentException("Message cannot be split properly.");
-		List<String> messages = new ArrayList<>();
-		StringBuilder message = new StringBuilder();
-		for (String s : split) {
-			if (message.length() + s.length() > maxlength) {
-				messages.add(message.toString());
-				message = new StringBuilder();
-			}
-			message.append(s).append("\n");
+		int margin = codeblock ? 9 : 1;
+		String[] lines = text.split("\\r?\\n");
+		List<String> source = new ArrayList<>();
+		// Split by line
+		if (Arrays.stream(lines).parallel().noneMatch(l -> l.length() > (maxlength - margin))) {
+			source.addAll(Arrays.asList(lines).parallelStream().map(l -> l + "\n").collect(Collectors.toList()));
 		}
-		messages.add(message.toString());
-		return messages
-				.parallelStream()
-				.map(String::trim)
-				.filter(s -> !s.isEmpty())
-				.map(s -> (codeblock) ? "```\n" + s + "\n```" : s)
-				.collect(Collectors.toList())
-				.toArray(new String[0]);
+		// Split by word
+		else {
+			for (String line : lines) {
+				source.addAll(Arrays.asList(line.split("\\s")));
+				source.add("\n");
+			}
+		}
+		List<String> splits = new ArrayList<>();
+		StringBuilder splitBuilder = new StringBuilder();
+		while (!source.isEmpty()) {
+			if (splitBuilder.length() + (source.get(0)).length() + 1 > maxlength - margin) {
+				splits.add(splitBuilder.toString());
+				splitBuilder = new StringBuilder();
+			}
+			splitBuilder.append(source.get(0));
+			if (!source.get(0).endsWith("\n")) splitBuilder.append(" ");
+			source.remove(0);
+		}
+		if (splitBuilder.length() > 0) splits.add(splitBuilder.toString());
+		return splits.parallelStream().map(s -> (codeblock ? "```\n" + s + "\n```" : s)).collect(Collectors.toList()).toArray(new String[0]);
 	}
 
 	public static String[] splitMessage(String text, int maxlength) {
