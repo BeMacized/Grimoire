@@ -1,7 +1,9 @@
 package net.bemacized.grimoire.data.providers;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.MalformedJsonException;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
@@ -47,7 +49,12 @@ public class StandardRotationProvider {
 
 		// Parse json
 		Gson gson = new Gson();
-		sets = StreamSupport.stream(new JsonParser().parse(rawJson).getAsJsonArray().spliterator(), false).map(s -> gson.fromJson(s.getAsJsonObject(), StandardSet.class)).collect(Collectors.toList());
+		try {
+			sets = StreamSupport.stream(new JsonParser().parse(rawJson).getAsJsonArray().spliterator(), false).map(s -> gson.fromJson(s.getAsJsonObject(), StandardSet.class)).collect(Collectors.toList());
+		} catch (JsonParseException ex) {
+			LOG.log(Level.SEVERE, "Could not parse standard sets: " + rawJson, ex);
+			return;
+		}
 
 		// Sort sets
 		sets.sort(Comparator.comparing(StandardSet::getEnterDate));
