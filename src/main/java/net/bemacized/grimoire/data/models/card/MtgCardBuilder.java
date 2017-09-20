@@ -46,7 +46,7 @@ public class MtgCardBuilder {
 	}
 
 
-	public MtgCardBuilder(final ScryfallCard sCard, @Nullable final ScryfallCard.Face face, final MtgJsonCard mCard) {
+	private MtgCardBuilder(final ScryfallCard sCard, @Nullable final ScryfallCard.Face face, final MtgJsonCard mCard) {
 		if (face != null) {
 			setName(face.getName());
 			setManacost(face.getManaCost());

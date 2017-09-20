@@ -154,7 +154,12 @@ public class CardProvider {
 		try {
 			String sfQuery = "!\"" + mCardEnglish.getName() + "\"";
 			if (set != null) sfQuery += " s:" + set.getCode();
-			ScryfallCard sCard = ScryfallRetriever.getCardsFromQuery(sfQuery).parallelStream().findFirst().orElse(null);
+			ScryfallCard sCard;
+			try {
+				sCard = ScryfallRetriever.getCardByMultiverseId(mCardEnglish.getMultiverseid());
+			} catch (ScryfallRetriever.ScryfallRequest.NoResultException e) {
+				sCard = ScryfallRetriever.getCardsFromQuery(sfQuery).parallelStream().findFirst().orElse(null);
+			}
 			return new MtgCardBuilder(sCard, mCard).createMtgCard();
 		} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException e) {
 			LOG.log(Level.SEVERE, "An unknown error occurred with Scryfall", e);
