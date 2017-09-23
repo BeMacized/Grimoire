@@ -260,7 +260,8 @@ public class MtgCard {
 
 	@Nullable
 	public String getImageUrl(GuildPreferences guildPreferences) {
-		if (imageUrl == null) imageUrl = Grimoire.getInstance().getCardProvider().getImageRetriever().findUrl(this, guildPreferences);
+		if (imageUrl == null)
+			imageUrl = Grimoire.getInstance().getCardProvider().getImageRetriever().findUrl(this, guildPreferences);
 		return imageUrl;
 	}
 

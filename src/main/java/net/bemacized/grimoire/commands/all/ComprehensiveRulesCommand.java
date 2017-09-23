@@ -195,7 +195,7 @@ public class ComprehensiveRulesCommand extends BaseCommand {
 					}
 				});
 				if (subsection.getParagraphId().equals("702."))
-					description.append("\n\n**In order to get more information about a keyword, please look up the specific rule reference using `"+guildPreferences.getPrefix()+"define <keyword>`.**");
+					description.append("\n\n**In order to get more information about a keyword, please look up the specific rule reference using `" + guildPreferences.getPrefix() + "define <keyword>`.**");
 			}
 		}
 		// Section output

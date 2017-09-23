@@ -59,6 +59,7 @@ public class Grimoire {
 	private StandardRotationProvider standardRotationProvider;
 	private PricingProvider pricingProvider;
 	private GuildPreferenceProvider guildPreferenceProvider;
+	private XLanderProvider xLanderProvider;
 
 	private Grimoire(String bot_token) {
 		instance = this;
@@ -152,7 +153,11 @@ public class Grimoire {
 
 		// Load standard rotation
 		this.standardRotationProvider = new StandardRotationProvider();
-		this.standardRotationProvider.load();
+		this.standardRotationProvider.getSets();
+
+		// Load XLander Properties
+		this.xLanderProvider = new XLanderProvider();
+		this.xLanderProvider.getHighlanderBanlist();
 
 		// Instantiate pricing provider
 		this.pricingProvider = new PricingProvider();
@@ -228,5 +233,9 @@ public class Grimoire {
 
 	public GeoApiContext getGeoAPI() {
 		return geoAPI;
+	}
+
+	public XLanderProvider getXLanderProvider() {
+		return xLanderProvider;
 	}
 }

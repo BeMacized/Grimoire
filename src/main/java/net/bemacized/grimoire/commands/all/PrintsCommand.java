@@ -52,8 +52,7 @@ public class PrintsCommand extends CardBaseCommand {
 				} else {
 					sets = printings.parallelStream().map(c -> String.format("**(%s)** %s", c.getSetCode(), c.getSetName())).collect(Collectors.toList());
 				}
-			}
-			else {
+			} else {
 				List<MtgCard> printings = card.getAllPrintings(-1);
 				if (printings.size() <= 10) {
 					sets = printings.parallelStream().map(c -> String.format(":small_orange_diamond: %s **(%s)** *[%s]*", c.getSet().getName(), c.getSet().getCode(), c.getSet().getReleasedAt() == null ? "Unknown" : c.getSet().getReleasedAt())).collect(Collectors.toList());

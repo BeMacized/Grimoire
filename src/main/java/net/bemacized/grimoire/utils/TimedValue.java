@@ -1,5 +1,7 @@
 package net.bemacized.grimoire.utils;
 
+import javax.annotation.Nullable;
+
 public abstract class TimedValue<T> {
 
 	private long max_age;
@@ -12,6 +14,7 @@ public abstract class TimedValue<T> {
 		this.max_age = max_age;
 	}
 
+	@Nullable
 	public T get() {
 		if ((value == null || System.currentTimeMillis() - timestamp > max_age) && !refreshing) {
 			refreshing = true;

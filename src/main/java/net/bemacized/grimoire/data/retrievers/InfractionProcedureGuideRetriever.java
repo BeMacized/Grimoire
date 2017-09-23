@@ -57,7 +57,6 @@ public class InfractionProcedureGuideRetriever {
 				else break;
 			}
 			// Parse content
-			// Parse content
 			String content;
 			{
 				StringBuilder contentSb = new StringBuilder();
