@@ -36,6 +36,7 @@ public class MtgCardBuilder {
 	private HashMap<String, ScryfallCard.Legality> legalities = new HashMap<>();
 	private Supplier<MtgCard> otherSide = () -> null;
 	private ScryfallCard.Layout layout = ScryfallCard.Layout.UNKNOWN;
+	private String scryfallImageUrl;
 
 	public MtgCardBuilder(final ScryfallCard sCard) {
 		this(sCard, sCard.getCardFaces().length > 0 ? sCard.getCardFaces()[0] : null);
@@ -54,6 +55,13 @@ public class MtgCardBuilder {
 			setTypeLine(face.getTypeLine());
 			setPower(face.getPower());
 			setToughness(face.getToughness());
+			if (face.getImageUris().getNormal() != null) {
+				setScryfallImageUrl(face.getImageUris().getNormal());
+			} else if (sCard.getImageUris().getNormal() != null){
+				setScryfallImageUrl(sCard.getImageUris().getNormal());
+			} else {
+				setScryfallImageUrl(sCard.getImageUri());
+			}
 		} else {
 			setName(sCard.getName());
 			setManacost(sCard.getManaCost());
@@ -61,6 +69,11 @@ public class MtgCardBuilder {
 			setText(sCard.getOracleText());
 			setPower(sCard.getPower());
 			setToughness(sCard.getToughness());
+			if (sCard.getImageUris().getNormal() != null){
+				setScryfallImageUrl(sCard.getImageUris().getNormal());
+			} else {
+				setScryfallImageUrl(sCard.getImageUri());
+			}
 		}
 		setLayout(sCard.getLayout());
 		setMultiverseId(sCard.getMultiverseId());
@@ -214,7 +227,7 @@ public class MtgCardBuilder {
 	}
 
 	public MtgCard createMtgCard() {
-		return new MtgCard(multiverseId, name, manacost, cmc, language, typeLine, rarity, set, scryfallId, colorIdentity, legalities, text, power, toughness, flavorText, loyalty, vgHandModifier, vgLifeModifier, scryfallUrl, number, rulings, foreignNames, otherSide, layout);
+		return new MtgCard(multiverseId, name, manacost, cmc, language, typeLine, rarity, set, scryfallId, colorIdentity, legalities, text, power, toughness, flavorText, loyalty, vgHandModifier, vgLifeModifier, scryfallUrl, number, rulings, foreignNames, otherSide, layout, scryfallImageUrl);
 	}
 
 	public MtgCardBuilder setColorIdentity(String[] colorIdentity) {
@@ -244,6 +257,11 @@ public class MtgCardBuilder {
 
 	public MtgCardBuilder setLayout(ScryfallCard.Layout layout) {
 		this.layout = layout;
+		return this;
+	}
+
+	public MtgCardBuilder setScryfallImageUrl(String scryfallImageUrl) {
+		this.scryfallImageUrl = scryfallImageUrl;
 		return this;
 	}
 }

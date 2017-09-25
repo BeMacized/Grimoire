@@ -55,13 +55,14 @@ public class MtgCard {
 	private MtgJsonCard.ForeignName[] foreignNames;
 	private Supplier<MtgCard> otherSideSupplier;
 	private ScryfallCard.Layout layout;
+	private String scryfallImageUrl;
 
 	private transient String imageUrl;
 	private transient String printedText;
 	private transient String printedTypeLine;
 	private transient MtgCard otherSide;
 
-	MtgCard(int multiverseId, String name, String manacost, String cmc, String language, String typeLine, ScryfallCard.Rarity rarity, ScryfallSet set, String scryfallId, String[] colorIdentity, HashMap<String, ScryfallCard.Legality> legalities, String text, String power, String toughness, String flavorText, String loyalty, String vgHandModifier, String vgLifeModifier, String scryfallUrl, String number, MtgJsonCard.Ruling[] rulings, MtgJsonCard.ForeignName[] foreignNames, Supplier<MtgCard> otherSideSupplier, ScryfallCard.Layout layout) {
+	MtgCard(int multiverseId, String name, String manacost, String cmc, String language, String typeLine, ScryfallCard.Rarity rarity, ScryfallSet set, String scryfallId, String[] colorIdentity, HashMap<String, ScryfallCard.Legality> legalities, String text, String power, String toughness, String flavorText, String loyalty, String vgHandModifier, String vgLifeModifier, String scryfallUrl, String number, MtgJsonCard.Ruling[] rulings, MtgJsonCard.ForeignName[] foreignNames, Supplier<MtgCard> otherSideSupplier, ScryfallCard.Layout layout, String scryfallImageUrl) {
 		this.multiverseId = multiverseId;
 		this.name = name;
 		this.manacost = manacost;
@@ -86,6 +87,7 @@ public class MtgCard {
 		this.foreignNames = foreignNames;
 		this.otherSideSupplier = otherSideSupplier;
 		this.layout = layout;
+		this.scryfallImageUrl = scryfallImageUrl;
 	}
 
 	//
@@ -200,6 +202,10 @@ public class MtgCard {
 
 	public String getVgLifeModifier() {
 		return vgLifeModifier;
+	}
+
+	public String getScryfallImageUrl() {
+		return scryfallImageUrl;
 	}
 
 	//

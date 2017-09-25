@@ -52,8 +52,11 @@ public class ScryfallRetriever {
 	public static List<ScryfallCard> getCardsFromQuery(String query, int maxResults) throws ScryfallRequest.UnknownResponseException, ScryfallRequest.NoResultException, ScryfallRequest.ScryfallErrorException {
 		try {
 			Gson gson = new Gson();
-			List<ScryfallCard> cards = new ListRetriever("/cards/search?q=" + URLEncoder.encode(query, "UTF-8")).getListContent(maxResults).parallelStream().map(e -> gson.fromJson(e, ScryfallCard.class)).collect(Collectors.toList());
-			return cards;
+			return new ListRetriever("/cards/search?q=" + URLEncoder.encode(query, "UTF-8"))
+					.getListContent(maxResults)
+					.parallelStream()
+					.map(e -> gson.fromJson(e, ScryfallCard.class))
+					.collect(Collectors.toList());
 		} catch (UnsupportedEncodingException e) {
 			LOG.log(Level.SEVERE, "UTF-8 is not a supported encoding", e);
 			throw new ScryfallRequest.UnknownResponseException(e);

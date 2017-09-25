@@ -401,6 +401,10 @@ public class ScryfallCard {
 		private String large;
 		@Nullable
 		private String png;
+		@Nullable
+		private String border_crop;
+		@Nullable
+		private String art_crop;
 
 		public ImageUris() {
 		}
@@ -424,6 +428,16 @@ public class ScryfallCard {
 		public String getPng() {
 			return png;
 		}
+
+		@Nullable
+		public String getBorder_crop() {
+			return border_crop;
+		}
+
+		@Nullable
+		public String getArt_crop() {
+			return art_crop;
+		}
 	}
 
 	public static class Face {
@@ -439,6 +453,14 @@ public class ScryfallCard {
 		private String power;
 		@Nullable
 		private String toughness;
+		@Nonnull
+		private String[] colors = new String[0];
+		@Nonnull
+		private String[] color_indicator = new String[0];
+		@Nonnull
+		private ImageUris image_uris = new ImageUris();
+		@Nullable
+		private String loyalty;
 
 		public Face() {
 		}
@@ -471,6 +493,41 @@ public class ScryfallCard {
 		@Nullable
 		public String getToughness() {
 			return toughness;
+		}
+
+		@Nullable
+		public String getMana_cost() {
+			return mana_cost;
+		}
+
+		@Nonnull
+		public String getType_line() {
+			return type_line;
+		}
+
+		@Nullable
+		public String getOracle_text() {
+			return oracle_text;
+		}
+
+		@Nonnull
+		public String[] getColors() {
+			return colors;
+		}
+
+		@Nonnull
+		public String[] getColor_indicator() {
+			return color_indicator;
+		}
+
+		@Nonnull
+		public ImageUris getImageUris() {
+			return image_uris;
+		}
+
+		@Nullable
+		public String getLoyalty() {
+			return loyalty;
 		}
 	}
 
