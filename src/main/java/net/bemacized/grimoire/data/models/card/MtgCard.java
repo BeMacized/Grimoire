@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -212,6 +213,18 @@ public class MtgCard {
 	// Utility Getters
 	//
 
+	public int getCanlanderPoints() {
+		Map<String, Integer> list = Grimoire.getInstance().getXLanderProvider().getCanlanderPointsList();
+		if (!list.containsKey(getName().toLowerCase())) return 0;
+		return list.get(getName().toLowerCase());
+	}
+
+	public int getAuslanderPoints() {
+		Map<String, Integer> list = Grimoire.getInstance().getXLanderProvider().getAuslanderPointsList();
+		if (!list.containsKey(getName().toLowerCase())) return 0;
+		return list.get(getName().toLowerCase());
+	}
+
 	public List<MtgJsonCard> getAllMtgJsonPrintings() {
 		List<MtgJsonCard> cards = Grimoire.getInstance().getCardProvider().getMtgJsonProvider().getCardsByName(name);
 		if (cards.isEmpty()) return cards;
@@ -347,6 +360,10 @@ public class MtgCard {
 			if (vgHandModifier != null && vgLifeModifier != null)
 				eb.addField("Vanguard Hand/Life Modifiers", vgHandModifier + "/" + vgLifeModifier, true);
 		}
+		if (getCanlanderPoints() > 0 && guildPreferences.showCanlanderPoints())
+			eb.addField("Canlander Points", getCanlanderPoints() + " Points",true);
+		if (getAuslanderPoints() > 0 && guildPreferences.showAuslanderPoints())
+			eb.addField("Auslander Points", getAuslanderPoints() + " Points",true);
 
 		// Return result
 		return eb.build();

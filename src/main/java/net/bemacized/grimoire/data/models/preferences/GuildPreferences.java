@@ -169,6 +169,10 @@ public class GuildPreferences {
 		return getValue(29) == 1;
 	}
 
+	public boolean showCanlanderPoints() { return getValue(30) == 1; }
+
+	public boolean showAuslanderPoints() { return getValue(31) == 1; }
+
 	@Nullable
 	public String getCardUrl(MtgCard card) {
 		switch (getTitleService()) {
@@ -265,4 +269,5 @@ public class GuildPreferences {
 				.append("pricingCurrencyMode", getPricingCurrencyMode())
 				.toString();
 	}
+
 }

@@ -302,5 +302,17 @@
     "name": "Prefer Low Quality Images",
     "description": "Low Quality images load faster on slow connections.",
     "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 30,
+    "name": "Show Canlander Points",
+    "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 31,
+    "name": "Show Auslander Points",
+    "default": 0
   }
 ]
