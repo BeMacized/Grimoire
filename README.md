@@ -1,5 +1,5 @@
 
-[![Grimoire Logo](https://img.bemacized.net/Heo6WJMr08yK5d74bmOTeMtLwhZDHXfb.png)](https://grimoirebot.xyz/)
+[![Grimoire Logo](https://i.imgur.com/KlhoTsz.png)](https://grimoirebot.xyz/)
 
 [![](https://images.microbadger.com/badges/version/bemacized/grimoire.svg)](https://microbadger.com/images/bemacized/grimoire)
 
