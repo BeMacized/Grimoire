@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ComprehensiveRuleRetriever {
 
 	private final static Logger LOG = Logger.getLogger(ComprehensiveRuleRetriever.class.getName());
-	private final static String SOURCE = "http://media.wizards.com/2017/downloads/MagicCompRules_20170707.txt";
+	private final static String SOURCE = "http://media.wizards.com/2017/downloads/MagicCompRules%2020170925.txt";
 	private final static String CHARSET = "windows-1252";
 
 	public static Result retrieveData() {

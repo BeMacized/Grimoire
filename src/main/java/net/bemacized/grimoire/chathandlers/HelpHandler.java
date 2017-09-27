@@ -142,7 +142,7 @@ public class HelpHandler extends ChatHandler {
 		}
 
 		// Send error
-		sendErrorEmbed(e.getChannel(), "I did not understand what you mean. Please only choose one of the options given:\n`help`, `commands`, `inline referneces`, `info`, or `help <command>`.");
+		sendErrorEmbed(e.getChannel(), "I did not understand what you mean. Please only choose one of the options given:\n`help`, `commands`, `inline references`, `info`, or `help <command>`.");
 
 	}
 }
