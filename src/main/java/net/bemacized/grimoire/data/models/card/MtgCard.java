@@ -294,7 +294,7 @@ public class MtgCard {
 			manaStr += (manacost == null || manacost.isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(manacost, guild);
 		if (guildPreferences.showConvertedManaCost()) {
 			try {
-				manaStr += "(" + new DecimalFormat("##.###").format(Double.parseDouble(cmc)) + ")";
+				manaStr += " (" + new DecimalFormat("##.###").format(Double.parseDouble(cmc)) + ")";
 			} catch (NumberFormatException e) {
 			}
 		}
