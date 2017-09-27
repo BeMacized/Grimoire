@@ -289,18 +289,22 @@ public class MtgCard {
 
 		eb.setColor(MTGUtils.colorIdentitiesToColor(colorIdentity));
 		if (guildPreferences.showThumbnail()) eb.setThumbnail(getImageUrl(guildPreferences));
-		eb.setTitle(name, guildPreferences.getCardUrl(this));
+		String manaStr = "";
 		if (guildPreferences.showManaCost())
-			eb.appendDescription((manacost == null || manacost.isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(manacost, guild));
+			manaStr += (manacost == null || manacost.isEmpty()) ? "" : Grimoire.getInstance().getEmojiParser().parseEmoji(manacost, guild);
 		if (guildPreferences.showConvertedManaCost()) {
-			String cmcStr;
 			try {
-				cmcStr = new DecimalFormat("##.###").format(Double.parseDouble(cmc));
-				eb.appendDescription(" **(" + cmcStr + ")**");
+				manaStr += "(" + new DecimalFormat("##.###").format(Double.parseDouble(cmc)) + ")";
 			} catch (NumberFormatException e) {
 			}
 		}
-		eb.appendDescription("\n");
+		if ((name + manaStr).length() >= 256) {
+			eb.setTitle(name, guildPreferences.getCardUrl(this));
+			eb.appendDescription("**" + manaStr + "**");
+			eb.appendDescription("\n");
+		} else {
+			eb.setTitle(name + manaStr, guildPreferences.getCardUrl(this));
+		}
 		if (guildPreferences.showPowerToughness()) {
 			String pat = MTGUtils.parsePowerAndToughness(power, toughness);
 			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");

@@ -134,7 +134,7 @@ public class LoadMessage {
 					messages.add(oldMsg);
 				} else if (!oldMsg.getEmbeds().get(0).getDescription().equals(newText)) {
 					oldMsg = oldMsg.editMessage(newEmbed).submit().get();
-					messages.remove(i);
+					if (i < messages.size()) messages.remove(i);
 					messages.add(i, oldMsg);
 				}
 			}
