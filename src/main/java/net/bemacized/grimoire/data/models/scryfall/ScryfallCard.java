@@ -331,7 +331,12 @@ public class ScryfallCard {
 		@SerializedName("rare")
 		RARE,
 		@SerializedName("mythic")
-		MYTHIC
+		MYTHIC;
+
+		@Override
+		public String toString() {
+			return WordUtils.capitalize(this.name().toLowerCase());
+		}
 	}
 
 	public static class Part {

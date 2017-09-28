@@ -76,7 +76,7 @@ public class RandomCommand extends BaseCommand {
 				if (!types.contains(arg.toLowerCase())) types.add(arg.toLowerCase());
 			} else if (allSubtypes.parallelStream().anyMatch(t -> t.equalsIgnoreCase(arg))) {
 				if (!subtypes.contains(arg.toLowerCase())) subtypes.add(arg.toLowerCase());
-			} else if (Arrays.stream(MtgJsonCard.Rarity.values()).parallel().anyMatch(r -> r.toString().equalsIgnoreCase(arg))) {
+			} else if (Arrays.stream(ScryfallCard.Rarity.values()).parallel().anyMatch(r -> r.toString().equalsIgnoreCase(arg))) {
 				if (rarity != null) {
 					sendErrorEmbed(loadMsg, "Please do not specify more than one rarity.");
 					return;
