@@ -41,7 +41,7 @@ public class InlinePriceHandler extends ChatHandler {
 
 	@Override
 	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
-		if (!guildPreferences.inlinePriceReferencesEnabled()) {
+		if (!guildPreferences.areInlinePriceReferencesEnabled()) {
 			next.handle(e);
 			return;
 		}

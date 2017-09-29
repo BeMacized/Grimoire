@@ -24,6 +24,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 	private static final String NEXT_ICON = "➡";
 	private static final String FLIP_ICON = "\uD83D\uDD04";
 	private static final String REMOVE_ICON = "❎";
+	private static final String ART_ICON = "\uD83D\uDDBC";
 
 	@Override
 	public String[] usages() {
@@ -106,11 +107,38 @@ public abstract class CardBaseCommand extends BaseCommand {
 			results.remove(1);
 		}
 
+		// Create a view context
+		final ViewContext context = new ViewContext();
+
+		// Define guild preferences for expanded view
+		GuildPreferences expandedGuildPreferences = new GuildPreferences(guildPreferences);
+		expandedGuildPreferences.setShowAuslanderPoints(true);
+		expandedGuildPreferences.setShowCanlanderPoints(true);
+		expandedGuildPreferences.setShowCardType(true);
+		expandedGuildPreferences.setShowConvertedManaCost(true);
+		expandedGuildPreferences.setShowFlavorText(true);
+		expandedGuildPreferences.setShowLegalFormats(true);
+		expandedGuildPreferences.setShowManaCost(true);
+		expandedGuildPreferences.setShowMiscProperties(true);
+		expandedGuildPreferences.setShowOracleText(true);
+		expandedGuildPreferences.setShowPowerToughness(true);
+		expandedGuildPreferences.setShowPrintedRarities(true);
+		expandedGuildPreferences.setShowPrintings(true);
+		expandedGuildPreferences.setShowThumbnail(true);
+
 		// Construct navigable embed
 		NavigableEmbed.Builder builder = new NavigableEmbed.Builder(e.getChannel());
 		for (int x = 0; x < results.size(); x++) {
 			MtgCard result = results.get(x);
-			builder.addEmbed(() -> getEmbedForCard(result, guildPreferences, e));
+			builder.addEmbed(() -> {
+				if (context.fullart) {
+					return result.getArtEmbed( guildPreferences );
+				} else if (context.expanded) {
+					return result.getEmbed(e.getGuild(), expandedGuildPreferences);
+				} else {
+					return getEmbedForCard( result, guildPreferences, e );
+				}
+			});
 			if (result.getOtherSide() != null)
 				builder.addEmbed(() -> getEmbedForCard(result.getOtherSide(), guildPreferences, e), x);
 		}
@@ -143,6 +171,16 @@ public abstract class CardBaseCommand extends BaseCommand {
 			else navEb.down();
 			applyControls(navEb, removalDisabled);
 		});
+		rl.addResponse(ART_ICON, (emoji, event) -> {
+			context.setFullart(!context.isFullart());
+			navEb.render();
+			applyControls(navEb, removalDisabled);
+		});
+		rl.addResponse(EXPAND_ICON, (emoji, event) -> {
+			context.setExpanded(!context.isExpanded());
+			navEb.render();
+			applyControls(navEb, removalDisabled);
+		});
 		if (removalDisabled) {
 			rl.addResponse(REMOVE_ICON, (emoji, event) -> {
 				rl.disable();
@@ -159,6 +197,9 @@ public abstract class CardBaseCommand extends BaseCommand {
 		applyControl(PREVIOUS_ICON, m, navEb.getWidth() > 1, removalEnabled);
 		applyControl(NEXT_ICON, m, navEb.getWidth() > 1, removalEnabled);
 		applyControl(FLIP_ICON, m, navEb.getHeightAt(navEb.getX()) > 1, removalEnabled);
+		applyControl(ART_ICON, m, true, removalEnabled);
+		applyControl(EXPAND_ICON, m, true, removalEnabled);
+
 		if (removalEnabled) {
 			applyControl(REMOVE_ICON, m, true, removalEnabled);
 		}
@@ -172,13 +213,32 @@ public abstract class CardBaseCommand extends BaseCommand {
 			message.getReactions().parallelStream().filter(r -> r.getEmote().getName().equals(emote))
 					.forEach(r -> {
 						try {
-							r.getUsers().submit().get().parallelStream().forEach(u -> {
-								r.removeReaction(u).queue();
-							});
+							r.getUsers().submit().get().parallelStream().forEach(u -> r.removeReaction( u ).queue() );
 						} catch (InterruptedException | ExecutionException e) {
 							LOG.log(Level.SEVERE, "Could not remove specific reaction", e);
 						}
 					});
+		}
+	}
+
+	private class ViewContext {
+		private boolean expanded = false;
+		private boolean fullart = false;
+
+		public boolean isExpanded() {
+			return expanded;
+		}
+
+		public void setExpanded( final boolean expanded ) {
+			this.expanded = expanded;
+		}
+
+		public boolean isFullart() {
+			return fullart;
+		}
+
+		public void setFullart( final boolean fullart ) {
+			this.fullart = fullart;
 		}
 	}
 

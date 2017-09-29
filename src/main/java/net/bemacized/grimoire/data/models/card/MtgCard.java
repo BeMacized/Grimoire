@@ -284,6 +284,15 @@ public class MtgCard {
 		return imageUrl;
 	}
 
+	public MessageEmbed getArtEmbed(GuildPreferences guildPreferences) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle(this.getName(), guildPreferences.getCardUrl(this));
+		eb.setDescription(String.format("%s (%s)", this.getSet().getName(), this.getSet().getCode()));
+		eb.setImage(this.getImageUrl(guildPreferences));
+		eb.setColor(MTGUtils.colorIdentitiesToColor(this.getColorIdentity()));
+		return eb.build();
+	}
+
 	public MessageEmbed getEmbed(Guild guild, GuildPreferences guildPreferences) {
 		EmbedBuilder eb = new EmbedBuilder();
 
