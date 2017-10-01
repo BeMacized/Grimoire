@@ -53,7 +53,7 @@ public class ReactionListener extends ListenerAdapter {
 			return;
 		ReactionCallback cb = actionMap.getOrDefault(event.getReactionEmote().getName(), null);
 		if (cb != null) {
-			cb.exec(event.getReactionEmote().getName(), event);
+			cb.exec(event);
 			if (oneTimeUse) disable();
 			else resetTimer();
 		}
@@ -93,6 +93,6 @@ public class ReactionListener extends ListenerAdapter {
 
 	public interface ReactionCallback {
 
-		void exec(String emoji, GenericMessageReactionEvent event);
+		void exec(GenericMessageReactionEvent event);
 	}
 }

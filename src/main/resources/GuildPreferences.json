@@ -61,7 +61,7 @@
     "type": "SWITCH",
     "id": 6,
     "name": "Show Converted Mana Cost",
-    "default": 1
+    "default": 0
   },
   {
     "type": "SWITCH",
@@ -79,26 +79,26 @@
     "type": "SWITCH",
     "id": 9,
     "name": "List Legal Formats",
-    "default": 1
+    "default": 0
   },
   {
     "type": "SWITCH",
     "id": 10,
     "name": "List Printed Rarities",
-    "default": 1
+    "default": 0
   },
   {
     "type": "SWITCH",
     "id": 11,
     "name": "List Printings",
-    "default": 1
+    "default": 0
   },
   {
     "type": "SWITCH",
     "id": 12,
     "name": "Show Miscellaneous Properties",
     "description": "E.g. Loyalty for planeswalkers, modifiers for Vanguard cards, etc.",
-    "default": 1
+    "default": 0
   },
   {
     "type": "MULTI",

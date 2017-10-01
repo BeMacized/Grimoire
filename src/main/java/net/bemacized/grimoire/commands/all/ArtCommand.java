@@ -26,13 +26,20 @@ public class ArtCommand extends CardBaseCommand {
 	}
 
 	@Override
+	protected EmbedButton[] getEnabledButtons() {
+		return new EmbedButton[]{
+			EmbedButton.NEXT,
+			EmbedButton.PREVIOUS,
+			EmbedButton.COLLAPSE,
+			EmbedButton.EXPAND,
+			EmbedButton.FLIP,
+			EmbedButton.REMOVE
+		};
+	}
+
+	@Override
 	protected MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e) {
-
-		// Check if an image is available
-		if (card.getImageUrl(guildPreferences) == null)
-			return errorEmbedFormat("There is no known art for **'%s'**.", card.getName()).get(0);
-
-		// Build embed & show
-		return card.getArtEmbed( guildPreferences );
+		// Return card embed
+		return card.getArtEmbed(guildPreferences);
 	}
 }

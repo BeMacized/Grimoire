@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings({"FieldCanBeLocal"/*, "unused"*/, "WeakerAccess"})
 public class MtgCard {
@@ -319,7 +320,7 @@ public class MtgCard {
 			if (!pat.isEmpty()) eb.appendDescription("**" + pat + "** ");
 		}
 		if (guildPreferences.showCardType() && getTypeLine() != null)
-			eb.appendDescription(getTypeLine() + "\n\n");
+			eb.appendDescription("**" + getTypeLine() + "**\n");
 		if (guildPreferences.showOracleText() && getText() != null)
 			eb.appendDescription(Grimoire.getInstance().getEmojiParser().parseEmoji(getText(), guild) + "\n");
 		if (guildPreferences.showFlavorText() && getFlavorText() != null)
@@ -377,6 +378,20 @@ public class MtgCard {
 			eb.addField("Canlander Points", getCanlanderPoints() + " Points",true);
 		if (getAuslanderPoints() > 0 && guildPreferences.showAuslanderPoints())
 			eb.addField("Auslander Points", getAuslanderPoints() + " Points",true);
+
+		if (guildPreferences.showPriceOnCard()) {
+			final MessageEmbed pricing = Grimoire.getInstance().getPricingProvider().getPricingEmbed(this, guildPreferences);
+			String descLine = pricing.getDescription() != null ? pricing.getDescription().split("\n")[0] : "";
+			final String set = (descLine.matches(".*?[(].+?[)]"))
+					? descLine.substring(descLine.indexOf("(") + 1, descLine.indexOf(")", descLine.indexOf("(")))
+					: "";
+			boolean showSet = !set.equalsIgnoreCase(getSet().getCode()) && !set.isEmpty();
+			pricing.getFields().forEach(f -> {
+				List<String> desc = Stream.of(f.getValue().split("\n")).collect(Collectors.toList());
+				desc.set(0, desc.get(0) + (showSet ? " _(" + set + ")_" : ""));
+				eb.addField(f.getName(), String.join("\n", desc), f.isInline());
+			});
+		}
 
 		// Return result
 		return eb.build();

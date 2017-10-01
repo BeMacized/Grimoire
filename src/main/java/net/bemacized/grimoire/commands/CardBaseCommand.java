@@ -8,23 +8,21 @@ import net.bemacized.grimoire.data.retrievers.ScryfallRetriever;
 import net.bemacized.grimoire.utils.LoadMessage;
 import net.bemacized.grimoire.utils.NavigableEmbed;
 import net.bemacized.grimoire.utils.ReactionListener;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 public abstract class CardBaseCommand extends BaseCommand {
-
-	private static final String PREVIOUS_ICON = "⬅";
-	private static final String NEXT_ICON = "➡";
-	private static final String FLIP_ICON = "\uD83D\uDD04";
-	private static final String REMOVE_ICON = "❎";
-	private static final String ART_ICON = "\uD83D\uDDBC";
 
 	@Override
 	public String[] usages() {
@@ -50,9 +48,6 @@ public abstract class CardBaseCommand extends BaseCommand {
 
 	@Override
 	public void exec(String[] args, String rawArgs, MessageReceivedEvent e, GuildPreferences guildPreferences) {
-		int dbg_i = -1;
-		long dbg_s = System.currentTimeMillis();
-
 		// Quit and error out if none provided
 		if (rawArgs.trim().length() == 0) {
 			sendErrorEmbed(e.getChannel(), "Please provide a card name.");
@@ -107,8 +102,8 @@ public abstract class CardBaseCommand extends BaseCommand {
 			results.remove(1);
 		}
 
-		// Create a view context
-		final ViewContext context = new ViewContext();
+		// Get a new view context
+		final ViewContext context = getDefaultViewContext();
 
 		// Define guild preferences for expanded view
 		GuildPreferences expandedGuildPreferences = new GuildPreferences(guildPreferences);
@@ -130,17 +125,24 @@ public abstract class CardBaseCommand extends BaseCommand {
 		NavigableEmbed.Builder builder = new NavigableEmbed.Builder(e.getChannel());
 		for (int x = 0; x < results.size(); x++) {
 			MtgCard result = results.get(x);
-			builder.addEmbed(() -> {
-				if (context.fullart) {
-					return result.getArtEmbed( guildPreferences );
-				} else if (context.expanded) {
-					return result.getEmbed(e.getGuild(), expandedGuildPreferences);
-				} else {
-					return getEmbedForCard( result, guildPreferences, e );
-				}
-			});
+			BiFunction<MtgCard, Integer, MessageEmbed> getEmbed = (c, resultIndex) -> {
+				MessageEmbed embed;
+				if (context.state == ViewContext.State.FULL_ART) {
+					embed = c.getArtEmbed(guildPreferences);
+				} else if (context.state == ViewContext.State.EXPANDED) {
+					embed = c.getEmbed(e.getGuild(), expandedGuildPreferences);
+				} else if (context.state == ViewContext.State.COLLAPSED) {
+					embed = getEmbedForCard(c, guildPreferences, e);
+				} else throw new NotImplementedException();
+				EmbedBuilder eb = new EmbedBuilder(embed);
+				if (results.size() > 1)
+					eb.setFooter("Result " + (resultIndex + 1) + "/" + results.size(), null);
+				return eb.build();
+			};
+			int finalIndex = x;
+			builder.addEmbed(() -> getEmbed.apply(result, finalIndex));
 			if (result.getOtherSide() != null)
-				builder.addEmbed(() -> getEmbedForCard(result.getOtherSide(), guildPreferences, e), x);
+				builder.addEmbed(() -> getEmbed.apply(result.getOtherSide(), finalIndex), x);
 		}
 
 		// Build the embed and send it
@@ -150,39 +152,44 @@ public abstract class CardBaseCommand extends BaseCommand {
 		loadMsg.complete();
 
 		// Add controls
-		boolean removalDisabled = e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE);
-		applyControls(navEb, removalDisabled);
+		boolean removalPermitted = e.getGuild().getSelfMember().hasPermission(e.getTextChannel(), Permission.MESSAGE_MANAGE);
+		applyControls(navEb, context, removalPermitted);
 
 		// Setup controls
 		ReactionListener rl = new ReactionListener(Grimoire.getInstance().getDiscord(), navEb.getMessage(), false, 30 * 1000);
 		rl.addController(e.getAuthor());
-		rl.addResponse(PREVIOUS_ICON, (emoji, event) -> {
+		rl.addResponse(EmbedButton.PREVIOUS.getIcon(), event -> {
 			navEb.setY(0);
 			if (navEb.getX() > 0) navEb.left();
-			applyControls(navEb, removalDisabled);
+			applyControls(navEb, context, removalPermitted);
 		});
-		rl.addResponse(NEXT_ICON, (emoji, event) -> {
+		rl.addResponse(EmbedButton.NEXT.getIcon(), event -> {
 			navEb.setY(0);
 			if (navEb.getX() < navEb.getWidth() - 1) navEb.right();
-			applyControls(navEb, removalDisabled);
+			applyControls(navEb, context, removalPermitted);
 		});
-		rl.addResponse(FLIP_ICON, (emoji, event) -> {
+		rl.addResponse(EmbedButton.FLIP.getIcon(), event -> {
 			if (navEb.getY() > 0) navEb.up();
 			else navEb.down();
-			applyControls(navEb, removalDisabled);
+			applyControls(navEb, context, removalPermitted);
 		});
-		rl.addResponse(ART_ICON, (emoji, event) -> {
-			context.setFullart(!context.isFullart());
+		rl.addResponse(EmbedButton.ART.getIcon(), event -> {
+			context.setState(ViewContext.State.FULL_ART);
 			navEb.render();
-			applyControls(navEb, removalDisabled);
+			applyControls(navEb, context, removalPermitted);
 		});
-		rl.addResponse(EXPAND_ICON, (emoji, event) -> {
-			context.setExpanded(!context.isExpanded());
+		rl.addResponse(EmbedButton.EXPAND.getIcon(), event -> {
+			context.setState(ViewContext.State.EXPANDED);
 			navEb.render();
-			applyControls(navEb, removalDisabled);
+			applyControls(navEb, context, removalPermitted);
 		});
-		if (removalDisabled) {
-			rl.addResponse(REMOVE_ICON, (emoji, event) -> {
+		rl.addResponse(EmbedButton.COLLAPSE.getIcon(), event -> {
+			context.setState(ViewContext.State.COLLAPSED);
+			navEb.render();
+			applyControls(navEb, context, removalPermitted);
+		});
+		if (removalPermitted) {
+			rl.addResponse(EmbedButton.REMOVE.getIcon(), event -> {
 				rl.disable();
 				navEb.getMessage().delete().queue();
 				e.getMessage().delete().queue();
@@ -190,18 +197,22 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 	}
 
-	protected abstract MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e);
-
-	private void applyControls(NavigableEmbed navEb, boolean removalEnabled) {
+	private void applyControls(NavigableEmbed navEb, ViewContext context, boolean removalPermitted) {
 		Message m = navEb.getMessage();
-		applyControl(PREVIOUS_ICON, m, navEb.getWidth() > 1, removalEnabled);
-		applyControl(NEXT_ICON, m, navEb.getWidth() > 1, removalEnabled);
-		applyControl(FLIP_ICON, m, navEb.getHeightAt(navEb.getX()) > 1, removalEnabled);
-		applyControl(ART_ICON, m, true, removalEnabled);
-		applyControl(EXPAND_ICON, m, true, removalEnabled);
-
-		if (removalEnabled) {
-			applyControl(REMOVE_ICON, m, true, removalEnabled);
+		if (EmbedButton.PREVIOUS.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.PREVIOUS.getIcon(), m, navEb.getWidth() > 1, removalPermitted);
+		if (EmbedButton.NEXT.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.NEXT.getIcon(), m, navEb.getWidth() > 1, removalPermitted);
+		if (EmbedButton.FLIP.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.FLIP.getIcon(), m, navEb.getHeightAt(navEb.getX()) > 1, removalPermitted);
+		if (EmbedButton.ART.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.ART.getIcon(), m, context.getState() != ViewContext.State.FULL_ART, removalPermitted);
+		if (EmbedButton.EXPAND.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.EXPAND.getIcon(), m, context.getState() == ViewContext.State.COLLAPSED, removalPermitted);
+		if (EmbedButton.COLLAPSE.isEnabled(getEnabledButtons()))
+			applyControl(EmbedButton.COLLAPSE.getIcon(), m, context.getState() != ViewContext.State.COLLAPSED, removalPermitted);
+		if (removalPermitted && EmbedButton.COLLAPSE.isEnabled(getEnabledButtons())) {
+			applyControl(EmbedButton.REMOVE.getIcon(), m, true, true);
 		}
 	}
 
@@ -213,7 +224,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 			message.getReactions().parallelStream().filter(r -> r.getEmote().getName().equals(emote))
 					.forEach(r -> {
 						try {
-							r.getUsers().submit().get().parallelStream().forEach(u -> r.removeReaction( u ).queue() );
+							r.getUsers().submit().get().parallelStream().forEach(u -> r.removeReaction(u).queue());
 						} catch (InterruptedException | ExecutionException e) {
 							LOG.log(Level.SEVERE, "Could not remove specific reaction", e);
 						}
@@ -221,24 +232,58 @@ public abstract class CardBaseCommand extends BaseCommand {
 		}
 	}
 
-	private class ViewContext {
-		private boolean expanded = false;
-		private boolean fullart = false;
+	protected abstract MessageEmbed getEmbedForCard(MtgCard card, GuildPreferences guildPreferences, MessageReceivedEvent e);
 
-		public boolean isExpanded() {
-			return expanded;
+	protected ViewContext getDefaultViewContext() {
+		return new ViewContext().setState(ViewContext.State.COLLAPSED);
+	}
+
+	protected EmbedButton[] getEnabledButtons() {
+		return EmbedButton.values();
+	}
+
+	protected enum EmbedButton {
+		PREVIOUS("⬅"),
+		NEXT("➡"),
+		FLIP("🔄"),
+		REMOVE("❎"),
+		ART("🖼"),
+		EXPAND("➕"),
+		COLLAPSE("➖");
+
+		private String icon;
+
+		EmbedButton(String icon) {
+			this.icon = icon;
 		}
 
-		public void setExpanded( final boolean expanded ) {
-			this.expanded = expanded;
+		public String getIcon() {
+			return icon;
 		}
 
-		public boolean isFullart() {
-			return fullart;
+		public boolean isEnabled(EmbedButton[] enabledButtons) {
+			return Arrays.asList(enabledButtons).contains(this);
 		}
 
-		public void setFullart( final boolean fullart ) {
-			this.fullart = fullart;
+	}
+
+	public static class ViewContext {
+
+		private State state;
+
+		public State getState() {
+			return state;
+		}
+
+		public ViewContext setState(State state) {
+			this.state = state;
+			return this;
+		}
+
+		public enum State {
+			COLLAPSED,
+			FULL_ART,
+			EXPANDED
 		}
 	}
 
