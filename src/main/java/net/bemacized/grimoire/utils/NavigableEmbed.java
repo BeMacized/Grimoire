@@ -60,7 +60,7 @@ public class NavigableEmbed extends ListenerAdapter {
 		return new ArrayList<>(embeds);
 	}
 
-	private void render() {
+	public void render() {
 		MessageEmbed embed = embeds.get(xindex).get(yindex).get();
 		try {
 			if (message == null)

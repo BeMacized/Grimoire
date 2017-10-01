@@ -41,7 +41,7 @@ public class InlineCardHandler extends ChatHandler {
 
 	@Override
 	protected void handle(MessageReceivedEvent e, GuildPreferences guildPreferences, ChatHandler next) {
-		if (!guildPreferences.inlineCardReferencesEnabled()) {
+		if (!guildPreferences.areInlineCardReferencesEnabled()) {
 			next.handle(e);
 			return;
 		}
