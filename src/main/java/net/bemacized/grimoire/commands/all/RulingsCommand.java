@@ -37,10 +37,30 @@ public class RulingsCommand extends CardBaseCommand {
 				.setColor(MTGUtils.colorIdentitiesToColor(card.getColorIdentity()))
 				.setTitle(card.getName(), guildPreferences.getCardUrl(card))
 				.setDescription("**Rulings**");
+
+		String TOO_MANY_RULINGS = "**You can find %s more rulings for this card on [Gatherer](" + card.getGathererUrl() + ")**";
+		int rulesNotShown = 0;
+
+		String lastDate = null;
 		for (MtgJsonCard.Ruling ruling : card.getRulings()) {
-			String rulingText = ruling.getText().length() <= 1024 ? ruling.getText() : "Ruling is too large to be displayed. You can go read it on [Gatherer](" + card.getGathererUrl() + ").";
-			eb.addField(ruling.getDate(), rulingText, false);
+			if (ruling.getText().length() > 1024) {
+				rulesNotShown++;
+				continue;
+			}
+			EmbedBuilder ebTmp = new EmbedBuilder((eb.build()));
+			ebTmp.addField((lastDate != null && lastDate.equalsIgnoreCase(ruling.getDate())) ? "" : ruling.getDate(), ruling.getText(), false);
+			lastDate = ruling.getDate();
+			if (ebTmp.build().getLength() > 4000 - TOO_MANY_RULINGS.length() - 10) {
+				rulesNotShown += card.getRulings().length - eb.getFields().size();
+				break;
+			} else {
+				eb = ebTmp;
+			}
 		}
+
+		if (eb.getFields().isEmpty()) TOO_MANY_RULINGS = TOO_MANY_RULINGS.replaceAll(" more ", " ");
+		else if (eb.getFields().size() == 1) TOO_MANY_RULINGS = TOO_MANY_RULINGS.replaceAll("rulings", "ruling");
+		if (rulesNotShown > 0) eb.addField("", String.format(TOO_MANY_RULINGS, rulesNotShown), false);
 
 		return eb.build();
 	}
