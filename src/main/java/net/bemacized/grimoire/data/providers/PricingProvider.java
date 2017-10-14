@@ -5,7 +5,10 @@ import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.*;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.MTGGoldfishRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.ScryfallPriceRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.StoreRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.TCGPlayerRetriever;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -43,7 +46,7 @@ public class PricingProvider {
 		}
 
 		this.stores = new ArrayList<StoreRetriever>() {{
-			if (System.getenv("MCM_HOST") != null && System.getenv("MCM_TOKEN") != null && System.getenv("MCM_SECRET") != null)
+//			if (System.getenv("MCM_HOST") != null && System.getenv("MCM_TOKEN") != null && System.getenv("MCM_SECRET") != null)
 //				add(new MagicCardMarketRetriever(
 //						System.getenv("MCM_HOST"),
 //						System.getenv("MCM_TOKEN"),
