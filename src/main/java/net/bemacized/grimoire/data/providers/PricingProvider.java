@@ -5,10 +5,7 @@ import com.google.gson.JsonParser;
 import net.bemacized.grimoire.Grimoire;
 import net.bemacized.grimoire.data.models.card.MtgCard;
 import net.bemacized.grimoire.data.models.preferences.GuildPreferences;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.MTGGoldfishRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.ScryfallPriceRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.StoreRetriever;
-import net.bemacized.grimoire.data.retrievers.storeretrievers.TCGPlayerRetriever;
+import net.bemacized.grimoire.data.retrievers.storeretrievers.*;
 import net.bemacized.grimoire.utils.MTGUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -46,13 +43,13 @@ public class PricingProvider {
 		}
 
 		this.stores = new ArrayList<StoreRetriever>() {{
-//			if (System.getenv("MCM_HOST") != null && System.getenv("MCM_TOKEN") != null && System.getenv("MCM_SECRET") != null)
-//				add(new MagicCardMarketRetriever(
-//						System.getenv("MCM_HOST"),
-//						System.getenv("MCM_TOKEN"),
-//						System.getenv("MCM_SECRET"),
-//						setDictionary
-//				));
+			if (System.getenv("MCM_HOST") != null && System.getenv("MCM_TOKEN") != null && System.getenv("MCM_SECRET") != null)
+				add(new MagicCardMarketRetriever(
+						System.getenv("MCM_HOST"),
+						System.getenv("MCM_TOKEN"),
+						System.getenv("MCM_SECRET"),
+						setDictionary
+				));
 			if (System.getenv("TCG_HOST") != null && System.getenv("TCG_KEY") != null)
 				add(new TCGPlayerRetriever(
 						System.getenv("TCG_HOST"),
@@ -120,7 +117,7 @@ public class PricingProvider {
 		switch (guildPreferences.getPricePresentationMode()) {
 			case "ALL_MARKETS": {
 				List<Class<? extends StoreRetriever>> stores = new ArrayList<>();
-//				if (guildPreferences.enabledMagicCardMarketStore()) stores.add(MagicCardMarketRetriever.class);
+				if (guildPreferences.enabledMagicCardMarketStore()) stores.add(MagicCardMarketRetriever.class);
 				if (guildPreferences.enabledTCGPlayerStore()) stores.add(TCGPlayerRetriever.class);
 				if (guildPreferences.enabledMTGGoldfishStore()) stores.add(MTGGoldfishRetriever.class);
 				if (guildPreferences.enabledScryfallStore()) stores.add(ScryfallPriceRetriever.class);
