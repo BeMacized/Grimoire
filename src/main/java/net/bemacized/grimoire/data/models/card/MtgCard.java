@@ -18,10 +18,7 @@ import javax.annotation.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -368,6 +365,9 @@ public class MtgCard {
 				eb.addField("Printings", printings.length() <= 1024 ? printings : "Too many printings to list.", true);
 			if (printings.length() > 1024)
 				LOG.log(Level.SEVERE, "PRINTINGS EXCEEDS 1024 CHARS FOR : " + toString() + "\n\n" + printings);
+		}
+		if (guildPreferences.showColorIdentity() && colorIdentity.length > 0) {
+			eb.addField("Color Identity", String.join(", ", Arrays.asList(colorIdentity).parallelStream().map(MTGUtils::colourIdToName).collect(Collectors.toList())), true);
 		}
 		if (guildPreferences.showMiscProperties()) {
 			if (loyalty != null) eb.addField("Loyalty", loyalty, true);

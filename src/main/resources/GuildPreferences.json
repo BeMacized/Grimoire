@@ -314,5 +314,11 @@
     "id": 31,
     "name": "Show Auslander Points",
     "default": 0
+  },
+  {
+    "type": "SWITCH",
+    "id": 32,
+    "name": "Show Color Identity",
+    "default": 0
   }
 ]

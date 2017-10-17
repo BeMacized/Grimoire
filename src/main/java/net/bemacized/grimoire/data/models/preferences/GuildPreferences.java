@@ -52,6 +52,7 @@ public class GuildPreferences {
     private boolean preferLQImages;
     private boolean showCanlanderPoints;
     private boolean showAuslanderPoints;
+    private boolean showColorIdentity;
 
     public GuildPreferences() {
     }
@@ -88,6 +89,7 @@ public class GuildPreferences {
         this.preferLQImages = original.preferLQImages;
         this.showCanlanderPoints = original.showCanlanderPoints;
         this.showAuslanderPoints = original.showAuslanderPoints;
+        this.showColorIdentity = original.showColorIdentity;
     }
 
     public GuildPreferences(@Nullable String guildId, @Nullable String permissionString) {
@@ -136,6 +138,7 @@ public class GuildPreferences {
         this.preferLQImages = getValue(29) == 1;
         this.showCanlanderPoints = getValue(30) == 1;
         this.showAuslanderPoints = getValue(31) == 1;
+        this.showColorIdentity = getValue(32) == 1;
     }
 
     public String getPrefix() {
@@ -260,6 +263,10 @@ public class GuildPreferences {
 
     public boolean showAuslanderPoints() {
         return showAuslanderPoints;
+    }
+
+    public boolean showColorIdentity() {
+        return showColorIdentity;
     }
 
     public String getGuildId() {
@@ -390,6 +397,10 @@ public class GuildPreferences {
         this.showAuslanderPoints = showAuslanderPoints;
     }
 
+    public void setShowColorIdentity(boolean showColorIdentity) {
+        this.showColorIdentity = showColorIdentity;
+    }
+
     @Nullable
     public String getCardUrl(MtgCard card) {
         switch (getTitleService()) {
@@ -484,5 +495,4 @@ public class GuildPreferences {
                 .append("pricingCurrencyMode", getPricingCurrencyMode)
                 .toString();
     }
-
 }

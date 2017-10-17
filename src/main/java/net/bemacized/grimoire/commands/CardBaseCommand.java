@@ -120,6 +120,7 @@ public abstract class CardBaseCommand extends BaseCommand {
 		expandedGuildPreferences.setShowPrintedRarities(true);
 		expandedGuildPreferences.setShowPrintings(true);
 		expandedGuildPreferences.setShowThumbnail(true);
+		expandedGuildPreferences.setShowColorIdentity(true);
 
 		// Construct navigable embed
 		NavigableEmbed.Builder builder = new NavigableEmbed.Builder(e.getChannel());
