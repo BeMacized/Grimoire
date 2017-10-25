@@ -38,7 +38,7 @@ public class XLanderProvider {
 					return XLanderRetriever.retrieveHighlanderBanlist().parallelStream()
 							.map(name -> {
 								try {
-									return Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery(name).parallelStream().findFirst().orElse(null);
+									return Grimoire.getInstance().getCardProvider().getCardsByScryfallQuery("!\"" + name + "\"").parallelStream().findFirst().orElse(null);
 								} catch (ScryfallRetriever.ScryfallRequest.UnknownResponseException | ScryfallRetriever.ScryfallRequest.ScryfallErrorException e) {
 									LOG.log(Level.SEVERE, "An error occurred contacting scryfall for processing the highlander banlist.");
 								} catch (ScryfallRetriever.ScryfallRequest.NoResultException e) {
