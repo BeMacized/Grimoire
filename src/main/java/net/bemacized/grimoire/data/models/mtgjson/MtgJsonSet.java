@@ -198,7 +198,9 @@ public class MtgJsonSet {
 		@SerializedName("conspiracy")
 		CONSPIRACY,
 		@SerializedName("masterpiece")
-		MASTERPIECE
+		MASTERPIECE,
+		@SerializedName("board game deck")
+		BOARD_GAME_DECK
 	}
 
 	public void assertValidity() {

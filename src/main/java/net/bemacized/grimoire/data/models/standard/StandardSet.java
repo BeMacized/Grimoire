@@ -19,7 +19,7 @@ public class StandardSet {
 	}
 
 	public String getBlock() {
-		return block;
+		return block != null ? block : name;
 	}
 
 	public String getCode() {
