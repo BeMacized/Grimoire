@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
 
 public class StandardSetsRetriever {
 
-	private static final String SOURCE = "http://whatsinstandard.com/api/4/sets.json";
+	private static final String SOURCE = "http://whatsinstandard.com/api/v5/sets.json";
 	private static final String CHARSET = "UTF-8";
 
 	private static final Logger LOG = Logger.getLogger(StandardSetsRetriever.class.getName());
