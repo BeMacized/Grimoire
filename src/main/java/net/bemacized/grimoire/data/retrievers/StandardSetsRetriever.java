@@ -25,7 +25,7 @@ public class StandardSetsRetriever {
 		// Parse json
 		Gson gson = new Gson();
 
-		Iterator<Object> setIterator = Unirest.get(SOURCE).asJson().getBody().getArray().iterator();
+		Iterator<Object> setIterator = Unirest.get(SOURCE).asJson().getBody().getObject().getJSONArray("sets").iterator();
 		Iterable<Object> setIterable = () -> setIterator;
 		List<StandardSet> sets = StreamSupport.stream(setIterable.spliterator(), true).map(o -> gson.fromJson(o.toString(), StandardSet.class)).collect(Collectors.toList());
 
