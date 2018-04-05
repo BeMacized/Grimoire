@@ -27,9 +27,11 @@ public class StandardSetsRetriever {
 
 		Iterator<Object> setIterator = Unirest.get(SOURCE).asJson().getBody().getObject().getJSONArray("sets").iterator();
 		Iterable<Object> setIterable = () -> setIterator;
-		List<StandardSet> sets = StreamSupport.stream(setIterable.spliterator(), true).map(o -> gson.fromJson(o.toString(), StandardSet.class)).collect(Collectors.toList());
-
-		// Sort sets
+		List<StandardSet> sets = StreamSupport
+				.stream(setIterable.spliterator(), true)
+				.map(o -> gson.fromJson(o.toString(), StandardSet.class))
+				.filter(s -> s.getExitDate() == null || s.getExitDate().isAfterNow())
+				.collect(Collectors.toList());
 		sets.sort(Comparator.comparing(StandardSet::getEnterDate));
 
 		LOG.info("Retrieved " + sets.size() + " standard sets");
