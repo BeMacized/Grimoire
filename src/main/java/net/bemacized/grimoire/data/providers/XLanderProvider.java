@@ -57,14 +57,12 @@ public class XLanderProvider {
 		canlanderPointsList = new TimedValue<Map<String, Integer>>(TIMEOUT) {
 			@Override
 			public Map<String, Integer> refresh() {
-				JsonObject list;
 				try {
-					list = new JsonParser().parse(IOUtils.toString(GuildPreferences.class.getResourceAsStream("/CanlanderPoints.json"))).getAsJsonObject();
+					return XLanderRetriever.retrieveCanlanderPointlist();
 				} catch (IOException e) {
-					LOG.log(Level.SEVERE, "Could not parse CanlanderPoints.json", e);
-					return new HashMap<>();
+					LOG.log(Level.SEVERE, "Canlander Pointlist could not be fetched", e);
 				}
-				return list.entrySet().parallelStream().collect(Collectors.toMap(p -> p.getKey().toLowerCase(), p -> p.getValue().getAsInt()));
+				return null;
 			}
 		};
 

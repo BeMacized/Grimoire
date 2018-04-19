@@ -44,7 +44,6 @@ public class Grimoire {
 	private JDA discord;
 	private GeoApiContext geoAPI;
 
-
 	// Controllers
 	private EmojiParser emojiParser;
 	private DBManager dbManager;
@@ -175,7 +174,6 @@ public class Grimoire {
 		this.playstatusHandler = new PlaystatusHandler();
 
 		// Assert nickname
-		//TODO: Move to on guild join
 		if (!discord.getSelfUser().getName().equals(BOT_NAME))
 			discord.getSelfUser().getManager().setName(BOT_NAME).submit();
 
