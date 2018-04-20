@@ -53,7 +53,8 @@ public class CommandHandler extends ChatHandler {
 				new ReloadPreferencesCommand(),
 				new StatsCommand(),
 				new BanListCommand(),
-				new LocatorCommand()
+				new LocatorCommand(),
+				new EventsCommand()
 		).collect(Collectors.toList());
 		rateLimiter = new InMemorySlidingWindowRequestRateLimiter(Stream.of(
 				RequestLimitRule.of(20, TimeUnit.SECONDS, 6),
