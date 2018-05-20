@@ -29,18 +29,18 @@ public class StandardSet {
 	@Nullable
 	public DateTime getEnterDate() {
 		try {
-			return enter_date != null ? ISODateTimeFormat.dateTime().parseDateTime(enter_date + "Z") : new DateTime();
+			return enter_date != null ? ISODateTimeFormat.dateTime().parseDateTime(enter_date + "Z") : null;
 		} catch (IllegalArgumentException e) {
-			return new DateTime();
+			return null;
 		}
 	}
 
 	@Nullable
 	public DateTime getExitDate() {
 		try {
-			return exit_date != null ? ISODateTimeFormat.dateTime().parseDateTime(exit_date + "Z") : new DateTime();
+			return exit_date != null ? ISODateTimeFormat.dateTime().parseDateTime(exit_date + "Z") : null;
 		} catch (IllegalArgumentException e) {
-			return new DateTime();
+			return null;
 		}
 	}
 
