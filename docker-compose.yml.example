@@ -34,3 +34,7 @@ services:
 #      - "EMOJI_GUILD="
 #      - "ENABLE_EVAL_MODULE=0"
 #      - "GOOGLE_API_KEY="
+#      - "REDDIT_USER="
+#      - "REDDIT_PASSWORD="
+#      - "REDDIT_CLIENT_ID="
+#      - "REDDIT_SECRET="
