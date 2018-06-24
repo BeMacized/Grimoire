@@ -1,7 +1,21 @@
 
 [![Grimoire Logo](https://i.imgur.com/KlhoTsz.png)](https://grimoirebot.xyz/)
 
-[![](https://images.microbadger.com/badges/version/bemacized/grimoire.svg)](https://microbadger.com/images/bemacized/grimoire)
+# Project Discontinued
+ 
+  Hi all.
+
+  As of the 24st of June 2018, Grimoire has been discontinued.
+  I no longer have the time or funds to keep maintaining this project.
+      
+  In case you are looking for an alternative, I can fully recommend switching to <a href="https://github.com/bra1n">bra1n's</a>&nbsp;<a href="https://github.com/bra1n/judgebot">JudgeBot</a>.
+  It covers most of the functionality Grimoire used to provide, and more.
+
+  Many thanks to all the people who supported me and this project, with special thanks to <a href="https://twitter.com/LightRodAU">@LightRod</a> for putting up with my many mtg related questions.
+
+  ~ BeMac
+
+<del>
 
 **Mac's Grimoire** is a Discord bot that brings many **Magic The Gathering** related tools straight into your discord server. It can perform tasks such as card, price and rule lookups to name a few.
 
@@ -16,7 +30,7 @@ Supported features include, but are not limited to:
 * Currency Conversion
 * Non-English Card Support
 * Scryfall Syntax Support
-* More on the [Website](https://grimoirebot.xyz)
+* <del>More on the [Website](https://grimoirebot.xyz)</del>
 
 Invite the bot to your Guild via this link: [Invite Grimoire](https://grimoirebot.xyz/invite)
 
@@ -140,3 +154,4 @@ Card prices represent daily averages and/or market values provided by our affili
 
 The Scryfall logo and Scryfall API are copyright Some Assembly, LLC, DBA Scryfall. Grimoire is not created by, affiliated with, or supported by Scryfall.
 
+</del>

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Abel');
+
+.container {
+  background-color: #FFF;
+  box-shadow: 0 8px 17px 2px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+}
+
+.top-bar {
+  width: 100%;
+  height: 72px;
+  background: linear-gradient(90deg,#f857a6,#ff5858);
+}
+
+.logo {
+  max-width: 1280px;
+}
+
+.content {
+  font-family: Abel, sans-serif;
+  padding: 20px;
+  width: calc(100% - 40px);
+  //text-align: center;
+  max-width: 1280px;
+
+  h1 {
+    font-size: 3em;
+  }
+
+  p {
+    font-size: 1.5em;
+  }
+}
+
+:host {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
