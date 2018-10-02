@@ -7,6 +7,7 @@
 
   As of the 24st of June 2018, Grimoire has been discontinued.
   I no longer have the time or funds to keep maintaining this project.
+  It had a great, amazing run.
       
   In case you are looking for an alternative, I can fully recommend switching to <a href="https://github.com/bra1n">bra1n's</a>&nbsp;<a href="https://github.com/bra1n/judgebot">JudgeBot</a>.
   It covers most of the functionality Grimoire used to provide, and more.
